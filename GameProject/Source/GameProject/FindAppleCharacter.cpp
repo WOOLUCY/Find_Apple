@@ -49,13 +49,13 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AFindAppleCharacter::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AFindAppleCharacter::MoveRight);
-	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &AFindAppleCharacter::LookUpRate);
-	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AFindAppleCharacter::LookRightRate);
-	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	//PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AFindAppleCharacter::MoveForward);
+	//PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
+	//PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AFindAppleCharacter::MoveRight);
+	//PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
+	//PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &AFindAppleCharacter::LookUpRate);
+	//PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AFindAppleCharacter::LookRightRate);
+	//PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 }
 
 void AFindAppleCharacter::MoveForward(float AxisValue)
