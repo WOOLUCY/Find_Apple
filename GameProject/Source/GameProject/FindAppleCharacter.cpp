@@ -8,6 +8,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "FindAppleInterface.h"
 #include "InputActionValue.h"
 
 // Sets default values
@@ -50,6 +52,35 @@ void AFindAppleCharacter::BeginPlay()
 	}
 }
 
+void AFindAppleCharacter::QuestInteraction(const FInputActionValue& Value)
+{
+	TArray<AActor*> TalkableActor;
+
+	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UFindAppleInterface::StaticClass(), TalkableActor);
+
+	for (AActor* Actor : TalkableActor)
+	{
+		IFindAppleInterface* Interface = Cast<IFindAppleInterface>(Actor);
+
+		if (Interface != nullptr)
+		{
+			if (this->IsOverlappingActor(Actor))
+			{
+				UE_LOG(LogTemp, Display, TEXT("collised"));
+				Interface->Execute_OnActivate(Actor);
+			}
+		}
+	}
+
+//	AActor* PocusActor = this;
+//
+//	IFindAppleInterface* Interface = Cast<IFindAppleInterface>(PocusActor);
+//	if (Interface) 
+//	{
+//		Interface->OnActivate();
+//	}
+}
+
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
 {	// Character movement
 	const FVector2D DirectionValue = Value.Get<FVector2D>();
@@ -78,11 +109,6 @@ void AFindAppleCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AFindAppleCharacter::Jump(const FInputActionValue& Value)
-{
-	const FVector2D DirectionValue = Value.Get<FVector2D>();
-}
-
 // Called every frame
 void AFindAppleCharacter::Tick(float DeltaTime)
 {
@@ -99,6 +125,7 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::MoveForward);
 		EnhancedInputComponent->BindAction(MoveRightAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::MoveRight);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::Look);
+		EnhancedInputComponent->BindAction(QuestInteractionAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::QuestInteraction);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 	}
@@ -110,14 +137,4 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	//PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &AFindAppleCharacter::LookUpRate);
 	//PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AFindAppleCharacter::LookRightRate);
 	//PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
-}
-
-void AFindAppleCharacter::LookUpRate(float AxisValue)
-{
-	AddControllerPitchInput(AxisValue * CameraRotationRate * GetWorld()->GetDeltaSeconds());
-}
-
-void AFindAppleCharacter::LookRightRate(float AxisValue)
-{
-	AddControllerYawInput(AxisValue * CameraRotationRate * GetWorld()->GetDeltaSeconds());
 }

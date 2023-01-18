@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "FindAppleInterface.h"
 #include "QuestNPC.generated.h"
 
 UCLASS()
-class GAMEPROJECT_API AQuestNPC : public ACharacter
+class GAMEPROJECT_API AQuestNPC : public ACharacter, public IFindAppleInterface
 {
 	GENERATED_BODY()
 
@@ -28,7 +29,17 @@ public:
 
 	TArray<struct FDialogueTableRow*> DialogueData;
 
-private:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyCategory")
+	void OnActivate(); virtual void OnActivate_Implementation() override;
+
+	void DialogueCreate();
+
+	void DialogueGetLine();
+
+private:	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> DialogueWidgetClass;
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USkeletalMeshComponent* SKMeshComponent;
 
@@ -39,13 +50,16 @@ private:
 	int32 NPC_ID = 1;			// Äù½ºÆ® NPC ID ´Â 1 ¹ø
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	int32 Conversation_ID = 1;		
+	int32 Conversation_ID = 1;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	int32 CurrentLine = 0;
 
 	UPROPERTY()
 	TArray<FName> MyDialogue;
 
-	//UPROPERTY(VisibleAnywhere, Category = "Components")
-	//const class ADialogueDataStruct* DialogueData;
+
+
 
 	UPROPERTY()
 	class UDataTable* DialogueDatatable;

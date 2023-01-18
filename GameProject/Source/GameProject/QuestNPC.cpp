@@ -6,6 +6,7 @@
 #include "Components/BoxComponent.h"
 #include "FindAppleGameMode.h"
 #include "DialogueDataStruct.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values
 AQuestNPC::AQuestNPC()
@@ -39,6 +40,13 @@ AQuestNPC::AQuestNPC()
 		UE_LOG(LogTemp, Warning, TEXT("Datatable Complete"));
 		DialogueDatatable = DataTable.Object;
 	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget> DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/WBP_Dialogue.WBP_Dialogue'"));
+	if (DialogueWidget.Succeeded())
+	{
+		DialogueWidgetClass = DialogueWidget.Class;
+	}
+
 	//GetMesh()->SetAnimClass()
 }
 
@@ -64,12 +72,38 @@ void AQuestNPC::BeginPlay()
 	}
 }
 
+void AQuestNPC::DialogueGetLine()
+{
+
+}
+
+void AQuestNPC::DialogueCreate() 
+{
+	if (IsValid(DialogueWidgetClass)) 
+	{
+		UE_LOG(LogTemp, Display, TEXT("widget oo "));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("Widget nono"));
+		CreateWidget(GetWorld()->GetFirstPlayerController(), DialogueWidgetClass);
+	}
+
+}
+
+void AQuestNPC::OnActivate_Implementation()
+{
+	CurrentLine++;
+	DialogueCreate();
+}
+
+
 // Called every frame
 void AQuestNPC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, );
+	//CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, );
 
 
 }
