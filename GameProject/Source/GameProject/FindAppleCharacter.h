@@ -66,4 +66,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	float Health;
+
+	//애니메이션관련
+	UPROPERTY()
+		class UFindAppleAnimInstance* Anim;
 };

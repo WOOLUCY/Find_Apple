@@ -16,6 +16,24 @@ AFindAppleCharacter::AFindAppleCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_HERO
+	(TEXT("/Script/Engine.SkeletalMesh'/Game/Semin/Character/SKM_CharacterSkeletonMesh.SKM_CharacterSkeletonMesh'"));
+
+	if (SK_HERO.Succeeded()) {
+		GetMesh()->SetSkeletalMesh(SK_HERO.Object);
+	}
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -88.f), FRotator(0.f, -90.f, 0.f));
+
+	//애니메이션 연결
+	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+	static ConstructorHelpers::FClassFinder<UAnimInstance> ABP_HERO
+	(TEXT("/Script/Engine.AnimBlueprint'/Game/kaon/Animation/ABP_Hero.ABP_Hero_C'"));
+
+	if (ABP_HERO.Succeeded()) {
+		GetMesh()->SetAnimInstanceClass(ABP_HERO.Class);
+	}
+
+
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->TargetArmLength = 500.f;
@@ -31,6 +49,7 @@ AFindAppleCharacter::AFindAppleCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
+
 }
 
 // Called when the game starts or when spawned
