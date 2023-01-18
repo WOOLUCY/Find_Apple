@@ -9,9 +9,9 @@
 
 
 USTRUCT(BlueprintType)
-struct FDialogueTableStruct : public FTableRowBase
+struct FDialogueTableRow : public FTableRowBase
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
@@ -32,7 +32,7 @@ public:
 
 
 UCLASS()
-class GAMEPROJECT_API ADialogueDataStruct : public AActor
+class GAMEPROJECT_API ADialogueDataTable : public AActor
 {
 	GENERATED_BODY()
 };

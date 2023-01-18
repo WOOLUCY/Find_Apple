@@ -3,6 +3,9 @@
 
 #include "QuestNPC.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Components/BoxComponent.h"
+#include "FindAppleGameMode.h"
+#include "DialogueDataStruct.h"
 
 // Sets default values
 AQuestNPC::AQuestNPC()
@@ -16,7 +19,26 @@ AQuestNPC::AQuestNPC()
 		GetMesh()->SetSkeletalMesh(SK_NPC.Object);
 	}
 
+	ConstructorHelpers::FObjectFinder<UAnimBlueprint>  BP_Anim(TEXT("AnimBlueprint'/Game/Semin/Character/NPC/ABP_NPC.ABP_NPC'"));
+	if (BP_Anim.Succeeded())
+	{
+		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+		GetMesh()->SetAnimInstanceClass(BP_Anim.Object->GetAnimBlueprintGeneratedClass());
+	}
+
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.f), FRotator(0.0f, 270.0f, 0.0f));
+
+	CollisionMesh = CreateDefaultSubobject<UBoxComponent>(FName("Collision Mesh"));
+	CollisionMesh->SetRelativeLocationAndRotation(FVector(0.1f, 100.f, 70.f), FRotator(0.f, 0.f, 0.f));
+	CollisionMesh->SetBoxExtent(FVector(130.f, 130.f, 32.f));
+	CollisionMesh->SetupAttachment(GetMesh());
+
+	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/CPP_Dialogue_File.CPP_Dialogue_File"));
+	if (DataTable.Succeeded())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Datatable Complete"));
+		DialogueDatatable = DataTable.Object;
+	}
 	//GetMesh()->SetAnimClass()
 }
 
@@ -24,13 +46,31 @@ AQuestNPC::AQuestNPC()
 void AQuestNPC::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (DialogueDatatable != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Datatable Complete"));
+		//DialogueDatatable->GetAllRows<FDialogueTableRow>(TEXT("GetAllRows"), DialogueData);
+		TArray<FName> RowNames = DialogueDatatable->GetRowNames();
+
+		for (int i = 0; i < RowNames.Num(); i++)
+		{
+			FDialogueTableRow Dialogue = *(DialogueDatatable->FindRow<FDialogueTableRow>(RowNames[i], RowNames[i].ToString()));
+			if (NPC_ID == Dialogue.NPC_ID) {
+				MyDialogue.Add(RowNames[i]);
+				UE_LOG(LogTemp, Warning, TEXT("NPCID: %d, NPC Name: %s"), Dialogue.NPC_ID, *(Dialogue.NPC_Name.ToString()));
+			}
+		}
+	}
 }
 
 // Called every frame
 void AQuestNPC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, );
+
 
 }
 
