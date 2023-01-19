@@ -7,12 +7,13 @@
 #include "FindAppleGameMode.h"
 #include "DialogueDataStruct.h"
 #include "Blueprint/UserWidget.h"
+#include "DialogueWidget.h"
 
 // Sets default values
 AQuestNPC::AQuestNPC()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NPC(TEXT("SkeletalMesh'/Game/Semin/Character/SKM_NPC.SKM_NPC'"));
 	if (SK_NPC.Succeeded())
@@ -34,18 +35,13 @@ AQuestNPC::AQuestNPC()
 	CollisionMesh->SetBoxExtent(FVector(130.f, 130.f, 32.f));
 	CollisionMesh->SetupAttachment(GetMesh());
 
+
 	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/CPP_Dialogue_File.CPP_Dialogue_File"));
 	if (DataTable.Succeeded())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Datatable Complete"));
 		DialogueDatatable = DataTable.Object;
 	}
 
-	ConstructorHelpers::FClassFinder<UUserWidget> DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/WBP_Dialogue.WBP_Dialogue'"));
-	if (DialogueWidget.Succeeded())
-	{
-		DialogueWidgetClass = DialogueWidget.Class;
-	}
 
 	//GetMesh()->SetAnimClass()
 }
@@ -57,8 +53,7 @@ void AQuestNPC::BeginPlay()
 
 	if (DialogueDatatable != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Datatable Complete"));
-		//DialogueDatatable->GetAllRows<FDialogueTableRow>(TEXT("GetAllRows"), DialogueData);
+		DialogueDatatable->GetAllRows<FDialogueTableRow>(TEXT("GetAllRows"), DialogueData);
 		TArray<FName> RowNames = DialogueDatatable->GetRowNames();
 
 		for (int i = 0; i < RowNames.Num(); i++)
@@ -74,22 +69,73 @@ void AQuestNPC::BeginPlay()
 
 void AQuestNPC::DialogueGetLine()
 {
+	TArray<FText> ReturnLines;
+
+	for ( FName CurDialogue : MyDialogue )
+	{
+		FDialogueTableRow Dialogue = *(DialogueDatatable->FindRow<FDialogueTableRow>(CurDialogue, CurDialogue.ToString()));
+		UE_LOG(LogTemp, Warning, TEXT("C_ID: %d, CD_ID: %d, L_ID: %d, LD_ID: %d"), Conversation_ID, Dialogue.Conversation_ID, CurrentLine, Dialogue.Line_ID);
+		if ( Conversation_ID == Dialogue.Conversation_ID && CurrentLine == Dialogue.Line_ID)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("NPCID: %d, NPC Name: %s"), Dialogue.NPC_ID, *(Dialogue.NPC_Name.ToString()));
+			MyNameText = Dialogue.NPC_Name;
+			ReturnLines.Add(Dialogue.Dialogue);
+			if (ReturnLines.Num() == 1)
+			{
+				if (!ReturnLines[0].IsEmpty())
+				{
+					UE_LOG(LogTemp, Display, TEXT("TExt Set"));
+					DialogueUIObject->ChangeText(MyNameText, ReturnLines[0]);
+					return;
+				}
+			}
+		}
+		else {
+		}
+	}
+
+	if (ReturnLines.IsEmpty()) {
+		UE_LOG(LogTemp, Display, TEXT("Text Remove "));
+		bIsValid = false;
+		DialogueUIObject->RemoveFromParent();
+		CurrentLine = 0;
+	}
+
+	//if (!ReturnLines[CurrentLine].IsEmpty())
+	//{
+	//	DialogueUIObject->ChangeText(ReturnLines[CurrentLine], MyNameText);
+	//}
+	//else 
+	//{
+	//	DialogueUIObject->RemoveFromParent();
+	//	DialogueUIObject = nullptr;
+	//	CurrentLine = 0;
+	//}
+
 
 }
 
 void AQuestNPC::DialogueCreate() 
 {
-	if (IsValid(DialogueWidgetClass)) 
+	if (bIsValid)	// Widget is 'not' valid !!
 	{
-		UE_LOG(LogTemp, Display, TEXT("widget oo "));
+		UE_LOG(LogTemp, Display, TEXT("call dialogue get line "));
+		DialogueGetLine();
 	}
-	else
+	else 
 	{
-		UE_LOG(LogTemp, Display, TEXT("Widget nono"));
-		CreateWidget(GetWorld()->GetFirstPlayerController(), DialogueWidgetClass);
+		if (DialogueWidgetClass)
+		{
+			UE_LOG(LogTemp, Display, TEXT("widget create "));
+			bIsValid = true;
+			DialogueUIObject = CreateWidget<UDialogueWidget>(GetWorld(), DialogueWidgetClass);
+			DialogueUIObject->AddToViewport();
+			DialogueGetLine();
+		}
 	}
 
 }
+
 
 void AQuestNPC::OnActivate_Implementation()
 {
@@ -97,15 +143,35 @@ void AQuestNPC::OnActivate_Implementation()
 	DialogueCreate();
 }
 
+void AQuestNPC::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor && (OtherActor != this) && OtherComp)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
+	}
+	
+}
+
+void AQuestNPC::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) 
+{
+	if (bIsValid) {
+		DialogueUIObject->RemoveFromParent();
+		bIsValid = false;
+		CurrentLine = 0;
+	}
+	if (OtherActor && (OtherActor != this) && OtherComp)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap End"));
+	}
+}
 
 // Called every frame
 void AQuestNPC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, );
-
-
+	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &AQuestNPC::OnOverlapEnd);
+	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &AQuestNPC::OnOverlapBegin);
 }
 
 // Called to bind functionality to input

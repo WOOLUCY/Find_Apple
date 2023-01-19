@@ -32,13 +32,22 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyCategory")
 	void OnActivate(); virtual void OnActivate_Implementation() override;
 
+	UFUNCTION()
 	void DialogueCreate();
 
+	UFUNCTION()
 	void DialogueGetLine();
 
-private:	
+	UFUNCTION()
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UUserWidget> DialogueWidgetClass;
+
+private:	
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USkeletalMeshComponent* SKMeshComponent;
@@ -49,14 +58,24 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Components")
 	int32 NPC_ID = 1;			// Äù½ºÆ® NPC ID ´Â 1 ¹ø
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	int32 Conversation_ID = 1;
+	UPROPERTY(EditAnywhere, Category = "Components")
+	int32 Conversation_ID = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Components")
+	int32 CurrentLine = 0;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	int32 CurrentLine = 0;
+	FText MyNameText;
+
+	UPROPERTY()
+	bool bIsValid = false;
+
 
 	UPROPERTY()
 	TArray<FName> MyDialogue;
+
+	UPROPERTY()
+	class UDialogueWidget* DialogueUIObject;
 
 
 
