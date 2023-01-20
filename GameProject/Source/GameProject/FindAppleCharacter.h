@@ -50,6 +50,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UCameraComponent* CameraComponent;
 
 private:
 	void LookUpRate(float AxisValue);
@@ -58,8 +60,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class UCameraComponent* CameraComponent;
 
 	UPROPERTY(EditAnywhere)
 	float CameraRotationRate = 10.f;
