@@ -52,8 +52,6 @@ private:
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
 
-	void Action();
-
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
 
@@ -72,9 +70,4 @@ private:
 	//애니메이션관련
 	UPROPERTY()
 		class UFindAppleAnimInstance* Anim;
-
-public:
-	UPROPERTY(VisibleAnywhere, Category = Equip)
-		UStaticMeshComponent* Sword;
-
 };
