@@ -5,9 +5,6 @@
 #include "FindAppleAnimInstance.h"
 #include "Sword.h"
 
-#include "Kismet/GameplayStatics.h"
-#include "FindAppleInterface.h"
-
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -84,29 +81,6 @@ void AFindAppleCharacter::BeginPlay()
 
 }
 
-void AFindAppleCharacter::QuestInteraction(const FInputActionValue & Value)
-{
-	TArray<AActor*> TalkableActor;
-
-	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UFindAppleInterface::StaticClass(), TalkableActor);
-
-	for (AActor* Actor : TalkableActor)
-	{
-		IFindAppleInterface* Interface = Cast<IFindAppleInterface>(Actor);
-
-		if (Interface != nullptr)
-		{
-			if (this->IsOverlappingActor(Actor))
-			{
-				UE_LOG(LogTemp, Display, TEXT("collised"));
-				Interface->Execute_OnActivate(Actor);
-			}
-		}
-	}
-
-}
-
-
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
 {	// Character movement
 	const FVector2D DirectionValue = Value.Get<FVector2D>();
@@ -135,6 +109,10 @@ void AFindAppleCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AFindAppleCharacter::Jump(const FInputActionValue& Value)
+{
+	const FVector2D DirectionValue = Value.Get<FVector2D>();
+}
 
 // Called every frame
 void AFindAppleCharacter::Tick(float DeltaTime)
@@ -154,7 +132,6 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-		EnhancedInputComponent->BindAction(QuestInteractionAction, ETriggerEvent::Completed, this, &AFindAppleCharacter::QuestInteraction);
 	}
 
 	PlayerInputComponent->BindAction(TEXT("Action"),EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);
@@ -167,7 +144,15 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	//PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 }
 
+void AFindAppleCharacter::LookUpRate(float AxisValue)
+{
+	AddControllerPitchInput(AxisValue * CameraRotationRate * GetWorld()->GetDeltaSeconds());
+}
 
+void AFindAppleCharacter::LookRightRate(float AxisValue)
+{
+	AddControllerYawInput(AxisValue * CameraRotationRate * GetWorld()->GetDeltaSeconds());
+}
 
 void AFindAppleCharacter::Action()
 {

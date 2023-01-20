@@ -52,6 +52,8 @@ public:
 
 
 private:
+	void LookUpRate(float AxisValue);
+	void LookRightRate(float AxisValue);
 
 	void Action();
 
