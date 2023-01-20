@@ -60,7 +60,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
 
-
 	UPROPERTY(EditAnywhere)
 	float CameraRotationRate = 10.f;
 

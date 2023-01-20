@@ -7,18 +7,43 @@
 #include "FindAppleGameMode.h"
 #include "DialogueDataStruct.h"
 #include "Blueprint/UserWidget.h"
+#include "Camera/CameraComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "DialogueWidget.h"
+#include "Components/TimelineComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AQuestNPC::AQuestNPC()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
+	Text = CreateDefaultSubobject<UTextRenderComponent>(TEXT("PressQ"));
+	Text->SetupAttachment(GetRootComponent());
+	Text->SetRelativeLocation(FVector(0.f, 0.f, 100.f));
+	Text->SetTextRenderColor(FColor::White);
+	Text->SetHorizontalAlignment(EHTA_Center);
+	Text->SetText(FText::FromString(TEXT("Press 'Q' to Chat")));
+
+	/* Set Mesh ( 캐릭터 스켈레톤 메쉬 ) */
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NPC(TEXT("SkeletalMesh'/Game/Semin/Character/SKM_NPC.SKM_NPC'"));
 	if (SK_NPC.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(SK_NPC.Object);
+	}
+
+	/* 대화 시 플레이어 위치 지정용 콘(원뿔) 메쉬 */
+	MyCone = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cone"));
+	MyCone->SetupAttachment(GetRootComponent());
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> ConeMesh(TEXT("StaticMesh'/Engine/BasicShapes/Cone.Cone'"));
+	if (ConeMesh.Succeeded())
+	{
+		MyCone->SetStaticMesh(ConeMesh.Object);
+		MyCone->SetRelativeLocationAndRotation(FVector(180.f, 0.f, -90.f), FRotator(0.f, 90.f, 0.f));
+		MyCone->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		MyCone->SetHiddenInGame(true);
 	}
 
 	ConstructorHelpers::FObjectFinder<UAnimBlueprint>  BP_Anim(TEXT("AnimBlueprint'/Game/Semin/Character/NPC/ABP_NPC.ABP_NPC'"));
@@ -27,6 +52,23 @@ AQuestNPC::AQuestNPC()
 		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 		GetMesh()->SetAnimInstanceClass(BP_Anim.Object->GetAnimBlueprintGeneratedClass());
 	}
+
+	ConstructorHelpers::FClassFinder<UDialogueWidget>  DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/BP_DialogueWidget.BP_DialogueWidget_C'"));
+	if (DialogueWidget.Succeeded())
+	{
+		DialogueWidgetClass = DialogueWidget.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UUserWidget>  DialoguePopWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/WBP_BlackScreenPop.WBP_BlackScreenPop_C'"));
+	if (DialoguePopWidget.Succeeded())
+	{
+		DialoguePopWidgetClass = DialoguePopWidget.Class;
+	}
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	CameraComponent->SetupAttachment(GetRootComponent());
+	//CameraComponent->bUsePawnControlRotation = false;
+	CameraComponent->SetRelativeLocationAndRotation(FVector(187.f, 178.f, 0.f), FRotator(0.f, -110.f, 0.f));
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.f), FRotator(0.0f, 270.0f, 0.0f));
 
@@ -64,6 +106,22 @@ void AQuestNPC::BeginPlay()
 				UE_LOG(LogTemp, Warning, TEXT("NPCID: %d, NPC Name: %s"), Dialogue.NPC_ID, *(Dialogue.NPC_Name.ToString()));
 			}
 		}
+	}
+
+	if (CurveFloat)
+	{
+		FOnTimelineFloat TimelineProgress;
+		TimelineProgress.BindUFunction(this, FName("TimelineProgress"));
+		CurveFTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
+		CurveFTimeline.SetLooping(true);
+
+		StartLoc = GetActorLocation();
+		EndLoc = StartLoc;
+		UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), StartLoc.X, StartLoc.Y, StartLoc.Z);
+		EndLoc.Z += ZOffset;
+		UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), EndLoc.X, EndLoc.Y, EndLoc.Z);
+
+		CurveFTimeline.PlayFromStart();
 	}
 }
 
@@ -136,11 +194,54 @@ void AQuestNPC::DialogueCreate()
 
 }
 
+void AQuestNPC::PlayerAdjustmentss()
+{
+	/* 플레이어 컨트롤러 가지고 오기 */
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->SetInputMode(FInputModeUIOnly());
+
+	/* 위젯 생성 */
+	UUserWidget* DialoguePopWidget = CreateWidget(GetWorld(), DialoguePopWidgetClass);
+	DialoguePopWidget->AddToViewport();
+
+	/* 2초 쉬기 */
+	FTimerHandle GravityTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(GravityTimerHandle, FTimerDelegate::CreateLambda([&]()	// 타이머 2초
+		{ GetWorld()->GetTimerManager().ClearTimer(GravityTimerHandle);}), 2.f, false);	// 반복하려면 false를 true로 변경
+
+	/* 플레이어의 카메라 수정 */
+	PlayerController->SetViewTargetWithBlend(CameraComponent->GetOwner());
+
+	/* 플레이어 위치 이동 */
+	PlayerController->GetCharacter()->GetCharacterMovement();
+
+}
+
+void AQuestNPC::TimelineProgress(float Value)
+{
+	FVector NewLocation = FMath::Lerp(StartLoc, EndLoc, Value);
+
+	SetActorLocation(NewLocation);
+	/*AActor* aa = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	aa->SetActorRelativeLocation(NewLocation);*/
+	// UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), NewLocation.X, NewLocation.Y, NewLocation.Z);
+	//UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetSpawnLocation(NewLocation);
+}
+
 
 void AQuestNPC::OnActivate_Implementation()
 {
 	CurrentLine++;
-	DialogueCreate();
+	if (bIsValid)
+	{
+		DialogueCreate();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("Is That Rihgt?"));
+		PlayerAdjustmentss();
+		Text->SetHiddenInGame(true);
+	}
 }
 
 void AQuestNPC::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -165,10 +266,16 @@ void AQuestNPC::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	}
 }
 
+void AQuestNPC::OnConstruction(const FTransform& Transform)
+{
+
+}
 // Called every frame
 void AQuestNPC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	CurveFTimeline.TickTimeline(DeltaTime);
 
 	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &AQuestNPC::OnOverlapEnd);
 	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &AQuestNPC::OnOverlapBegin);
