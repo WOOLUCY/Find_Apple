@@ -35,11 +35,13 @@ protected:
 	UInputAction* LookAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* JumpAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* QuestInteractionAction;
 
 	void MoveForward(const FInputActionValue& Value);
 	void MoveRight(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-	void Jump(const FInputActionValue& Value);
+	void QuestInteraction(const FInputActionValue& Value);
 
 public:	
 	// Called every frame
@@ -48,9 +50,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void Action();
+
+
 private:
-	void LookUpRate(float AxisValue);
-	void LookRightRate(float AxisValue);
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
@@ -70,4 +73,9 @@ private:
 	//애니메이션관련
 	UPROPERTY()
 		class UFindAppleAnimInstance* Anim;
+public:
+	UPROPERTY(VisibleAnywhere, Category = Equip)
+		UStaticMeshComponent* Sword;
+
+
 };

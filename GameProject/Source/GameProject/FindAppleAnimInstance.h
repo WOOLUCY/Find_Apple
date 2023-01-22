@@ -7,7 +7,7 @@
 #include "FindAppleAnimInstance.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class GAMEPROJECT_API UFindAppleAnimInstance : public UAnimInstance
@@ -19,15 +19,18 @@ public:
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+	//¸ùÅ¸ÁÖ 
+	void PlayActionMontage();
+
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Move, Meta = (AllowPrivateAccess = true))
 		float Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Move, Meta = (AllowPrivateAccess = true))
-		float Angle;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Move, Meta = (AllowPrivateAccess = true))
 		bool OnAir;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* ActionMontage;
+
 
 
 };

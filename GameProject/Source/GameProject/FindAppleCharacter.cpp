@@ -2,13 +2,20 @@
 
 
 #include "FindAppleCharacter.h"
+#include "FindAppleAnimInstance.h"
+#include "Sword.h"
+
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "FindAppleInterface.h"
 #include "InputActionValue.h"
+
+#include "Components/InputComponent.h"
 
 // Sets default values
 AFindAppleCharacter::AFindAppleCharacter()
@@ -17,7 +24,7 @@ AFindAppleCharacter::AFindAppleCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_HERO
-	(TEXT("/Script/Engine.SkeletalMesh'/Game/Semin/Character/SKM_CharacterSkeletonMesh.SKM_CharacterSkeletonMesh'"));
+	(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Hero/Char.Char'"));
 
 	if (SK_HERO.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(SK_HERO.Object);
@@ -27,7 +34,7 @@ AFindAppleCharacter::AFindAppleCharacter()
 	//애니메이션 연결
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	static ConstructorHelpers::FClassFinder<UAnimInstance> ABP_HERO
-	(TEXT("/Script/Engine.AnimBlueprint'/Game/kaon/Animation/ABP_Hero.ABP_Hero_C'"));
+	(TEXT("/Script/Engine.AnimBlueprint'/Game/Characters/Hero/ABP_Char.ABP_Char_C'"));
 
 	if (ABP_HERO.Succeeded()) {
 		GetMesh()->SetAnimInstanceClass(ABP_HERO.Class);
@@ -67,6 +74,34 @@ void AFindAppleCharacter::BeginPlay()
 			Subsystem->AddMappingContext(CharacterMappingContext, 0);
 		}
 	}
+
+	auto CurEquip = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
+	if (CurEquip != nullptr) {
+		CurEquip->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
+	}
+
+}
+
+void AFindAppleCharacter::QuestInteraction(const FInputActionValue& Value)
+{
+	TArray<AActor*> TalkableActor;
+
+	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UFindAppleInterface::StaticClass(), TalkableActor);
+
+	for (AActor* Actor : TalkableActor)
+	{
+		IFindAppleInterface* Interface = Cast<IFindAppleInterface>(Actor);
+
+		if (Interface != nullptr)
+		{
+			if (this->IsOverlappingActor(Actor))
+			{
+				UE_LOG(LogTemp, Display, TEXT("collised"));
+				Interface->Execute_OnActivate(Actor);
+			}
+		}
+	}
+
 }
 
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
@@ -97,11 +132,6 @@ void AFindAppleCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AFindAppleCharacter::Jump(const FInputActionValue& Value)
-{
-	const FVector2D DirectionValue = Value.Get<FVector2D>();
-}
-
 // Called every frame
 void AFindAppleCharacter::Tick(float DeltaTime)
 {
@@ -118,25 +148,33 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::MoveForward);
 		EnhancedInputComponent->BindAction(MoveRightAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::MoveRight);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::Look);
+		EnhancedInputComponent->BindAction(QuestInteractionAction, ETriggerEvent::Completed, this, &AFindAppleCharacter::QuestInteraction);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 	}
 
-	//PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AFindAppleCharacter::MoveForward);
-	//PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
-	//PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AFindAppleCharacter::MoveRight);
-	//PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
-	//PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &AFindAppleCharacter::LookUpRate);
-	//PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &AFindAppleCharacter::LookRightRate);
-	//PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);
+
+
 }
 
-void AFindAppleCharacter::LookUpRate(float AxisValue)
+void AFindAppleCharacter::Action()
 {
-	AddControllerPitchInput(AxisValue * CameraRotationRate * GetWorld()->GetDeltaSeconds());
-}
+	UE_LOG(LogTemp, Error, TEXT("attack dkfjdk"));
 
-void AFindAppleCharacter::LookRightRate(float AxisValue)
-{
-	AddControllerYawInput(AxisValue * CameraRotationRate * GetWorld()->GetDeltaSeconds());
+	auto AnimInst = Cast<UFindAppleAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr == AnimInst) {
+		UE_LOG(LogTemp, Error, TEXT("attack fali!!! why??"));
+
+		return;
+	}
+	AnimInst->PlayActionMontage();
+
+	//소켓일단 여기다 붙혀놓고
+
+
+	//(X = -2.191723, Y = -7.376023, Z = 0.871590)
+	UE_LOG(LogTemp, Warning, TEXT("Action function end"));
+
+
 }
