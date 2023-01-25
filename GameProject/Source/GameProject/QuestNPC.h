@@ -65,6 +65,8 @@ public:
 	/* 타임 라인 */
 	UFUNCTION()
 	void TimelineProgress(float Value);
+	UFUNCTION()
+	void TimelineFinished();
 
 private:	
 	/* 타임 라인 */
@@ -76,6 +78,12 @@ private:
 	FVector StartLoc;
 	UPROPERTY()
 	FVector EndLoc;
+
+	UPROPERTY()
+	FRotator StartRot;
+	UPROPERTY()
+	FRotator EndRot;
+
 	UPROPERTY(EditAnywhere, Category = "Components")
 	float ZOffset;
 
@@ -115,6 +123,8 @@ private:
 
 	UPROPERTY()
 	class UDialogueWidget* DialogueUIObject;
+	UPROPERTY()
+	class UUserWidget* DialoguePopWidget;
 
 	UPROPERTY()
 	class UDataTable* DialogueDatatable;

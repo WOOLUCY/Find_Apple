@@ -11,7 +11,9 @@
 #include "Components/TextRenderComponent.h"
 #include "DialogueWidget.h"
 #include "Components/TimelineComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "FindAppleCharacter.h"
 
 // Sets default values
 AQuestNPC::AQuestNPC()
@@ -41,7 +43,7 @@ AQuestNPC::AQuestNPC()
 	if (ConeMesh.Succeeded())
 	{
 		MyCone->SetStaticMesh(ConeMesh.Object);
-		MyCone->SetRelativeLocationAndRotation(FVector(180.f, 0.f, -90.f), FRotator(0.f, 90.f, 0.f));
+		MyCone->SetRelativeLocationAndRotation(FVector(180.f, 0.f, 0.f), FRotator(0.f, 180.f, 0.f));
 		MyCone->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		MyCone->SetHiddenInGame(true);
 	}
@@ -53,16 +55,16 @@ AQuestNPC::AQuestNPC()
 		GetMesh()->SetAnimInstanceClass(BP_Anim.Object->GetAnimBlueprintGeneratedClass());
 	}
 
-	ConstructorHelpers::FClassFinder<UDialogueWidget>  DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/BP_DialogueWidget.BP_DialogueWidget_C'"));
+	ConstructorHelpers::FClassFinder<UDialogueWidget>  DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/BP_DialogueWidget.BP_DialogueWidget_C'"));
 	if (DialogueWidget.Succeeded())
 	{
 		DialogueWidgetClass = DialogueWidget.Class;
 	}
 
-	ConstructorHelpers::FClassFinder<UUserWidget>  DialoguePopWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/WBP_BlackScreenPop.WBP_BlackScreenPop_C'"));
-	if (DialoguePopWidget.Succeeded())
+	ConstructorHelpers::FClassFinder<UUserWidget>  DialoguePopWidgetObject(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_BlackScreenPop.WBP_BlackScreenPop_C'"));
+	if (DialoguePopWidgetObject.Succeeded())
 	{
-		DialoguePopWidgetClass = DialoguePopWidget.Class;
+		DialoguePopWidgetClass = DialoguePopWidgetObject.Class;
 	}
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -107,26 +109,11 @@ void AQuestNPC::BeginPlay()
 			}
 		}
 	}
-
-	if (CurveFloat)
-	{
-		FOnTimelineFloat TimelineProgress;
-		TimelineProgress.BindUFunction(this, FName("TimelineProgress"));
-		CurveFTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
-		CurveFTimeline.SetLooping(true);
-
-		StartLoc = GetActorLocation();
-		EndLoc = StartLoc;
-		UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), StartLoc.X, StartLoc.Y, StartLoc.Z);
-		EndLoc.Z += ZOffset;
-		UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), EndLoc.X, EndLoc.Y, EndLoc.Z);
-
-		CurveFTimeline.PlayFromStart();
-	}
 }
 
 void AQuestNPC::DialogueGetLine()
 {
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	TArray<FText> ReturnLines;
 
 	for ( FName CurDialogue : MyDialogue )
@@ -157,6 +144,20 @@ void AQuestNPC::DialogueGetLine()
 		bIsValid = false;
 		DialogueUIObject->RemoveFromParent();
 		CurrentLine = 0;
+
+		/* FindAppleCharacter로 Cast */
+		AActor* ActorItr = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(ActorItr);
+
+		PlayerController->SetViewTargetWithBlend(MyCharacter->CameraComponent->GetOwner(), 1.3f);
+
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		PlayerController->SetShowMouseCursor(false);
+
+		PlayerController->GetCharacter()->GetCharacterMovement()->SetActive(true);
+
+
+		Text->SetHiddenInGame(false);
 	}
 
 	//if (!ReturnLines[CurrentLine].IsEmpty())
@@ -201,31 +202,67 @@ void AQuestNPC::PlayerAdjustmentss()
 	PlayerController->SetInputMode(FInputModeUIOnly());
 
 	/* 위젯 생성 */
-	UUserWidget* DialoguePopWidget = CreateWidget(GetWorld(), DialoguePopWidgetClass);
+	DialoguePopWidget = CreateWidget(GetWorld(), DialoguePopWidgetClass);
 	DialoguePopWidget->AddToViewport();
 
 	/* 2초 쉬기 */
 	FTimerHandle GravityTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(GravityTimerHandle, FTimerDelegate::CreateLambda([&]()	// 타이머 2초
-		{ GetWorld()->GetTimerManager().ClearTimer(GravityTimerHandle);}), 2.f, false);	// 반복하려면 false를 true로 변경
+		{ GetWorld()->GetTimerManager().ClearTimer(GravityTimerHandle);}), 0.2f, false);	// 반복하려면 false를 true로 변경
 
 	/* 플레이어의 카메라 수정 */
-	PlayerController->SetViewTargetWithBlend(CameraComponent->GetOwner());
+	PlayerController->SetViewTargetWithBlend(CameraComponent->GetOwner(), 2.f);
 
 	/* 플레이어 위치 이동 */
-	PlayerController->GetCharacter()->GetCharacterMovement();
+	
+	/* 커브 사용 */
+	if (CurveFloat)
+	{
+		FVector Forward = GetActorForwardVector();
+
+		FOnTimelineFloat TimelineProgress;
+		FOnTimelineEvent LerpTimelineFinishedCallback;
+		TimelineProgress.BindUFunction(this, FName("TimelineProgress"));
+		LerpTimelineFinishedCallback.BindUFunction(this, FName("TimelineFinished"));
+
+		CurveFTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
+		CurveFTimeline.SetTimelineFinishedFunc(LerpTimelineFinishedCallback);
+		StartLoc = PlayerController->GetCharacter()->GetActorLocation(); 
+		EndLoc = MyCone->GetComponentLocation();
+
+		StartRot = PlayerController->GetCharacter()->GetActorRotation();
+		EndRot = MyCone->GetComponentRotation();
+
+		CurveFTimeline.SetTimelineLength(1.f);
+
+		CurveFTimeline.PlayFromStart();
+	}
 
 }
 
 void AQuestNPC::TimelineProgress(float Value)
-{
-	FVector NewLocation = FMath::Lerp(StartLoc, EndLoc, Value);
+{	/* 플레이어 위치, 회전 변경 */
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
-	SetActorLocation(NewLocation);
-	/*AActor* aa = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	aa->SetActorRelativeLocation(NewLocation);*/
-	// UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), NewLocation.X, NewLocation.Y, NewLocation.Z);
-	//UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetSpawnLocation(NewLocation);
+	FVector NewLocation = FMath::Lerp(StartLoc, EndLoc, Value);
+	FRotator NewRotation = FMath::Lerp(StartRot, EndRot, Value);
+
+	CharacterActor->SetActorRelativeLocation(NewLocation);
+	CharacterActor->SetActorRelativeRotation(NewRotation);
+	PlayerController->GetCharacter()->GetCharacterMovement()->Velocity.X = 80.f;
+}
+
+void AQuestNPC::TimelineFinished()
+{	/* 타임라인 끝난 후 위젯 설정 */
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->GetCharacter()->GetCharacterMovement()->SetActive(false);
+	DialogueCreate();
+
+	PlayerController->SetInputMode(FInputModeGameAndUI());
+
+	PlayerController->SetShowMouseCursor(false);
+//	//DialoguePopWidget->RemoveFromParent();
 }
 
 
@@ -287,4 +324,3 @@ void AQuestNPC::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
