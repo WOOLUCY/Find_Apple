@@ -86,7 +86,4 @@ private:
 		class UFindAppleAnimInstance* Anim;
 
 
-
-
-
 };
