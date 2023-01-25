@@ -10,6 +10,7 @@
 class UInputMappingContext;
 class UInputAction;
 
+
 UCLASS()
 class GAMEPROJECT_API AFindAppleCharacter : public ACharacter
 {
@@ -46,12 +47,15 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void PostInitializeComponents() override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Action();
 
+	UFUNCTION()
+	void OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted);
 
 private:
 
@@ -70,12 +74,19 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	float Health;
 
+	UPROPERTY(VisibleAnywhere)
+	int32 CurEqip; //현재 가지고있는 도구저장변수
+
+
 	//애니메이션관련
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsAction;
+
 	UPROPERTY()
 		class UFindAppleAnimInstance* Anim;
-public:
-	UPROPERTY(VisibleAnywhere, Category = Equip)
-		UStaticMeshComponent* Sword;
+
+
+
 
 
 };

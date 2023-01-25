@@ -6,6 +6,10 @@
 #include "Animation/AnimInstance.h"
 #include "FindAppleAnimInstance.generated.h"
 
+
+DECLARE_MULTICAST_DELEGATE(FonActionCheckDelegate);
+DECLARE_MULTICAST_DELEGATE(FonActionHitCheckDelegate);
+
 /**
  *
  */
@@ -31,6 +35,23 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* ActionMontage;
 
+
+
+public:
+	UPROPERTY(VisibleAnywhere, Category = Equip)
+	UStaticMeshComponent* Sword;
+
+	FonActionCheckDelegate OnActionMon;
+	FonActionHitCheckDelegate OnActHitMon;
+
+private:
+	UFUNCTION()
+	void AnimNotify_HitCheck();
+
+	UFUNCTION()
+	void AnimNotify_HitEnd();
+
+	FName GetActionMontageSecName(int32 Section);
 
 
 };

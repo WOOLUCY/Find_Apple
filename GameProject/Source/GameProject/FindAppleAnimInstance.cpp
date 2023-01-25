@@ -40,11 +40,28 @@ void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UFindAppleAnimInstance::PlayActionMontage()
 {
-	if (!Montage_Play(ActionMontage)) {
-		UE_LOG(LogTemp, Warning, TEXT("Play lontaget"));
 
 
-		Montage_Play(ActionMontage, 1.f);
-	}
+	Montage_Play(ActionMontage, 1.f);
 
+}
+
+void UFindAppleAnimInstance::AnimNotify_HitCheck()
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("Sword Hitcheck Call"));
+	OnActionMon.Broadcast();
+
+}
+
+void UFindAppleAnimInstance::AnimNotify_HitEnd()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Ax HitEnd Call"));
+
+	OnActHitMon.Broadcast();
+}
+
+FName UFindAppleAnimInstance::GetActionMontageSecName(int32 Section)
+{
+	return FName(*FString::Printf(TEXT("Sword")));
 }

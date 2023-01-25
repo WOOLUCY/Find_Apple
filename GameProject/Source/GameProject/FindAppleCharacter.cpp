@@ -40,6 +40,8 @@ AFindAppleCharacter::AFindAppleCharacter()
 		GetMesh()->SetAnimInstanceClass(ABP_HERO.Class);
 	}
 
+	IsAction = false;
+	CurEqip = 0;
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
@@ -79,6 +81,18 @@ void AFindAppleCharacter::BeginPlay()
 	if (CurEquip != nullptr) {
 		CurEquip->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
 	}
+
+}
+
+void AFindAppleCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	Anim = Cast<UFindAppleAnimInstance>(GetMesh()->GetAnimInstance());
+	Anim->OnMontageEnded.AddDynamic(this, &AFindAppleCharacter::OnActionMontageEnded);
+
+
+
 
 }
 
@@ -160,21 +174,18 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 void AFindAppleCharacter::Action()
 {
-	UE_LOG(LogTemp, Error, TEXT("attack dkfjdk"));
-
-	auto AnimInst = Cast<UFindAppleAnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr == AnimInst) {
-		UE_LOG(LogTemp, Error, TEXT("attack fali!!! why??"));
-
+	if (IsAction) {
 		return;
 	}
-	AnimInst->PlayActionMontage();
-
-	//소켓일단 여기다 붙혀놓고
-
-
-	//(X = -2.191723, Y = -7.376023, Z = 0.871590)
-	UE_LOG(LogTemp, Warning, TEXT("Action function end"));
+	else {
+		Anim->PlayActionMontage();
+		IsAction = true;
+	}
 
 
+}
+
+void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted)
+{
+	IsAction = false;
 }
