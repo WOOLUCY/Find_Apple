@@ -21,6 +21,7 @@ AQuestNPC::AQuestNPC()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	/* 텍스트 설정 */
 	Text = CreateDefaultSubobject<UTextRenderComponent>(TEXT("PressQ"));
 	Text->SetupAttachment(GetRootComponent());
 	Text->SetRelativeLocation(FVector(0.f, 0.f, 100.f));

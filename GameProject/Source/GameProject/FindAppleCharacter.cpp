@@ -3,6 +3,7 @@
 
 #include "FindAppleCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -18,6 +19,8 @@ AFindAppleCharacter::AFindAppleCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+
+	/* 카메라랑 스프링암 붙이기 */
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->TargetArmLength = 500.f;
@@ -27,10 +30,68 @@ AFindAppleCharacter::AFindAppleCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	CameraComponent->bUsePawnControlRotation = false;
 
+	/* 애니메이션 붙이기 */
+	ConstructorHelpers::FObjectFinder<UAnimBlueprint>  BP_Anim(TEXT("AnimBlueprint'/Game/Blueprint/ABP_CharacterAnim.ABP_CharacterAnim'"));
+	if (BP_Anim.Succeeded())
+	{
+		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+		GetMesh()->SetAnimInstanceClass(BP_Anim.Object->GetAnimBlueprintGeneratedClass());
+	}
+
+	/* 스켈레톤 메시 붙이기 */
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_Character(TEXT("SkeletalMesh'/Game/Semin/Character/SKM_CharacterSkeletonMesh.SKM_CharacterSkeletonMesh'"));
+	if (SK_Character.Succeeded())
+	{
+		GetMesh()->SetSkeletalMesh(SK_Character.Object);
+	}
+
+
+
+	/* 키 맵핑하는 거 붙이기 */
+	/* 전진 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveForward(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveForward.IA_MoveForward'"));
+	{
+		MoveForwardAction = Input_MoveForward.Object;
+	}
+	/* 옆으로 가기 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveRight(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveRight.IA_MoveRight'"));
+	if (Input_MoveRight.Succeeded())
+	{
+		MoveRightAction = Input_MoveRight.Object;
+	}
+	/* 마우스 회전 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Look(TEXT("InputAction'/Game/Semin/KeyInput/IA_Look.IA_Look'"));
+	if (Input_Look.Succeeded())
+	{
+		LookAction = Input_Look.Object;
+	}
+	/* 퀘스트 / 아이템 줍기 인터랙션 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_QuestInteraction(TEXT("InputAction'/Game/Semin/KeyInput/IA_QuestInteraction.IA_QuestInteraction'"));
+	if (Input_QuestInteraction.Succeeded())
+	{
+		QuestInteractionAction = Input_QuestInteraction.Object;
+	}
+	/* 인벤토리 키 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Inventory(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
+	if (Input_Inventory.Succeeded())
+	{
+		InventoryAction = Input_Inventory.Object;
+	}
+	/* 점프 키 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
+	if (Input_Jump.Succeeded())
+	{
+		InventoryAction = Input_Jump.Object;
+	}
+
+
+	/* 매핑 콘텍스트 */
+
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
 
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.f), FRotator(0.0f, 270.0f, 0.0f));
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
 }
@@ -81,6 +142,11 @@ void AFindAppleCharacter::QuestInteraction(const FInputActionValue& Value)
 //	}
 }
 
+void AFindAppleCharacter::Inventory(const FInputActionValue& Value)
+{
+
+}
+
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
 {	// Character movement
 	const FVector2D DirectionValue = Value.Get<FVector2D>();
@@ -125,9 +191,10 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::MoveForward);
 		EnhancedInputComponent->BindAction(MoveRightAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::MoveRight);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::Look);
-		EnhancedInputComponent->BindAction(QuestInteractionAction, ETriggerEvent::Completed, this, &AFindAppleCharacter::QuestInteraction);
+		EnhancedInputComponent->BindAction(QuestInteractionAction, ETriggerEvent::Started, this, &AFindAppleCharacter::QuestInteraction);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Inventory);
 	}
 
 	//PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AFindAppleCharacter::MoveForward);

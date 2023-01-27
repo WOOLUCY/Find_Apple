@@ -37,11 +37,14 @@ protected:
 	UInputAction* JumpAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* QuestInteractionAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* InventoryAction;
 
 	void MoveForward(const FInputActionValue& Value);
 	void MoveRight(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void QuestInteraction(const FInputActionValue& Value);
+	void Inventory(const FInputActionValue& Value);
 
 public:	
 	// Called every frame
@@ -54,8 +57,8 @@ public:
 	class UCameraComponent* CameraComponent;
 
 private:
-	void LookUpRate(float AxisValue);
-	void LookRightRate(float AxisValue);
+	//void LookUpRate(float AxisValue);
+	//void LookRightRate(float AxisValue);
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;

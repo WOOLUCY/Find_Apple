@@ -91,9 +91,6 @@ private:
 	class UTextRenderComponent* Text;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class USkeletalMeshComponent* SKMeshComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UBoxComponent* CollisionMesh = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
