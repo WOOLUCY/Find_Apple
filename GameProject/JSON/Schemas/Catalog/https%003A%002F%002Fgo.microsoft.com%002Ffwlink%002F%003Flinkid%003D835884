@@ -55,7 +55,11 @@
       "name": ".aiproj.json",
       "description": "Settings for project analysis by the application inspector",
       "fileMatch": [".aiproj.json"],
-      "url": "https://json.schemastore.org/aiproj.json"
+      "url": "https://json.schemastore.org/aiproj-1.1.json",
+      "versions": {
+        "1.0": "https://json.schemastore.org/aiproj-1.0.json",
+        "1.1": "https://json.schemastore.org/aiproj-1.1.json"
+      }
     },
     {
       "name": "Airlock Microgateway",
@@ -355,6 +359,24 @@
       }
     },
     {
+      "name": "CodeCV",
+      "description": "CV format specification",
+      "fileMatch": [
+        "cv.json",
+        "cv.yaml",
+        "cv.yml",
+        "cv.toml",
+        "*.cv.json",
+        "*.cv.yaml",
+        "*.cv.yml",
+        "*.cv.toml"
+      ],
+      "url": "https://raw.githubusercontent.com/hexagonkt/codecv/master/cv.schema.json",
+      "versions": {
+        "0.9.9": "https://raw.githubusercontent.com/hexagonkt/codecv/0.9.9/cv.schema.json"
+      }
+    },
+    {
       "name": "Azure Pipelines",
       "description": "Azure Pipelines YAML pipelines definition",
       "fileMatch": ["azure-pipelines.yml", "azure-pipelines.yaml"],
@@ -371,6 +393,12 @@
       "description": "Schema for fly.io, a cloud provider",
       "fileMatch": ["fly.toml"],
       "url": "https://json.schemastore.org/fly.json"
+    },
+    {
+      "name": "Freifunk.de Community API",
+      "description": "Schema for Freifunk.de Community API. See more details https://github.com/freifunk/directory.api.freifunk.net",
+      "fileMatch": ["*.freifunk-api.json"],
+      "url": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.1.json"
     },
     {
       "name": ".asmdef",
@@ -1003,7 +1031,7 @@
         "sam.yml",
         "sam.yaml"
       ],
-      "url": "https://raw.githubusercontent.com/awslabs/goformation/master/schema/sam.schema.json"
+      "url": "https://raw.githubusercontent.com/aws/serverless-application-model/main/samtranslator/schema/schema.json"
     },
     {
       "name": "Citation File Format",
@@ -3116,7 +3144,7 @@
       "name": "tmLanguage",
       "description": "Language grammar description files in Textmate and compatible editors",
       "fileMatch": ["*.tmLanguage.json"],
-      "url": "https://raw.githubusercontent.com/Septh/tmlanguage/master/tmLanguage.schema.json"
+      "url": "https://raw.githubusercontent.com/Septh/tmlanguage/master/tmlanguage.json"
     },
     {
       "name": "TestEnvironment.json",
@@ -3247,6 +3275,19 @@
         "ui5-local.yaml"
       ],
       "url": "https://sap.github.io/ui5-tooling/schema/ui5.yaml.json"
+    },
+    {
+      "name": "ui5-workspace.yaml",
+      "description": "UI5 Tooling Workspace Configuration File (ui5-workspace.yaml)",
+      "fileMatch": [
+        "ui5-workspace.yaml",
+        "*-ui5-workspace.yaml",
+        "*.ui5-workspace.yaml",
+        "ui5-workspace-deploy.yaml",
+        "ui5-workspace-dist.yaml",
+        "ui5-workspace-local.yaml"
+      ],
+      "url": "https://sap.github.io/ui5-tooling/schema/ui5-workspace.yaml.json"
     },
     {
       "name": "UTAM Page Object",
@@ -4440,6 +4481,15 @@
       "description": "Unreal Engine project configuration file",
       "fileMatch": [".uproject"],
       "url": "https://json.schemastore.org/uproject.json"
+    },
+    {
+      "name": "Pantsbuild",
+      "description": "Pantsbuild configuration file",
+      "fileMatch": ["pants*.toml"],
+      "url": "https://json.schemastore.org/pantsbuild-2.14.0.json",
+      "versions": {
+        "2.14.0": "https://json.schemastore.org/pantsbuild-2.14.0.json"
+      }
     }
   ],
   "version": 1

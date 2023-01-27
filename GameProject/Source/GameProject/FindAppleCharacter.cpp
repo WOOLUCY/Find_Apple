@@ -6,6 +6,7 @@
 #include "Sword.h"
 
 #include "GameFramework/SpringArmComponent.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -31,7 +32,7 @@ AFindAppleCharacter::AFindAppleCharacter()
 	}
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -88.f), FRotator(0.f, -90.f, 0.f));
 
-	//�ִϸ��̼� ����
+	//�ִϸ��̼� ����
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	static ConstructorHelpers::FClassFinder<UAnimInstance> ABP_HERO
 	(TEXT("/Script/Engine.AnimBlueprint'/Game/Characters/Hero/ABP_Char.ABP_Char_C'"));
@@ -43,6 +44,8 @@ AFindAppleCharacter::AFindAppleCharacter()
 	IsAction = false;
 	CurEqip = 0;
 
+
+	/* ī�޶�� �������� ���̱� */
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->TargetArmLength = 500.f;
@@ -51,6 +54,47 @@ AFindAppleCharacter::AFindAppleCharacter()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	CameraComponent->bUsePawnControlRotation = false;
+
+
+	/* Ű �����ϴ� �� ���̱� */
+	/* ���� */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveForward(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveForward.IA_MoveForward'"));
+	{
+		MoveForwardAction = Input_MoveForward.Object;
+	}
+	/* ������ ���� */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveRight(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveRight.IA_MoveRight'"));
+	if (Input_MoveRight.Succeeded())
+	{
+		MoveRightAction = Input_MoveRight.Object;
+	}
+	/* ���콺 ȸ�� */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Look(TEXT("InputAction'/Game/Semin/KeyInput/IA_Look.IA_Look'"));
+	if (Input_Look.Succeeded())
+	{
+		LookAction = Input_Look.Object;
+	}
+	/* ����Ʈ / ������ �ݱ� ���ͷ��� */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_QuestInteraction(TEXT("InputAction'/Game/Semin/KeyInput/IA_QuestInteraction.IA_QuestInteraction'"));
+	if (Input_QuestInteraction.Succeeded())
+	{
+		QuestInteractionAction = Input_QuestInteraction.Object;
+	}
+	/* �κ��丮 Ű */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Inventory(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
+	if (Input_Inventory.Succeeded())
+	{
+		InventoryAction = Input_Inventory.Object;
+	}
+	/* ���� Ű */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
+	if (Input_Jump.Succeeded())
+	{
+		InventoryAction = Input_Jump.Object;
+	}
+
+
+	/* ���� ���ؽ�Ʈ */
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -118,6 +162,11 @@ void AFindAppleCharacter::QuestInteraction(const FInputActionValue& Value)
 
 }
 
+void AFindAppleCharacter::Inventory(const FInputActionValue& Value)
+{
+
+}
+
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
 {	// Character movement
 	const FVector2D DirectionValue = Value.Get<FVector2D>();
@@ -162,9 +211,10 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::MoveForward);
 		EnhancedInputComponent->BindAction(MoveRightAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::MoveRight);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::Look);
-		EnhancedInputComponent->BindAction(QuestInteractionAction, ETriggerEvent::Completed, this, &AFindAppleCharacter::QuestInteraction);
+		EnhancedInputComponent->BindAction(QuestInteractionAction, ETriggerEvent::Started, this, &AFindAppleCharacter::QuestInteraction);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Inventory);
 	}
 
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);

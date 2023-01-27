@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "FindAppleInterface.h"
+#include "Components/TimelineComponent.h"
 #include "QuestNPC.generated.h"
 
 UCLASS()
@@ -29,6 +30,11 @@ public:
 
 	TArray<struct FDialogueTableRow*> DialogueData;
 
+	/* 카메라 블렌드 무브를 위한 함수 생성 */
+	UFUNCTION()
+	void PlayerAdjustmentss();
+
+	/* 플레이어가 collised 상태에서 Q를 눌렀을 경우 인터페이스 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyCategory")
 	void OnActivate(); virtual void OnActivate_Implementation() override;
 
@@ -44,19 +50,54 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	UPROPERTY(EditAnywhere)
+	/* widget class */
+	UPROPERTY(EditAnywhere, Category = "Components")
 	TSubclassOf<class UUserWidget> DialogueWidgetClass;
 
+	UPROPERTY(EditAnywhere, Category = "Components")
+	TSubclassOf<class UUserWidget> DialoguePopWidgetClass;
+
+	virtual void OnConstruction(const FTransform& Transform) override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UCameraComponent* CameraComponent;
+
+	/* 타임 라인 */
+	UFUNCTION()
+	void TimelineProgress(float Value);
+	UFUNCTION()
+	void TimelineFinished();
+
 private:	
+	/* 타임 라인 */
+	FTimeline CurveFTimeline;
+	UPROPERTY(EditAnywhere, Category = "Components")
+	UCurveFloat* CurveFloat;
+
+	UPROPERTY()
+	FVector StartLoc;
+	UPROPERTY()
+	FVector EndLoc;
+
+	UPROPERTY()
+	FRotator StartRot;
+	UPROPERTY()
+	FRotator EndRot;
+
+	UPROPERTY(EditAnywhere, Category = "Components")
+	float ZOffset;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class USkeletalMeshComponent* SKMeshComponent;
+	class UTextRenderComponent* Text;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UBoxComponent* CollisionMesh = nullptr;
 
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UStaticMeshComponent* MyCone = nullptr;
+
 	UPROPERTY(EditAnywhere, Category = "Components")
-	int32 NPC_ID = 1;			// 퀘스트 NPC ID 는 1 번
+	int32 NPC_ID = 500;			// 퀘스트 NPC ID 는 1 번
 
 	UPROPERTY(EditAnywhere, Category = "Components")
 	int32 Conversation_ID = 0;
@@ -70,15 +111,17 @@ private:
 	UPROPERTY()
 	bool bIsValid = false;
 
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	FTransform	CameraTransform;
+
 
 	UPROPERTY()
 	TArray<FName> MyDialogue;
 
 	UPROPERTY()
 	class UDialogueWidget* DialogueUIObject;
-
-
-
+	UPROPERTY()
+	class UUserWidget* DialoguePopWidget;
 
 	UPROPERTY()
 	class UDataTable* DialogueDatatable;

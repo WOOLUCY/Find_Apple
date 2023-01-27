@@ -27,7 +27,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* CharacterMappingContext;
 
-	/* Ä³¸¯ÅÍ ÀÌµ¿ ¾×¼Ç */
+	/* Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½×¼ï¿½ */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveForwardAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
@@ -38,11 +38,14 @@ protected:
 	UInputAction* JumpAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* QuestInteractionAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* InventoryAction;
 
 	void MoveForward(const FInputActionValue& Value);
 	void MoveRight(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void QuestInteraction(const FInputActionValue& Value);
+	void Inventory(const FInputActionValue& Value);
 
 public:	
 	// Called every frame
@@ -58,12 +61,15 @@ public:
 	void OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted);
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UCameraComponent* CameraComponent;
+
+private:
+	//void LookUpRate(float AxisValue);
+	//void LookRightRate(float AxisValue);
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class UCameraComponent* CameraComponent;
 
 	UPROPERTY(EditAnywhere)
 	float CameraRotationRate = 10.f;
@@ -75,10 +81,10 @@ private:
 	float Health;
 
 	UPROPERTY(VisibleAnywhere)
-	int32 CurEqip; //ÇöÀç °¡Áö°íÀÖ´Â µµ±¸ÀúÀåº¯¼ö
+	int32 CurEqip; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½åº¯ï¿½ï¿½
 
 
-	//¾Ö´Ï¸ÞÀÌ¼Ç°ü·Ã
+	//ï¿½Ö´Ï¸ï¿½ï¿½Ì¼Ç°ï¿½ï¿½ï¿½
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsAction;
 
