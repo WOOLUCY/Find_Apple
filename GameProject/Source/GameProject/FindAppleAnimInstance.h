@@ -7,8 +7,7 @@
 #include "FindAppleAnimInstance.generated.h"
 
 
-DECLARE_MULTICAST_DELEGATE(FonActionCheckDelegate);
-DECLARE_MULTICAST_DELEGATE(FonActionHitCheckDelegate);
+DECLARE_DELEGATE(FonActionCheckDelegate);
 
 /**
  *
@@ -38,15 +37,11 @@ private:
 
 
 public:
-	UPROPERTY(VisibleAnywhere, Category = Equip)
-	UStaticMeshComponent* Sword;
-
-	FonActionCheckDelegate OnActionMon;
-	FonActionHitCheckDelegate OnActHitMon;
-
+	FonActionCheckDelegate HitCheckStart; //칼휘두르기 시작 - 콜리전설정부터하자.
+	FonActionCheckDelegate HitCheckEnd;
 private:
 	UFUNCTION()
-	void AnimNotify_HitCheck();
+	void AnimNotify_HitStart();
 
 	UFUNCTION()
 	void AnimNotify_HitEnd();

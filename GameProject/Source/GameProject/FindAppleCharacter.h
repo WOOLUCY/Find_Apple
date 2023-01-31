@@ -56,6 +56,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Action();
+	void ChangeEqip(int32 Select);
+
 
 	UFUNCTION()
 	void OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted);
@@ -64,8 +66,6 @@ public:
 	class UCameraComponent* CameraComponent;
 
 private:
-	//void LookUpRate(float AxisValue);
-	//void LookRightRate(float AxisValue);
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;

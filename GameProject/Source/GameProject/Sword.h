@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "EquipComponent.h"
+
 #include "Sword.generated.h"
 
 UCLASS()
@@ -23,8 +25,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetCollisionStart();
+	void SetCollisionEnd();
+
 	UPROPERTY(VisibleAnywhere, Category = Sword)
 		UStaticMeshComponent* Sword;
+	UPROPERTY(VisibleAnywhere, Category = Sword)
+		UBoxComponent* CollisionBox;
+
+
+	UPROPERTY()
+		UFindAppleAnimInstance* Anim;
+
+	UFUNCTION()
+		virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 
 };

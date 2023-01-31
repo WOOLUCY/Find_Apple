@@ -136,8 +136,6 @@ void AFindAppleCharacter::PostInitializeComponents()
 	Anim->OnMontageEnded.AddDynamic(this, &AFindAppleCharacter::OnActionMontageEnded);
 
 
-
-
 }
 
 void AFindAppleCharacter::QuestInteraction(const FInputActionValue& Value)
@@ -218,8 +216,12 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	}
 
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);
+	
 
+	//1,2,3 도구선택
+	//PlayerInputComponent->BindKey(EKeys::E, IE_Pressed, this, &AFindAppleCharacter::ChangeEqip);
 
+		//EKeys::e, IE_Pressed, this, &AFindAppleCharacter::ChangeEqip);
 }
 
 void AFindAppleCharacter::Action()
@@ -233,6 +235,24 @@ void AFindAppleCharacter::Action()
 	}
 
 
+}
+
+void AFindAppleCharacter::ChangeEqip(int32 Select)
+{
+	//키입력받아서 어쩌구저쩌구 해야할듯 
+	//컨트롤러에서 키입력을 받거나 액션맵핑을 해야겠다.
+	switch (Select) {
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 0:
+		break;
+	default:
+		break;
+	}
 }
 
 void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted)
