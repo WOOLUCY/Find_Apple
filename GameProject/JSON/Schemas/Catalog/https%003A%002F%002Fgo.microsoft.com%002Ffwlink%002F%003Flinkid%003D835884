@@ -723,15 +723,6 @@
       "url": "https://raw.githubusercontent.com/dbt-labs/dbt-jsonschema/main/schemas/dbt_project.json"
     },
     {
-      "name": "Deadpendency Config Schema",
-      "description": "Schema for Deadpendency config, a dependency management GitHub app",
-      "fileMatch": [
-        "**/.github/deadpendency.yaml",
-        "**/.deadpendency/config.yaml"
-      ],
-      "url": "https://json.schemastore.org/deadpendency.json"
-    },
-    {
       "name": "Dein Config Schema",
       "description": "Schema for Dein.vim, a Vim/Neovim plugin manager",
       "fileMatch": ["dein.toml"],
@@ -2044,6 +2035,12 @@
       "url": "https://w3id.org/linkml/meta.schema.json"
     },
     {
+      "name": "Lively Properties",
+      "description": "Lively Wallpaper configuration file. More info at https://github.com/rocksdanister/lively/wiki/Web-Guide-IV-:-Interaction#lively-properties",
+      "fileMatch": ["LivelyProperties.json"],
+      "url": "https://raw.githubusercontent.com/rocksdanister/lively/core-separation/schemas/livelyPropertiesSchema.json"
+    },
+    {
       "name": "local.settings.json",
       "description": "JSON schema for Azure Functions local.settings.json files",
       "fileMatch": ["local.settings.json"],
@@ -2184,6 +2181,12 @@
       "description": "Configuration file defining what sounds play when sound event is triggered for a resourcepack for Minecraft.",
       "fileMatch": ["**/assets/*/sounds.json"],
       "url": "https://raw.githubusercontent.com/AxoCode/json-schema/master/minecraft/sounds.json"
+    },
+    {
+      "name": "MkDocs Configuration 1.0",
+      "description": "JSON schema for MkDocs configuration file",
+      "fileMatch": ["mkdocs.yml"],
+      "url": "https://json.schemastore.org/mkdocs-1.0.json"
     },
     {
       "name": ".mocharc",
