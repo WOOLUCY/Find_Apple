@@ -18,8 +18,6 @@ public:
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvnet, class AController* EvnetInstigator, AActor* DamageCauser) override;
 
-	void Test(float Damage);
-
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,17 +26,26 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(BlueprintReadWrite, Category = Tree)
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = Tree)
 		UStaticMeshComponent* Lower;
 
-	UPROPERTY(BlueprintReadWrite, Category = Tree)
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = Tree)
 		UStaticMeshComponent* Upper;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Tree)
+		USceneComponent* Pivot;
 
 	UPROPERTY(BlueprintReadWrite, Category=Damage)
 		float MaxDamage;
 	UPROPERTY(BlueprintReadWrite, Category = Damage)
 		float TotalDamage;
 
+	void RespawnTree();
 
+private:
+	
+	float RespawnTime;
+
+	
 
 };

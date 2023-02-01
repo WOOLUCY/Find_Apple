@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "EquipComponent.h"
-
+#include "FindAppleAnimInstance.h"
+#include "Components/BoxComponent.h"
 #include "Sword.generated.h"
 
 UCLASS()

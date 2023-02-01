@@ -2,6 +2,7 @@
 
 
 #include "Sword.h"
+#include "Kismet/GameplayStatics.h"
 #include "FindAppleCharacter.h"
 
 // Sets default values
