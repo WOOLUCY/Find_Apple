@@ -15,7 +15,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "FindAppleInterface.h"
 #include "InputActionValue.h"
-
+#include "Inventory/InventoryUW.h"
+#include "Inventory/InventoryComponent.h"
 #include "Components/InputComponent.h"
 
 // Sets default values
@@ -87,15 +88,32 @@ AFindAppleCharacter::AFindAppleCharacter()
 		InventoryAction = Input_Inventory.Object;
 	}
 	/* 점프 키 */
-	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Jump.IA_Jump'"));
 	if (Input_Jump.Succeeded())
 	{
 		JumpAction = Input_Jump.Object;
+	}
+	/* 아이템 줍기 키 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_PickUp(TEXT("InputAction'/Game/Semin/KeyInput/IA_PickItem.IA_PickItem'"));
+	if (Input_PickUp.Succeeded())
+	{
+		PickItemAction = Input_PickUp.Object;
+	}
+
+	
+	/* Inventory Widget */
+	ConstructorHelpers::FClassFinder<UInventoryUW>  InventoryWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_InventoryCPP.WBP_InventoryCPP_C'"));
+	if (InventoryWidget.Succeeded())
+	{
+		InventoryWidgetClass = InventoryWidget.Class;
 	}
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+
+	//InventoryComponent
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
@@ -161,7 +179,43 @@ void AFindAppleCharacter::QuestInteraction(const FInputActionValue& Value)
 
 void AFindAppleCharacter::Inventory(const FInputActionValue& Value)
 {
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if ( bInventoryWidget ) 
+	{
+		InventoryUIObject->RemoveFromParent();
+		bInventoryWidget = false;
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		PlayerController->SetShowMouseCursor(false);
+	}
+	else  
+	{
+		InventoryUIObject = CreateWidget<UInventoryUW>(GetWorld(), InventoryWidgetClass);
+		InventoryUIObject->AddToViewport();
+		bInventoryWidget = true;
+		PlayerController->SetInputMode(FInputModeGameAndUI());
+		PlayerController->SetShowMouseCursor(true);
+	}
+}
 
+void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
+{
+	TArray<AActor*> TalkableActor;
+
+	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UFindAppleInterface::StaticClass(), TalkableActor);
+
+	for (AActor* Actor : TalkableActor)
+	{
+		IFindAppleInterface* Interface = Cast<IFindAppleInterface>(Actor);
+
+		if (Interface != nullptr)
+		{
+			if (this->IsOverlappingActor(Actor))
+			{
+				UE_LOG(LogTemp, Display, TEXT("collised"));
+				Interface->Execute_PicUpItem(Actor);
+			}
+		}
+	}
 }
 
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
@@ -212,6 +266,7 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Inventory);
+		EnhancedInputComponent->BindAction(PickItemAction, ETriggerEvent::Started, this, &AFindAppleCharacter::PickItem);
 	}
 
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);

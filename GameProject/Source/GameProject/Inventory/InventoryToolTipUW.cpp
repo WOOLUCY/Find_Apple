@@ -3,3 +3,11 @@
 
 #include "InventoryToolTipUW.h"
 
+UInventoryToolTipUW::UInventoryToolTipUW(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
+{
+}
+
+void UInventoryToolTipUW::NativeConstruct()
+{
+	Super::NativeConstruct();
+}

@@ -4,3 +4,11 @@
 
 #include "InventorySlotUW.h"
 
+UInventorySlotUW::UInventorySlotUW(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
+{
+}
+
+void UInventorySlotUW::NativeConstruct()
+{
+	Super::NativeConstruct();
+}
