@@ -3,7 +3,7 @@
 
 #include "FindAppleGameMode.h"
 #include "FindAppleCharacter.h"
-#include "DialogueDataStruct.h"
+#include "Dialogue/DialogueDataStruct.h"
 #include "UObject/ConstructorHelpers.h"
 
 AFindAppleGameMode::AFindAppleGameMode()

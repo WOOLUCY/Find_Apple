@@ -40,12 +40,15 @@ protected:
 	UInputAction* QuestInteractionAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* InventoryAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* PickItemAction;
 
 	void MoveForward(const FInputActionValue& Value);
 	void MoveRight(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void QuestInteraction(const FInputActionValue& Value);
 	void Inventory(const FInputActionValue& Value);
+	void PickItem(const FInputActionValue& Value);
 
 public:	
 	// Called every frame
@@ -62,6 +65,23 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UInventoryComponent* InventoryComponent;
+
+	/* Inventory Widget Class */
+	UPROPERTY(EditAnywhere, Category = "Components")
+	TSubclassOf<class UUserWidget> InventoryWidgetClass;
+	UPROPERTY()
+	class UInventoryUW* InventoryUIObject;
+	UPROPERTY()
+	bool bInventoryWidget = false;
+	
+	/* Item Pick up Check */
+	UPROPERTY()
+	bool PressE = false;
+	UPROPERTY()
+	AActor* LookAtActorPressE;
 
 private:
 	//void LookUpRate(float AxisValue);
@@ -88,7 +108,7 @@ private:
 	bool IsAction;
 
 	UPROPERTY()
-		class UFindAppleAnimInstance* Anim;
+	class UFindAppleAnimInstance* Anim;
 
 
 };

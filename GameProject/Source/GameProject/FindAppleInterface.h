@@ -22,7 +22,11 @@ class GAMEPROJECT_API IFindAppleInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-
+	/* Dialogue Activate */
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Dialogue")
 	void OnActivate();
+
+	/* Item Pick up Interface */
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Dialogue")
+	void PicUpItem();
 };
