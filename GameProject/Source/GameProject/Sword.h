@@ -33,12 +33,17 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Sword)
 		UBoxComponent* CollisionBox;
 
+	UPROPERTY(VisibleAnywhere, Category = Sword)
+		float Damage;
+
 
 	UPROPERTY()
 		UFindAppleAnimInstance* Anim;
 
 	UFUNCTION()
 		virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-
+	UFUNCTION()
+		virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
+			bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 };

@@ -2,6 +2,7 @@
 
 
 #include "Sword.h"
+#include "FindAppleCharacter.h"
 
 // Sets default values
 ASword::ASword()
@@ -17,7 +18,7 @@ ASword::ASword()
 	CollisionBox->SetRelativeLocation(FVector(0.f, 37.191134f, 0.f));
 
 
-
+	Damage = 10.f;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_SWORD
 	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/Sword.Sword'"));
@@ -64,7 +65,7 @@ void ASword::SetCollisionStart()
 {
 	//근데 스월드는 항상 노콜리전임 박스를바꿔줘야함
 	CollisionBox->SetCollisionProfileName(TEXT("OverlapAll"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SetCollisionStart "));
+	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SetCollisionStart "));
 
 
 }
@@ -72,20 +73,46 @@ void ASword::SetCollisionStart()
 void ASword::SetCollisionEnd()
 {
 	CollisionBox->SetCollisionProfileName(TEXT("NoCollision"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SetCollisionEnd "));
+	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SetCollisionEnd "));
 
 }
 
 void ASword::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("NotifyActorBeginOverlap "));
+	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("NotifyActorBeginOverlap "));
 
 	//FHitResult hit;
 	FString name = OtherActor->GetName();
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, name);
+	
+
+
+	UWorld* TheWorld = GetWorld();
+	if (TheWorld != nullptr) {
+		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
+		if (Cast<AFindAppleCharacter>(OtherActor) != hero) {
+			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, name);
+			//데미지를주겠다.
+			FDamageEvent DamageEvent;
+			OtherActor->TakeDamage(Damage, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), this);
+			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("TakeDamage"));
+		}
+		else {
+			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OverlapSelf"));
+		}
+	}
 
 
 }
 
+void ASword::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+{
+	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("NotifyHit "));
+
+	//피해를 주겠다.
+	FDamageEvent DamageEvent;
+	//Hit.GetActor()->TakeDamage()
+
+}
 

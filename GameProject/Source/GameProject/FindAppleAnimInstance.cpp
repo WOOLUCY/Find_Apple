@@ -49,14 +49,12 @@ void UFindAppleAnimInstance::PlayActionMontage()
 void UFindAppleAnimInstance::AnimNotify_HitStart()
 {
 
-	UE_LOG(LogTemp, Warning, TEXT("Sword Hitcheck Call"));
 	HitCheckStart.ExecuteIfBound();
 
 }
 
 void UFindAppleAnimInstance::AnimNotify_HitEnd()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Ax HitEnd Call"));
 	HitCheckEnd.ExecuteIfBound();
 
 

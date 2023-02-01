@@ -37,7 +37,7 @@ private:
 
 
 public:
-	FonActionCheckDelegate HitCheckStart; //칼휘두르기 시작 - 콜리전설정부터하자.
+	FonActionCheckDelegate HitCheckStart; 
 	FonActionCheckDelegate HitCheckEnd;
 private:
 	UFUNCTION()

@@ -14,6 +14,12 @@ class GAMEPROJECT_API ATree : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATree();
+	
+	UFUNCTION()
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvnet, class AController* EvnetInstigator, AActor* DamageCauser) override;
+
+	void Test(float Damage);
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,10 +28,17 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(VisibleAnywhere, Category = Tree)
+	UPROPERTY(BlueprintReadWrite, Category = Tree)
 		UStaticMeshComponent* Lower;
 
-	UPROPERTY(VisibleAnywhere, Category = Tree)
+	UPROPERTY(BlueprintReadWrite, Category = Tree)
 		UStaticMeshComponent* Upper;
+
+	UPROPERTY(BlueprintReadWrite, Category=Damage)
+		float MaxDamage;
+	UPROPERTY(BlueprintReadWrite, Category = Damage)
+		float TotalDamage;
+
+
 
 };

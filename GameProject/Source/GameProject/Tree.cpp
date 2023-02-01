@@ -8,7 +8,8 @@ ATree::ATree()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
+	MaxDamage = 10.f;
+	TotalDamage = 0.f;
 	Lower = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LOWER"));
 	RootComponent = Lower;
 
@@ -43,5 +44,31 @@ void ATree::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+float ATree::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet, AController* EvnetInstigator, AActor* DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvnet, EvnetInstigator, DamageCauser);
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, DamageCauser->GetName());
+
+	
+	Test(FinalDamage);
+
+
+	return 0.f;
+}
+
+void ATree::Test(float Damage)
+{
+	if (TotalDamage > MaxDamage) {
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Wow"));
+		TotalDamage = 0.f;
+
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("not yet"));
+		TotalDamage += Damage;
+		//Upper->SetRelativeRotation(FRotator());
+	}
 }
 
