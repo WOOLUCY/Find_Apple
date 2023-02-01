@@ -33,7 +33,7 @@ public:
 	float Hunger;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	float MeshScale;
+	FVector MeshScale;
 };
 
 
