@@ -45,7 +45,7 @@ AFindAppleCharacter::AFindAppleCharacter()
 	CurEqip = 0;
 
 
-	/* ī�޶�� �������� ���̱� */
+	/* Camera & Spring Arm */
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->TargetArmLength = 500.f;
@@ -56,45 +56,42 @@ AFindAppleCharacter::AFindAppleCharacter()
 	CameraComponent->bUsePawnControlRotation = false;
 
 
-	/* Ű �����ϴ� �� ���̱� */
-	/* ���� */
+	/* 캐릭터 이동 */
+	/* 전진 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveForward(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveForward.IA_MoveForward'"));
 	{
 		MoveForwardAction = Input_MoveForward.Object;
 	}
-	/* ������ ���� */
+	/* 회전 이동 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveRight(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveRight.IA_MoveRight'"));
 	if (Input_MoveRight.Succeeded())
 	{
 		MoveRightAction = Input_MoveRight.Object;
 	}
-	/* ���콺 ȸ�� */
+	/* 마우스 회전 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Look(TEXT("InputAction'/Game/Semin/KeyInput/IA_Look.IA_Look'"));
 	if (Input_Look.Succeeded())
 	{
 		LookAction = Input_Look.Object;
 	}
-	/* ����Ʈ / ������ �ݱ� ���ͷ��� */
+	/* 퀘스트 및 아이템 줍기 인터랙션 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_QuestInteraction(TEXT("InputAction'/Game/Semin/KeyInput/IA_QuestInteraction.IA_QuestInteraction'"));
 	if (Input_QuestInteraction.Succeeded())
 	{
 		QuestInteractionAction = Input_QuestInteraction.Object;
 	}
-	/* �κ��丮 Ű */
+	/* 인벤토리 키 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Inventory(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
 	if (Input_Inventory.Succeeded())
 	{
 		InventoryAction = Input_Inventory.Object;
 	}
-	/* ���� Ű */
+	/* 점프 키 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
 	if (Input_Jump.Succeeded())
 	{
-		InventoryAction = Input_Jump.Object;
+		JumpAction = Input_Jump.Object;
 	}
-
-
-	/* ���� ���ؽ�Ʈ */
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;

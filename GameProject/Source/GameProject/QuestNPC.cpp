@@ -130,7 +130,6 @@ void AQuestNPC::DialogueGetLine()
 			{
 				if (!ReturnLines[0].IsEmpty())
 				{
-					UE_LOG(LogTemp, Display, TEXT("TExt Set"));
 					DialogueUIObject->ChangeText(MyNameText, ReturnLines[0]);
 					return;
 				}
@@ -288,7 +287,9 @@ void AQuestNPC::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
 	}
-	
+
+	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &AQuestNPC::OnOverlapEnd);
+	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &AQuestNPC::OnOverlapBegin);
 }
 
 void AQuestNPC::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) 
@@ -315,8 +316,6 @@ void AQuestNPC::Tick(float DeltaTime)
 
 	CurveFTimeline.TickTimeline(DeltaTime);
 
-	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &AQuestNPC::OnOverlapEnd);
-	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &AQuestNPC::OnOverlapBegin);
 }
 
 // Called to bind functionality to input
