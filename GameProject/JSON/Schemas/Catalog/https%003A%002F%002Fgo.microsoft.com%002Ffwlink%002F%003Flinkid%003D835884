@@ -389,6 +389,22 @@
       "url": "https://json.schemastore.org/foxx-manifest.json"
     },
     {
+      "name": "flagd flag configuration",
+      "description": "Flag configuration for the OpenFeature spec compliant flagd provider",
+      "fileMatch": [
+        "flagd.json",
+        "flagd.yaml",
+        "flagd.yml",
+        "*.flagd.json",
+        "*.flagd.yaml",
+        "*.flagd.yml"
+      ],
+      "url": "https://raw.githubusercontent.com/open-feature/schemas/main/json/flagd-definitions.json",
+      "versions": {
+        "0.1.1": "https://raw.githubusercontent.com/open-feature/schemas/json/json-schema-v0.1.1/json/flagd-definitions.json"
+      }
+    },
+    {
       "name": "fly.io Schema",
       "description": "Schema for fly.io, a cloud provider",
       "fileMatch": ["fly.toml"],
@@ -3293,7 +3309,11 @@
       "name": "UTAM Page Object",
       "description": "UI Test Automation Model page object - https://utam.dev/",
       "fileMatch": ["*.utam.json", ".utam.json"],
-      "url": "https://json.schemastore.org/utam-page-object.json"
+      "url": "https://json.schemastore.org/utam-page-object.json",
+      "versions": {
+        "1.5.0": "https://json.schemastore.org/utam-page-object-1.5.0.json",
+        "current": "https://json.schemastore.org/utam-page-object.json"
+      }
     },
     {
       "name": "vega.json",
