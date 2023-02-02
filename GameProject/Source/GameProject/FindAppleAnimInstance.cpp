@@ -41,7 +41,6 @@ void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 void UFindAppleAnimInstance::PlayActionMontage()
 {
 
-
 	Montage_Play(ActionMontage, 1.f);
 
 }
@@ -60,8 +59,4 @@ void UFindAppleAnimInstance::AnimNotify_HitEnd()
 
 }
 
-FName UFindAppleAnimInstance::GetActionMontageSecName(int32 Section)
-{
-	return FName(*FString::Printf(TEXT("Sword")));
 
-}

@@ -4,6 +4,7 @@
 #include "FindAppleCharacter.h"
 #include "FindAppleAnimInstance.h"
 #include "Sword.h"
+#include "Ax.h"
 #include "FarmGround.h"
 
 
@@ -60,29 +61,32 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		MoveForwardAction = Input_MoveForward.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveRight(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveRight.IA_MoveRight'"));
 	if (Input_MoveRight.Succeeded())
 	{
 		MoveRightAction = Input_MoveRight.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Look(TEXT("InputAction'/Game/Semin/KeyInput/IA_Look.IA_Look'"));
 	if (Input_Look.Succeeded())
 	{
 		LookAction = Input_Look.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_QuestInteraction(TEXT("InputAction'/Game/Semin/KeyInput/IA_QuestInteraction.IA_QuestInteraction'"));
 	if (Input_QuestInteraction.Succeeded())
 	{
 		QuestInteractionAction = Input_QuestInteraction.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Inventory(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
 	if (Input_Inventory.Succeeded())
 	{
 		InventoryAction = Input_Inventory.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Jump.IA_Jump'"));
-
-
 	if (Input_Jump.Succeeded())
 	{
 		JumpAction = Input_Jump.Object;
@@ -93,6 +97,19 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		PickItemAction = Input_PickUp.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Dash(TEXT("InputAction'/Game/Semin/KeyInput/IA_Jump.IA_Jump'"));
+	if (Input_Dash.Succeeded())
+	{
+		DashMapping = Input_Dash.Object;
+	}
+	
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Equip(TEXT("InputAction'/Game/Semin/KeyInput/IA_Jump.IA_Jump'"));
+	if (Input_Equip.Succeeded())
+	{
+		EquipChoicMapping = Input_Equip.Object;
+	}
+
 
 	
 	/* Inventory Widget */
@@ -130,7 +147,9 @@ void AFindAppleCharacter::BeginPlay()
 		}
 	}
 
-	auto CurEquip = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
+	//auto CurEquip = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
+	auto CurEquip = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
+
 	if (CurEquip != nullptr) {
 		CurEquip->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
 	}
@@ -206,6 +225,7 @@ void AFindAppleCharacter::Inventory(const FInputActionValue& Value)
 
 void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
 {
+
 	TArray<AActor*> TalkableActor;
 
 	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UFindAppleInterface::StaticClass(), TalkableActor);
@@ -223,6 +243,22 @@ void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
 			}
 		}
 	}
+}
+
+void AFindAppleCharacter::ChangeEqip(const FInputActionValue& Value)
+{
+	
+
+}
+
+void AFindAppleCharacter::ChangeSpeed(const FInputActionValue& Value)
+{
+	//여기서 스피드를 바꾸던가 올리던가 어쩌구저쩌구해야함
+}
+
+void AFindAppleCharacter::Test()
+{
+	UE_LOG(LogTemp, Warning, TEXT("sibla"));
 }
 
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
@@ -274,15 +310,16 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Inventory);
 		EnhancedInputComponent->BindAction(PickItemAction, ETriggerEvent::Started, this, &AFindAppleCharacter::PickItem);
+		
+		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);
+		EnhancedInputComponent->BindAction(EquipChoicMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeEqip);
+
 	}
 
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);
 	
-
-	//1,2,3 도구선택
-	//PlayerInputComponent->BindKey(EKeys::E, IE_Pressed, this, &AFindAppleCharacter::ChangeEqip);
-
-		//EKeys::e, IE_Pressed, this, &AFindAppleCharacter::ChangeEqip);
+	//PlayerInputComponent->KeyBindings()
+//	PlayerInputComponent->BindKey(EKeys::M, IE_Pressed, this, &AFindAppleCharacter::Test);
 }
 
 void AFindAppleCharacter::Action()
@@ -298,25 +335,7 @@ void AFindAppleCharacter::Action()
 
 }
 
-void AFindAppleCharacter::ChangeEqip(int32 Select)
-{
-	//키입력받아서 어쩌구저쩌구 해야할듯 
-	//컨트롤러에서 키입력을 받거나 액션맵핑을 해야겠다.
-	switch (Select) {
-	case 1:
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 0:
-		break;
-	default:
-		break;
-	}
-}
+
 
 void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted)
 {
@@ -324,7 +343,7 @@ void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInte
 }
 
 void AFindAppleCharacter::ActionPlant()
-{
+{//??d이거 왜썻지...
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Action Plant Delegate"));
 
 }

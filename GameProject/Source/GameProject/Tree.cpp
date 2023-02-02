@@ -17,15 +17,18 @@ ATree::ATree()
 
 	Lower = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LOWER"));
 	Pivot = CreateDefaultSubobject<USceneComponent>(TEXT("PIVOT"));
-	Pivot->SetRelativeLocation(FVector(0, 0, 90.f));
-
 	Upper = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("UPPER"));
+	Leaf = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LEAF"));
+
+	Pivot->SetRelativeLocation(FVector(0, 0, 90.f));
 	Upper->SetRelativeLocation(FVector(0, 0, -90.f));
+	Leaf->SetRelativeLocation(FVector(0, 0, -90.f));
 
 	RootComponent = Lower;
 	Pivot->SetupAttachment(RootComponent);
 	Upper->AttachToComponent(Pivot, FAttachmentTransformRules::KeepWorldTransform);
-
+	Leaf->AttachToComponent(Pivot, FAttachmentTransformRules::KeepWorldTransform);
+	Leaf->SetCollisionProfileName(TEXT("NoCollision"));
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LOWER
 	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/LowerTree.LowerTree'"));
@@ -33,12 +36,16 @@ ATree::ATree()
 		Lower->SetStaticMesh(SM_LOWER.Object);
 	}
 
-
-
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_UPPER
 	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/UpperTree.UpperTree'"));
 	if (SM_UPPER.Succeeded()) {
 		Upper->SetStaticMesh(SM_UPPER.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LEAF
+	(TEXT("/Script/Engine.StaticMesh'/Game/untitled_category/untitled_asset/TreeWithLeafs.TreeWithLeafs'"));
+	if (SM_LEAF.Succeeded()) {
+		Leaf->SetStaticMesh(SM_LEAF.Object);
 	}
 
 
@@ -50,6 +57,8 @@ void ATree::BeginPlay()
 	Super::BeginPlay();
 
 }
+
+
 
 // Called every frame
 void ATree::Tick(float DeltaTime)
@@ -63,8 +72,8 @@ void ATree::RespawnTree()
 	TotalDamage = 0.f;
 	Pivot->SetRelativeRotation(FRotator());
 	Upper->SetVisibility(true);
+	Leaf->SetVisibility(true);
 
-	
 }
 
 float ATree::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet, AController* EvnetInstigator, AActor* DamageCauser)
@@ -83,6 +92,8 @@ float ATree::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet, ACo
 			if (TotalDamage > MaxDamage) {
 				GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Wow"));
 				Upper->SetVisibility(false);
+				Leaf->SetVisibility(false);
+
 				FTimerHandle Timer;
 
 				GetWorldTimerManager().SetTimer(Timer, this, &ATree::RespawnTree, RespawnTime);

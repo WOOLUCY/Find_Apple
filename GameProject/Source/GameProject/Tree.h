@@ -26,18 +26,22 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = Tree)
+	UPROPERTY(VisibleAnywhere, Category = Tree)
 		UStaticMeshComponent* Lower;
 
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = Tree)
+	UPROPERTY(VisibleAnywhere, Category = Tree)
 		UStaticMeshComponent* Upper;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Tree)
+	UPROPERTY(VisibleAnywhere,  Category = Tree)
+		UStaticMeshComponent* Leaf;
+
+	UPROPERTY(VisibleAnywhere,  Category = Tree)
 		USceneComponent* Pivot;
 
-	UPROPERTY(BlueprintReadWrite, Category=Damage)
+	UPROPERTY(VisibleAnywhere, Category=Damage)
 		float MaxDamage;
-	UPROPERTY(BlueprintReadWrite, Category = Damage)
+
+	UPROPERTY(VisibleAnywhere, Category = Damage)
 		float TotalDamage;
 
 	void RespawnTree();

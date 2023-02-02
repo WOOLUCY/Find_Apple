@@ -92,6 +92,7 @@ void ASword::NotifyActorBeginOverlap(AActor* OtherActor)
 		if (Cast<AFindAppleCharacter>(OtherActor) != hero) {
 			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, name);
 			//데미지를주겠다.
+
 			FDamageEvent DamageEvent;
 			OtherActor->TakeDamage(Damage, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), this);
 			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("TakeDamage"));

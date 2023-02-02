@@ -31,6 +31,7 @@ private:
 		float Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Move, Meta = (AllowPrivateAccess = true))
 		bool OnAir;
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* ActionMontage;
 
@@ -46,7 +47,8 @@ private:
 	UFUNCTION()
 	void AnimNotify_HitEnd();
 
-	FName GetActionMontageSecName(int32 Section);
+
+
 
 
 };

@@ -17,11 +17,23 @@ public:
 	// Sets default values for this actor's properties
 	AFarmGround();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* Mesh;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
+		UStaticMeshComponent* CheckMesh;
+
+
+	UPROPERTY(VisibleAnywhere)
 		UBoxComponent* Box;
+
+	UPROPERTY()
+		UMaterial* Wet;
+	UPROPERTY()
+		UMaterial* NotWet;
+	UPROPERTY()
+		UMaterial* Overlap;
+
 
 
 	OnFarmDelegate PlantDelegate;
@@ -33,8 +45,15 @@ protected:
 	virtual void NotifyActorBeginCursorOver() override;
 	virtual void NotifyActorEndCursorOver() override;
 
+private:
+	bool IsEmpty;
+	bool CanPutSeed;
+	bool IsWet;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+
 
 };

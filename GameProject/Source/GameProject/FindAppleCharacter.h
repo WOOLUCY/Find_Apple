@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-
 #include "FindAppleCharacter.generated.h"
 
 class UInputMappingContext;
@@ -30,7 +29,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* CharacterMappingContext;
 
-	/* ĳ���� �̵� �׼� */
+	/* input */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveForwardAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
@@ -45,6 +44,10 @@ protected:
 	UInputAction* InventoryAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* PickItemAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* DashMapping;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* EquipChoicMapping;
 
 	void MoveForward(const FInputActionValue& Value);
 	void MoveRight(const FInputActionValue& Value);
@@ -52,6 +55,10 @@ protected:
 	void QuestInteraction(const FInputActionValue& Value);
 	void Inventory(const FInputActionValue& Value);
 	void PickItem(const FInputActionValue& Value);
+
+	void ChangeEqip(const FInputActionValue& Value);
+	void ChangeSpeed(const FInputActionValue& Value);
+
 
 public:	
 	// Called every frame
@@ -62,7 +69,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Action();
-	void ChangeEqip(int32 Select);
+	void Test();
 
 
 	UFUNCTION()
