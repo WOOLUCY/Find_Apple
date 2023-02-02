@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../FindAppleInterface.h"
 #include "Blueprint/UserWidget.h"
 #include "InventoryUW.h"
 #include "InventorySlotUW.generated.h"
@@ -15,11 +16,13 @@ class GAMEPROJECT_API UInventorySlotUW : public UUserWidget
 {
 	GENERATED_BODY()
 
-public:
+protected:
 	UInventorySlotUW(const FObjectInitializer& objectInitializer);
 
 	virtual void NativeConstruct() override;
+	virtual void NativePreConstruct() override;
 
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* QuantityText;
 
@@ -35,6 +38,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	FName ItemName;
 
+	UPROPERTY()
+	FText Descript;
+
+	UPROPERTY()
+	FText Name;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInventoryUW* Widget;
+
+	UPROPERTY(EditAnywhere, Category = "Components")
+	TSubclassOf<class UUserWidget> InventoryWidgetClass;
+
+	UPROPERTY()
+	class UInventoryUW* InventoryUIObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
+
+	TArray<struct FInventoryTableRow*> InventoryData;
+
+	UFUNCTION()
+	void ShowToolTip();
 };

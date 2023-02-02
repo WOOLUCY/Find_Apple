@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../FindAppleInterface.h"
 #include "Blueprint/UserWidget.h"
 #include "InventoryUW.generated.h"
 
@@ -31,7 +32,7 @@ public:
 	FText ItemName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	FText Descript;
+	FText DescriptText;
 
 	FOnInputAction Input;
 };

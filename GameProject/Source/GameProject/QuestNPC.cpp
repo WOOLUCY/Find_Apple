@@ -106,7 +106,6 @@ void AQuestNPC::BeginPlay()
 			FDialogueTableRow Dialogue = *(DialogueDatatable->FindRow<FDialogueTableRow>(RowNames[i], RowNames[i].ToString()));
 			if (NPC_ID == Dialogue.NPC_ID) {
 				MyDialogue.Add(RowNames[i]);
-				UE_LOG(LogTemp, Warning, TEXT("NPCID: %d, NPC Name: %s"), Dialogue.NPC_ID, *(Dialogue.NPC_Name.ToString()));
 			}
 		}
 	}
@@ -120,10 +119,8 @@ void AQuestNPC::DialogueGetLine()
 	for ( FName CurDialogue : MyDialogue )
 	{
 		FDialogueTableRow Dialogue = *(DialogueDatatable->FindRow<FDialogueTableRow>(CurDialogue, CurDialogue.ToString()));
-		UE_LOG(LogTemp, Warning, TEXT("C_ID: %d, CD_ID: %d, L_ID: %d, LD_ID: %d"), Conversation_ID, Dialogue.Conversation_ID, CurrentLine, Dialogue.Line_ID);
 		if ( Conversation_ID == Dialogue.Conversation_ID && CurrentLine == Dialogue.Line_ID)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("NPCID: %d, NPC Name: %s"), Dialogue.NPC_ID, *(Dialogue.NPC_Name.ToString()));
 			MyNameText = Dialogue.NPC_Name;
 			ReturnLines.Add(Dialogue.Dialogue);
 			if (ReturnLines.Num() == 1)
@@ -140,7 +137,6 @@ void AQuestNPC::DialogueGetLine()
 	}
 
 	if (ReturnLines.IsEmpty()) {
-		UE_LOG(LogTemp, Display, TEXT("Text Remove "));
 		bIsValid = false;
 		DialogueUIObject->RemoveFromParent();
 		CurrentLine = 0;
@@ -178,14 +174,12 @@ void AQuestNPC::DialogueCreate()
 {
 	if (bIsValid)	// Widget is 'not' valid !!
 	{
-		UE_LOG(LogTemp, Display, TEXT("call dialogue get line "));
 		DialogueGetLine();
 	}
 	else 
 	{
 		if (DialogueWidgetClass)
 		{
-			UE_LOG(LogTemp, Display, TEXT("widget create "));
 			bIsValid = true;
 			DialogueUIObject = CreateWidget<UDialogueWidget>(GetWorld(), DialogueWidgetClass);
 			DialogueUIObject->AddToViewport();
@@ -275,7 +269,6 @@ void AQuestNPC::OnActivate_Implementation()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Display, TEXT("Is That Rihgt?"));
 		PlayerAdjustmentss();
 		Text->SetHiddenInGame(true);
 	}

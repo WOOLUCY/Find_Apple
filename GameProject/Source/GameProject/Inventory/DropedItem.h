@@ -47,5 +47,5 @@ private:
 	class UDataTable* ItemDataTable;
 
 	UPROPERTY(EditAnywhere, Category ="Setting")
-	FName ItemName = "Apple";
+	FName ItemName = "apple";
 };

@@ -7,6 +7,7 @@
 #include "Engine/DataTable.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "InventoryComponent.h"
 #include "../FindAppleCharacter.h"
 
 // Sets default values
@@ -24,8 +25,10 @@ ADropedItem::ADropedItem()
 	{
 		MyBox->SetStaticMesh(BoxMesh.Object);
 		MyBox->SetRelativeLocationAndRotation(FVector(180.f, 0.f, 0.f), FRotator(0.f, 180.f, 0.f));
-		MyBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		MyBox->SetHiddenInGame(true);
+		MyBox->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+		MyBox->SetCollisionProfileName(TEXT("ItemCollision"));
+		MyBox->SetSimulatePhysics(true);
+
 	}
 
 	/* Collision Mesh */
@@ -33,13 +36,19 @@ ADropedItem::ADropedItem()
 	CollisionMesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 64.f), FRotator(0.f, 0.f, 0.f));
 	CollisionMesh->SetBoxExtent(FVector(64.f, 64.f, 64.f));
 	CollisionMesh->SetupAttachment(MyBox);
+	CollisionMesh->SetHiddenInGame(true);
 
-	//static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable'"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
+	if (DataTable.Succeeded())
+	{
+		ItemDataTable = DataTable.Object;
+	}
+
+	//static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/CPP_Dialogue_File.CPP_Dialogue_File"));
 	//if (DataTable.Succeeded())
 	//{
-	//	ItemDataTable = DataTable.Object;
+	//	DialogueDatatable = DataTable.Object;
 	//}
-
 }
 
 // Called when the game starts or when spawned
@@ -61,7 +70,7 @@ void ADropedItem::BeginPlay()
 				MyBox->SetStaticMesh(InventoryRow.Mesh3D);
 				MyBox->SetWorldScale3D(InventoryRow.MeshScale);
 				MyBox->SetMaterial(0, InventoryRow.Mesh3D->GetMaterial(0));
-				UE_LOG(LogTemp, Warning, TEXT("Apple "));
+				UE_LOG(LogTemp, Warning, TEXT("Apple"));
 			}
 		}
 	}
@@ -75,6 +84,7 @@ void ADropedItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 }
 
 void ADropedItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -100,5 +110,8 @@ void ADropedItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 
 void ADropedItem::PicUpItem_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Pick UP !!"));
+	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+	MyCharacter->InventoryComponent->AddToInventory(ItemName, 1);
+	Destroy();
 }

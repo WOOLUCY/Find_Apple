@@ -74,8 +74,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UCameraComponent* CameraComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	class UInventoryComponent* InventoryComponent;
 
 	/* Inventory Widget Class */
 	UPROPERTY(EditAnywhere, Category = "Components")
@@ -90,6 +88,10 @@ public:
 	bool PressE = false;
 	UPROPERTY()
 	AActor* LookAtActorPressE;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UInventoryComponent* InventoryComponent;
+	UPROPERTY()
+	bool HideToolTip = true;
 
 private:
 

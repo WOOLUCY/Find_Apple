@@ -12,7 +12,7 @@ void UInventoryUW::NativePreConstruct()
 	Super::NativePreConstruct();
 
 	WBP_ToolTip->ItemName = ItemName;
-	WBP_ToolTip->Descript = Descript;
+	WBP_ToolTip->Descript = DescriptText;
 	WBP_InventoryMenu->InventoryWidget = this;
 }
 
@@ -24,7 +24,10 @@ void UInventoryUW::NativeConstruct()
 	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 
 	WBP_InventoryMenu->ShowInventory(MyCharacter->InventoryComponent, FText());
-	WBP_ToolTip->SetVisibility(ESlateVisibility::Hidden);
+	if (MyCharacter->HideToolTip == true)
+	{
+		WBP_ToolTip->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 UInventoryUW::UInventoryUW(const FObjectInitializer& objectInitializer) : Super(objectInitializer)

@@ -27,6 +27,6 @@ public:
 	void OnActivate();
 
 	/* Item Pick up Interface */
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Dialogue")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Inventory")
 	void PicUpItem();
 };

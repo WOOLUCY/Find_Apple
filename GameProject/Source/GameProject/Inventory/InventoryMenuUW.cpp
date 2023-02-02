@@ -39,7 +39,7 @@ void UInventoryMenuUW::Refresh()
 
 void UInventoryMenuUW::ShowInventory(UInventoryComponent* InventoryComp, FText Name)
 {
-	//InventoryComponent = InventoryComp;
-	//InventoryName = Name;
-	//Refresh();
+	InventoryComponent = InventoryComp;
+	InventoryName = Name;
+	Refresh();
 }
