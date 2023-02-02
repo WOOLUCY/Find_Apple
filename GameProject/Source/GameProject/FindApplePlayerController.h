@@ -13,5 +13,13 @@ UCLASS()
 class GAMEPROJECT_API AFindApplePlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void PostInitializeComponents() override;
+	virtual void OnPossess(APawn* pawn) override;
+
+	UFUNCTION()
+	void changeMouse();
+
+protected:
+	virtual void SetupInputComponent() override;
 };

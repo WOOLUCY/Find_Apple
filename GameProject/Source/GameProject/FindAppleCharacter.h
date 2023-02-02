@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+
 #include "FindAppleCharacter.generated.h"
 
 class UInputMappingContext;
@@ -23,6 +24,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* CharacterMappingContext;
@@ -59,9 +62,14 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Action();
+	void ChangeEqip(int32 Select);
+
 
 	UFUNCTION()
 	void OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted);
+
+	UFUNCTION()
+		void ActionPlant();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UCameraComponent* CameraComponent;
@@ -84,8 +92,6 @@ public:
 	AActor* LookAtActorPressE;
 
 private:
-	//void LookUpRate(float AxisValue);
-	//void LookRightRate(float AxisValue);
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
@@ -100,10 +106,9 @@ private:
 	float Health;
 
 	UPROPERTY(VisibleAnywhere)
-	int32 CurEqip; //���� �������ִ� �������庯��
+	int32 CurEqip; 
 
-
-	//�ִϸ��̼ǰ���
+	
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsAction;
 

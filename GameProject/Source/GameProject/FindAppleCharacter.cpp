@@ -4,6 +4,8 @@
 #include "FindAppleCharacter.h"
 #include "FindAppleAnimInstance.h"
 #include "Sword.h"
+#include "FarmGround.h"
+
 
 #include "GameFramework/SpringArmComponent.h"
 #include "UObject/ConstructorHelpers.h"
@@ -33,7 +35,7 @@ AFindAppleCharacter::AFindAppleCharacter()
 	}
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -88.f), FRotator(0.f, -90.f, 0.f));
 
-	//�ִϸ��̼� ����
+
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	static ConstructorHelpers::FClassFinder<UAnimInstance> ABP_HERO
 	(TEXT("/Script/Engine.AnimBlueprint'/Game/Characters/Hero/ABP_Char.ABP_Char_C'"));
@@ -45,8 +47,6 @@ AFindAppleCharacter::AFindAppleCharacter()
 	IsAction = false;
 	CurEqip = 0;
 
-
-	/* Camera & Spring Arm */
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->TargetArmLength = 500.f;
@@ -56,39 +56,34 @@ AFindAppleCharacter::AFindAppleCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	CameraComponent->bUsePawnControlRotation = false;
 
-
-	/* 캐릭터 이동 */
-	/* 전진 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveForward(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveForward.IA_MoveForward'"));
 	{
 		MoveForwardAction = Input_MoveForward.Object;
 	}
-	/* 회전 이동 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveRight(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveRight.IA_MoveRight'"));
 	if (Input_MoveRight.Succeeded())
 	{
 		MoveRightAction = Input_MoveRight.Object;
 	}
-	/* 마우스 회전 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Look(TEXT("InputAction'/Game/Semin/KeyInput/IA_Look.IA_Look'"));
 	if (Input_Look.Succeeded())
 	{
 		LookAction = Input_Look.Object;
 	}
-	/* 퀘스트 및 아이템 줍기 인터랙션 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_QuestInteraction(TEXT("InputAction'/Game/Semin/KeyInput/IA_QuestInteraction.IA_QuestInteraction'"));
 	if (Input_QuestInteraction.Succeeded())
 	{
 		QuestInteractionAction = Input_QuestInteraction.Object;
 	}
-	/* 인벤토리 키 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Inventory(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
 	if (Input_Inventory.Succeeded())
 	{
 		InventoryAction = Input_Inventory.Object;
 	}
-	/* 점프 키 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Jump.IA_Jump'"));
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
+
 	if (Input_Jump.Succeeded())
 	{
 		JumpAction = Input_Jump.Object;
@@ -150,8 +145,21 @@ void AFindAppleCharacter::PostInitializeComponents()
 	Anim = Cast<UFindAppleAnimInstance>(GetMesh()->GetAnimInstance());
 	Anim->OnMontageEnded.AddDynamic(this, &AFindAppleCharacter::OnActionMontageEnded);
 
+	
+	
+	
+	
 
+}
 
+void AFindAppleCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+}
+
+void AFindAppleCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
 
 }
 
@@ -270,8 +278,12 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	}
 
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);
+	
 
+	//1,2,3 도구선택
+	//PlayerInputComponent->BindKey(EKeys::E, IE_Pressed, this, &AFindAppleCharacter::ChangeEqip);
 
+		//EKeys::e, IE_Pressed, this, &AFindAppleCharacter::ChangeEqip);
 }
 
 void AFindAppleCharacter::Action()
@@ -287,7 +299,33 @@ void AFindAppleCharacter::Action()
 
 }
 
+void AFindAppleCharacter::ChangeEqip(int32 Select)
+{
+	//키입력받아서 어쩌구저쩌구 해야할듯 
+	//컨트롤러에서 키입력을 받거나 액션맵핑을 해야겠다.
+	switch (Select) {
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 0:
+		break;
+	default:
+		break;
+	}
+}
+
 void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted)
 {
 	IsAction = false;
+}
+
+void AFindAppleCharacter::ActionPlant()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Action Plant Delegate"));
+
 }

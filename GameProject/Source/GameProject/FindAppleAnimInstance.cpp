@@ -46,22 +46,22 @@ void UFindAppleAnimInstance::PlayActionMontage()
 
 }
 
-void UFindAppleAnimInstance::AnimNotify_HitCheck()
+void UFindAppleAnimInstance::AnimNotify_HitStart()
 {
 
-	UE_LOG(LogTemp, Warning, TEXT("Sword Hitcheck Call"));
-	OnActionMon.Broadcast();
+	HitCheckStart.ExecuteIfBound();
 
 }
 
 void UFindAppleAnimInstance::AnimNotify_HitEnd()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Ax HitEnd Call"));
+	HitCheckEnd.ExecuteIfBound();
 
-	OnActHitMon.Broadcast();
+
 }
 
 FName UFindAppleAnimInstance::GetActionMontageSecName(int32 Section)
 {
 	return FName(*FString::Printf(TEXT("Sword")));
+
 }
