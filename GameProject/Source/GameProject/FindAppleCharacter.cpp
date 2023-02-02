@@ -82,7 +82,6 @@ AFindAppleCharacter::AFindAppleCharacter()
 	}
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Jump.IA_Jump'"));
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
 
 	if (Input_Jump.Succeeded())
 	{
