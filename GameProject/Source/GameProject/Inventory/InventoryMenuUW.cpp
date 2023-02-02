@@ -32,6 +32,7 @@ void UInventoryMenuUW::Refresh()
 			InventorySlotUIObject = CreateWidget<UInventorySlotUW>(GetWorld(), InventorySlotWidgetClass);
 			InventorySlotUIObject->Quantity = InventoryElement.Value;
 			InventorySlotUIObject->ItemName = InventoryElement.Key;
+			InventorySlotUIObject->Widget = InventoryWidget;
 			InventoryContentsWrap->AddChildToWrapBox(InventorySlotUIObject);
 		};
 	}

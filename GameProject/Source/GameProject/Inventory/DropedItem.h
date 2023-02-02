@@ -43,9 +43,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UStaticMeshComponent* MyBox = nullptr;
 
-	UPROPERTY(EditAnywhere, Category = "Setting")
+	UPROPERTY(EditAnywhere, Category = "ItemSetting")
 	class UDataTable* ItemDataTable;
 
-	UPROPERTY(EditAnywhere, Category ="Setting")
+	UPROPERTY(EditAnywhere, Category ="ItemSetting")
 	FName ItemName = "apple";
 };

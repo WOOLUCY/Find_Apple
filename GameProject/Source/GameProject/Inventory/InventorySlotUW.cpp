@@ -20,13 +20,6 @@ UInventorySlotUW::UInventorySlotUW(const FObjectInitializer& objectInitializer) 
 	{
 		ItemDataTable = DataTable.Object;
 	}
-
-	/* Inventory Widget */
-	ConstructorHelpers::FClassFinder<UInventorySlotUW>  InventoryWidgetFind(TEXT("WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_InventoryCPP.WBP_InventoryCPP_C'"));
-	if (InventoryWidgetFind.Succeeded())
-	{
-		InventoryWidgetClass = InventoryWidgetFind.Class;
-	}
 }
 
 void UInventorySlotUW::NativeConstruct()
@@ -69,12 +62,7 @@ void UInventorySlotUW::NativePreConstruct()
 
 void UInventorySlotUW::ShowToolTip()
 {
-	if (InventoryWidgetClass)
-	{
-		InventoryUIObject = CreateWidget<UInventoryUW>(GetWorld(), InventoryWidgetClass);
-		//InventoryUIObejct.Remove
-	}
-
+	Widget->ShowToolTip(Name, Descript);
 
 	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);

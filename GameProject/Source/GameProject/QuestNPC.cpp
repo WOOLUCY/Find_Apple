@@ -68,6 +68,12 @@ AQuestNPC::AQuestNPC()
 		DialoguePopWidgetClass = DialoguePopWidgetObject.Class;
 	}
 
+	ConstructorHelpers::FObjectFinder<UCurveFloat>  CurveObject(TEXT("CurveFloat'/Game/Semin/UI/Dialogue/BlackScreenTimeline.BlackScreenTimeline'"));
+	if (CurveObject.Succeeded())
+	{
+		CurveFloat = CurveObject.Object;
+	}
+
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(GetRootComponent());
 	//CameraComponent->bUsePawnControlRotation = false;
@@ -79,7 +85,7 @@ AQuestNPC::AQuestNPC()
 	CollisionMesh->SetRelativeLocationAndRotation(FVector(0.1f, 100.f, 70.f), FRotator(0.f, 0.f, 0.f));
 	CollisionMesh->SetBoxExtent(FVector(130.f, 130.f, 32.f));
 	CollisionMesh->SetupAttachment(GetMesh());
-
+	 
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/CPP_Dialogue_File.CPP_Dialogue_File"));
 	if (DataTable.Succeeded())

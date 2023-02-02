@@ -30,4 +30,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	FText Descript;
+
+	UFUNCTION()
+	void SetText();
 };

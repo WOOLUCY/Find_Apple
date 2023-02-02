@@ -47,12 +47,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInventoryUW* Widget;
 
-	UPROPERTY(EditAnywhere, Category = "Components")
-	TSubclassOf<class UUserWidget> InventoryWidgetClass;
-
-	UPROPERTY()
-	class UInventoryUW* InventoryUIObject;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UDataTable* ItemDataTable;
 

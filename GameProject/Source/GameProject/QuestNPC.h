@@ -51,10 +51,10 @@ public:
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	/* widget class */
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY()
 	TSubclassOf<class UUserWidget> DialogueWidgetClass;
 
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY()
 	TSubclassOf<class UUserWidget> DialoguePopWidgetClass;
 
 	virtual void OnConstruction(const FTransform& Transform) override;
@@ -84,8 +84,8 @@ private:
 	UPROPERTY()
 	FRotator EndRot;
 
-	UPROPERTY(EditAnywhere, Category = "Components")
-	float ZOffset;
+	UPROPERTY()
+	float ZOffset = 100;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UTextRenderComponent* Text;

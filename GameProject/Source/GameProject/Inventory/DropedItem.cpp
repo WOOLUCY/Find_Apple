@@ -24,7 +24,7 @@ ADropedItem::ADropedItem()
 	if (BoxMesh.Succeeded())
 	{
 		MyBox->SetStaticMesh(BoxMesh.Object);
-		MyBox->SetRelativeLocationAndRotation(FVector(180.f, 0.f, 0.f), FRotator(0.f, 180.f, 0.f));
+		MyBox->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 180.f, 0.f));
 		MyBox->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 		MyBox->SetCollisionProfileName(TEXT("ItemCollision"));
 		MyBox->SetSimulatePhysics(true);

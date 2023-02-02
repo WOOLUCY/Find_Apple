@@ -26,7 +26,7 @@ public:
 	class UInventoryMenuUW* WBP_InventoryMenu;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UInventoryToolTipUW* WBP_ToolTip;
+	class UInventoryToolTipUW* WBP_ToolTipCPP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	FText ItemName;
@@ -35,4 +35,7 @@ public:
 	FText DescriptText;
 
 	FOnInputAction Input;
+
+	UFUNCTION()
+	void ShowToolTip(FText NameTextIn, FText DescriptTextIn);
 };
