@@ -91,9 +91,6 @@ float ATree::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet, ACo
 			else {
 				GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("not yet"));
 				FVector ForAdd = hero->GetMesh()->GetRightVector();
-
-				FRotator newAdd = Pivot->GetComponentRotation();// *FVector(-3, -3, 3);;
-
 				Pivot->AddWorldRotation(FRotator(ForAdd.Y * -3, ForAdd.Z * 3, ForAdd.X * -3));
 				TotalDamage += FinalDamage;
 			}

@@ -83,11 +83,9 @@ void ASword::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("NotifyActorBeginOverlap "));
 
-	//FHitResult hit;
+	//°Á ¾´°ÅÀÓ Áö¿öµµµÊ
 	FString name = OtherActor->GetName();
 	
-
-
 	UWorld* TheWorld = GetWorld();
 	if (TheWorld != nullptr) {
 		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
