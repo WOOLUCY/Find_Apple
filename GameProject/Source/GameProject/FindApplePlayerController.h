@@ -22,4 +22,6 @@ public:
 
 protected:
 	virtual void SetupInputComponent() override;
+	// Called when the game starts or when spawned
+
 };

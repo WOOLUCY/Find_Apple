@@ -2,6 +2,8 @@
 
 
 #include "FindApplePlayerController.h"
+#include "Blueprint/UserWidget.h"
+
 
 void AFindApplePlayerController::PostInitializeComponents()
 {
