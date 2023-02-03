@@ -37,5 +37,5 @@ public:
 	FOnInputAction Input;
 
 	UFUNCTION()
-	void ShowToolTip(FText NameTextIn, FText DescriptTextIn);
+	void ShowToolTip(FText NameTextIn, FText DescriptTextIn, FName NonDisplayName, bool Eatable);
 };

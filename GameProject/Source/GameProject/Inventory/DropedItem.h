@@ -35,6 +35,9 @@ public:
 	/* 플레이어가 collised 상태에서 E 를 눌렀을 경우 인터페이스 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyCategory")
 	void PicUpItem(); virtual void PicUpItem_Implementation() override;
+
+	UPROPERTY(EditAnywhere, Category ="ItemSetting")
+	FName ItemName = "apple";
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
@@ -45,7 +48,4 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "ItemSetting")
 	class UDataTable* ItemDataTable;
-
-	UPROPERTY(EditAnywhere, Category ="ItemSetting")
-	FName ItemName = "apple";
 };

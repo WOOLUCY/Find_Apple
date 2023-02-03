@@ -32,11 +32,14 @@ UInventoryUW::UInventoryUW(const FObjectInitializer& objectInitializer) : Super(
 
 }
 
-void UInventoryUW::ShowToolTip(FText NameTextIn, FText DescriptTextIn)
+void UInventoryUW::ShowToolTip(FText NameTextIn, FText DescriptTextIn, FName NonDisplayName, bool Eatable)
 {
 	UE_LOG(LogTemp, Warning, TEXT("ShowToolTip"));
 	WBP_ToolTipCPP->ItemName = NameTextIn;
 	WBP_ToolTipCPP->Descript = DescriptTextIn;
+	WBP_ToolTipCPP->Eatable = Eatable;
+	WBP_ToolTipCPP->NonDisplayName = NonDisplayName;
+	WBP_ToolTipCPP->MenuWidget = WBP_InventoryMenu;
 	WBP_ToolTipCPP->SetText();
 	WBP_ToolTipCPP->SetVisibility(ESlateVisibility::Visible);
 }

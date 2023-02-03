@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "../FindAppleInterface.h"
-#include "Blueprint/UserWidget.h"
 #include "InventoryUW.h"
 #include "InventorySlotUW.generated.h"
 
@@ -21,6 +20,8 @@ protected:
 
 	virtual void NativeConstruct() override;
 	virtual void NativePreConstruct() override;
+
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -50,8 +51,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UDataTable* ItemDataTable;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UItemMenuTab> ItemMenuTabClass;
+
+	UPROPERTY()
+	class UItemMenuTab* ItemMenuTabUIObject;
+
+	UPROPERTY()
+	bool Eatable;
+
+	UPROPERTY()
+	bool bIsViewMenu = false;
+
 	TArray<struct FInventoryTableRow*> InventoryData;
 
 	UFUNCTION()
 	void ShowToolTip();
+
+
 };

@@ -7,10 +7,16 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Components/Border.h"
+#include "Components/CanvasPanel.h"
+#include "Components/CanvasPanelSlot.h"
 #include "InventoryDataTable.h"	
 #include "Engine/DataTable.h"
 #include "Math/Color.h"
 #include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
+#include "InputCoreTypes.h"
+#include "Input/Reply.h"
+#include "ItemMenuTab.h"
 #include "../FindAppleCharacter.h"
 
 UInventorySlotUW::UInventorySlotUW(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
@@ -20,12 +26,18 @@ UInventorySlotUW::UInventorySlotUW(const FObjectInitializer& objectInitializer) 
 	{
 		ItemDataTable = DataTable.Object;
 	}
+
+	ConstructorHelpers::FClassFinder<UItemMenuTab>  ItemMenuWidgetFind(TEXT("WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_ItemMenuTab.WBP_ItemMenuTab_C'"));
+	if (ItemMenuWidgetFind.Succeeded())
+	{
+		ItemMenuTabClass = ItemMenuWidgetFind.Class;
+	}
 }
 
 void UInventorySlotUW::NativeConstruct()
 {
 	Super::NativeConstruct();
-	ToolTipButton->OnClicked.AddDynamic(this, &UInventorySlotUW::ShowToolTip);
+	//ToolTipButton->OnClicked.AddDynamic(this, &UInventorySlotUW::ShowToolTip);
 }
 
 void UInventorySlotUW::NativePreConstruct()
@@ -54,22 +66,36 @@ void UInventorySlotUW::NativePreConstruct()
 				SlotImage->SetBrushColor(FColor::White);
 				Descript = InventoryRow.Descript;
 				Name = InventoryRow.DisplayName;
-				UE_LOG(LogTemp, Warning, TEXT("Apple"));
+				if ( InventoryRow.ItemType == 1 ) 
+				{
+					Eatable = true;
+				}
 			}
 		}
 	}
 }
 
+FReply UInventorySlotUW::NativeOnMouseButtonDown(const FGeometry& MovieSceneBlends, const FPointerEvent& InMouseEvent)
+{
+	auto Reply = Super::NativeOnMouseButtonDown(MovieSceneBlends, InMouseEvent);
+	if (InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
+	{
+		ShowToolTip();
+		if (bIsViewMenu == true)
+		{
+			ItemMenuTabUIObject->RemoveFromParent();
+			bIsViewMenu = false;
+		}
+	}
+
+	return Reply;
+}
+
 void UInventorySlotUW::ShowToolTip()
 {
-	Widget->ShowToolTip(Name, Descript);
+	Widget->ShowToolTip(Name, Descript, ItemName, Eatable);
 
 	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 	MyCharacter->HideToolTip = false;
-
-	TArray<AActor*> TalkableActor;
-
-	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UFindAppleInterface::StaticClass(), TalkableActor);
-
 }

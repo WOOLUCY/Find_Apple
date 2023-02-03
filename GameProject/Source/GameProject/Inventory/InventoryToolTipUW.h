@@ -26,11 +26,37 @@ public:
 	class UTextBlock* ItemNameText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* EatButton;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* DumpButton;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UInventoryMenuUW* MenuWidget;
+
+	TArray<struct FInventoryTableRow*> InventoryData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	FText ItemName;
+
+	UPROPERTY()
+	FName NonDisplayName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	FText Descript;
 
+	UPROPERTY()
+	bool Eatable = false;
+
 	UFUNCTION()
 	void SetText();
+
+	UFUNCTION()
+	void EattingItem();
+
+	UFUNCTION()
+	void RemoveItem();
 };
