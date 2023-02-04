@@ -7,7 +7,7 @@
 
 UFindAppleAnimInstance::UFindAppleAnimInstance()
 {
-	UE_LOG(LogTemp, Error, TEXT("Animinstance start"));
+	//UE_LOG(LogTemp, Error, TEXT("Animinstance start"));
 	Speed = 0.f;
 	OnAir = false;
 

@@ -24,7 +24,8 @@ ATree::ATree()
 
 	RootComponent = Lower;
 	Pivot->SetupAttachment(RootComponent);
-	Upper->AttachToComponent(Pivot, FAttachmentTransformRules::KeepWorldTransform);
+	Upper->SetupAttachment(Pivot);
+	//Upper->AttachToComponent(Pivot, FAttachmentTransformRules::KeepWorldTransform);
 
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LOWER
