@@ -10,6 +10,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Dialogue/DialogueWidget.h"
+#include "Dialogue/BlackScreenPop.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -49,20 +50,32 @@ AQuestNPC::AQuestNPC()
 		MyCone->SetHiddenInGame(true);
 	}
 
-	ConstructorHelpers::FObjectFinder<UAnimBlueprint>  BP_Anim(TEXT("AnimBlueprint'/Game/Semin/Character/NPC/ABP_NPC.ABP_NPC'"));
+	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+
+	static ConstructorHelpers::FClassFinder<UAnimInstance>  BP_Anim(TEXT("/Script/Engine.AnimBlueprint'/Game/Semin/Character/NPC/ABP_NPC.ABP_NPC_C'"));
 	if (BP_Anim.Succeeded())
 	{
-		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-		GetMesh()->SetAnimInstanceClass(BP_Anim.Object->GetAnimBlueprintGeneratedClass());
+		GetMesh()->SetAnimInstanceClass(BP_Anim.Class);
 	}
 
-	ConstructorHelpers::FClassFinder<UDialogueWidget>  DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/BP_DialogueWidget.BP_DialogueWidget_C'"));
+
+	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+	//static ConstructorHelpers::FClassFinder<UAnimInstance> ABP_HERO
+	//(TEXT("/Script/Engine.AnimBlueprint'/Game/Characters/Hero/ABP_Char.ABP_Char_C'"));
+
+	//if (ABP_HERO.Succeeded()) {
+	//	GetMesh()->SetAnimInstanceClass(ABP_HERO.Class);
+	//}
+
+
+
+	ConstructorHelpers::FClassFinder<UDialogueWidget>  DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_Dialogue.WBP_Dialogue_C'"));
 	if (DialogueWidget.Succeeded())
 	{
 		DialogueWidgetClass = DialogueWidget.Class;
 	}
 
-	ConstructorHelpers::FClassFinder<UUserWidget>  DialoguePopWidgetObject(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_BlackScreenPop.WBP_BlackScreenPop_C'"));
+	ConstructorHelpers::FClassFinder<UBlackScreenPop>  DialoguePopWidgetObject(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_BlackScreenPop.WBP_BlackScreenPop_C'"));
 	if (DialoguePopWidgetObject.Succeeded())
 	{
 		DialoguePopWidgetClass = DialoguePopWidgetObject.Class;
@@ -145,6 +158,7 @@ void AQuestNPC::DialogueGetLine()
 	if (ReturnLines.IsEmpty()) {
 		bIsValid = false;
 		DialogueUIObject->RemoveFromParent();
+		DialoguePopWidget->RemoveFromParent();
 		CurrentLine = 0;
 
 		/* FindAppleCharacter·Î Cast */
