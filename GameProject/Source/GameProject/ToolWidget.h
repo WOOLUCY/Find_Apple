@@ -25,7 +25,7 @@ public:
 	void ResetCombo();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* TXTCombo;
+	//class UTextBlock* TXTCombo;
 	class UImage* SwordImg;
 	class UImage* HeartImg_01;
 	class UImage* HeartImg_02;
