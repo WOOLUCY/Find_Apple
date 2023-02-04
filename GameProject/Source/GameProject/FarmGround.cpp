@@ -2,6 +2,9 @@
 
 
 #include "FarmGround.h"
+#include "Kismet/GameplayStatics.h"
+
+#include "FindAppleCharacter.h"
 
 // Sets default values
 AFarmGround::AFarmGround()
@@ -25,7 +28,7 @@ AFarmGround::AFarmGround()
 	Mesh->SetCollisionProfileName("NoCollision");
 	Box->SetCollisionProfileName("OverlapAll");
 
-	IsEmpty = false;
+	IsEmpty = true;
 	CanPutSeed = false;
 	IsWet = false;
 
@@ -60,10 +63,35 @@ AFarmGround::AFarmGround()
 	}
 
 
-
-	//Box->BeginComponentOverlap.ADd
 	Mesh->SetVisibility(true);
+
+	Box->OnComponentBeginOverlap.AddDynamic(this, &AFarmGround::OnOverlapBegin);
+	Box->OnComponentEndOverlap.AddDynamic(this, &AFarmGround::OnOverlapEnd);
+
+	UWorld* TheWorld = GetWorld();
+	if (TheWorld != nullptr) {
+		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
+		Anim = Cast<UFindAppleAnimInstance>(hero->GetMesh()->GetAnimInstance());
+
+		if (Anim != nullptr) {
+			Anim->GrabSeed.BindUObject(this, &AFarmGround::GrabSeed);
+			Anim->RelaseSeed.BindUObject(this, &AFarmGround::ReleaseSeed);
+
+
+		}
+	}
+
+
+
 }
+void AFarmGround::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+
+	
+}
+
 
 // Called when the game starts or when spawned
 void AFarmGround::BeginPlay()
@@ -80,7 +108,6 @@ void AFarmGround::NotifyActorOnClicked(FKey PressedButton)
 
 
 
-	PlantDelegate.ExecuteIfBound();
 
 }
 
@@ -100,14 +127,63 @@ void AFarmGround::NotifyActorEndCursorOver()
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("being End"));
 	//여기서 뭐 파란색으로 표시한다거나하기
 
-	CheckMesh->SetVisibility(false);
 
 }
+
 
 // Called every frame
 void AFarmGround::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+void AFarmGround::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	
+
+	auto hero = Cast<AFindAppleCharacter>(OtherActor);
+	if (hero != nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap with Character"));
+		CheckMesh->SetVisibility(true);
+
+		FVector change = Box->GetComponentLocation();
+		//hero->GetMesh()->SetWorldLocation(change);
+
+		PlantDelegate.ExecuteIfBound();
+
+		
+	}
+	else {
+		return;
+	}
+
+}
+
+void AFarmGround::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	auto hero = Cast<AFindAppleCharacter>(OtherActor);
+	if (hero != nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap end with Character"));
+		CheckMesh->SetVisibility(false);
+
+	}
+
+
+}
+
+void AFarmGround::ReleaseSeed()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("ReleaseSeed "));
+
+}
+
+void AFarmGround::GrabSeed()
+{
+	CanPutSeed = false;
+	IsEmpty = false;
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("GrabSeed"));
+
 
 }
 

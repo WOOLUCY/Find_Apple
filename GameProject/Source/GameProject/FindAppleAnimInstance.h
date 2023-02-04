@@ -4,6 +4,7 @@
 
 #include "EngineMinimal.h"
 #include "Animation/AnimInstance.h"
+
 #include "FindAppleAnimInstance.generated.h"
 
 
@@ -40,6 +41,9 @@ private:
 public:
 	FonActionCheckDelegate HitCheckStart; 
 	FonActionCheckDelegate HitCheckEnd;
+	FonActionCheckDelegate GrabSeed;
+	FonActionCheckDelegate RelaseSeed;
+
 private:
 	UFUNCTION()
 	void AnimNotify_HitStart();
@@ -48,6 +52,11 @@ private:
 	void AnimNotify_HitEnd();
 
 
+	UFUNCTION()
+		void AnimNotify_Release();
+
+	UFUNCTION()
+		void AnimNotify_Grab();
 
 
 

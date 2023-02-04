@@ -42,6 +42,7 @@ void UFindAppleAnimInstance::PlayActionMontage()
 {
 
 	Montage_Play(ActionMontage, 1.f);
+	Montage_JumpToSection(TEXT("PlantSeed"));
 
 }
 
@@ -57,6 +58,17 @@ void UFindAppleAnimInstance::AnimNotify_HitEnd()
 	HitCheckEnd.ExecuteIfBound();
 
 
+}
+
+void UFindAppleAnimInstance::AnimNotify_Release()
+{
+	RelaseSeed.ExecuteIfBound();
+
+}
+
+void UFindAppleAnimInstance::AnimNotify_Grab()
+{
+	GrabSeed.ExecuteIfBound();
 }
 
 

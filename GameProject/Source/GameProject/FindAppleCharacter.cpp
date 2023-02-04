@@ -256,10 +256,7 @@ void AFindAppleCharacter::ChangeSpeed(const FInputActionValue& Value)
 	//여기서 스피드를 바꾸던가 올리던가 어쩌구저쩌구해야함
 }
 
-void AFindAppleCharacter::Test()
-{
-	UE_LOG(LogTemp, Warning, TEXT("sibla"));
-}
+
 
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
 {	// Character movement

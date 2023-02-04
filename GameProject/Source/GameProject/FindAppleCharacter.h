@@ -69,7 +69,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Action();
-	void Test();
 
 
 	UFUNCTION()
@@ -97,6 +96,7 @@ public:
 	bool PressE = false;
 	UPROPERTY()
 	AActor* LookAtActorPressE;
+
 
 private:
 

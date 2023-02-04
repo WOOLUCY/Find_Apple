@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "FindAppleAnimInstance.h"
 #include "Components/BoxComponent.h"
 #include "FarmGround.generated.h"
 
@@ -44,6 +45,7 @@ protected:
 	virtual void NotifyActorOnClicked(FKey PressedButton) override;
 	virtual void NotifyActorBeginCursorOver() override;
 	virtual void NotifyActorEndCursorOver() override;
+	virtual void PostInitializeComponents() override;
 
 private:
 	bool IsEmpty;
@@ -54,6 +56,18 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+	UFUNCTION()
+		void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+		void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+
+	UPROPERTY()
+		UFindAppleAnimInstance* Anim;
+
+	void ReleaseSeed();
+	void GrabSeed();
 
 
 };
