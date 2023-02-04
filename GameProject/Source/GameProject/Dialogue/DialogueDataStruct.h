@@ -15,13 +15,13 @@ struct FDialogueTableRow : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
-	int32 NPC_ID;
+	int32 NPC_ID = 500;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
-	int32 Conversation_ID;
+	int32 Conversation_ID = 0;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
-	int32 Line_ID;
+	int32 Line_ID = 0;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
 	FText Dialogue;

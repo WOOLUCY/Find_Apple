@@ -15,7 +15,7 @@ struct FInventoryTableRow : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	int32 ItemType;		/* 먹을 수 있으면 1 / eatable = 1 */
+	int32 ItemType = 0;		/* 먹을 수 있으면 1 / eatable = 1 */
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 	FText DisplayName;
@@ -24,19 +24,19 @@ public:
 	FText Descript;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	UTexture2D* Thumbnail;
+	UTexture2D* Thumbnail = UTexture2D::CreateTransient(128, 128, PF_R8G8B8A8);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	UStaticMesh* Mesh3D;
+	UStaticMesh* Mesh3D = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	float HP;
+	float HP = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	float Hunger;
+	float Hunger = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	FVector MeshScale;
+	FVector MeshScale = FVector(1.f, 1.f, 1.f);
 };
 
 
