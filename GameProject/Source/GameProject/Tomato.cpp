@@ -2,6 +2,8 @@
 
 
 #include "Tomato.h"
+#include "TimerHandler.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATomato::ATomato()
@@ -45,6 +47,7 @@ ATomato::ATomato()
 	WaterCount = 0;
 	level = 0;
 	IsDead = false;
+	Days = 0;
 
 }
 
@@ -53,6 +56,16 @@ void ATomato::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//타임핸들 가져오기
+
+	TArray<AActor*> TimeOfDayHandler;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATimerHandler::StaticClass(),TimeOfDayHandler);
+
+	if (TimeOfDayHandler.Num() != 0) {
+		auto TimerHandler = Cast<ATimerHandler>(TimeOfDayHandler[0]);
+		MyDelegate = TimerHandler->PlantDelegate.AddUObject(this, &ATomato::TimeChange);
+	}
 }
 
 void ATomato::PostInitializeComponents()
@@ -66,7 +79,26 @@ void ATomato::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 }
+
+void ATomato::TimeChange(int32 hours, int32 minutes)
+{
+	Hours = hours;
+	Minute = minutes;
+	//housr가 24되면 뭐 days를 올리고 level을 올리던가 어쩌구저쩌궇 ㅏ면될듯
+	if (hours == 1) {
+		level = 1;
+		ChangePlant();
+
+	}
+	else if (hours == 2) {
+		level = 2;
+		ChangePlant();
+
+	}
+}
+
 
 void ATomato::ChangePlant()
 {

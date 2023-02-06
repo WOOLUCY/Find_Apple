@@ -14,12 +14,17 @@ class GAMEPROJECT_API ATomato : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATomato();
+
+	FDelegateHandle MyDelegate;
+
 	UPROPERTY()
 		USceneComponent* Root;
 
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* Plant[3] ;
-
+	
+	UFUNCTION()
+		void TimeChange(int32 hours, int32 minutes);
 
 
 protected:
@@ -30,8 +35,13 @@ protected:
 private:
 	int WaterCount;
 	int level;
+
 	//0,1,2까지가 식물단계 3,4,5가 열매단계임 초 핑 빨 단계임
 	bool IsDead;
+
+	int32 Hours;
+	int32 Minute;
+	int32 Days;
 
 public:	
 	// Called every frame

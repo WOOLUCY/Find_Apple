@@ -29,6 +29,8 @@ public:
 	UPROPERTY()
 		int32 Minutes;
 
+
+
 	UPROPERTY()
 		float ElapsedSecond;
 

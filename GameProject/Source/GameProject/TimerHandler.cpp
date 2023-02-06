@@ -10,7 +10,7 @@ ATimerHandler::ATimerHandler()
 	PrimaryActorTick.bCanEverTick = true;
 
 
-	TimeScale = 60;
+	TimeScale = 30;
 	Hours = 0;
 	Minutes = 0;
 	ElapsedSecond = 0;
@@ -32,9 +32,13 @@ void ATimerHandler::Tick(float DeltaTime)
 	if (ElapsedSecond > 60) {
 		ElapsedSecond -= 60;
 		++Minutes;
+		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Hours==1 "));
+
 		if (Minutes > 60) {
 			Minutes -= 60;
-			--Hours;
+			++Hours;
+			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Minutes==1 "));
+
 		}
 
 		PlantDelegate.Broadcast(Hours,Minutes);
