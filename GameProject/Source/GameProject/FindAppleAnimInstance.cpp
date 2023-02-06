@@ -42,7 +42,7 @@ void UFindAppleAnimInstance::PlayActionMontage()
 {
 
 	Montage_Play(ActionMontage, 1.f);
-	Montage_JumpToSection(TEXT("PlantSeed"));
+//	Montage_JumpToSection(TEXT("PlantSeed"));
 
 }
 

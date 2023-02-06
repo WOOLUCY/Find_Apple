@@ -56,7 +56,11 @@ protected:
 	void Inventory(const FInputActionValue& Value);
 	void PickItem(const FInputActionValue& Value);
 
-	void ChangeEqip(const FInputActionValue& Value);
+	void EquipSword(const FInputActionValue& Value);
+	void EquipAx(const FInputActionValue& Value);
+	void EquipPick(const FInputActionValue& Value);
+	void EquipReset(const FInputActionValue& Value);
+
 	void ChangeSpeed(const FInputActionValue& Value);
 
 

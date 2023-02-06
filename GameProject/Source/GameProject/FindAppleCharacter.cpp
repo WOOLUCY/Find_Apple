@@ -148,11 +148,6 @@ void AFindAppleCharacter::BeginPlay()
 	}
 
 	//auto CurEquip = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
-	auto CurEquip = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
-
-	if (CurEquip != nullptr) {
-		CurEquip->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
-	}
 
 }
 
@@ -245,11 +240,46 @@ void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
 	}
 }
 
-void AFindAppleCharacter::ChangeEqip(const FInputActionValue& Value)
+void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
 {
-	
+	CurEqip = 1;
+	auto CurEquip = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
+
+	if (CurEquip != nullptr) {
+		CurEquip->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
+	}
 
 }
+
+void AFindAppleCharacter::EquipAx(const FInputActionValue& Value)
+{
+	CurEqip = 2;
+	auto CurEquip = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
+
+	if (CurEquip != nullptr) {
+		CurEquip->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
+	}
+
+
+}
+void AFindAppleCharacter::EquipPick(const FInputActionValue& Value)
+{
+	CurEqip = 3;
+	auto CurEquip = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
+
+	if (CurEquip != nullptr) {
+		CurEquip->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
+	}
+
+
+}
+void AFindAppleCharacter::EquipReset(const FInputActionValue& Value)
+{
+	CurEqip = 0;
+ 
+
+}
+
 
 void AFindAppleCharacter::ChangeSpeed(const FInputActionValue& Value)
 {
@@ -308,13 +338,14 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Inventory);
 		EnhancedInputComponent->BindAction(PickItemAction, ETriggerEvent::Started, this, &AFindAppleCharacter::PickItem);
 		
-		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);
-		EnhancedInputComponent->BindAction(EquipChoicMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeEqip);
+	//	EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);
+		//EnhancedInputComponent->BindAction(EquipChoicMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeEqip);
 
 	}
-
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);
-	
+
+	//PlayerInputComponent->BindAction(TEXT("EquipAx"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::EquipAx);
+
 	//PlayerInputComponent->KeyBindings()
 //	PlayerInputComponent->BindKey(EKeys::M, IE_Pressed, this, &AFindAppleCharacter::Test);
 }

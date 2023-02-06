@@ -68,19 +68,6 @@ AFarmGround::AFarmGround()
 	Box->OnComponentBeginOverlap.AddDynamic(this, &AFarmGround::OnOverlapBegin);
 	Box->OnComponentEndOverlap.AddDynamic(this, &AFarmGround::OnOverlapEnd);
 
-	UWorld* TheWorld = GetWorld();
-	if (TheWorld != nullptr) {
-		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
-		Anim = Cast<UFindAppleAnimInstance>(hero->GetMesh()->GetAnimInstance());
-
-		if (Anim != nullptr) {
-			Anim->GrabSeed.BindUObject(this, &AFarmGround::GrabSeed);
-			Anim->RelaseSeed.BindUObject(this, &AFarmGround::ReleaseSeed);
-
-
-		}
-	}
-
 
 
 }
@@ -97,7 +84,22 @@ void AFarmGround::PostInitializeComponents()
 void AFarmGround::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	UWorld* TheWorld = GetWorld();
+
+	if (TheWorld != nullptr) {
+
+		auto hero = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+		Anim = Cast<UFindAppleAnimInstance>(hero->GetMesh()->GetAnimInstance());
+
+		if (Anim != nullptr) {
+			Anim->GrabSeed.BindUObject(this, &AFarmGround::GrabSeed);
+			Anim->RelaseSeed.BindUObject(this, &AFarmGround::ReleaseSeed);
+
+
+		}
+	}
+
+
 }
 
 void AFarmGround::NotifyActorOnClicked(FKey PressedButton)
