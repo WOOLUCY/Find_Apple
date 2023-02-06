@@ -126,7 +126,7 @@ public:
 	UPROPERTY()
 	class UQuestListWidget* QuestListUIObject;
 	UPROPERTY()
-	int32 QuestNum = 0; /* 현재 내가 승낙한 퀘스트의 수 */
+	int32 QuestNum = 0; /* ?�재 ?��? ?�낙???�스?�의 ??*/
 
 
 
