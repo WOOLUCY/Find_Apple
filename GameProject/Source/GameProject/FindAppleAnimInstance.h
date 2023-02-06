@@ -41,6 +41,7 @@ private:
 public:
 	FonActionCheckDelegate HitCheckStart; 
 	FonActionCheckDelegate HitCheckEnd;
+
 	FonActionCheckDelegate GrabSeed;
 	FonActionCheckDelegate RelaseSeed;
 

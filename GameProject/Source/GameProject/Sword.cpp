@@ -78,6 +78,12 @@ void ASword::SetCollisionEnd()
 
 }
 
+void ASword::SetSwordVisibiltiy(bool IsVisible)
+{
+	Sword->SetVisibility(IsVisible);
+
+}
+
 void ASword::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);

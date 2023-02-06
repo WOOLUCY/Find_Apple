@@ -53,6 +53,11 @@ void AAx::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AAx::SetAxVisibiltiy(bool IsVisible)
+{
+	Ax->SetVisibility(IsVisible);
+}
+
 void AAx::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("AAx -NotifyAcotrBeginOverlap "));

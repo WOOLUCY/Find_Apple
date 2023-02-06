@@ -39,6 +39,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetAxVisibiltiy(bool IsVisible);
+
 
 	UFUNCTION()
 		virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;

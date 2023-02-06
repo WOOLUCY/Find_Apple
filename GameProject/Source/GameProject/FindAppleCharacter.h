@@ -5,6 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "Sword.h"
+#include "Pick.h"
+#include "Ax.h"
+
 #include "FindAppleCharacter.generated.h"
 
 class UInputMappingContext;
@@ -44,10 +48,20 @@ protected:
 	UInputAction* InventoryAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* PickItemAction;
+
+	//가온 - 도구선택, 대쉬
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 		UInputAction* DashMapping;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-		UInputAction* EquipChoicMapping;
+		UInputAction* SwordMapping;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* AxMapping;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* PickMapping;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* ResetEquipMapping;
+
+
 
 	void MoveForward(const FInputActionValue& Value);
 	void MoveRight(const FInputActionValue& Value);
@@ -60,7 +74,6 @@ protected:
 	void EquipAx(const FInputActionValue& Value);
 	void EquipPick(const FInputActionValue& Value);
 	void EquipReset(const FInputActionValue& Value);
-
 	void ChangeSpeed(const FInputActionValue& Value);
 
 
@@ -75,6 +88,7 @@ public:
 	void Action();
 
 
+	
 	UFUNCTION()
 	void OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted);
 
@@ -104,6 +118,15 @@ public:
 
 private:
 
+	UPROPERTY(VisibleAnywhere)
+		ASword* Sword;
+	UPROPERTY(VisibleAnywhere)
+		AAx* Ax;
+	UPROPERTY(VisibleAnywhere)
+		APick* Pick;
+
+
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
 
@@ -115,6 +138,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	float Health;
+
 
 	UPROPERTY(VisibleAnywhere)
 	int32 CurEqip; 
