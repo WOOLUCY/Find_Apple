@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "Sword.h"
+#include "Pick.h"
+#include "Ax.h"
 
 #include "FindAppleCharacter.generated.h"
 
@@ -30,7 +33,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* CharacterMappingContext;
 
-	/* ƒ≥ÔøΩÔøΩÔøΩÔøΩ ÔøΩÃµÔøΩ ÔøΩ◊ºÔøΩ */
+	/* input */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveForwardAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
@@ -48,6 +51,20 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MouseToggleAction;
 
+	//∞°ø¬ - µµ±∏º±≈√, ¥ÎΩ¨
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* DashMapping;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* SwordMapping;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* AxMapping;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* PickMapping;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* ResetEquipMapping;
+
+
+
 	void MoveForward(const FInputActionValue& Value);
 	void MoveRight(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -55,6 +72,13 @@ protected:
 	void Inventory(const FInputActionValue& Value);
 	void PickItem(const FInputActionValue& Value);
 	void MouseToggle(const FInputActionValue& Value);
+
+	void EquipSword(const FInputActionValue& Value);
+	void EquipAx(const FInputActionValue& Value);
+	void EquipPick(const FInputActionValue& Value);
+	void EquipReset(const FInputActionValue& Value);
+	void ChangeSpeed(const FInputActionValue& Value);
+
 
 public:	
 	// Called every frame
@@ -65,9 +89,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Action();
-	void ChangeEqip(int32 Select);
 
 
+	
 	UFUNCTION()
 	void OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted);
 
@@ -105,7 +129,17 @@ public:
 	int32 QuestNum = 0; /* ÌòÑÏû¨ ÎÇ¥Í∞Ä ÏäπÎÇôÌïú ÌÄòÏä§Ìä∏Ïùò Ïàò */
 
 
+
 private:
+
+	UPROPERTY(VisibleAnywhere)
+		ASword* Sword;
+	UPROPERTY(VisibleAnywhere)
+		AAx* Ax;
+	UPROPERTY(VisibleAnywhere)
+		APick* Pick;
+
+
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class USpringArmComponent* SpringArmComponent;
@@ -118,6 +152,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	float Health;
+
 
 	UPROPERTY(VisibleAnywhere)
 	int32 CurEqip; 

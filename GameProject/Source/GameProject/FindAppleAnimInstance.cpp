@@ -41,8 +41,8 @@ void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 void UFindAppleAnimInstance::PlayActionMontage()
 {
 
-
 	Montage_Play(ActionMontage, 1.f);
+//	Montage_JumpToSection(TEXT("PlantSeed"));
 
 }
 
@@ -60,8 +60,15 @@ void UFindAppleAnimInstance::AnimNotify_HitEnd()
 
 }
 
-FName UFindAppleAnimInstance::GetActionMontageSecName(int32 Section)
+void UFindAppleAnimInstance::AnimNotify_Release()
 {
-	return FName(*FString::Printf(TEXT("Sword")));
+	RelaseSeed.ExecuteIfBound();
 
 }
+
+void UFindAppleAnimInstance::AnimNotify_Grab()
+{
+	GrabSeed.ExecuteIfBound();
+}
+
+

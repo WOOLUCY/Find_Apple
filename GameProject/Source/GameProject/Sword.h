@@ -27,6 +27,8 @@ public:
 
 	void SetCollisionStart();
 	void SetCollisionEnd();
+	
+	void SetSwordVisibiltiy(bool IsVisible);
 
 	UPROPERTY(VisibleAnywhere, Category = Sword)
 		UStaticMeshComponent* Sword;

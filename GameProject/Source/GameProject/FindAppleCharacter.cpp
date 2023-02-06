@@ -3,7 +3,6 @@
 
 #include "FindAppleCharacter.h"
 #include "FindAppleAnimInstance.h"
-#include "Sword.h"
 #include "FarmGround.h"
 
 
@@ -57,33 +56,37 @@ AFindAppleCharacter::AFindAppleCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 	CameraComponent->bUsePawnControlRotation = false;
 
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveForward(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveForward.IA_MoveForward'"));
 	{
 		MoveForwardAction = Input_MoveForward.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveRight(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveRight.IA_MoveRight'"));
 	if (Input_MoveRight.Succeeded())
 	{
 		MoveRightAction = Input_MoveRight.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Look(TEXT("InputAction'/Game/Semin/KeyInput/IA_Look.IA_Look'"));
 	if (Input_Look.Succeeded())
 	{
 		LookAction = Input_Look.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_QuestInteraction(TEXT("InputAction'/Game/Semin/KeyInput/IA_QuestInteraction.IA_QuestInteraction'"));
 	if (Input_QuestInteraction.Succeeded())
 	{
 		QuestInteractionAction = Input_QuestInteraction.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Inventory(TEXT("InputAction'/Game/Semin/KeyInput/IA_Inventory.IA_Inventory'"));
 	if (Input_Inventory.Succeeded())
 	{
 		InventoryAction = Input_Inventory.Object;
 	}
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Jump(TEXT("InputAction'/Game/Semin/KeyInput/IA_Jump.IA_Jump'"));
-
-
 	if (Input_Jump.Succeeded())
 	{
 		JumpAction = Input_Jump.Object;
@@ -99,6 +102,38 @@ AFindAppleCharacter::AFindAppleCharacter()
 	if (Input_MouseToggle.Succeeded())
 	{
 		MouseToggleAction = Input_MouseToggle.Object;
+	}
+
+
+	//kaon - 대쉬, 도구선택
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Dash(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_Dash.IA_Dash'"));
+	if (Input_Dash.Succeeded())
+	{
+		DashMapping = Input_Dash.Object;
+	}
+	
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Sword(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_Sword.IA_Sword'"));
+	if (Input_Sword.Succeeded())
+	{
+		SwordMapping = Input_Sword.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Ax(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_Ax.IA_Ax'"));
+	if (Input_Ax.Succeeded())
+	{
+		AxMapping = Input_Ax.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Pick(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_Pick.IA_Pick'"));
+	if (Input_Pick.Succeeded())
+	{
+		PickMapping = Input_Pick.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Reset(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_ResetEquip.IA_ResetEquip'"));
+	if (Input_Reset.Succeeded())
+	{
+		ResetEquipMapping = Input_Reset.Object;
 	}
 
 	
@@ -138,16 +173,24 @@ void AFindAppleCharacter::BeginPlay()
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController)
 	{
+
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(CharacterMappingContext, 0);
 		}
 	}
 
-	auto CurEquip = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (CurEquip != nullptr) {
-		//CurEquip->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
-	}
+	Sword = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
+	Sword->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
+	Sword->SetSwordVisibiltiy(false);
+
+	Ax = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
+	Ax->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
+	Ax->SetAxVisibiltiy(false);
+
+	Pick = GetWorld()->SpawnActor<APick>(FVector::ZeroVector, FRotator::ZeroRotator);
+	Pick->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
+	Pick->SetPickVisibiltiy(false);
 
 	/* Quest List 위젯 생성, 얘는 항상 Viewport 위에 있음 */
 	QuestListUIObject = CreateWidget<UQuestListWidget>(GetWorld(), QuestListWidgetClass);
@@ -231,6 +274,7 @@ void AFindAppleCharacter::Inventory(const FInputActionValue& Value)
 
 void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
 {
+
 	TArray<AActor*> TalkableActor;
 
 	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UFindAppleInterface::StaticClass(), TalkableActor);
@@ -250,6 +294,7 @@ void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
 	}
 }
 
+
 void AFindAppleCharacter::MouseToggle(const FInputActionValue& Value)
 {
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -264,6 +309,56 @@ void AFindAppleCharacter::MouseToggle(const FInputActionValue& Value)
 		PlayerController->SetShowMouseCursor(true);
 	}
 }
+
+
+void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
+{
+	CurEqip = 1;
+
+	Sword->SetSwordVisibiltiy(true);
+	Ax->SetAxVisibiltiy(false);
+	Pick->SetPickVisibiltiy(false);
+
+}
+
+void AFindAppleCharacter::EquipAx(const FInputActionValue& Value)
+{
+	CurEqip = 2;
+	Sword->SetSwordVisibiltiy(false);
+	Ax->SetAxVisibiltiy(true);
+	Pick->SetPickVisibiltiy(false);
+
+
+
+}
+void AFindAppleCharacter::EquipPick(const FInputActionValue& Value)
+{
+	CurEqip = 3;
+
+	Sword->SetSwordVisibiltiy(false);
+	Ax->SetAxVisibiltiy(false);
+	Pick->SetPickVisibiltiy(true);
+
+
+}
+void AFindAppleCharacter::EquipReset(const FInputActionValue& Value)
+{
+	CurEqip = 0;
+	Sword->SetSwordVisibiltiy(false);
+	Ax->SetAxVisibiltiy(false);
+	Pick->SetPickVisibiltiy(false);
+
+
+}
+
+
+
+
+void AFindAppleCharacter::ChangeSpeed(const FInputActionValue& Value)
+{
+	//여기서 스피드를 바꾸던가 올리던가 어쩌구저쩌구해야함
+}
+
 
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
 {	// Character movement
@@ -315,15 +410,17 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Inventory);
 		EnhancedInputComponent->BindAction(PickItemAction, ETriggerEvent::Started, this, &AFindAppleCharacter::PickItem);
 		EnhancedInputComponent->BindAction(MouseToggleAction, ETriggerEvent::Started, this, &AFindAppleCharacter::MouseToggle);
+		
+		//kaon - dash, equipment
+		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);
+		EnhancedInputComponent->BindAction(SwordMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipSword);
+		EnhancedInputComponent->BindAction(AxMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipAx);
+		EnhancedInputComponent->BindAction(PickMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipPick);
+		EnhancedInputComponent->BindAction(ResetEquipMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipReset);
+
 	}
-
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);
-	
 
-	//1,2,3 도구선택
-	//PlayerInputComponent->BindKey(EKeys::E, IE_Pressed, this, &AFindAppleCharacter::ChangeEqip);
-
-		//EKeys::e, IE_Pressed, this, &AFindAppleCharacter::ChangeEqip);
 }
 
 void AFindAppleCharacter::Action()
@@ -339,25 +436,7 @@ void AFindAppleCharacter::Action()
 
 }
 
-void AFindAppleCharacter::ChangeEqip(int32 Select)
-{
-	//키입력받아서 어쩌구저쩌구 해야할듯 
-	//컨트롤러에서 키입력을 받거나 액션맵핑을 해야겠다.
-	switch (Select) {
-	case 1:
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 0:
-		break;
-	default:
-		break;
-	}
-}
+
 
 void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted)
 {
@@ -365,7 +444,7 @@ void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInte
 }
 
 void AFindAppleCharacter::ActionPlant()
-{
+{//??d이거 왜썻지...
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Action Plant Delegate"));
 
 }
