@@ -3,11 +3,13 @@
 
 #include "DropedItem.h"
 #include "Components/BoxComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "InventoryDataTable.h"	
 #include "Engine/DataTable.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "InventoryComponent.h"
+#include "../QuestNPC.h"
 #include "../FindAppleCharacter.h"
 
 // Sets default values
@@ -113,5 +115,65 @@ void ADropedItem::PicUpItem_Implementation()
 	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 	MyCharacter->InventoryComponent->AddToInventory(ItemName, 1);
+
+	TArray<AQuestNPC*> MyActors;
+	TArray<AActor*> OutActors;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AQuestNPC::StaticClass(), OutActors);
+	for (AActor* a : OutActors)
+	{
+		MyActors.Add(Cast<AQuestNPC>(a));
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Item . . . "));
+	for (AQuestNPC* FoundActor : MyActors)
+	{
+		if (FoundActor->QuestRequirItem.Find(ItemName))
+		{
+			if (*FoundActor->QuestRequirItem.Find(ItemName) >= *MyCharacter->InventoryComponent->InventoryContent.Find(ItemName))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
+				UE_LOG(LogTemp, Warning, TEXT("Have Quest ITem"));
+				FoundActor->Text->SetText(FText::FromString(TEXT("?")));
+				FoundActor->Conversation_ID += 1;
+				FoundActor->CurrentLine = 0;
+			}
+		}
+
+	}
+
+	/* 퀘스트 받았을 때의 내 아이템 현황 검사, 만약 이미 아이템 있다면 바로 퀘스트 완료 */
+	//if (ItemDataTable != nullptr)
+	//{
+	//	ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+	//	TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+	//	for (FName RowName : RowNames)
+	//	{
+	//		//FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+	//		if (RowName == Dialogue.Conditions_Item)		/* 이미 가지고 있는 아이템이라면 ?로 뜨게 */
+	//		{
+	//			if (MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item))
+	//			{
+	//				if (*MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item) == Dialogue.Conditions_cnt)
+	//				{
+	//					GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
+	//					Text->SetText(FText::FromString(TEXT("?")));
+	//					Conversation_ID += 1;
+	//					CurrentLine = 0;
+
+
+	//					Text->SetHiddenInGame(false);
+	//					QuestAccept = true;
+	//				}
+	//				else
+	//				{
+	//					Text->SetText(FText::FromString(TEXT("!")));
+	//				}
+	//			}
+	//		}
+	//	}
+
 	Destroy();
 }

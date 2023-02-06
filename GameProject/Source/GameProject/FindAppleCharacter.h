@@ -45,6 +45,8 @@ protected:
 	UInputAction* InventoryAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* PickItemAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MouseToggleAction;
 
 	void MoveForward(const FInputActionValue& Value);
 	void MoveRight(const FInputActionValue& Value);
@@ -52,6 +54,7 @@ protected:
 	void QuestInteraction(const FInputActionValue& Value);
 	void Inventory(const FInputActionValue& Value);
 	void PickItem(const FInputActionValue& Value);
+	void MouseToggle(const FInputActionValue& Value);
 
 public:	
 	// Called every frame
@@ -92,6 +95,15 @@ public:
 	class UInventoryComponent* InventoryComponent;
 	UPROPERTY()
 	bool HideToolTip = true;
+
+	/* Quest System */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> QuestListWidgetClass;
+	UPROPERTY()
+	class UQuestListWidget* QuestListUIObject;
+	UPROPERTY()
+	int32 QuestNum = 0; /* 현재 내가 승낙한 퀘스트의 수 */
+
 
 private:
 

@@ -68,6 +68,18 @@ public:
 	UFUNCTION()
 	void TimelineFinished();
 
+	UPROPERTY()
+	TMap<FName, int32> QuestRequirItem;
+
+	UPROPERTY()
+	class UTextRenderComponent* Text;
+
+	UPROPERTY(EditAnywhere, Category = "Components")
+	int32 Conversation_ID = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Components")
+	int32 CurrentLine = 0;
+
 private:	
 	/* 타임 라인 */
 	FTimeline CurveFTimeline;
@@ -87,31 +99,22 @@ private:
 	UPROPERTY()
 	float ZOffset = 100;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class UTextRenderComponent* Text;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY()
 	class UBoxComponent* CollisionMesh = nullptr;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY()
 	class UStaticMeshComponent* MyCone = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Components")
 	int32 NPC_ID = 500;			// 퀘스트 NPC ID 는 1 번
 
-	UPROPERTY(EditAnywhere, Category = "Components")
-	int32 Conversation_ID = 0;
-
-	UPROPERTY(EditAnywhere, Category = "Components")
-	int32 CurrentLine = 0;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY()
 	FText MyNameText;
 
 	UPROPERTY()
 	bool bIsValid = false;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY()
 	FTransform	CameraTransform;
 
 
@@ -128,4 +131,20 @@ private:
 	
 	class AFindAppleGameMode* FAGameMode;
 
+	/* Quest System */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> QuestListTextWidgetClass;
+	UPROPERTY()
+	class UQuestListTextWidget* QuestListTextUIObject;
+
+	UPROPERTY()
+	class UDataTable* ItemDataTable;
+	TArray<struct FInventoryTableRow*> InventoryData;
+
+	/* 퀘스트 마지막 말에는 대화가 끝날 수 있도록하는 bool값 */
+	UPROPERTY()
+	bool QuestAccept = false;
+	/* 퀘스트 리스트에 더하기용 불값 */
+	UPROPERTY()
+	bool SetQuestList = false;
 };

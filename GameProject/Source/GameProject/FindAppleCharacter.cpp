@@ -19,6 +19,7 @@
 #include "InputActionValue.h"
 #include "Inventory/InventoryUW.h"
 #include "Inventory/InventoryComponent.h"
+#include "Dialogue/QuestListWidget.h"
 #include "Components/InputComponent.h"
 
 // Sets default values
@@ -93,6 +94,12 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		PickItemAction = Input_PickUp.Object;
 	}
+	/* 마우스 토글 키 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MouseToggle(TEXT("InputAction'/Game/Semin/KeyInput/IA_MouseToggle.IA_MouseToggle'"));
+	if (Input_MouseToggle.Succeeded())
+	{
+		MouseToggleAction = Input_MouseToggle.Object;
+	}
 
 	
 	/* Inventory Widget */
@@ -100,6 +107,13 @@ AFindAppleCharacter::AFindAppleCharacter()
 	if (InventoryWidget.Succeeded())
 	{
 		InventoryWidgetClass = InventoryWidget.Class;
+	}
+
+	/* Quest List Widget */
+	ConstructorHelpers::FClassFinder<UQuestListWidget>  QuestListWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_QuestList.WBP_QuestList_C'"));
+	if (QuestListWidget.Succeeded())
+	{
+		QuestListWidgetClass = QuestListWidget.Class;
 	}
 
 	bUseControllerRotationPitch = false;
@@ -135,6 +149,17 @@ void AFindAppleCharacter::BeginPlay()
 		//CurEquip->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
 	}
 
+	/* Quest List 위젯 생성, 얘는 항상 Viewport 위에 있음 */
+	QuestListUIObject = CreateWidget<UQuestListWidget>(GetWorld(), QuestListWidgetClass);
+	QuestListUIObject->AddToViewport();
+	if (QuestNum == 0)
+	{
+		QuestListUIObject->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		QuestListUIObject->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 
 void AFindAppleCharacter::PostInitializeComponents()
@@ -225,6 +250,21 @@ void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
 	}
 }
 
+void AFindAppleCharacter::MouseToggle(const FInputActionValue& Value)
+{
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (PlayerController->bShowMouseCursor == true )
+	{
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		PlayerController->SetShowMouseCursor(false);
+	}
+	else
+	{
+		PlayerController->SetInputMode(FInputModeGameAndUI());
+		PlayerController->SetShowMouseCursor(true);
+	}
+}
+
 void AFindAppleCharacter::MoveForward(const FInputActionValue& Value)
 {	// Character movement
 	const FVector2D DirectionValue = Value.Get<FVector2D>();
@@ -274,6 +314,7 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Inventory);
 		EnhancedInputComponent->BindAction(PickItemAction, ETriggerEvent::Started, this, &AFindAppleCharacter::PickItem);
+		EnhancedInputComponent->BindAction(MouseToggleAction, ETriggerEvent::Started, this, &AFindAppleCharacter::MouseToggle);
 	}
 
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);

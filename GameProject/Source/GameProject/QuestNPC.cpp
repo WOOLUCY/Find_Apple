@@ -6,14 +6,24 @@
 #include "Components/BoxComponent.h"
 #include "FindAppleGameMode.h"
 #include "Dialogue/DialogueDataStruct.h"
+#include "Dialogue/QuestListWidget.h"
+#include "Dialogue/DialogueWidget.h"
+#include "Dialogue/BlackScreenPop.h"
+#include "Dialogue/QuestListTextWidget.h"
+#include "Inventory/InventoryDataTable.h"
+#include "Inventory/InventoryComponent.h"
+#include "Components/WrapBox.h"
+#include "Components/VerticalBox.h"
+#include "Components/TextBlock.h"
 #include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Components/TextRenderComponent.h"
-#include "Dialogue/DialogueWidget.h"
-#include "Dialogue/BlackScreenPop.h"
+#include "Components/TextBlock.h"
 #include "Components/TimelineComponent.h"
+#include "Components/ScrollBox.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "FindAppleCharacter.h"
 
 // Sets default values
@@ -25,10 +35,11 @@ AQuestNPC::AQuestNPC()
 	/* 텍스트 설정 */
 	Text = CreateDefaultSubobject<UTextRenderComponent>(TEXT("PressQ"));
 	Text->SetupAttachment(GetRootComponent());
-	Text->SetRelativeLocation(FVector(0.f, 0.f, 100.f));
+	Text->SetRelativeLocation(FVector(0.f, 0.f, 90.f));
 	Text->SetTextRenderColor(FColor::White);
+	Text->SetWorldSize(110.f);
 	Text->SetHorizontalAlignment(EHTA_Center);
-	Text->SetText(FText::FromString(TEXT("Press 'Q' to Chat")));
+	Text->SetText(FText::FromString(TEXT("!")));
 
 	/* Set Mesh ( 캐릭터 스켈레톤 메쉬 ) */
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_NPC(TEXT("SkeletalMesh'/Game/Semin/Character/SKM_NPC.SKM_NPC'"));
@@ -59,14 +70,18 @@ AQuestNPC::AQuestNPC()
 	}
 
 
-	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	//static ConstructorHelpers::FClassFinder<UAnimInstance> ABP_HERO
-	//(TEXT("/Script/Engine.AnimBlueprint'/Game/Characters/Hero/ABP_Char.ABP_Char_C'"));
+	/* Quest System - Item Data Table */
+	static ConstructorHelpers::FObjectFinder<UDataTable> InventoryDataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
+	if (InventoryDataTable.Succeeded())
+	{
+		ItemDataTable = InventoryDataTable.Object;
+	}
 
-	//if (ABP_HERO.Succeeded()) {
-	//	GetMesh()->SetAnimInstanceClass(ABP_HERO.Class);
-	//}
-
+	ConstructorHelpers::FClassFinder<UQuestListTextWidget>  QuestListTextWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_QuestListText.WBP_QuestListText_C'"));
+	if (QuestListTextWidget.Succeeded())
+	{
+		QuestListTextWidgetClass = QuestListTextWidget.Class;
+	}
 
 
 	ConstructorHelpers::FClassFinder<UDialogueWidget>  DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_Dialogue.WBP_Dialogue_C'"));
@@ -100,10 +115,10 @@ AQuestNPC::AQuestNPC()
 	CollisionMesh->SetupAttachment(GetMesh());
 	 
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/CPP_Dialogue_File.CPP_Dialogue_File"));
-	if (DataTable.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UDataTable> DialogueDataTable(TEXT("/Game/Semin/UI/CPP_Dialogue_File.CPP_Dialogue_File"));
+	if (DialogueDataTable.Succeeded())
 	{
-		DialogueDatatable = DataTable.Object;
+		DialogueDatatable = DialogueDataTable.Object;
 	}
 
 
@@ -135,23 +150,91 @@ void AQuestNPC::DialogueGetLine()
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	TArray<FText> ReturnLines;
 
+	/* FindAppleCharacter로 Cast */
+	AActor* ActorItr = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(ActorItr);
+
 	for ( FName CurDialogue : MyDialogue )
 	{
-		FDialogueTableRow Dialogue = *(DialogueDatatable->FindRow<FDialogueTableRow>(CurDialogue, CurDialogue.ToString()));
-		if ( Conversation_ID == Dialogue.Conversation_ID && CurrentLine == Dialogue.Line_ID)
+		if (QuestAccept == false)
 		{
-			MyNameText = Dialogue.NPC_Name;
-			ReturnLines.Add(Dialogue.Dialogue);
-			if (ReturnLines.Num() == 1)
+			FDialogueTableRow Dialogue = *(DialogueDatatable->FindRow<FDialogueTableRow>(CurDialogue, CurDialogue.ToString()));
+			if (Conversation_ID == Dialogue.Conversation_ID && CurrentLine == Dialogue.Line_ID)
 			{
-				if (!ReturnLines[0].IsEmpty())
+				MyNameText = Dialogue.NPC_Name;
+				ReturnLines.Add(Dialogue.Dialogue);
+				if (ReturnLines.Num() == 1)
 				{
-					DialogueUIObject->ChangeText(MyNameText, ReturnLines[0]);
-					return;
+					if (!ReturnLines[0].IsEmpty())
+					{
+						DialogueUIObject->ChangeText(MyNameText, ReturnLines[0]);
+
+						Text->SetText(FText::FromString(TEXT("!")));
+
+						if (!Dialogue.Reward.IsNone())	/* 만약 이 대화가 퀘스트라면 */
+						{
+							/* 만약 대화의 끝이 퀘스트 아이템 필요로 끝난다면 */
+							if (SetQuestList == false) 
+							{
+								//MyCharacter->QuestListUIObject->QuestTitle->SetText(Dialogue.QuestTitle);
+								//MyCharacter->QuestListUIObject->QuestDes->SetText(Dialogue.QuestDes);
+								MyCharacter->QuestListUIObject->SetVisibility(ESlateVisibility::Visible);
+
+								QuestListTextUIObject = CreateWidget<UQuestListTextWidget>(GetWorld(), QuestListTextWidgetClass);
+								QuestListTextUIObject->QuestTitle->SetText(Dialogue.QuestTitle);
+								QuestListTextUIObject->QuestDes->SetText(Dialogue.QuestDes);
+								MyCharacter->QuestListUIObject->ScrollBox->AddChild(QuestListTextUIObject);
+								SetQuestList = true;
+
+								/* 캐릭터의 퀘스트 개수 하나 증가 */
+								MyCharacter->QuestNum += 1;
+
+								/* 퀘스트 아이템 조건 추가 */
+								QuestRequirItem.Add(Dialogue.Conditions_Item, Dialogue.Conditions_cnt);
+
+								UE_LOG(LogTemp, Warning, TEXT("%d Apples need"), *QuestRequirItem.Find(Dialogue.Conditions_Item));
+							}
+
+
+							/* 퀘스트 받았을 때의 내 아이템 현황 검사, 만약 이미 아이템 있다면 바로 퀘스트 완료 */
+							if (ItemDataTable != nullptr)
+							{
+								ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+								TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+								for (FName RowName : RowNames)
+								{
+									//FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+									if (RowName == Dialogue.Conditions_Item)		/* 이미 가지고 있는 아이템이라면 ?로 뜨게 */
+									{
+										if (MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item))
+										{
+											if (*MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item) == Dialogue.Conditions_cnt)
+											{
+												GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
+												Text->SetText(FText::FromString(TEXT("?")));
+												Conversation_ID += 1;
+												CurrentLine = 0;
+
+
+												Text->SetHiddenInGame(false);
+												QuestAccept = true;
+											}
+											else
+											{
+												Text->SetText(FText::FromString(TEXT("!")));
+											}
+										}
+									}
+								}
+							}
+						}
+
+						return;
+					}
 				}
 			}
-		}
-		else {
 		}
 	}
 
@@ -161,10 +244,6 @@ void AQuestNPC::DialogueGetLine()
 		DialoguePopWidget->RemoveFromParent();
 		CurrentLine = 0;
 
-		/* FindAppleCharacter로 Cast */
-		AActor* ActorItr = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(ActorItr);
-
 		PlayerController->SetViewTargetWithBlend(MyCharacter->CameraComponent->GetOwner(), 1.3f);
 
 		PlayerController->SetInputMode(FInputModeGameOnly());
@@ -173,6 +252,8 @@ void AQuestNPC::DialogueGetLine()
 		PlayerController->GetCharacter()->GetCharacterMovement()->SetActive(true);
 
 
+		QuestAccept = false;
+		SetQuestList = false;
 		Text->SetHiddenInGame(false);
 	}
 
@@ -328,6 +409,12 @@ void AQuestNPC::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CurveFTimeline.TickTimeline(DeltaTime);
+
+	FVector cameraLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	FRotator rotatorToCamera = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), cameraLocation);
+	//FQuat4d localPlaneRotationQuat = this->cesiumGeoreference->ComputeEastNorthUpToUnreal(GetActorLocation()).ToQuat();
+
+	Text->SetWorldRotation((rotatorToCamera.Quaternion()).Rotator());
 
 }
 
