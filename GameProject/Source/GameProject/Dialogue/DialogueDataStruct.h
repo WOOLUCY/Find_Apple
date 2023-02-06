@@ -39,16 +39,16 @@ public:
 	FName Conditions_Item;		// 퀘스트 필요 아이템
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
-	int32 Conditions_cnt;		// 퀘스트 필요 아이템의 개수	
+	int32 Conditions_cnt = 0;	// 퀘스트 필요 아이템의 개수	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
 	FName Reward;				// 보상
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
-	int32 Reward_cnt;			// 보상 개수
+	int32 Reward_cnt = 0;		// 보상 개수
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
-	int32 Next_Conversation_ID;	// 다음 다이얼로그 진행을 위한 수 (걍 ++ 하면 다음 내용으로)
+	int32 Next_Conversation_ID = 0;	// 다음 다이얼로그 진행을 위한 수 (걍 ++ 하면 다음 내용으로)
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
 	FText QuestTitle;			// UI에 나오게 될 퀘스트의 이름

@@ -125,15 +125,13 @@ void ADropedItem::PicUpItem_Implementation()
 		MyActors.Add(Cast<AQuestNPC>(a));
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Item . . . "));
 	for (AQuestNPC* FoundActor : MyActors)
 	{
 		if (FoundActor->QuestRequirItem.Find(ItemName))
 		{
 			if (*FoundActor->QuestRequirItem.Find(ItemName) >= *MyCharacter->InventoryComponent->InventoryContent.Find(ItemName))
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
-				UE_LOG(LogTemp, Warning, TEXT("Have Quest ITem"));
+				//GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
 				FoundActor->Text->SetText(FText::FromString(TEXT("?")));
 				FoundActor->Conversation_ID += 1;
 				FoundActor->CurrentLine = 0;
