@@ -88,13 +88,13 @@ void AAx::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveCompon
 void AAx::SetCollisionStart()
 {
 	CollisionBox->SetCollisionProfileName(TEXT("OverlapAll"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OverlapAll"));
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("AX - OverlapAll"));
 
 }
 
 void AAx::SetCollisionEnd()
 {
 	CollisionBox->SetCollisionProfileName(TEXT("NoCollision"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("NoCollision"));
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("AX - SetCollisionEnd"));
 
 }

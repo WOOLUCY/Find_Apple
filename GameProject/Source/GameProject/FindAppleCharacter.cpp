@@ -45,7 +45,7 @@ AFindAppleCharacter::AFindAppleCharacter()
 	}
 
 	IsAction = false;
-	CurEqip = 0;
+	CurEquipNum = 0;
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
@@ -183,17 +183,17 @@ void AFindAppleCharacter::BeginPlay()
 
 
 
-	Sword = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
-	Sword->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
-	Sword->SetSwordVisibiltiy(false);
+	//Sword = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
+	//Sword->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
+	//Sword->SetSwordVisibiltiy(false);
 
-	Ax = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
-	Ax->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
-	Ax->SetAxVisibiltiy(false);
+	//Ax = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
+	//Ax->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
+	//Ax->SetAxVisibiltiy(false);
 
-	Pick = GetWorld()->SpawnActor<APick>(FVector::ZeroVector, FRotator::ZeroRotator);
-	Pick->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
-	Pick->SetPickVisibiltiy(false);
+	//Pick = GetWorld()->SpawnActor<APick>(FVector::ZeroVector, FRotator::ZeroRotator);
+	//Pick->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
+	//Pick->SetPickVisibiltiy(false);
 
 	/* Quest List 위젯 생성, 얘는 항상 Viewport 위에 있음 */
 	QuestListUIObject = CreateWidget<UQuestListWidget>(GetWorld(), QuestListWidgetClass);
@@ -315,40 +315,69 @@ void AFindAppleCharacter::MouseToggle(const FInputActionValue& Value)
 
 void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
 {
-	CurEqip = 1;
 
-	Sword->SetSwordVisibiltiy(true);
-	Ax->SetAxVisibiltiy(false);
-	Pick->SetPickVisibiltiy(false);
+	//클래스 다 가져와서 있으면 안됨
+	//TArray<AActor*> FoundActors;
+	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASword::StaticClass(), FoundActors);
+
+	if (CurEquipNum == 1) return;
+
+	if (CurEquipNum != 0 && CurEquipNum != 1) {
+		CurEquipActor->Destroy();
+	}
+	if (CurEquipNum != 1) {
+
+		CurEquipActor = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
+		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
+		CurEquipNum = 1;
+
+	}
 
 }
 
 void AFindAppleCharacter::EquipAx(const FInputActionValue& Value)
 {
-	CurEqip = 2;
-	Sword->SetSwordVisibiltiy(false);
-	Ax->SetAxVisibiltiy(true);
-	Pick->SetPickVisibiltiy(false);
+
+	if (CurEquipNum == 2) return;
+
+	if (CurEquipNum != 0 && CurEquipNum != 2) {
+		CurEquipActor->Destroy();
+	}
+
+	if (CurEquipNum != 2) {
+		CurEquipActor = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
+		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
+		CurEquipNum = 2;
+
+	}
 
 
 
 }
 void AFindAppleCharacter::EquipPick(const FInputActionValue& Value)
 {
-	CurEqip = 3;
+	if (CurEquipNum == 3) return;
 
-	Sword->SetSwordVisibiltiy(false);
-	Ax->SetAxVisibiltiy(false);
-	Pick->SetPickVisibiltiy(true);
+	if (CurEquipNum != 0 && CurEquipNum != 3) {
+		CurEquipActor->Destroy();
+	}
 
+	if (CurEquipNum != 3) {
+		CurEquipActor = GetWorld()->SpawnActor<APick>(FVector::ZeroVector, FRotator::ZeroRotator);
+		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("PickSocket"));
+		CurEquipNum = 3;
+
+	}
 
 }
 void AFindAppleCharacter::EquipReset(const FInputActionValue& Value)
 {
-	CurEqip = 0;
-	Sword->SetSwordVisibiltiy(false);
-	Ax->SetAxVisibiltiy(false);
-	Pick->SetPickVisibiltiy(false);
+
+	if (CurEquipNum != 0) {
+		CurEquipActor->Destroy();
+		CurEquipNum = 0;
+
+	}
 
 
 }
@@ -431,8 +460,10 @@ void AFindAppleCharacter::Action()
 		return;
 	}
 	else {
-		Anim->PlayActionMontage();
-		IsAction = true;
+		if (CurEquipNum != 0) {
+			Anim->PlayActionMontage();
+			IsAction = true;
+		}
 	}
 
 

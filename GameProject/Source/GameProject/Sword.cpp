@@ -66,7 +66,7 @@ void ASword::SetCollisionStart()
 {
 	//근데 스월드는 항상 노콜리전임 박스를바꿔줘야함
 	CollisionBox->SetCollisionProfileName(TEXT("OverlapAll"));
-	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SetCollisionStart "));
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SWORDSetCollisionStart "));
 
 
 }
@@ -74,7 +74,7 @@ void ASword::SetCollisionStart()
 void ASword::SetCollisionEnd()
 {
 	CollisionBox->SetCollisionProfileName(TEXT("NoCollision"));
-	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SetCollisionEnd "));
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SWORDSetCollisionEnd "));
 
 }
 
