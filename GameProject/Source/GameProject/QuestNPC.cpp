@@ -76,24 +76,28 @@ AQuestNPC::AQuestNPC()
 	{
 		ItemDataTable = InventoryDataTable.Object;
 	}
-
+	/* Quest List -> My Character에 추가하기 용도 */
 	ConstructorHelpers::FClassFinder<UQuestListTextWidget>  QuestListTextWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_QuestListText.WBP_QuestListText_C'"));
 	if (QuestListTextWidget.Succeeded())
 	{
 		QuestListTextWidgetClass = QuestListTextWidget.Class;
 	}
-
-
+	/* Dialogue Widgets */
 	ConstructorHelpers::FClassFinder<UDialogueWidget>  DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_Dialogue.WBP_Dialogue_C'"));
 	if (DialogueWidget.Succeeded())
 	{
 		DialogueWidgetClass = DialogueWidget.Class;
 	}
-
 	ConstructorHelpers::FClassFinder<UBlackScreenPop>  DialoguePopWidgetObject(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_BlackScreenPop.WBP_BlackScreenPop_C'"));
 	if (DialoguePopWidgetObject.Succeeded())
 	{
 		DialoguePopWidgetClass = DialoguePopWidgetObject.Class;
+	}
+	/* Press key Widget */
+	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_PressQ.WBP_PressQ_C'"));
+	if (PressKeyWidget.Succeeded())
+	{
+		PressKeyWidgetClass = PressKeyWidget.Class;
 	}
 
 	ConstructorHelpers::FObjectFinder<UCurveFloat>  CurveObject(TEXT("CurveFloat'/Game/Semin/UI/Dialogue/BlackScreenTimeline.BlackScreenTimeline'"));
@@ -129,6 +133,9 @@ AQuestNPC::AQuestNPC()
 void AQuestNPC::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &AQuestNPC::OnOverlapEnd);
+	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &AQuestNPC::OnOverlapBegin);
 
 	if (DialogueDatatable != nullptr)
 	{
@@ -379,23 +386,30 @@ void AQuestNPC::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
+		if (bIsPressKeyValid == false)
+		{
+			bIsPressKeyValid = true;
+			PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
+			PressKeyWidgetUIObejct->AddToViewport();
+		}
 	}
-
-	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &AQuestNPC::OnOverlapEnd);
-	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &AQuestNPC::OnOverlapBegin);
 }
 
 void AQuestNPC::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) 
 {
-	if (bIsValid) {
-		DialogueUIObject->RemoveFromParent();
-		bIsValid = false;
-		CurrentLine = 0;
-	}
-	if (OtherActor && (OtherActor != this) && OtherComp)
+	if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap End"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Overlap End"));
+		if (bIsPressKeyValid == true)
+		{
+			PressKeyWidgetUIObejct->RemoveFromParent();
+			bIsPressKeyValid = false;
+		}
+		if (bIsValid) {
+			DialogueUIObject->RemoveFromParent();
+			bIsValid = false;
+			CurrentLine = 0;
+		}
 	}
 }
 
@@ -410,9 +424,10 @@ void AQuestNPC::Tick(float DeltaTime)
 
 	CurveFTimeline.TickTimeline(DeltaTime);
 
-	FVector cameraLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
-	FRotator rotatorToCamera = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), cameraLocation);
-	//FQuat4d localPlaneRotationQuat = this->cesiumGeoreference->ComputeEastNorthUpToUnreal(GetActorLocation()).ToQuat();
+
+	APlayerCameraManager* camManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+	FVector camLocation = camManager->GetCameraLocation();
+	FRotator rotatorToCamera = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), camLocation);
 
 	Text->SetWorldRotation((rotatorToCamera.Quaternion()).Rotator());
 

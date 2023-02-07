@@ -7,6 +7,7 @@
 #include "InventoryDataTable.h"	
 #include "Engine/DataTable.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "InventoryComponent.h"
 #include "../QuestNPC.h"
@@ -40,6 +41,14 @@ ADropedItem::ADropedItem()
 	CollisionMesh->SetupAttachment(MyBox);
 	CollisionMesh->SetHiddenInGame(true);
 
+	///Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_PressQ.WBP_PressQ'
+	/* Press key Widget */
+	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_PressE.WBP_PressE_C'"));
+	if (PressKeyWidget.Succeeded())
+	{
+		PressKeyWidgetClass = PressKeyWidget.Class;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
 	if (DataTable.Succeeded())
 	{
@@ -72,7 +81,6 @@ void ADropedItem::BeginPlay()
 				MyBox->SetStaticMesh(InventoryRow.Mesh3D);
 				MyBox->SetWorldScale3D(InventoryRow.MeshScale);
 				MyBox->SetMaterial(0, InventoryRow.Mesh3D->GetMaterial(0));
-				UE_LOG(LogTemp, Warning, TEXT("Apple"));
 			}
 		}
 	}
@@ -97,6 +105,13 @@ void ADropedItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 		MyCharacter->PressE = true;
 		MyCharacter->LookAtActorPressE = this;
+
+		if (bIsPressKeyValid == false) 
+		{
+			bIsPressKeyValid = true;
+			PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
+			PressKeyWidgetUIObejct->AddToViewport();
+		}
 	}
 }
 
@@ -107,6 +122,33 @@ void ADropedItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 		MyCharacter->PressE = false;
+
+		if (bIsPressKeyValid == true)
+		{
+			PressKeyWidgetUIObejct->RemoveFromParent();
+			bIsPressKeyValid = false;
+		}
+	}
+}
+
+void ADropedItem::ItemFresh(FName ItemReName)
+{
+	if (ItemDataTable != nullptr)
+	{
+		ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+		TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+		for (FName RowName : RowNames)
+		{
+			FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+			if (RowName == ItemReName)
+			{
+				MyBox->SetStaticMesh(InventoryRow.Mesh3D);
+				MyBox->SetWorldScale3D(InventoryRow.MeshScale);
+				MyBox->SetMaterial(0, InventoryRow.Mesh3D->GetMaterial(0));
+			}
+		}
 	}
 }
 
