@@ -132,13 +132,9 @@ public:
 
 private:
 
-	UPROPERTY(VisibleAnywhere)
-		ASword* Sword;
-	UPROPERTY(VisibleAnywhere)
-		AAx* Ax;
-	UPROPERTY(VisibleAnywhere)
-		APick* Pick;
 
+	UPROPERTY(VisibleAnywhere)
+		AActor* CurEquipActor;
 
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
@@ -155,7 +151,7 @@ private:
 
 
 	UPROPERTY(VisibleAnywhere)
-	int32 CurEqip; 
+	int32 CurEquipNum; 
 
 	
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))

@@ -39,6 +39,7 @@ public:
 		float Damage;
 
 
+
 	UPROPERTY()
 		UFindAppleAnimInstance* Anim;
 
