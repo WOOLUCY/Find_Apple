@@ -180,6 +180,9 @@ void AFindAppleCharacter::BeginPlay()
 		}
 	}
 
+
+
+
 	Sword = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
 	Sword->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
 	Sword->SetSwordVisibiltiy(false);
@@ -213,8 +216,7 @@ void AFindAppleCharacter::PostInitializeComponents()
 	Anim->OnMontageEnded.AddDynamic(this, &AFindAppleCharacter::OnActionMontageEnded);
 
 	
-	
-	
+
 	
 
 }

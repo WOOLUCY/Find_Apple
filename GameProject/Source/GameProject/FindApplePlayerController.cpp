@@ -9,11 +9,11 @@ void AFindApplePlayerController::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	
-	bEnableClickEvents = true;
-	bEnableTouchEvents = true;
-	bEnableMouseOverEvents = true;
-	bEnableTouchOverEvents = true;
-	bShowMouseCursor = true;
+	//bEnableClickEvents = true;
+	//bEnableTouchEvents = true;
+	//bEnableMouseOverEvents = true;
+	//bEnableTouchOverEvents = true;
+	//bShowMouseCursor = true;
 
 	//bShowMouseCursor = false;
 }
