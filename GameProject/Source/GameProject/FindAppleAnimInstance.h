@@ -4,6 +4,7 @@
 
 #include "EngineMinimal.h"
 #include "Animation/AnimInstance.h"
+
 #include "FindAppleAnimInstance.generated.h"
 
 
@@ -31,6 +32,7 @@ private:
 		float Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Move, Meta = (AllowPrivateAccess = true))
 		bool OnAir;
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* ActionMontage;
 
@@ -39,6 +41,10 @@ private:
 public:
 	FonActionCheckDelegate HitCheckStart; 
 	FonActionCheckDelegate HitCheckEnd;
+
+	FonActionCheckDelegate GrabSeed;
+	FonActionCheckDelegate RelaseSeed;
+
 private:
 	UFUNCTION()
 	void AnimNotify_HitStart();
@@ -46,7 +52,13 @@ private:
 	UFUNCTION()
 	void AnimNotify_HitEnd();
 
-	FName GetActionMontageSecName(int32 Section);
+
+	UFUNCTION()
+		void AnimNotify_Release();
+
+	UFUNCTION()
+		void AnimNotify_Grab();
+
 
 
 };
