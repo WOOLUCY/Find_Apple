@@ -31,6 +31,8 @@ public:
 
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	void ItemFresh(FName ItemReName);
 	
 	/* 플레이어가 collised 상태에서 E 를 눌렀을 경우 인터페이스 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyCategory")
@@ -48,4 +50,12 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "ItemSetting")
 	class UDataTable* ItemDataTable;
+
+	/* Press E to Chat Widget */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> PressKeyWidgetClass;
+	UPROPERTY()
+	class UUserWidget* PressKeyWidgetUIObejct;
+	UPROPERTY()
+	bool bIsPressKeyValid = false;
 };

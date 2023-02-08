@@ -111,8 +111,12 @@ private:
 	UPROPERTY()
 	FText MyNameText;
 
+	/* Is Dialogue Widget Valid */
 	UPROPERTY()
 	bool bIsValid = false;
+	/* Is Press Key Widget Valid */
+	UPROPERTY()
+	bool bIsPressKeyValid = false;
 
 	UPROPERTY()
 	FTransform	CameraTransform;
@@ -121,10 +125,17 @@ private:
 	UPROPERTY()
 	TArray<FName> MyDialogue;
 
+	/* Dialouge Widget */
 	UPROPERTY()
 	class UDialogueWidget* DialogueUIObject;
 	UPROPERTY()
 	class UUserWidget* DialoguePopWidget;
+
+	/* Press E to Chat Widget */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> PressKeyWidgetClass;
+	UPROPERTY()
+	class UUserWidget* PressKeyWidgetUIObejct;
 
 	UPROPERTY()
 	class UDataTable* DialogueDatatable;

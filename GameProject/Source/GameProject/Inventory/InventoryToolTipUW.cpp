@@ -80,7 +80,7 @@ void UInventoryToolTipUW::RemoveItem()
 		{
 			FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
 
-			if (RowName == NonDisplayName)
+			if (RowName == NonDisplayName)	/* Non-DisplayName = 표시용 이름이 아니라 행 이름 */
 			{
 				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 				AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
@@ -94,7 +94,9 @@ void UInventoryToolTipUW::RemoveItem()
 				FVector spawnLocation = MyCharacter->GetActorLocation();
 				//ADropedItem DropItem;
 				//DropItem.ItemName = RowName;
-				GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), spawnLocation, rotator, spawnParams);
+				ADropedItem* DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), spawnLocation, rotator, spawnParams);
+				DropedActor->ItemFresh(RowName);
+
 			}
 		}
 	}

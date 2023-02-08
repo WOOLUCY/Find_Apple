@@ -234,7 +234,6 @@ void AFindAppleCharacter::QuestInteraction(const FInputActionValue& Value)
 		{
 			if (this->IsOverlappingActor(Actor))
 			{
-				UE_LOG(LogTemp, Display, TEXT("collised"));
 				Interface->Execute_OnActivate(Actor);
 			}
 		}
@@ -277,7 +276,6 @@ void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
 		{
 			if (this->IsOverlappingActor(Actor))
 			{
-				UE_LOG(LogTemp, Display, TEXT("collised"));
 				Interface->Execute_PicUpItem(Actor);
 			}
 		}
