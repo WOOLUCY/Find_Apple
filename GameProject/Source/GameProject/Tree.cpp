@@ -28,13 +28,15 @@ ATree::ATree()
 	Pivot->SetupAttachment(RootComponent);
 
 	Upper->SetupAttachment(Pivot);
-	//Upper->AttachToComponent(Pivot, FAttachmentTransformRules::KeepWorldTransform);
+	Leaf->SetupAttachment(Pivot);
 
-//=======
-	Upper->AttachToComponent(Pivot, FAttachmentTransformRules::KeepWorldTransform);
-	Leaf->AttachToComponent(Pivot, FAttachmentTransformRules::KeepWorldTransform);
+	Upper->GetAttachParent();
+	Leaf->GetAttachParent();
+
+
+
+
 	Leaf->SetCollisionProfileName(TEXT("NoCollision"));
-//>>>>>>> CharacterIntertaction
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LOWER
 	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/LowerTree.LowerTree'"));
@@ -61,6 +63,8 @@ ATree::ATree()
 void ATree::BeginPlay()
 {
 	Super::BeginPlay();
+
+
 
 }
 

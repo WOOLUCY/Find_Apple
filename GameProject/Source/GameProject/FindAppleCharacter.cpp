@@ -183,18 +183,6 @@ void AFindAppleCharacter::BeginPlay()
 
 
 
-	//Sword = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
-	//Sword->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
-	//Sword->SetSwordVisibiltiy(false);
-
-	//Ax = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
-	//Ax->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
-	//Ax->SetAxVisibiltiy(false);
-
-	//Pick = GetWorld()->SpawnActor<APick>(FVector::ZeroVector, FRotator::ZeroRotator);
-	//Pick->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
-	//Pick->SetPickVisibiltiy(false);
-
 	/* Quest List 위젯 생성, 얘는 항상 Viewport 위에 있음 */
 	QuestListUIObject = CreateWidget<UQuestListWidget>(GetWorld(), QuestListWidgetClass);
 	QuestListUIObject->AddToViewport();
