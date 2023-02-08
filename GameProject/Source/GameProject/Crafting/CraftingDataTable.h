@@ -21,6 +21,9 @@ public:
 	// PNG 넣는다면 Texture
 	// 돈이 있다면 돈
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
+	FText DisplayName;		/* 아이템 제작 창에 출력될 이름 */
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
 	int32 apple = 0;		/* row name이 apple이다. apple이 필요한 개수 */
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
