@@ -24,18 +24,9 @@ void AFindApplePlayerController::OnPossess(APawn* pawn)
 
 }
 
-void AFindApplePlayerController::changeMouse()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("pressed A"));
-
-}
 
 void AFindApplePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	
-	if (InputKey(EKeys::B, EInputEvent::IE_Pressed, 1.0f, false)) {
-		changeMouse();
-	}
-	//InputComponent->BindKey(EKeys::B, IE_Pressed, this, &AFindApplePlayerController::changeMouse);
+
 }
