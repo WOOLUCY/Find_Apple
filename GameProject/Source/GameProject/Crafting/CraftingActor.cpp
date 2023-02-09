@@ -66,10 +66,10 @@ void ACraftingActor::OnActivate_Implementation()
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Overlap & Press Q"));
 	if (bIsWidgetValid)	/* Already Widget is created */
 	{
-		bIsWidgetValid = false;
-		CraftingAllUIObject->RemoveFromParent();
-		PlayerController->SetInputMode(FInputModeGameOnly());
-		PlayerController->SetShowMouseCursor(false);
+		//bIsWidgetValid = false;
+		//CraftingAllUIObject->RemoveFromParent();
+		//PlayerController->SetInputMode(FInputModeGameOnly());
+		//PlayerController->SetShowMouseCursor(false);
 	}
 	else
 	{

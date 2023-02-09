@@ -49,7 +49,7 @@ public:
 	class UCraftingListWidget* CraftingListUIObject;
 	UFUNCTION()
 	void SetCraftListWidget(FName CraftRowName);
-	
+
 	UPROPERTY()
 	class UDataTable* CraftingDataTable;
 	TArray<struct FCraftingTableRow*> CraftingData;
@@ -69,6 +69,12 @@ public:
 	int32 HaveAppleCnt;
 	UPROPERTY()
 	int32 HaveOrangeCnt;
+	UPROPERTY()
+	int32 HaveBranchCnt;
+	UPROPERTY()
+	int32 HaveRockCnt;
+	UPROPERTY()
+	int32 HaveTrunkCnt;
 	//UPROPERTY()
 	//int32 HasAppleCnt;
 

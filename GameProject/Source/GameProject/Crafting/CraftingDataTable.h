@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -16,24 +16,44 @@ struct FCraftingTableRow : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 
 public:
-	// Á¦ÀÛ ¹°Ç°ÀÇ ÀÌ¸§Àº ÇàÀÌ¸§À¸·Î ÇÏ°í
-	// Àç·áº° ÀÌ¸§(=Çà ÀÌ¸§)°ú °³¼ö
-	// PNG ³Ö´Â´Ù¸é Texture
-	// µ·ÀÌ ÀÖ´Ù¸é µ·
+	// ì œì‘ ë¬¼í’ˆì˜ ì´ë¦„ì€ í–‰ì´ë¦„ìœ¼ë¡œ í•˜ê³ 
+	// ì¬ë£Œë³„ ì´ë¦„(=í–‰ ì´ë¦„)ê³¼ ê°œìˆ˜
+	// PNG ë„£ëŠ”ë‹¤ë©´ Texture
+	// ëˆì´ ìˆë‹¤ë©´ ëˆ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
-	FText DisplayName;		/* ¾ÆÀÌÅÛ Á¦ÀÛ Ã¢¿¡ Ãâ·ÂµÉ ÀÌ¸§ */
+	FText DisplayName;		/* ì•„ì´í…œ ì œì‘ ì°½ì— ì¶œë ¥ë  ì´ë¦„ */
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
-	int32 apple = 0;		/* row nameÀÌ appleÀÌ´Ù. appleÀÌ ÇÊ¿äÇÑ °³¼ö */
+	int32 apple = 0;		/* row nameì´ appleì´ë‹¤. appleì´ í•„ìš”í•œ ê°œìˆ˜ */
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
 	UTexture2D* AppleTexture = UTexture2D::CreateTransient(128, 128, PF_R8G8B8A8);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
-	int32 orange = 0;
+	int32 orange = 0;		/* Orangeê°€ í•„ìš”í•œ ê°œìˆ˜ */
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
 	UTexture2D* OrangeTexture = UTexture2D::CreateTransient(128, 128, PF_R8G8B8A8);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
+	int32 branch = 0;		/* branch(ë‚˜ë­‡ê°€ì§€)ê°€ í•„ìš”í•œ ê°œìˆ˜ */
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
+	UTexture2D* BranchTexture = UTexture2D::CreateTransient(128, 128, PF_R8G8B8A8);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
+	int32 rock = 0;			/* rock(ëŒë©©ì´)ê°€ í•„ìš”í•œ ê°œìˆ˜ */
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
+	UTexture2D* RockTexture = UTexture2D::CreateTransient(128, 128, PF_R8G8B8A8);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
+	int32 trunk = 0;			/* Trunk(í†µë‚˜ë¬´)ê°€ í•„ìš”í•œ ê°œìˆ˜ */
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
+	UTexture2D* TrunkTexture = UTexture2D::CreateTransient(128, 128, PF_R8G8B8A8);
+
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Crafting")
 	UTexture2D* CraftTexture = UTexture2D::CreateTransient(128, 128, PF_R8G8B8A8);

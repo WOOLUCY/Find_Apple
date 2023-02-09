@@ -67,6 +67,9 @@ void ADropedItem::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
+	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
+
 	if (ItemDataTable != nullptr)
 	{
 		ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
@@ -84,9 +87,6 @@ void ADropedItem::BeginPlay()
 			}
 		}
 	}
-
-	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
-	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
 }
 
 // Called every frame
@@ -94,7 +94,7 @@ void ADropedItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
+	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 }
 
 void ADropedItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -111,23 +111,25 @@ void ADropedItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 			bIsPressKeyValid = true;
 			PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
 			PressKeyWidgetUIObejct->AddToViewport();
+			// UE_LOG(LogTemp, Warning, TEXT("Item Name: %s"), *ItemName.ToString());
 		}
 	}
 }
 
 void ADropedItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+	MyCharacter->PressE = false;
+
+	if (bIsPressKeyValid == true)
+	{
+		PressKeyWidgetUIObejct->RemoveFromParent();
+		bIsPressKeyValid = false;
+	}
+
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
-		AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
-		MyCharacter->PressE = false;
-
-		if (bIsPressKeyValid == true)
-		{
-			PressKeyWidgetUIObejct->RemoveFromParent();
-			bIsPressKeyValid = false;
-		}
 	}
 }
 
