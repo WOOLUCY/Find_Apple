@@ -14,14 +14,21 @@ class GAMEPROJECT_API AFindApplePlayerController : public APlayerController
 {
 	GENERATED_BODY()
 public:
+
+	AFindApplePlayerController();
+
+
 	virtual void PostInitializeComponents() override;
 	virtual void OnPossess(APawn* pawn) override;
+	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void changeMouse();
+
+
 
 protected:
 	virtual void SetupInputComponent() override;
 	// Called when the game starts or when spawned
+
+
 
 };

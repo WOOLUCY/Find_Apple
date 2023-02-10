@@ -3,7 +3,7 @@
 
 #include "FarmGround.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "FindApplePlayerController.h"
 #include "FindAppleCharacter.h"
 
 // Sets default values
@@ -106,6 +106,11 @@ void AFarmGround::NotifyActorOnClicked(FKey PressedButton)
 {
 	if (PressedButton == EKeys::LeftMouseButton) {
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("notify actor clicked"));
+
+		///구름스폰하기
+		cloud = GetWorld()->SpawnActor<ACloud>(GetActorLocation(), GetActorRotation());
+
+		//
 	}
 
 
@@ -118,8 +123,8 @@ void AFarmGround::NotifyActorBeginCursorOver()
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("being dfkldkfldf"));
 	//여기서 뭐 파란색으로 표시한다거나하기
 
-	CheckMesh->SetVisibility(true);
-
+	cloud = GetWorld()->SpawnActor<ACloud>(GetActorLocation(), GetActorRotation());
+	cloud->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform);
 
 
 }
@@ -127,7 +132,6 @@ void AFarmGround::NotifyActorBeginCursorOver()
 void AFarmGround::NotifyActorEndCursorOver()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("being End"));
-	//여기서 뭐 파란색으로 표시한다거나하기
 
 
 }
@@ -149,10 +153,10 @@ void AFarmGround::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap with Character"));
 		CheckMesh->SetVisibility(true);
 
-		FVector change = Box->GetComponentLocation();
-		//hero->GetMesh()->SetWorldLocation(change);
 
-		PlantDelegate.ExecuteIfBound();
+		cloud = GetWorld()->SpawnActor<ACloud>(GetActorLocation(), GetActorRotation());
+
+		//PlantDelegate.ExecuteIfBound();
 
 		
 	}

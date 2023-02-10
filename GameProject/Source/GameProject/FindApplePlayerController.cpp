@@ -2,13 +2,19 @@
 
 
 #include "FindApplePlayerController.h"
+#include "PlantWidget.h"
 #include "Blueprint/UserWidget.h"
 
+
+AFindApplePlayerController::AFindApplePlayerController()
+{
+
+}
 
 void AFindApplePlayerController::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	
+
 	//bEnableClickEvents = true;
 	//bEnableTouchEvents = true;
 	//bEnableMouseOverEvents = true;
@@ -24,18 +30,18 @@ void AFindApplePlayerController::OnPossess(APawn* pawn)
 
 }
 
-void AFindApplePlayerController::changeMouse()
+void AFindApplePlayerController::BeginPlay()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("pressed A"));
+
+	
+
 
 }
+
+
 
 void AFindApplePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	
-	if (InputKey(EKeys::B, EInputEvent::IE_Pressed, 1.0f, false)) {
-		changeMouse();
-	}
-	//InputComponent->BindKey(EKeys::B, IE_Pressed, this, &AFindApplePlayerController::changeMouse);
+
 }

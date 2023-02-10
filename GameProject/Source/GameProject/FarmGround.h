@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "FindAppleAnimInstance.h"
 #include "Components/BoxComponent.h"
+#include "Cloud.h"
 #include "FarmGround.generated.h"
 
 DECLARE_DELEGATE(OnFarmDelegate)
@@ -28,13 +29,15 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		UBoxComponent* Box;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 		UMaterial* Wet;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 		UMaterial* NotWet;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 		UMaterial* Overlap;
 
+	UPROPERTY(VisibleAnywhere)
+		AActor* cloud;
 
 
 	OnFarmDelegate PlantDelegate;
