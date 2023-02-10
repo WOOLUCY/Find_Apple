@@ -2,24 +2,27 @@
 
 
 #include "PlantWidget.h"
+#include "Components/Button.h"
+
+
 
 void UPlantWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	Seed = Cast<UButton>(GetWidgetFromName(TEXT("Seed")));
-	if (Seed != nullptr) {
-		Seed->OnClicked.AddDynamic(this, &UPlantWidget::PutSeed);
+	SeedButton = Cast<UButton>(GetWidgetFromName(TEXT("Seed")));
+	if (SeedButton != nullptr) {
+		SeedButton->OnClicked.AddDynamic(this, &UPlantWidget::PutSeed);
 	}
 
-	Water = Cast<UButton>(GetWidgetFromName(TEXT("Water")));
-	if (Water != nullptr) {
-		Water->OnClicked.AddDynamic(this, &UPlantWidget::PutWater);
+	WaterButton = Cast<UButton>(GetWidgetFromName(TEXT("Water")));
+	if (WaterButton != nullptr) {
+		WaterButton->OnClicked.AddDynamic(this, &UPlantWidget::PutWater);
 	}
 
-	Harvest = Cast<UButton>(GetWidgetFromName(TEXT("Harvest")));
-	if (Harvest != nullptr) {
-		Harvest->OnClicked.AddDynamic(this, &UPlantWidget::GetHarvest);
+	HarvestButton = Cast<UButton>(GetWidgetFromName(TEXT("Harvest")));
+	if (HarvestButton != nullptr) {
+		HarvestButton->OnClicked.AddDynamic(this, &UPlantWidget::GetHarvest);
 	}
 
 

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Button.h"
 #include "PlantWidget.generated.h"
 
 /**
@@ -14,6 +13,8 @@ UCLASS()
 class GAMEPROJECT_API UPlantWidget : public UUserWidget
 {
 	GENERATED_BODY()
+public:
+
 
 protected:
 	virtual void NativeConstruct() override;
@@ -31,13 +32,13 @@ protected:
 
 protected:
 	UPROPERTY()
-	class UButton* Seed;
+	class UButton* SeedButton;
 
 	UPROPERTY()
-	class UButton* Water;
+	class UButton* WaterButton;
 
 	UPROPERTY()
-	class UButton* Harvest;
+	class UButton* HarvestButton;
 
 
 };
