@@ -20,7 +20,8 @@ ADropedItem::ADropedItem()
 	PrimaryActorTick.bCanEverTick = true;
 
 	MyBox = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Box"));
-	MyBox->SetupAttachment(GetRootComponent());
+	SetRootComponent(MyBox);
+	//MyBox->SetupAttachment(GetRootComponent());
 
 	/* Box Static Mesh */
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BoxMesh(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
@@ -39,9 +40,9 @@ ADropedItem::ADropedItem()
 	CollisionMesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 64.f), FRotator(0.f, 0.f, 0.f));
 	CollisionMesh->SetBoxExtent(FVector(64.f, 64.f, 64.f));
 	CollisionMesh->SetupAttachment(MyBox);
-	CollisionMesh->SetHiddenInGame(true);
+	CollisionMesh->SetHiddenInGame(false);
+	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 
-	///Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_PressQ.WBP_PressQ'
 	/* Press key Widget */
 	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_PressE.WBP_PressE_C'"));
 	if (PressKeyWidget.Succeeded())
@@ -54,12 +55,6 @@ ADropedItem::ADropedItem()
 	{
 		ItemDataTable = DataTable.Object;
 	}
-
-	//static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/CPP_Dialogue_File.CPP_Dialogue_File"));
-	//if (DataTable.Succeeded())
-	//{
-	//	DialogueDatatable = DataTable.Object;
-	//}
 }
 
 // Called when the game starts or when spawned
@@ -69,6 +64,8 @@ void ADropedItem::BeginPlay()
 
 	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
 	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
+	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
+	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &ADropedItem::CollisionStart, 3.0f, false);
 
 	if (ItemDataTable != nullptr)
 	{
@@ -87,6 +84,7 @@ void ADropedItem::BeginPlay()
 			}
 		}
 	}
+	bIsPressKeyValid = false;
 }
 
 // Called every frame
@@ -101,35 +99,41 @@ void ADropedItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
-		AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
-		MyCharacter->PressE = true;
-		MyCharacter->LookAtActorPressE = this;
-
-		if (bIsPressKeyValid == false) 
+		if (CollisionValid) 
 		{
-			bIsPressKeyValid = true;
-			PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
-			PressKeyWidgetUIObejct->AddToViewport();
-			// UE_LOG(LogTemp, Warning, TEXT("Item Name: %s"), *ItemName.ToString());
+			AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+			AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+			MyCharacter->PressE = true;
+			MyCharacter->LookAtActorPressE = this;
+
+			if (bIsPressKeyValid == false) 
+			{
+				bIsPressKeyValid = true;
+				PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
+				PressKeyWidgetUIObejct->AddToViewport();
+				// UE_LOG(LogTemp, Warning, TEXT("Item Name: %s"), *ItemName.ToString());
+			}
 		}
 	}
 }
 
 void ADropedItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
-	MyCharacter->PressE = false;
-
-	if (bIsPressKeyValid == true)
-	{
-		PressKeyWidgetUIObejct->RemoveFromParent();
-		bIsPressKeyValid = false;
-	}
 
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
+		if (CollisionValid)
+		{
+			AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+			AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+			MyCharacter->PressE = false;
+
+			if (bIsPressKeyValid == true)
+			{
+				PressKeyWidgetUIObejct->RemoveFromParent();
+				bIsPressKeyValid = false;
+			}
+		}
 	}
 }
 
@@ -139,6 +143,7 @@ void ADropedItem::ItemFresh(FName ItemReName)
 	{
 		ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
 		TArray<FName> RowNames = ItemDataTable->GetRowNames();
+		ItemName = ItemReName;
 
 		for (FName RowName : RowNames)
 		{
@@ -184,38 +189,10 @@ void ADropedItem::PicUpItem_Implementation()
 
 	}
 
-	/* 퀘스트 받았을 때의 내 아이템 현황 검사, 만약 이미 아이템 있다면 바로 퀘스트 완료 */
-	//if (ItemDataTable != nullptr)
-	//{
-	//	ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
-	//	TArray<FName> RowNames = ItemDataTable->GetRowNames();
-
-	//	for (FName RowName : RowNames)
-	//	{
-	//		//FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
-
-	//		if (RowName == Dialogue.Conditions_Item)		/* 이미 가지고 있는 아이템이라면 ?로 뜨게 */
-	//		{
-	//			if (MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item))
-	//			{
-	//				if (*MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item) == Dialogue.Conditions_cnt)
-	//				{
-	//					GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
-	//					Text->SetText(FText::FromString(TEXT("?")));
-	//					Conversation_ID += 1;
-	//					CurrentLine = 0;
-
-
-	//					Text->SetHiddenInGame(false);
-	//					QuestAccept = true;
-	//				}
-	//				else
-	//				{
-	//					Text->SetText(FText::FromString(TEXT("!")));
-	//				}
-	//			}
-	//		}
-	//	}
-
 	Destroy();
+}
+
+void ADropedItem::CollisionStart()
+{
+	CollisionValid = true;
 }
