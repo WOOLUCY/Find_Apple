@@ -4,11 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "FindApplePlayerController.h"
 #include "FindAppleGameMode.generated.h"
 
 /**
  * 
  */
+
+DECLARE_MULTICAST_DELEGATE(AboutPlantDelegate)
+
 UCLASS()
 class GAMEPROJECT_API AFindAppleGameMode : public AGameModeBase
 {
@@ -16,8 +20,15 @@ class GAMEPROJECT_API AFindAppleGameMode : public AGameModeBase
 
 public:
 	AFindAppleGameMode();
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 
 	virtual void BeginPlay() override;
 
 private:
+
+public:
+	AboutPlantDelegate SeedDelegate;
+	AboutPlantDelegate WaterDelegate;
+	AboutPlantDelegate HarvestDelegate;
+
 };

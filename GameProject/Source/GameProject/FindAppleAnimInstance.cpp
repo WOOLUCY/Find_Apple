@@ -17,6 +17,14 @@ UFindAppleAnimInstance::UFindAppleAnimInstance()
 		ActionMontage = ACTION_MON.Object;
 	}
 
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> PLANT_MON
+	(TEXT("/Script/Engine.AnimMontage'/Game/Characters/Hero/PlantMontage.PlantMontage'"));
+	if (PLANT_MON.Succeeded()) {
+		PlantMontage = PLANT_MON.Object;
+	}
+
+
 }
 
 void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -42,7 +50,15 @@ void UFindAppleAnimInstance::PlayActionMontage()
 {
 
 	Montage_Play(ActionMontage, 1.f);
-//	Montage_JumpToSection(TEXT("PlantSeed"));
+	//Montage_JumpToSection(TEXT("PlantSeed"));
+
+}
+
+void UFindAppleAnimInstance::PlayPlantMontage()
+{
+
+	Montage_Play(PlantMontage, 1.5f);
+	//Montage_JumpToSection(TEXT("PlantSeed"));
 
 }
 

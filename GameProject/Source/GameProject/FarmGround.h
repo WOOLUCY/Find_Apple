@@ -9,7 +9,6 @@
 #include "Cloud.h"
 #include "FarmGround.generated.h"
 
-DECLARE_DELEGATE(OnFarmDelegate)
 UCLASS()
 class GAMEPROJECT_API AFarmGround : public AActor
 {
@@ -24,6 +23,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* CheckMesh;
+	
+
 
 
 	UPROPERTY(VisibleAnywhere)
@@ -40,7 +41,8 @@ public:
 		AActor* cloud;
 
 
-	OnFarmDelegate PlantDelegate;
+	FDelegateHandle MyDelegateHandle;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -65,6 +67,7 @@ public:
 	UFUNCTION()
 		void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	
 
 	UPROPERTY()
 		UFindAppleAnimInstance* Anim;
@@ -72,5 +75,7 @@ public:
 	void ReleaseSeed();
 	void GrabSeed();
 
+	void Makecloud();
+	void PutSeed();
 
 };

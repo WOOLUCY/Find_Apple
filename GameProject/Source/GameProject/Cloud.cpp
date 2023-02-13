@@ -38,6 +38,7 @@ ACloud::ACloud()
 	Rain->SetCollisionProfileName(TEXT("NoCollision"));
 
 	SetLifeSpan(3);
+	
 
 }
 

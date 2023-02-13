@@ -25,6 +25,7 @@ public:
 
 	//¸ùÅ¸ÁÖ 
 	void PlayActionMontage();
+	void PlayPlantMontage();
 
 
 private:
@@ -35,6 +36,8 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* ActionMontage;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* PlantMontage;
 
 
 

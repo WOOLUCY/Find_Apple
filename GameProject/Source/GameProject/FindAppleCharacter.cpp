@@ -5,7 +5,7 @@
 #include "FindAppleAnimInstance.h"
 #include "FarmGround.h"
 
-
+#include "InputMappingContext.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
@@ -57,7 +57,17 @@ AFindAppleCharacter::AFindAppleCharacter()
 	CameraComponent->bUsePawnControlRotation = false;
 
 
+	static ConstructorHelpers::FObjectFinder<UInputMappingContext> MappingConetext
+	(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/Semin/KeyInput/IMC_MyProject.IMC_MyProject'"));
+	if(MappingConetext.Succeeded())
+	{
+		CharacterMappingContext = MappingConetext.Object;
+	}
+
+
+
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_MoveForward(TEXT("InputAction'/Game/Semin/KeyInput/IA_MoveForward.IA_MoveForward'"));
+	if (Input_MoveForward.Succeeded())
 	{
 		MoveForwardAction = Input_MoveForward.Object;
 	}

@@ -3,6 +3,7 @@
 
 #include "FarmGround.h"
 #include "Kismet/GameplayStatics.h"
+#include "FindAppleGameMode.h"
 #include "FindApplePlayerController.h"
 #include "FindAppleCharacter.h"
 
@@ -15,18 +16,25 @@ AFarmGround::AFarmGround()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("mesh"));
 	CheckMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CheckMesh"));
 
+
 	Overlap = CreateDefaultSubobject<UMaterial>(TEXT("BLUE"));
 	NotWet = CreateDefaultSubobject<UMaterial>(TEXT("NotWet"));
 	Wet = CreateDefaultSubobject<UMaterial>(TEXT("Wet"));
 
 
-	RootComponent = Box;
-	Box->SetRelativeScale3D(FVector(1.5f, 1.5, 0.5f));
-	Mesh->SetupAttachment(RootComponent);
+	RootComponent = Mesh;
+	Mesh->SetRelativeRotation(FRotator(0, 90.f, 0));
+	Box->SetupAttachment(RootComponent);
+	
+
+	Mesh->SetRelativeScale3D(FVector(1.5f, 1.5 , 1.f));
+
+	Box->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
 	CheckMesh->SetupAttachment(Mesh);
 
 	Mesh->SetCollisionProfileName("NoCollision");
 	Box->SetCollisionProfileName("OverlapAll");
+
 
 	IsEmpty = true;
 	CanPutSeed = false;
@@ -41,7 +49,11 @@ AFarmGround::AFarmGround()
 		CheckMesh->SetRelativeLocation(FVector(0, 0, 1));
 	}
 
-	
+
+
+
+
+
 	//머터리얼불러오기
 	static ConstructorHelpers::FObjectFinder<UMaterial>Mat_Blue
 	(TEXT("/Script/Engine.Material'/Game/kaon/asset/material/M_GroundBlue.M_GroundBlue'"));
@@ -70,6 +82,8 @@ AFarmGround::AFarmGround()
 
 
 
+
+
 }
 void AFarmGround::PostInitializeComponents()
 {
@@ -95,11 +109,8 @@ void AFarmGround::BeginPlay()
 			Anim->GrabSeed.BindUObject(this, &AFarmGround::GrabSeed);
 			Anim->RelaseSeed.BindUObject(this, &AFarmGround::ReleaseSeed);
 
-
 		}
 	}
-
-
 }
 
 void AFarmGround::NotifyActorOnClicked(FKey PressedButton)
@@ -107,10 +118,7 @@ void AFarmGround::NotifyActorOnClicked(FKey PressedButton)
 	if (PressedButton == EKeys::LeftMouseButton) {
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("notify actor clicked"));
 
-		///구름스폰하기
-		cloud = GetWorld()->SpawnActor<ACloud>(GetActorLocation(), GetActorRotation());
 
-		//
 	}
 
 
@@ -123,8 +131,6 @@ void AFarmGround::NotifyActorBeginCursorOver()
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("being dfkldkfldf"));
 	//여기서 뭐 파란색으로 표시한다거나하기
 
-	cloud = GetWorld()->SpawnActor<ACloud>(GetActorLocation(), GetActorRotation());
-	cloud->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform);
 
 
 }
@@ -150,14 +156,23 @@ void AFarmGround::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
 	if (hero != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap with Character"));
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("Overlap with Character"));
 		CheckMesh->SetVisibility(true);
 
+		
+		AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+		if (MyMode != nullptr) {
+			MyDelegateHandle = MyMode->WaterDelegate.AddUObject(this, &AFarmGround::Makecloud);
+			MyDelegateHandle = MyMode->SeedDelegate.AddUObject(this, &AFarmGround::PutSeed);
+		}
 
-		cloud = GetWorld()->SpawnActor<ACloud>(GetActorLocation(), GetActorRotation());
 
-		//PlantDelegate.ExecuteIfBound();
 
+		AFindApplePlayerController* Mycontroller = Cast<AFindApplePlayerController>(hero->GetController());
+		if (Mycontroller != nullptr) {
+			Mycontroller->ShowPlantWidget();
+
+		}
 		
 	}
 	else {
@@ -173,6 +188,19 @@ void AFarmGround::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap end with Character"));
 		CheckMesh->SetVisibility(false);
 
+		AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+		if (MyMode != nullptr) {
+			MyMode->WaterDelegate.Remove(MyDelegateHandle);
+			MyMode->SeedDelegate.Remove(MyDelegateHandle);
+
+		}
+
+
+		AFindApplePlayerController* Mycontroller = Cast<AFindApplePlayerController>(hero->GetController());
+		if (Mycontroller != nullptr) {
+			Mycontroller->HiddenPlantWidget();
+		}
+
 	}
 
 
@@ -186,10 +214,39 @@ void AFarmGround::ReleaseSeed()
 
 void AFarmGround::GrabSeed()
 {
-	CanPutSeed = false;
+	CanPutSeed = false; //얘 필요ㅇ없는거 아님??
 	IsEmpty = false;
+
+
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("GrabSeed"));
 
 
+}
+
+void AFarmGround::Makecloud()
+{
+	if (IsWet) {
+		return;
+	}
+	else {
+		cloud = GetWorld()->SpawnActor<ACloud>(GetActorLocation(), GetActorRotation());
+		Mesh->SetMaterial(0, Wet);
+		IsWet = true;
+	}
+
+	
+}
+
+void AFarmGround::PutSeed()
+{
+	if (IsEmpty==false) {
+		//이미 점유되어있음 - 안내문띄우기
+
+		return;
+	}
+	else {
+		Anim->PlayPlantMontage();
+		IsEmpty = false;
+	}
 }
 
