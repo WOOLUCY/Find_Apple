@@ -9,11 +9,16 @@
 /**
  * 
  */
+DECLARE_DELEGATE(AboutPlantDelegate)
 UCLASS()
 class GAMEPROJECT_API UPlantWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
+	AboutPlantDelegate SeedDelegate;
+	AboutPlantDelegate WaterDelegate;
+	AboutPlantDelegate HarvestDelegate;
+
 
 protected:
 	virtual void NativeConstruct() override;
@@ -27,7 +32,7 @@ protected:
 
 	UFUNCTION()
 		void GetHarvest();
-
+	
 
 protected:
 

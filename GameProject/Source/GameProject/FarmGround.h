@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "FindAppleAnimInstance.h"
 #include "Components/BoxComponent.h"
+#include "PlantWidget.h"
 #include "Cloud.h"
 #include "FarmGround.generated.h"
 
@@ -20,13 +21,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* Mesh;
-
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* CheckMesh;
-	
-
-
-
 	UPROPERTY(VisibleAnywhere)
 		UBoxComponent* Box;
 
@@ -40,8 +36,14 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		AActor* cloud;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
+		TSubclassOf<class UPlantWidget> PlantWidgetClass;
 
-	FDelegateHandle MyDelegateHandle;
+private:
+	UPROPERTY()
+		class UPlantWidget* PlantWdiget;
+
+
 
 
 protected:
@@ -51,6 +53,16 @@ protected:
 	virtual void NotifyActorBeginCursorOver() override;
 	virtual void NotifyActorEndCursorOver() override;
 	virtual void PostInitializeComponents() override;
+	
+	UFUNCTION()
+		void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+		void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+
+	UPROPERTY()
+		UFindAppleAnimInstance* Anim;
+
 
 private:
 	bool IsEmpty;
@@ -61,21 +73,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
-	UFUNCTION()
-		void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UFUNCTION()
-		void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
 	
+	void ShowPlantWidget();
+	void HiddenPlantWidget();
 
-	UPROPERTY()
-		UFindAppleAnimInstance* Anim;
 
 	void ReleaseSeed();
 	void GrabSeed();
-
+	
+	UFUNCTION()
 	void Makecloud();
+	UFUNCTION()
 	void PutSeed();
 
 };

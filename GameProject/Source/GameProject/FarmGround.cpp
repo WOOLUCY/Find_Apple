@@ -49,7 +49,12 @@ AFarmGround::AFarmGround()
 		CheckMesh->SetRelativeLocation(FVector(0, 0, 1));
 	}
 
-
+	//À§Á¬
+	static ConstructorHelpers::FClassFinder<UPlantWidget> PLANT_WIDGET
+	(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/kaon/UI/PlantOverlapWidget.PlantOverlapWidget_C'"));
+	if (PLANT_WIDGET.Succeeded()) {
+		PlantWidgetClass = PLANT_WIDGET.Class;
+	}
 
 
 
@@ -83,14 +88,13 @@ AFarmGround::AFarmGround()
 
 
 
-
 }
 void AFarmGround::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
 
-	
+
 }
 
 
@@ -109,7 +113,10 @@ void AFarmGround::BeginPlay()
 			Anim->GrabSeed.BindUObject(this, &AFarmGround::GrabSeed);
 			Anim->RelaseSeed.BindUObject(this, &AFarmGround::ReleaseSeed);
 
+
+
 		}
+
 	}
 }
 
@@ -159,21 +166,10 @@ void AFarmGround::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("Overlap with Character"));
 		CheckMesh->SetVisibility(true);
 
-		
-		AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-		if (MyMode != nullptr) {
-			MyDelegateHandle = MyMode->WaterDelegate.AddUObject(this, &AFarmGround::Makecloud);
-			MyDelegateHandle = MyMode->SeedDelegate.AddUObject(this, &AFarmGround::PutSeed);
-		}
+		ShowPlantWidget();
+		PlantWdiget->SeedDelegate.BindUObject(this, &AFarmGround::PutSeed);
+		PlantWdiget->WaterDelegate.BindUObject(this, &AFarmGround::Makecloud);
 
-
-
-		AFindApplePlayerController* Mycontroller = Cast<AFindApplePlayerController>(hero->GetController());
-		if (Mycontroller != nullptr) {
-			Mycontroller->ShowPlantWidget();
-
-		}
-		
 	}
 	else {
 		return;
@@ -187,19 +183,9 @@ void AFarmGround::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	if (hero != nullptr) {
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap end with Character"));
 		CheckMesh->SetVisibility(false);
-
-		AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-		if (MyMode != nullptr) {
-			MyMode->WaterDelegate.Remove(MyDelegateHandle);
-			MyMode->SeedDelegate.Remove(MyDelegateHandle);
-
-		}
-
-
-		AFindApplePlayerController* Mycontroller = Cast<AFindApplePlayerController>(hero->GetController());
-		if (Mycontroller != nullptr) {
-			Mycontroller->HiddenPlantWidget();
-		}
+		HiddenPlantWidget();
+		PlantWdiget->SeedDelegate.Unbind();
+		PlantWdiget->WaterDelegate.Unbind();
 
 	}
 
@@ -245,8 +231,52 @@ void AFarmGround::PutSeed()
 		return;
 	}
 	else {
+
+
+
 		Anim->PlayPlantMontage();
 		IsEmpty = false;
 	}
 }
 
+
+void AFarmGround::ShowPlantWidget()
+{
+	UWorld* TheWorld = GetWorld();
+
+	if (TheWorld != nullptr) {
+
+		auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
+		if (MyContorller != nullptr) {
+			PlantWdiget = CreateWidget<UPlantWidget>(MyContorller, PlantWidgetClass);
+			PlantWdiget->AddToViewport();
+			MyContorller->SetInputMode(FInputModeGameAndUI());
+			MyContorller->bShowMouseCursor = true;
+		}
+	}
+
+
+
+}
+void AFarmGround::HiddenPlantWidget()
+{
+
+	UWorld* TheWorld = GetWorld();
+
+	if (TheWorld != nullptr) {
+
+		auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
+		if (MyContorller != nullptr) {
+			PlantWdiget->RemoveFromParent();
+			MyContorller->SetInputMode(FInputModeGameOnly());
+
+			MyContorller->bShowMouseCursor = false;
+		}
+	}
+
+
+
+
+}

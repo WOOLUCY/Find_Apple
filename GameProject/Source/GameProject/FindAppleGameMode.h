@@ -11,7 +11,6 @@
  * 
  */
 
-DECLARE_MULTICAST_DELEGATE(AboutPlantDelegate)
 
 UCLASS()
 class GAMEPROJECT_API AFindAppleGameMode : public AGameModeBase
@@ -27,8 +26,4 @@ public:
 private:
 
 public:
-	AboutPlantDelegate SeedDelegate;
-	AboutPlantDelegate WaterDelegate;
-	AboutPlantDelegate HarvestDelegate;
-
 };

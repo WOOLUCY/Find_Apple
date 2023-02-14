@@ -470,8 +470,3 @@ void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInte
 	IsAction = false;
 }
 
-void AFindAppleCharacter::ActionPlant()
-{//??d이거 왜썻지...
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Action Plant Delegate"));
-
-}

@@ -95,8 +95,6 @@ public:
 	UFUNCTION()
 	void OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted);
 
-	UFUNCTION()
-		void ActionPlant();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UCameraComponent* CameraComponent;
