@@ -41,7 +41,7 @@ ADropedItem::ADropedItem()
 	CollisionMesh->SetBoxExtent(FVector(64.f, 64.f, 64.f));
 	CollisionMesh->SetupAttachment(MyBox);
 	CollisionMesh->SetHiddenInGame(false);
-	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
+	//CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 
 	/* Press key Widget */
 	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_PressE.WBP_PressE_C'"));
@@ -62,10 +62,11 @@ void ADropedItem::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
-	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
 	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &ADropedItem::CollisionStart, 3.0f, false);
+
+	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
+	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
 
 	if (ItemDataTable != nullptr)
 	{
@@ -93,6 +94,7 @@ void ADropedItem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
+
 }
 
 void ADropedItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

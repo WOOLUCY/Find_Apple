@@ -40,6 +40,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category ="ItemSetting")
 	FName ItemName = "apple";
+
+	UPROPERTY()
+	bool CollisionValid = false;
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
@@ -65,6 +68,4 @@ private:
 	FTimerHandle CountdownTimerHandle;
 	UFUNCTION()
 	void CollisionStart();
-	UPROPERTY()
-	bool CollisionValid = false;
 };
