@@ -29,6 +29,9 @@ public:
 	UPROPERTY()
 		int32 Minutes;
 
+	UPROPERTY()
+		FTimespan GameTime;
+
 
 
 	UPROPERTY()

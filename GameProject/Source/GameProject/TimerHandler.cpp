@@ -14,6 +14,7 @@ ATimerHandler::ATimerHandler()
 	Hours = 0;
 	Minutes = 0;
 	ElapsedSecond = 0;
+	GameTime = 0;
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +33,7 @@ void ATimerHandler::Tick(float DeltaTime)
 	if (ElapsedSecond > 60) {
 		ElapsedSecond -= 60;
 		++Minutes;
+		
 		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Hours==1 "));
 
 		if (Minutes > 60) {

@@ -37,7 +37,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 		TSubclassOf<UUserWidget> ToolWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> TimeWidgetClass;
+
 private:
 	UToolWidget* ToolWidget;
+	UPROPERTY()
+	class UTimeWidget* TimeWidget;
 
 };

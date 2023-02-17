@@ -65,9 +65,6 @@ void ADropedItem::BeginPlay()
 	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &ADropedItem::CollisionStart, 3.0f, false);
 
-	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
-	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
-
 	if (ItemDataTable != nullptr)
 	{
 		ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
@@ -86,6 +83,9 @@ void ADropedItem::BeginPlay()
 		}
 	}
 	bIsPressKeyValid = false;
+
+	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
+	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
 }
 
 // Called every frame

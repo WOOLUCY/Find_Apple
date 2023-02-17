@@ -383,6 +383,12 @@
       "url": "https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"
     },
     {
+      "name": "FasterCI Configuration",
+      "description": "FasterCI repository configuration file",
+      "fileMatch": ["**/.fasterci/config.yaml"],
+      "url": "https://fasterci.com/config.schema.json"
+    },
+    {
       "name": "Foxx Manifest",
       "description": "ArangoDB Foxx service manifest file",
       "fileMatch": ["manifest.json"],
@@ -414,7 +420,23 @@
       "name": "Freifunk.de Community API",
       "description": "Schema for Freifunk.de Community API. See more details https://github.com/freifunk/directory.api.freifunk.net",
       "fileMatch": ["*.freifunk-api.json"],
-      "url": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.1.json"
+      "url": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.5.2.json",
+      "versions": {
+        "0.1": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.1.json",
+        "0.2.0": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.2.0.json",
+        "0.4.9": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.4.9.json",
+        "0.4.10": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.4.10.json",
+        "0.4.11": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.4.11.json",
+        "0.4.12": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.4.12.json",
+        "0.4.13": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.4.13.json",
+        "0.4.14": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.4.14.json",
+        "0.4.15": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.4.15.json",
+        "0.4.16": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.4.16.json",
+        "0.5.0": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.5.0.json",
+        "0.5.1": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.5.1.json",
+        "0.5.2": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/0.5.2.json",
+        "development": "https://raw.githubusercontent.com/freifunk/api.freifunk.net/master/specs/development.json"
+      }
     },
     {
       "name": "Frogbot Config",
@@ -729,6 +751,15 @@
       }
     },
     {
+      "name": "Cog config file",
+      "description": "Schema for cog.yaml files",
+      "fileMatch": ["cog.yaml", "cog.yml"],
+      "url": "https://raw.githubusercontent.com/replicate/cog/main/pkg/config/data/config_schema_v1.0.json",
+      "versions": {
+        "1.0": "https://raw.githubusercontent.com/replicate/cog/main/pkg/config/data/config_schema_v1.0.json"
+      }
+    },
+    {
       "name": "Commandbox Box.json",
       "description": "Box.json Schema used with Commandbox cli, cfml web servers and modules.",
       "url": "https://raw.githubusercontent.com/Ortus-Solutions/vscode-commandbox/master/resources/schemas/box.schema.json"
@@ -839,6 +870,12 @@
       "description": "The Chart.lock file locks dependencies from Chart.yaml",
       "fileMatch": ["Chart.lock"],
       "url": "https://json.schemastore.org/chart-lock.json"
+    },
+    {
+      "name": "Helm Unittest Test Suite",
+      "description": "A Helm Unittest Test Suite file",
+      "fileMatch": ["**/charts/*/tests/*.yaml"],
+      "url": "https://raw.githubusercontent.com/helm-unittest/helm-unittest/v0.3.0/schema/helm-testsuite.json"
     },
     {
       "name": "CircleCI config.yml",
@@ -2413,6 +2450,12 @@
       "url": "https://json.schemastore.org/openfin.json"
     },
     {
+      "name": "OpenRewrite Resource",
+      "description": "JSON schema for OpenRewrite resource descriptors",
+      "fileMatch": ["**/META-INF/rewrite/*.yml"],
+      "url": "https://raw.githubusercontent.com/openrewrite/rewrite/main/rewrite-core/openrewrite.json"
+    },
+    {
       "name": "Outblocks project configuration",
       "description": "JSON schema for Outblocks project configuration files",
       "fileMatch": ["project.outblocks.yaml", "project.outblocks.yml"],
@@ -2703,6 +2746,12 @@
       "description": "Pyrseas database schema versioning for Postgres databases, v0.8",
       "fileMatch": ["pyrseas-0.8.json"],
       "url": "https://json.schemastore.org/pyrseas-0.8.json"
+    },
+    {
+      "name": "Rancher Fleet",
+      "description": "Rancher Fleet fleet.yaml configuration file",
+      "fileMatch": ["fleet.yaml"],
+      "url": "https://json.schemastore.org/rancher-fleet.json"
     },
     {
       "name": "Read the Docs",
@@ -3152,6 +3201,12 @@
       "description": "SideWaffle template source schema",
       "fileMatch": ["templatesources.json"],
       "url": "https://json.schemastore.org/templatesources.json"
+    },
+    {
+      "name": "Tier.run pricing.json",
+      "description": "Tier.run pricing model configuration",
+      "fileMatch": ["pricing.json"],
+      "url": "https://raw.githubusercontent.com/tierrun/tier/main/pricing/schema.json"
     },
     {
       "name": "Tikibase",

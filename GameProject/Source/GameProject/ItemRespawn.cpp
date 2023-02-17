@@ -51,12 +51,12 @@ void AItemRespawn::CheckActors()
 	//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Blue, TEXT("CheckActors 5.f"));
 	if (Actors.Num() > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Actors Num: %d"), Actors.Num());
+		//UE_LOG(LogTemp, Warning, TEXT("Actors Num: %d"), Actors.Num());
 		for (int i = 0; i < Actors.Num(); i++)
 		{
 			if ( !Actors[i].IsValid() )
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Remove Index Num: %d"), Actors.Num());
+				//UE_LOG(LogTemp, Warning, TEXT("Remove Index Num: %d"), Actors.Num());
 				/* i 번째 인덱스를 제거 */
 				Actors.RemoveAt(i);
 			}
