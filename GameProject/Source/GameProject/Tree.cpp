@@ -51,6 +51,7 @@ ATree::ATree()
 		Leaf->SetStaticMesh(SM_LEAF.Object);
 	}
 
+	
 
 
 	int RandonNumber = FMath::RandRange(0, 3);
@@ -136,7 +137,6 @@ ATree::ATree()
 void ATree::BeginPlay()
 {
 	Super::BeginPlay();
-
 
 
 }
