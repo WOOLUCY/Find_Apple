@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Tree.h"
+#include "Inventory/DropedItem.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 #include "FindAppleCharacter.h"
@@ -9,7 +9,7 @@
 // Sets default values
 ATree::ATree()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	MaxDamage = 50.f;
 	TotalDamage = 0.f;
@@ -32,30 +32,103 @@ ATree::ATree()
 
 	Upper->GetAttachParent();
 	Leaf->GetAttachParent();
-
-
-
-
 	Leaf->SetCollisionProfileName(TEXT("NoCollision"));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LOWER
-	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/LowerTree.LowerTree'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LOWER
+	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeLower0.TreeLower0'"));
 	if (SM_LOWER.Succeeded()) {
 		Lower->SetStaticMesh(SM_LOWER.Object);
 	}
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_UPPER
-	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/UpperTree.UpperTree'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_UPPER
+	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeUpper0.TreeUpper0'"));
 	if (SM_UPPER.Succeeded()) {
 		Upper->SetStaticMesh(SM_UPPER.Object);
-	}
 
+	}
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LEAF
 	(TEXT("/Script/Engine.StaticMesh'/Game/untitled_category/untitled_asset/TreeWithLeafs.TreeWithLeafs'"));
 	if (SM_LEAF.Succeeded()) {
 		Leaf->SetStaticMesh(SM_LEAF.Object);
 	}
 
+
+
+	int RandonNumber = FMath::RandRange(0, 3);
+
+	switch (RandonNumber)
+	{
+	case 0:
+
+
+		break;
+	case 1:
+		SM_LOWER = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeLower1.TreeLower1'"));
+		if (SM_LOWER.Succeeded()) {
+			Lower->SetStaticMesh(SM_LOWER.Object);
+		}
+		SM_UPPER = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeUpper1.TreeUpper1'"));
+		if (SM_UPPER.Succeeded()) {
+			Upper->SetStaticMesh(SM_UPPER.Object);
+		}
+
+		break;
+	case 2:
+		SM_LOWER = ConstructorHelpers::FObjectFinder<UStaticMesh> (TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeLower2.TreeLower2'"));
+		if (SM_LOWER.Succeeded()) {
+			Lower->SetStaticMesh(SM_LOWER.Object);
+		}
+		SM_UPPER = ConstructorHelpers::FObjectFinder<UStaticMesh> (TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeUpper2.TreeUpper2'"));
+		if (SM_UPPER.Succeeded()) {
+			Upper->SetStaticMesh(SM_UPPER.Object);
+		}
+
+		break;
+	case 3:
+		SM_LOWER = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeLower3.TreeLower3'"));
+		if (SM_LOWER.Succeeded()) {
+			Lower->SetStaticMesh(SM_LOWER.Object);
+		}
+		SM_UPPER = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeUpper3.TreeUpper3'"));
+		if (SM_UPPER.Succeeded()) {
+			Upper->SetStaticMesh(SM_UPPER.Object);
+		}
+
+		break;
+
+	default:
+		break;
+	}
+
+
+	RandonNumber = FMath::RandRange(0, 100);
+
+	switch (RandonNumber)
+	{
+	case 0:
+
+		break;
+	case 1:
+		SM_LEAF =  ConstructorHelpers::FObjectFinder<UStaticMesh>
+		(TEXT("/Script/Engine.StaticMesh'/Game/untitled_category/untitled_asset/TreeWithLeafs01.TreeWithLeafs01'"));
+		if (SM_LEAF.Succeeded()) {
+			Leaf->SetStaticMesh(SM_LEAF.Object);
+
+		}
+
+		break;
+	case 2:
+		SM_LEAF = ConstructorHelpers::FObjectFinder<UStaticMesh>
+			(TEXT("/Script/Engine.StaticMesh'/Game/untitled_category/untitled_asset/TreeWithLeafs02.TreeWithLeafs02'"));
+		if (SM_LEAF.Succeeded()) {
+			Leaf->SetStaticMesh(SM_LEAF.Object);
+
+		}
+
+		break;
+
+	default:
+		break;
+	}
 
 }
 
@@ -66,6 +139,11 @@ void ATree::BeginPlay()
 
 
 
+}
+
+void ATree::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
 }
 
 
@@ -91,7 +169,8 @@ float ATree::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet, ACo
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvnet, EvnetInstigator, DamageCauser);
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, DamageCauser->GetName());
 
-	
+	static bool once = true;
+
 	UWorld* TheWorld = GetWorld();
 
 	if (TheWorld != nullptr) {
@@ -103,9 +182,15 @@ float ATree::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet, ACo
 				GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Wow"));
 				Upper->SetVisibility(false);
 				Leaf->SetVisibility(false);
+				
+				FVector PivotWorld = GetTransform().TransformPosition(Pivot->GetRelativeLocation());
+				if (once) {
+					ADropedItem* DropedActor = GetWorld()->SpawnActor<ADropedItem>(PivotWorld, FRotator::ZeroRotator);
+					DropedActor->ItemFresh("trunk");
+					once = false;
+				}
 
 				FTimerHandle Timer;
-
 				GetWorldTimerManager().SetTimer(Timer, this, &ATree::RespawnTree, RespawnTime);
 
 			}
@@ -114,6 +199,7 @@ float ATree::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet, ACo
 				FVector ForAdd = hero->GetMesh()->GetRightVector();
 				Pivot->AddWorldRotation(FRotator(ForAdd.Y * -3, ForAdd.Z * 3, ForAdd.X * -3));
 				TotalDamage += FinalDamage;
+				once = true;
 			}
 		}
 

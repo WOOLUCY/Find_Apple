@@ -40,6 +40,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category ="ItemSetting")
 	FName ItemName = "apple";
+
+	//이름 정하는거
+	void SetItemName(FName newName) { ItemName = newName; }
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
