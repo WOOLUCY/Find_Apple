@@ -30,6 +30,12 @@ void AItemRespawn::BeginPlay()
 
 	AdvanceTimer();
 
+	/* Rock 일 때 높이 낮춤 */
+	if (SpawnItemName == "rock")
+	{
+		CollisionMesh->SetBoxExtent(FVector(64.f, 64.f, 10.f));
+	}
+
 	/* 5 초마다 */
 	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &AItemRespawn::AdvanceTimer, SecTimer, true);
 }
@@ -82,17 +88,20 @@ void AItemRespawn::RespawnActor()
 void AItemRespawn::GetRandomPointInCollisionBox()
 {
 	FActorSpawnParameters SpawnParams;
-	//SpawnParams.Owner = this;
 
 	FVector SpawnOrigin = CollisionMesh->Bounds.Origin;
 	FVector SpawnExtent = CollisionMesh->Bounds.BoxExtent;
 
-	/* 같은 함수 내에서는 RandomPointInBoundingBox가 제대로 안 돼서 함수 따로 만듬 */
 	const FVector SpawnLocation = UKismetMathLibrary::RandomPointInBoundingBox(SpawnOrigin, SpawnExtent);
 	const FRotator SpawnRotation = UKismetMathLibrary::RandomRotator(true);
 
 	ADropedItem* DropedActor;
-	DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+
+	DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), FVector(10000.f, 10000.f, 10000.f), SpawnRotation, SpawnParams);
+	DropedActor->CollisionMesh->SetBoxExtent(FVector(15.f, 15.f, 15.f));
+	/* 자꾸 캐릭터와 충돌이 나서 먼 곳으로 보내버리고 위치 조정 */
+	DropedActor->SetActorLocation(SpawnLocation);
+	DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
 	DropedActor->ItemFresh(SpawnItemName);
 
 	Actors.Add(DropedActor);

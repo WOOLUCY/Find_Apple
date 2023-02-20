@@ -43,14 +43,13 @@ public:
 
 	UPROPERTY()
 	bool CollisionValid = false;
-	
-private:
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UBoxComponent* CollisionMesh = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UStaticMeshComponent* MyBox = nullptr;
-
+private:
 	UPROPERTY(EditAnywhere, Category = "ItemSetting")
 	class UDataTable* ItemDataTable;
 

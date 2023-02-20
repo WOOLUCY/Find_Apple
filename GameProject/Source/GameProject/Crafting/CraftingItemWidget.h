@@ -56,6 +56,7 @@ public:
 	UPROPERTY()
 	TArray<FName> CraftingRowNames;
 
+
 	UPROPERTY()
 	class UDataTable* ItemDataTable;
 	TArray<struct FInventoryTableRow*> InventoryData;
@@ -83,4 +84,10 @@ public:
 	/* Close */
 	UFUNCTION()
 	void ClickedCloseButton();
+	UFUNCTION()
+	void ClickedCreateButton();
+	UFUNCTION()
+	void CreateButtonSet(FName CraftRowName);
+	UPROPERTY()
+	FName CraftingName;
 };

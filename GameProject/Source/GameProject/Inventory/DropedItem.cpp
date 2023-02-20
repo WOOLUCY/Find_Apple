@@ -37,11 +37,10 @@ ADropedItem::ADropedItem()
 
 	/* Collision Mesh */
 	CollisionMesh = CreateDefaultSubobject<UBoxComponent>(FName("Collision Mesh"));
-	CollisionMesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 64.f), FRotator(0.f, 0.f, 0.f));
-	CollisionMesh->SetBoxExtent(FVector(64.f, 64.f, 64.f));
+	CollisionMesh->SetBoxExtent(FVector(15.f, 15.f, 15.f));
 	CollisionMesh->SetupAttachment(MyBox);
+	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 	CollisionMesh->SetHiddenInGame(false);
-	//CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 
 	/* Press key Widget */
 	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_PressE.WBP_PressE_C'"));
@@ -55,6 +54,9 @@ ADropedItem::ADropedItem()
 	{
 		ItemDataTable = DataTable.Object;
 	}
+
+	bIsPressKeyValid = false;
+	CollisionValid = false;
 }
 
 // Called when the game starts or when spawned
@@ -83,6 +85,7 @@ void ADropedItem::BeginPlay()
 		}
 	}
 	bIsPressKeyValid = false;
+	CollisionValid = false;
 
 	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
 	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
@@ -196,5 +199,6 @@ void ADropedItem::PicUpItem_Implementation()
 
 void ADropedItem::CollisionStart()
 {
+	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 	CollisionValid = true;
 }

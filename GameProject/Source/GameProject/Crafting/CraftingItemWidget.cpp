@@ -52,6 +52,7 @@ void UCraftingItemWidget::NativeConstruct()
 	Super::NativeConstruct();
 	BackButton->OnClicked.AddDynamic(this, &UCraftingItemWidget::ClickedBackButton);
 	CloseButton->OnClicked.AddDynamic(this, &UCraftingItemWidget::ClickedCloseButton);
+	CreateButton->OnClicked.AddDynamic(this, &UCraftingItemWidget::ClickedCreateButton);
 
 	if (CraftingDataTable != nullptr)
 	{
@@ -65,6 +66,11 @@ void UCraftingItemWidget::NativeConstruct()
 		ItemRowNames = ItemDataTable->GetRowNames();
 	}
 
+}
+
+void UCraftingItemWidget::SetCraftListWidget(FName CraftRowName)
+{
+	CraftingName = CraftRowName;
 	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 
@@ -99,10 +105,9 @@ void UCraftingItemWidget::NativeConstruct()
 			}
 		}
 	}
-}
 
-void UCraftingItemWidget::SetCraftListWidget(FName CraftRowName)
-{
+	CraftingList->ClearChildren();
+
 	if (CraftingDataTable != nullptr)
 	{
 		for (FName RowName : CraftingRowNames)
@@ -111,6 +116,7 @@ void UCraftingItemWidget::SetCraftListWidget(FName CraftRowName)
 			if (RowName == CraftRowName)
 			{
 				FCraftingTableRow Crafting = *(CraftingDataTable->FindRow<FCraftingTableRow>(RowName, RowName.ToString()));
+				
 				if (Crafting.apple != 0) {
 					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
 					FText NameDisplay = FText::FromName(FName(TEXT("사과")));
@@ -184,6 +190,8 @@ void UCraftingItemWidget::SetCraftListWidget(FName CraftRowName)
 			}
 		}
 	}
+
+	CreateButtonSet(CraftingName);
 }
 
 void UCraftingItemWidget::ClickedBackButton()
@@ -220,5 +228,103 @@ void UCraftingItemWidget::ClickedCloseButton()
 	}
 
 	RemoveFromParent();
+}
+
+void UCraftingItemWidget::ClickedCreateButton()
+{
+	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+
+	/* 아이템 추가할 때마다 고쳐야 함 */
+	if (MyCharacter->InventoryComponent) {
+		/* 만든 제작템을 인벤토리에 추가 */
+		MyCharacter->InventoryComponent->AddToInventory(CraftingName, 1);
+		//MyCharacter->InventoryComponent
+
+		/* 제작한 뒤 재료 템들은 없어지도록 설정 */
+		if (CraftingDataTable != nullptr)
+		{
+			for (FName RowName : CraftingRowNames)
+			{
+				/* 아이템 추가할 때마다 고쳐야 함 */
+				if (RowName == CraftingName)
+				{
+					FCraftingTableRow Crafting = *(CraftingDataTable->FindRow<FCraftingTableRow>(RowName, RowName.ToString()));
+					if (Crafting.apple != 0) {
+						/* 캐릭터가 가진 수가 필요한 개수보다 적다면 button 비활성화 */
+						MyCharacter->InventoryComponent->RemoveFromInventory("apple", Crafting.apple);
+					}
+					if (Crafting.orange != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("orange", Crafting.orange);
+					}
+					if (Crafting.branch != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("branch", Crafting.branch);
+					}
+					if (Crafting.rock != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("rock", Crafting.rock);
+					}
+					if (Crafting.trunk != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("trunk", Crafting.trunk);
+					}
+				}
+			}
+		}
+	}
+	/* 리스트 다시 세팅 */
+	SetCraftListWidget(CraftingName);
+}
+
+void UCraftingItemWidget::CreateButtonSet(FName CraftRowName)
+{
+	if (CraftingDataTable != nullptr)
+	{
+		for (FName RowName : CraftingRowNames)
+		{
+			/* 아이템 추가할 때마다 고쳐야 함 */
+			if (RowName == CraftRowName)
+			{
+				FCraftingTableRow Crafting = *(CraftingDataTable->FindRow<FCraftingTableRow>(RowName, RowName.ToString()));
+				if (Crafting.apple != 0) {
+					/* 캐릭터가 가진 수가 필요한 개수보다 적다면 button 비활성화 */
+					if (HaveAppleCnt < Crafting.apple)
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.orange != 0) {
+					if (HaveOrangeCnt < Crafting.orange)
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.branch != 0) {
+					if (HaveBranchCnt < Crafting.branch)
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.rock != 0) {
+					if (HaveRockCnt < Crafting.rock)
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.trunk != 0) {
+					if (HaveTrunkCnt < Crafting.trunk)
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	CreateButton->SetIsEnabled(true);
+	return;
 }
 
