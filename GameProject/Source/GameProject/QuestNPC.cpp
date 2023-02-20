@@ -26,6 +26,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "FindAppleCharacter.h"
 
+
 // Sets default values
 AQuestNPC::AQuestNPC()
 {
@@ -178,15 +179,23 @@ void AQuestNPC::DialogueGetLine()
 
 						Text->SetText(FText::FromString(TEXT("!")));
 
-						if (!Dialogue.Reward.IsNone())	/* 만약 이 대화가 퀘스트라면 */
+						/* 만약 이전 퀘스트 필요 아이템 리스트가 있다면 ( 캐릭터가 NPC에게 줘야 하는 것 ) */
+						if (!QuestRequirItem.IsEmpty()) 
+						{
+							//UE_LOG(LogTemp, Warning,TEXT("Quest Item Need"));
+							MyCharacter->InventoryComponent->RemoveFromInventory(QuestRequirItemName, QuestRequirItemCnt);
+							QuestRequirItem.Remove(QuestRequirItemName);
+						}
+
+						if (!Dialogue.Conditions_Item.IsNone())	/* 만약 이 대화가 퀘스트라면 (필요 아이템 존재) */
 						{
 							/* 만약 대화의 끝이 퀘스트 아이템 필요로 끝난다면 */
 							if (SetQuestList == false) 
 							{
-								//MyCharacter->QuestListUIObject->QuestTitle->SetText(Dialogue.QuestTitle);
-								//MyCharacter->QuestListUIObject->QuestDes->SetText(Dialogue.QuestDes);
+								/* 퀘스트 리스트 출력 */
 								MyCharacter->QuestListUIObject->SetVisibility(ESlateVisibility::Visible);
 
+								/* 퀘스트 리스트에 해당 퀘스트 추가 */
 								QuestListTextUIObject = CreateWidget<UQuestListTextWidget>(GetWorld(), QuestListTextWidgetClass);
 								QuestListTextUIObject->QuestTitle->SetText(Dialogue.QuestTitle);
 								QuestListTextUIObject->QuestDes->SetText(Dialogue.QuestDes);
@@ -198,8 +207,8 @@ void AQuestNPC::DialogueGetLine()
 
 								/* 퀘스트 아이템 조건 추가 */
 								QuestRequirItem.Add(Dialogue.Conditions_Item, Dialogue.Conditions_cnt);
-
-								UE_LOG(LogTemp, Warning, TEXT("%d Apples need"), *QuestRequirItem.Find(Dialogue.Conditions_Item));
+								QuestRequirItemName = Dialogue.Conditions_Item;
+								QuestRequirItemCnt = Dialogue.Conditions_cnt;
 							}
 
 
@@ -217,13 +226,12 @@ void AQuestNPC::DialogueGetLine()
 									{
 										if (MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item))
 										{
-											if (*MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item) == Dialogue.Conditions_cnt)
+											if (*MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item) >= Dialogue.Conditions_cnt)
 											{
 												GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
 												Text->SetText(FText::FromString(TEXT("?")));
 												Conversation_ID += 1;
 												CurrentLine = 0;
-
 
 												Text->SetHiddenInGame(false);
 												QuestAccept = true;

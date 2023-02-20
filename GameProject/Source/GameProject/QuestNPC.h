@@ -8,10 +8,16 @@
 #include "Components/TimelineComponent.h"
 #include "QuestNPC.generated.h"
 
+
 UCLASS()
 class GAMEPROJECT_API AQuestNPC : public ACharacter, public IFindAppleInterface
 {
 	GENERATED_BODY()
+
+	struct QuestStruct {
+	FName ItemName;
+	int32 ItemCnt;
+};
 
 public:
 	// Sets default values for this character's properties
@@ -70,7 +76,11 @@ public:
 
 	UPROPERTY()
 	TMap<FName, int32> QuestRequirItem;
-
+	UPROPERTY()
+	FName QuestRequirItemName;
+	UPROPERTY()
+	int32 QuestRequirItemCnt;
+	
 	UPROPERTY()
 	class UTextRenderComponent* Text;
 

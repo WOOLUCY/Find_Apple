@@ -173,6 +173,7 @@ void ADropedItem::PicUpItem_Implementation()
 	TArray<AQuestNPC*> MyActors;
 	TArray<AActor*> OutActors;
 
+	/* 배치된 NPC 캐릭터 찾기 */
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AQuestNPC::StaticClass(), OutActors);
 	for (AActor* a : OutActors)
 	{
@@ -183,11 +184,12 @@ void ADropedItem::PicUpItem_Implementation()
 	{
 		if (FoundActor->QuestRequirItem.Find(ItemName))
 		{
-			if (*FoundActor->QuestRequirItem.Find(ItemName) >= *MyCharacter->InventoryComponent->InventoryContent.Find(ItemName))
+			if (*FoundActor->QuestRequirItem.Find(ItemName) == *MyCharacter->InventoryComponent->InventoryContent.Find(ItemName))
 			{
-				//GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
+				GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Finished Quest !!"));
 				FoundActor->Text->SetText(FText::FromString(TEXT("?")));
 				FoundActor->Conversation_ID += 1;
+			//	UE_LOG(LogTemp, Warning, TEXT("%d Conversation ID "), FoundActor->Conversation_ID);
 				FoundActor->CurrentLine = 0;
 			}
 		}

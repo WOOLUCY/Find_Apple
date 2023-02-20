@@ -124,7 +124,7 @@ public:
 	UPROPERTY()
 	class UQuestListWidget* QuestListUIObject;
 	UPROPERTY()
-	int32 QuestNum = 0; /* ?์ฌ ?ด๊? ?น๋???์ค?ธ์ ??*/
+	int32 QuestNum = 0; 
 
 
 
