@@ -13,5 +13,61 @@ UCLASS()
 class GAMEPROJECT_API UWorldMapWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	UWorldMapWidget(const FObjectInitializer& objectInitializer);
+	virtual void NativeConstruct() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* NPChouse;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* FrontDungeon;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Bridge;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Home;
+	
+	/* Black Screen Pop (어두워지는 효과) */
+	/* Begin */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> BlackScreenBeginClass;
+	UPROPERTY()
+	class UBlackScreenBegin* BlackScreenBeginUIObject;
+	/* End */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> BlackScreenEndClass;
+	UPROPERTY()
+	class UBlackScreenEnd* BlackScreenEndUIObject;
+
+	/* Hover Action */
+	UFUNCTION()
+	void NPCHouseButtonHovered();
+	UFUNCTION()
+	void FrontDungeonButtonHovered();
+	UFUNCTION()
+	void HomeButtonHovered();
+	UFUNCTION()
+	void BridgeButtonHovered();
+	/* Not Hover Action */
+	UFUNCTION()
+	void NPCHouseButtonNotHovered();
+	UFUNCTION()
+	void FrontDungeonButtonNotHovered();
+	UFUNCTION()
+	void HomeButtonNotHovered();
+	UFUNCTION()
+	void BridgeButtonNotHovered();
+	/* Click Action */
+	UFUNCTION()
+	void NPCHouseButtonClick();
+	UFUNCTION()
+	void FrontDungeonButtonClick();
+	UFUNCTION()
+	void HomeButtonClick();
+	UFUNCTION()
+	void BridgeButtonClick();
+
 };

@@ -19,6 +19,7 @@
 #include "Inventory/InventoryUW.h"
 #include "Inventory/InventoryComponent.h"
 #include "Dialogue/QuestListWidget.h"
+#include "Teleport/WorldMapWidget.h"
 #include "Components/InputComponent.h"
 
 // Sets default values
@@ -113,6 +114,12 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		MouseToggleAction = Input_MouseToggle.Object;
 	}
+	/* 월드맵 키 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_WorldMap(TEXT("InputAction'/Game/Semin/KeyInput/IA_Map.IA_Map'"));
+	if (Input_WorldMap.Succeeded())
+	{
+		WorldMapAction = Input_WorldMap.Object;
+	}
 
 
 	//kaon - 대쉬, 도구선택
@@ -159,6 +166,13 @@ AFindAppleCharacter::AFindAppleCharacter()
 	if (QuestListWidget.Succeeded())
 	{
 		QuestListWidgetClass = QuestListWidget.Class;
+	}
+
+	/* World Map Widget */
+	ConstructorHelpers::FClassFinder<UWorldMapWidget>  WorldMapWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Map/WBP_WorldMap.WBP_WorldMap_C'"));
+	if (WorldMapWidget.Succeeded())
+	{
+		WorldMapWidgetClass = WorldMapWidget.Class;
 	}
 
 	bUseControllerRotationPitch = false;
@@ -306,6 +320,26 @@ void AFindAppleCharacter::MouseToggle(const FInputActionValue& Value)
 	}
 }
 
+void AFindAppleCharacter::ShowWorldMap(const FInputActionValue& Value)
+{
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (bWorldMapWidget)
+	{
+		WorldMapUIObject->RemoveFromParent();
+		bWorldMapWidget = false;
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		PlayerController->SetShowMouseCursor(false);
+	}
+	else
+	{
+		WorldMapUIObject = CreateWidget<UWorldMapWidget>(GetWorld(), WorldMapWidgetClass);
+		WorldMapUIObject->AddToViewport();
+		bWorldMapWidget = true;
+		PlayerController->SetInputMode(FInputModeGameAndUI());
+		PlayerController->SetShowMouseCursor(true);
+	}
+}
+
 
 void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
 {
@@ -435,6 +469,7 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Inventory);
 		EnhancedInputComponent->BindAction(PickItemAction, ETriggerEvent::Started, this, &AFindAppleCharacter::PickItem);
 		EnhancedInputComponent->BindAction(MouseToggleAction, ETriggerEvent::Started, this, &AFindAppleCharacter::MouseToggle);
+		EnhancedInputComponent->BindAction(WorldMapAction, ETriggerEvent::Started, this, &AFindAppleCharacter::ShowWorldMap);
 		
 		//kaon - dash, equipment
 		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);

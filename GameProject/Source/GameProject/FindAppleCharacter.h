@@ -51,6 +51,8 @@ protected:
 	UInputAction* PickItemAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MouseToggleAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* WorldMapAction;
 
 	//가온 - 도구선택, 대쉬
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
@@ -73,6 +75,7 @@ protected:
 	void Inventory(const FInputActionValue& Value);
 	void PickItem(const FInputActionValue& Value);
 	void MouseToggle(const FInputActionValue& Value);
+	void ShowWorldMap(const FInputActionValue& Value);
 
 	void EquipSword(const FInputActionValue& Value);
 	void EquipAx(const FInputActionValue& Value);
@@ -101,7 +104,7 @@ public:
 
 
 	/* Inventory Widget Class */
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY()
 	TSubclassOf<class UUserWidget> InventoryWidgetClass;
 	UPROPERTY()
 	class UInventoryUW* InventoryUIObject;
@@ -126,7 +129,13 @@ public:
 	UPROPERTY()
 	int32 QuestNum = 0; 
 
-
+	/* World Map Widget Class */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> WorldMapWidgetClass;
+	UPROPERTY()
+	class UWorldMapWidget* WorldMapUIObject;
+	UPROPERTY()
+	bool bWorldMapWidget = false;
 
 private:
 

@@ -13,5 +13,13 @@ UCLASS()
 class GAMEPROJECT_API UBlackScreenEnd : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+
+public:
+	UBlackScreenEnd(const FObjectInitializer& objectInitializer);
+
+	UPROPERTY(BlueprintReadOnly, Transient, Category = "Animation", meta = (BindWidgetAnim))
+	class UWidgetAnimation* BlackScreenEnd;
+
+	virtual void NativeConstruct() override;
 };
