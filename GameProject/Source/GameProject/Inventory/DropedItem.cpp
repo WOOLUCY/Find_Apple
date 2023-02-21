@@ -186,7 +186,7 @@ void ADropedItem::PicUpItem_Implementation()
 		{
 			if (*FoundActor->QuestRequirItem.Find(ItemName) == *MyCharacter->InventoryComponent->InventoryContent.Find(ItemName))
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Finished Quest !!"));
+				//GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Finished Quest !!"));
 				FoundActor->Text->SetText(FText::FromString(TEXT("?")));
 				FoundActor->Conversation_ID += 1;
 			//	UE_LOG(LogTemp, Warning, TEXT("%d Conversation ID "), FoundActor->Conversation_ID);
