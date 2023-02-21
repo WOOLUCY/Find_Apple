@@ -39,6 +39,8 @@ public:
 	UPROPERTY(VisibleAnywhere,  Category = Tree)
 		USceneComponent* Pivot;
 
+	UStaticMesh* Leafs[3];
+
 	UPROPERTY(VisibleAnywhere, Category=Damage)
 		float MaxDamage;
 

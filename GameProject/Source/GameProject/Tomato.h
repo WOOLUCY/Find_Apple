@@ -46,6 +46,7 @@ private:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 	//시간핸들 받아와서 해야겠음
 	void ChangePlant();
 	bool IsDeadCheck();

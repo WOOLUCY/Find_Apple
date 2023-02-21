@@ -12,6 +12,11 @@
  */
 
 
+struct Day {
+	int Days;
+	int Hours;
+	int Minutes;
+};
 UCLASS()
 class GAMEPROJECT_API AFindAppleGameMode : public AGameModeBase
 {
@@ -26,7 +31,7 @@ public:
 	UPROPERTY()
 	FTimespan GameTime;
 	UPROPERTY()
-	float TotalGameTime;
+	double TotalGameTime;
 	UPROPERTY()
 	FString TotalGameTimeString;
 	UPROPERTY()
@@ -44,6 +49,6 @@ public:
 
 
 private:
+	 Day Today;
 
-public:
 };

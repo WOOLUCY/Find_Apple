@@ -14,6 +14,7 @@ AFindAppleGameMode::AFindAppleGameMode()
 	DefaultPawnClass = AFindAppleCharacter::StaticClass();
 	PlayerControllerClass = AFindApplePlayerController::StaticClass();
 
+	Today.Days = 0;
 }
 
 void AFindAppleGameMode::BeginPlay()
@@ -30,12 +31,22 @@ void AFindAppleGameMode::Tick(float DeltaTime)
 
 void AFindAppleGameMode::SetGameTime(float DeltaTime)
 {
-	TotalGameTime += DeltaTime * 100;
+	TotalGameTime += DeltaTime * 2000;
 
 	//totalGameTime += DeltaSeconds;
+	if (Today.Days != TimeFormatter.GetDays()) {
+		Today.Days = TimeFormatter.GetDays();
+		UE_LOG(LogTemp, Warning, TEXT("Time Day ++"))
 
-	TimeFormatter = FTimespan(0, 0, 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
+	}
+
+	TimeFormatter = FTimespan(0, 8*(Today.Days+1), 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
 	TotalGameTimeString = TimeFormatter.ToString();
+		
+	Today.Hours = TimeFormatter.GetHours();
+	Today.Minutes = TimeFormatter.GetMinutes();
+
+
 
 	TArray< FStringFormatArg > args;
 	args.Add(FStringFormatArg(FString::FromInt(TimeFormatter.GetDays())));
@@ -51,6 +62,8 @@ FString AFindAppleGameMode::GetGameTime()
 {
 	return GameTimeStirng;
 }
+
+
 
 void AFindAppleGameMode::PostLogin(APlayerController* NewPlayer)
 {

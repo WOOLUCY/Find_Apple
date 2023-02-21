@@ -13,7 +13,7 @@ ATree::ATree()
 	PrimaryActorTick.bCanEverTick = false;
 	MaxDamage = 50.f;
 	TotalDamage = 0.f;
-	RespawnTime = 5.f;
+	RespawnTime = 20.f;
 
 	Lower = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LOWER"));
 	Pivot = CreateDefaultSubobject<USceneComponent>(TEXT("PIVOT"));
@@ -49,9 +49,20 @@ ATree::ATree()
 	(TEXT("/Script/Engine.StaticMesh'/Game/untitled_category/untitled_asset/TreeWithLeafs.TreeWithLeafs'"));
 	if (SM_LEAF.Succeeded()) {
 		Leaf->SetStaticMesh(SM_LEAF.Object);
+		Leafs[0] = SM_LEAF.Object;
 	}
 
-	
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LEAF1
+	(TEXT("/Script/Engine.StaticMesh'/Game/untitled_category/untitled_asset/TreeWithLeafs01.TreeWithLeafs01'"));
+	if (SM_LEAF1.Succeeded()) {
+		Leafs[1] = SM_LEAF1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LEAF2
+	(TEXT("/Script/Engine.StaticMesh'/Game/untitled_category/untitled_asset/TreeWithLeafs02.TreeWithLeafs02'"));
+	if (SM_LEAF2.Succeeded()) {
+		Leafs[2] = SM_LEAF2.Object;
+	}
+
 
 
 	int RandonNumber = FMath::RandRange(0, 3);
@@ -101,35 +112,7 @@ ATree::ATree()
 	}
 
 
-	RandonNumber = FMath::RandRange(0, 100);
 
-	switch (RandonNumber)
-	{
-	case 0:
-
-		break;
-	case 1:
-		SM_LEAF =  ConstructorHelpers::FObjectFinder<UStaticMesh>
-		(TEXT("/Script/Engine.StaticMesh'/Game/untitled_category/untitled_asset/TreeWithLeafs01.TreeWithLeafs01'"));
-		if (SM_LEAF.Succeeded()) {
-			Leaf->SetStaticMesh(SM_LEAF.Object);
-
-		}
-
-		break;
-	case 2:
-		SM_LEAF = ConstructorHelpers::FObjectFinder<UStaticMesh>
-			(TEXT("/Script/Engine.StaticMesh'/Game/untitled_category/untitled_asset/TreeWithLeafs02.TreeWithLeafs02'"));
-		if (SM_LEAF.Succeeded()) {
-			Leaf->SetStaticMesh(SM_LEAF.Object);
-
-		}
-
-		break;
-
-	default:
-		break;
-	}
 
 }
 
@@ -137,6 +120,13 @@ ATree::ATree()
 void ATree::BeginPlay()
 {
 	Super::BeginPlay();
+	float RandPitch= FMath::RandRange(-90.f,90.f);
+	float RandYaw = FMath::RandRange(-90.f, 90.f);
+
+	SetActorRelativeRotation(FRotator(0.f, RandYaw,0.f));
+
+	int RandonNumber = FMath::RandRange(0, 2);
+	Leaf->SetStaticMesh(Leafs[RandonNumber]);
 
 
 }
@@ -185,7 +175,7 @@ float ATree::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet, ACo
 				
 				FVector PivotWorld = GetTransform().TransformPosition(Pivot->GetRelativeLocation());
 				if (once) {
-					ADropedItem* DropedActor = GetWorld()->SpawnActor<ADropedItem>(PivotWorld, FRotator::ZeroRotator);
+					ADropedItem* DropedActor = GetWorld()->SpawnActor<ADropedItem>(PivotWorld+FVector(0,0,20.f), FRotator::ZeroRotator);
 					DropedActor->ItemFresh("trunk");
 					once = false;
 				}
