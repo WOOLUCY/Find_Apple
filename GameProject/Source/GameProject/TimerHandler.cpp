@@ -20,8 +20,12 @@ void ATimerHandler::BeginPlay()
 	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance != nullptr) {
 		Day temp = GameInstance->Today;
+
 		Today.SetTime(temp.GetDays(), temp.GetHours(), temp.GetMin(), temp.GetSec(),temp.GetTotal());
 		TotalGameTime = Today.GetTotal();
+
+		UE_LOG(LogTemp, Warning, TEXT("Begin Plyat %d %d"), Today.GetDays(), Today.GetHours());
+
 
 	}
 }
@@ -32,7 +36,7 @@ void ATimerHandler::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance != nullptr) {
-
+		UE_LOG(LogTemp, Warning, TEXT("End Plyat %d %d"), Today.GetDays(), Today.GetHours());
 		GameInstance->Today.SetTime(Today.GetDays(), Today.GetHours(), Today.GetMin(), Today.GetSec(),Today.GetTotal());
 	}
 
@@ -55,12 +59,19 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 {
 	TotalGameTime += DeltaTime * 2000;
 
-	if (Today.GetDays() != TimeFormatter.GetDays()) {
+	if (Today.GetDays() < TimeFormatter.GetDays()) {
 		Today.SetDay(TimeFormatter.GetDays());
 
 	}
+	if (Today.GetHours() == 23) {
+		TotalGameTime = 0;
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==12"));
+		Today.SetDay(Today.GetDays()+1);
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("realdkfjdk??"));
 
-	TimeFormatter = FTimespan(0, 8 * (Today.GetDays() + 1), 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
+	}
+
+	TimeFormatter = FTimespan(Today.GetDays(), 8 , 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
 	TotalGameTimeString = TimeFormatter.ToString();
 
 
