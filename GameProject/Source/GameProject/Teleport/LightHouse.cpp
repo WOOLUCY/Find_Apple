@@ -31,7 +31,7 @@ ALightHouse::ALightHouse()
 	{
 		LightHouseMesh->SetStaticMesh(Mesh.Object);
 		LightHouseMesh->SetRelativeRotation(FRotator(0.f, -0.f, 0.f));
-		LightHouseMesh->SetWorldScale3D(FVector(2.f, 2.f, 2.f));
+		LightHouseMesh->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
 	}
 
 
