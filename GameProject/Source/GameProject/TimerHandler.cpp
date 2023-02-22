@@ -2,26 +2,42 @@
 
 
 #include "TimerHandler.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATimerHandler::ATimerHandler()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-
-	TimeScale = 30;
-	Hours = 0;
-	Minutes = 0;
-	ElapsedSecond = 0;
-	GameTime = 0;
 }
+
 
 // Called when the game starts or when spawned
 void ATimerHandler::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GameInstance != nullptr) {
+		Day temp = GameInstance->Today;
+		Today.SetTime(temp.GetDays(), temp.GetHours(), temp.GetMin(), temp.GetSec(),temp.GetTotal());
+		TotalGameTime = Today.GetTotal();
+
+	}
+}
+
+void ATimerHandler::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GameInstance != nullptr) {
+
+		GameInstance->Today.SetTime(Today.GetDays(), Today.GetHours(), Today.GetMin(), Today.GetSec(),Today.GetTotal());
+	}
+
+
+
 }
 
 // Called every frame
@@ -29,22 +45,42 @@ void ATimerHandler::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	ElapsedSecond += (DeltaTime * TimeScale);
-	if (ElapsedSecond > 60) {
-		ElapsedSecond -= 60;
-		++Minutes;
-		
-		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Hours==1 "));
-
-		if (Minutes > 60) {
-			Minutes -= 60;
-			++Hours;
-			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Minutes==1 "));
-
-		}
-
-		PlantDelegate.Broadcast(Hours,Minutes);
-	}
+	SetGameTime(DeltaTime);
 
 }
 
+
+
+void ATimerHandler::SetGameTime(float DeltaTime)
+{
+	TotalGameTime += DeltaTime * 2000;
+
+	if (Today.GetDays() != TimeFormatter.GetDays()) {
+		Today.SetDay(TimeFormatter.GetDays());
+
+	}
+
+	TimeFormatter = FTimespan(0, 8 * (Today.GetDays() + 1), 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
+	TotalGameTimeString = TimeFormatter.ToString();
+
+
+	Today.SetHour( TimeFormatter.GetHours());
+	Today.SetMin( TimeFormatter.GetMinutes());
+	Today.SetSec(TimeFormatter.GetSeconds());
+	Today.SetTotal(TotalGameTime);
+
+
+	TArray< FStringFormatArg > args;
+	args.Add(FStringFormatArg(FString::FromInt(TimeFormatter.GetDays())));
+	args.Add(FStringFormatArg(FString::FromInt(TimeFormatter.GetHours())));
+	args.Add(FStringFormatArg(FString::FromInt(TimeFormatter.GetMinutes())));
+	args.Add(FStringFormatArg(FString::FromInt(TimeFormatter.GetSeconds())));
+
+	GameTimeStirng = FString::Format(TEXT("Day {0} | {1}:{2}:{3}"), args);
+
+}
+
+FString ATimerHandler::GetGameTime()
+{
+	return GameTimeStirng;
+}

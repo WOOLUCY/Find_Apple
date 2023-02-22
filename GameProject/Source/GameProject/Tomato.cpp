@@ -64,7 +64,7 @@ void ATomato::BeginPlay()
 
 	if (TimeOfDayHandler.Num() != 0) {
 		auto TimerHandler = Cast<ATimerHandler>(TimeOfDayHandler[0]);
-		MyDelegate = TimerHandler->PlantDelegate.AddUObject(this, &ATomato::TimeChange);
+		//MyDelegate = TimerHandler->PlantDelegate.AddUObject(this, &ATomato::TimeChange);
 	}
 }
 

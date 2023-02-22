@@ -1,0 +1,51 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Engine/GameInstance.h"
+#include "MyGameInstance.generated.h"
+
+/**
+ * 
+ */
+
+class Day {
+private:
+	int days;
+	int hours;
+	int minutes;
+	int seconds;
+	double TotalGameTime;
+
+
+public:
+	void SetTime(int Day, int Hour, int Min, int Sec, double total);
+	Day& GetTime();
+
+
+	void SetDay(int a) { days = a; }
+	void SetHour(int a) { hours = a; }
+	void SetMin(int a) { minutes = a; }
+	void SetSec(int a) { seconds = a; }
+	void SetTotal(int a) { TotalGameTime = a; }
+
+	int GetDays() { return days; }
+	int GetHours() {return hours; }
+	int GetMin() { return minutes; }
+	int GetSec() { return seconds; }
+	double GetTotal() { return TotalGameTime; }
+
+	
+};
+UCLASS()
+class GAMEPROJECT_API UMyGameInstance : public UGameInstance
+{
+	GENERATED_BODY()
+public:
+	Day Today;
+
+
+
+	
+};

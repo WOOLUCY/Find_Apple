@@ -120,7 +120,6 @@ ATree::ATree()
 void ATree::BeginPlay()
 {
 	Super::BeginPlay();
-	float RandPitch= FMath::RandRange(-90.f,90.f);
 	float RandYaw = FMath::RandRange(-90.f, 90.f);
 
 	SetActorRelativeRotation(FRotator(0.f, RandYaw,0.f));
