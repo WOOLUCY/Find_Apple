@@ -6,6 +6,7 @@
 #include "BlackScreenBegin.h"
 #include "BlackScreenEnd.h"
 #include "LightHouse.h"
+#include "../PlayerHouse.h"
 #include "Kismet/GameplayStatics.h"
 #include "../FindAppleCharacter.h"
 
@@ -90,51 +91,155 @@ void UWorldMapWidget::BridgeButtonNotHovered()
 
 void UWorldMapWidget::NPCHouseButtonClick()
 {
+	/* 어두워지는 위젯 애니메이션 추가 */
+	BlackScreenPopStart();
+	FTimerHandle TimerHandle;
+	float BlackScreenBeginTime = 0.8;
+
+	/* 타이머 진행, 위젯이 흐려지는 동안은 이동하지 않도록 잠시 Delay 효과 */
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			/* (FName) 위치로 플레이어 이동 */
+			TeleportPlayer("NPChouse");
+
+			BlackScreenBeginUIObject->RemoveFromParent();
+
+			/* 점점 밝아지는 위젯 애니메이션 추가 */
+			BlackScreenPopEnd();
+
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		}), BlackScreenBeginTime, false);
+
+
+	RemoveFromParent();
 }
 
 void UWorldMapWidget::FrontDungeonButtonClick()
 {
-}
-
-void UWorldMapWidget::HomeButtonClick()
-{
-}
-
-void UWorldMapWidget::BridgeButtonClick()
-{
-	BlackScreenBeginUIObject = CreateWidget<UBlackScreenBegin>(GetWorld(), BlackScreenBeginClass);
-	BlackScreenBeginUIObject->AddToViewport();
-
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	//PlayerController->SetInputMode(FInputModeUIOnly());
-	PlayerController->SetShowMouseCursor(false);
-
+	BlackScreenPopStart();
 	FTimerHandle TimerHandle;
 	float BlackScreenBeginTime = 0.8;
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
-			TArray<AActor*> LightHouses;
-			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ALightHouse::StaticClass(), TEXT("Bridge"), LightHouses);
+			TeleportPlayer("FrontDungeon");
 
-			for (AActor* Actor : LightHouses)
-			{
-				ALightHouse* LightHouse = Cast<ALightHouse>(Actor);
+			BlackScreenBeginUIObject->RemoveFromParent();
 
-				if (LightHouse != nullptr)
-				{
-					FVector Location = LightHouse->GetActorLocation();
-					FVector Forward = LightHouse->GetActorForwardVector() * FVector(1.f, 1.f, 1.f);
-					FVector MoveLocation = Location + (Forward * 300.f);
-
-					AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-					CharacterActor->SetActorRelativeLocation(MoveLocation);
-					BlackScreenBeginUIObject->RemoveFromParent();
-				}
-			}
+			BlackScreenPopEnd();
 
 			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 		}), BlackScreenBeginTime, false);
 
+
 	RemoveFromParent();
+}
+
+void UWorldMapWidget::HomeButtonClick()
+{
+	BlackScreenPopStart();
+	FTimerHandle TimerHandle;
+	float BlackScreenBeginTime = 0.8;
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			TeleportPlayer("Home");
+
+			BlackScreenBeginUIObject->RemoveFromParent();
+
+			BlackScreenPopEnd();
+
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		}), BlackScreenBeginTime, false);
+
+
+	RemoveFromParent();
+}
+
+void UWorldMapWidget::BridgeButtonClick()
+{
+	BlackScreenPopStart();
+	FTimerHandle TimerHandle;
+	float BlackScreenBeginTime = 0.8;
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			TeleportPlayer("Bridge");
+
+			BlackScreenBeginUIObject->RemoveFromParent();
+
+			BlackScreenPopEnd();
+
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		}), BlackScreenBeginTime, false);
+
+
+	RemoveFromParent();
+}
+
+void UWorldMapWidget::TeleportPlayer(FName Place)
+{
+	UE_LOG(LogTemp, Warning, TEXT("TeleportPlayer"));
+	if (Place == "Home")
+	{
+		TArray<AActor*> HomeActor;
+		UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), APlayerHouse::StaticClass(), Place, HomeActor);
+		for (AActor* Actor : HomeActor)
+		{
+			APlayerHouse* PlayerHome = Cast<APlayerHouse>(Actor);
+
+			if (PlayerHome != nullptr)
+			{
+				FVector Location = PlayerHome->GetActorLocation();
+				FVector Forward = PlayerHome->GetActorForwardVector() * FVector(1.f, 1.f, 1.f);
+				FVector MoveLocation = Location + (Forward * 700.f);
+
+				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+				CharacterActor->SetActorRelativeLocation(MoveLocation);
+				UE_LOG(LogTemp, Warning, TEXT("Home teleport"));
+			}
+		}
+	}
+	else 
+	{
+		TArray<AActor*> LightHouses;
+		UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ALightHouse::StaticClass(), Place, LightHouses);
+
+		for (AActor* Actor : LightHouses)
+		{
+			ALightHouse* LightHouse = Cast<ALightHouse>(Actor);
+
+			if (LightHouse != nullptr)
+			{
+				FVector Location = LightHouse->GetActorLocation();
+				FVector Forward = LightHouse->GetActorForwardVector() * FVector(1.f, 1.f, 1.f);
+				FVector MoveLocation = Location + (Forward * 300.f);
+
+				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+				CharacterActor->SetActorRelativeLocation(MoveLocation);
+				//UE_LOG(LogTemp, Warning, TEXT("Light house teleport, %s"), *Place.ToString());
+			}
+		}
+	}
+	
+}
+
+void UWorldMapWidget::BlackScreenPopStart()
+{
+	BlackScreenBeginUIObject = CreateWidget<UBlackScreenBegin>(GetWorld(), BlackScreenBeginClass);
+	BlackScreenBeginUIObject->AddToViewport();
+
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	PlayerController->SetShowMouseCursor(false);
+}
+
+void UWorldMapWidget::BlackScreenPopEnd()
+{
+	BlackScreenEndUIObject = CreateWidget<UBlackScreenEnd>(GetWorld(), BlackScreenEndClass);
+	BlackScreenEndUIObject->AddToViewport();
+
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	//PlayerController->SetInputMode(FInputModeUIOnly());
+	PlayerController->SetShowMouseCursor(false);
 }

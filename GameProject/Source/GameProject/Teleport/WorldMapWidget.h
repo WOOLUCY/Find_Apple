@@ -70,4 +70,11 @@ public:
 	UFUNCTION()
 	void BridgeButtonClick();
 
+private:
+	UFUNCTION()
+	void TeleportPlayer(FName Place);
+	UFUNCTION()
+	void BlackScreenPopStart();
+	UFUNCTION()
+	void BlackScreenPopEnd();
 };

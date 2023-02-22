@@ -17,7 +17,7 @@
 ALightHouse::ALightHouse()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	DefaultRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultRoot"));
 	SetRootComponent(DefaultRoot);
@@ -30,7 +30,7 @@ ALightHouse::ALightHouse()
 	if (Mesh.Succeeded())
 	{
 		LightHouseMesh->SetStaticMesh(Mesh.Object);
-		LightHouseMesh->SetRelativeRotation(FRotator(0.f, -0.f, 0.f));
+		LightHouseMesh->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 		LightHouseMesh->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
 	}
 
