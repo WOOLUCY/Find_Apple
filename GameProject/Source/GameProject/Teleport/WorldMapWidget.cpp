@@ -192,7 +192,7 @@ void UWorldMapWidget::TeleportPlayer(FName Place)
 			{
 				FVector Location = PlayerHome->GetActorLocation();
 				FVector Forward = PlayerHome->GetActorForwardVector() * FVector(1.f, 1.f, 1.f);
-				FVector MoveLocation = Location + (Forward * 700.f);
+				FVector MoveLocation = Location + (Forward * 700.f) + FVector(0.f, 0.f, 50.f);
 
 				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 				CharacterActor->SetActorRelativeLocation(MoveLocation);
@@ -213,7 +213,7 @@ void UWorldMapWidget::TeleportPlayer(FName Place)
 			{
 				FVector Location = LightHouse->GetActorLocation();
 				FVector Forward = LightHouse->GetActorForwardVector() * FVector(1.f, 1.f, 1.f);
-				FVector MoveLocation = Location + (Forward * 300.f);
+				FVector MoveLocation = Location + (Forward * 700.f) + FVector(0.f, 0.f, 50.f);
 
 				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 				CharacterActor->SetActorRelativeLocation(MoveLocation);
