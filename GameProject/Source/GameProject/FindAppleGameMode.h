@@ -27,7 +27,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	TimerHandlerMultiDelegate SunriseDelegate;
+	TimerHandlerMultiDelegate DayChangeDelegate;
 	TimerHandlerMultiDelegate SunsetDelegate;
 
 private:

@@ -9,6 +9,7 @@ ATimerHandler::ATimerHandler()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 }
 
 
@@ -17,17 +18,21 @@ void ATimerHandler::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (GameInstance != nullptr) {
-		Day temp = GameInstance->Today;
+	UWorld* TheWorld = GetWorld();
+	if (TheWorld != nullptr) {
 
-		Today.SetTime(temp.GetDays(), temp.GetHours(), temp.GetMin(), temp.GetSec(),temp.GetTotal());
-		TotalGameTime = Today.GetTotal();
+		auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		if (GameInstance != nullptr) {
+			Day temp = GameInstance->Today;
 
-		UE_LOG(LogTemp, Warning, TEXT("Begin Plyat %d %d"), Today.GetDays(), Today.GetHours());
+			Today.SetTime(temp.GetDays(), temp.GetHours(), temp.GetMin(), temp.GetSec(), temp.GetTotal());
+			TotalGameTime = Today.GetTotal();
+		}
 
 
 	}
+
+
 }
 
 void ATimerHandler::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -36,7 +41,6 @@ void ATimerHandler::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("End Plyat %d %d"), Today.GetDays(), Today.GetHours());
 		GameInstance->Today.SetTime(Today.GetDays(), Today.GetHours(), Today.GetMin(), Today.GetSec(),Today.GetTotal());
 	}
 
@@ -57,7 +61,7 @@ void ATimerHandler::Tick(float DeltaTime)
 
 void ATimerHandler::SetGameTime(float DeltaTime)
 {
-	TotalGameTime += DeltaTime * 2000;
+	TotalGameTime += DeltaTime * 200;//¿ø·¡100
 
 	if (Today.GetDays() < TimeFormatter.GetDays()) {
 		Today.SetDay(TimeFormatter.GetDays());
@@ -65,10 +69,8 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 	}
 	if (Today.GetHours() == 23) {
 		TotalGameTime = 0;
-		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==12"));
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==23"));
 		Today.SetDay(Today.GetDays()+1);
-		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("realdkfjdk??"));
-
 	}
 
 	TimeFormatter = FTimespan(Today.GetDays(), 8 , 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));

@@ -23,6 +23,11 @@ public:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* Sky;
 
+	UPROPERTY(EditAnywhere)
+		bool IsNight = false;
+
+
+
 	
 protected:
 	// Called when the game starts or when spawned
@@ -32,13 +37,26 @@ private:
 	UMaterialInstance* MDay;
 	UMaterialInstance* MNight;
 
-	bool IsNight = false;
+	const FRotator BasicRot{ 0,180.f,180.f };
+	const FColor BlueColor{ 73,101,179,255 };
+	const FColor PurpeColor{ 187,86,255,255 };
+	
+
+
+	//UPROPERTY(EditAnywhere)
+	//bool IsNight = false;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void Sunset();
 	void Sunrise();
+
+
+	void SetNight();
+
+	class ATimerHandler* GameTimer;
+
+
 
 };
