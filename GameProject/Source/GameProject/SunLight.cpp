@@ -77,10 +77,10 @@ void ASunLight::Tick(float DeltaTime)
 	if (IsNight && GameTimer->Today.GetHours() == 8  ) {
 		Sunrise();
 	}
-
+	
 
 	if (!IsNight) {
-		Sun->AddLocalRotation(FRotator(18.f/60.f/60.f*DeltaTime*200, 0, 0));
+		Sun->AddLocalRotation(GameTimer->SunRotation);
 	}
 	else {
 		Sky->AddLocalRotation(FRotator(0, DeltaTime, 0));
@@ -97,8 +97,8 @@ void ASunLight::Sunrise()
 	Sun->LightingChannels.bChannel0 = true;
 	Sky->SetMaterial(0, MDay);
 	Sun->SetLightFColor(FColor(255.f,255.f,255.f,255.f));
-
-	Sun->SetWorldRotation(BasicRot);
+	GameTimer->SunRotation = FRotator(BasicRot);
+	Sun->SetWorldRotation(GameTimer->SunRotation);
 	Sun->SetIntensity(10.f);
 
 }
@@ -107,7 +107,9 @@ void ASunLight::Sunrise()
 void ASunLight::SetNight()
 {
 	IsNight = true;
-	Sun->SetWorldRotation(FRotator(-90.f, 0, 0));
+	GameTimer->SunRotation = FRotator(-90.f, 0, 0);
+
+	Sun->SetWorldRotation(GameTimer->SunRotation);
 	Sun->SetIntensity(4.f);
 	Sun->SetLightFColor(BlueColor); //B=179,G=101,R=73,A=255)
 	Sky->SetMaterial(0, MNight);

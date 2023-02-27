@@ -12,7 +12,3 @@ void Day::SetTime(int Day, int Hour, int Min, int Sec,double total)
 	TotalGameTime = total;
 }
 
-Day& Day::GetTime()
-{
-	return *this;
-}

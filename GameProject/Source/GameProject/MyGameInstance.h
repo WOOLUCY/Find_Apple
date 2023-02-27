@@ -21,7 +21,6 @@ private:
 
 public:
 	void SetTime(int Day, int Hour, int Min, int Sec, double total);
-	Day& GetTime();
 
 
 	void SetDay(int a) { days = a; }
@@ -44,6 +43,8 @@ class GAMEPROJECT_API UMyGameInstance : public UGameInstance
 	GENERATED_BODY()
 public:
 	Day Today;
+
+	FRotator Sun;
 
 
 

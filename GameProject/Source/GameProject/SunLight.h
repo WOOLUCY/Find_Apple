@@ -43,9 +43,6 @@ private:
 	
 
 
-	//UPROPERTY(EditAnywhere)
-	//bool IsNight = false;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

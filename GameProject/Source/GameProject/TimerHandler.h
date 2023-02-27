@@ -38,7 +38,7 @@ public:
 		FString GetGameTime();
 
 	Day Today;
-//	FRotator SunRotation{ 0.f,180.f,180.f };
+	FRotator SunRotation{ 0.f,180.f,180.f };
 
 protected:
 	// Called when the game starts or when spawned

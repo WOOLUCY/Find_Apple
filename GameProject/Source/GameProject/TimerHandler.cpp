@@ -27,6 +27,8 @@ void ATimerHandler::BeginPlay()
 
 			Today.SetTime(temp.GetDays(), temp.GetHours(), temp.GetMin(), temp.GetSec(), temp.GetTotal());
 			TotalGameTime = Today.GetTotal();
+
+			GameInstance->Sun = SunRotation;
 		}
 
 
@@ -42,6 +44,9 @@ void ATimerHandler::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance != nullptr) {
 		GameInstance->Today.SetTime(Today.GetDays(), Today.GetHours(), Today.GetMin(), Today.GetSec(),Today.GetTotal());
+
+		GameInstance->Sun = SunRotation;
+
 	}
 
 
@@ -52,6 +57,8 @@ void ATimerHandler::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void ATimerHandler::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	SunRotation = FRotator(18.f / 60.f / 60.f * DeltaTime * 200, 0, 0);
 
 	SetGameTime(DeltaTime);
 
