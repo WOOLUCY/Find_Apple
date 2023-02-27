@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MyGameInstance.h"
+
 #include "TimerHandler.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FTimeChangeDelegate, int32, int32)
+
 
 UCLASS()
 class GAMEPROJECT_API ATimerHandler : public AActor
@@ -17,34 +19,32 @@ public:
 	// Sets default values for this actor's properties
 	ATimerHandler();
 	
-	FTimeChangeDelegate PlantDelegate;
-
 	UPROPERTY()
-		int32 TimeScale;
-
-
+		double TotalGameTime;
 	UPROPERTY()
-		int32 Hours;
-
+		FString TotalGameTimeString;
 	UPROPERTY()
-		int32 Minutes;
-
+		FString GameTimeStirng;
 	UPROPERTY()
-		FTimespan GameTime;
+		FTimespan TimeFormatter;
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+		void SetGameTime(float DeltaTime);
 
-	UPROPERTY()
-		float ElapsedSecond;
+	UFUNCTION()
+		FString GetGameTime();
 
-
+	Day Today;
+	FRotator SunRotation{ 0.f,180.f,180.f };
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason )override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 };

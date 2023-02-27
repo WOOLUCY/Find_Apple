@@ -2,6 +2,7 @@
 
 
 #include "LevelTransferVol.h"
+#include "FindAppleGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -19,7 +20,15 @@ ALevelTransferVol::ALevelTransferVol()
 void ALevelTransferVol::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	APawn* Pawn = Cast<APawn>(OtherActor);
+	//시간도 저장할까해서 넘겨줘야나,,
+	auto RecentMode = UGameplayStatics::GetGameMode(GetWorld());
 	
+
+	if (Cast<AFindAppleGameMode>(RecentMode) != nullptr) {
+
+
+	}
+
 	if (Pawn != nullptr) {
 		UGameplayStatics::OpenLevel(this, *TransferLevelName);
 	}

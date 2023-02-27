@@ -4,6 +4,11 @@
 #include "TimeWidget.h"
 #include "Misc/DateTime.h"
 #include "FindAppleGameMode.h"
+
+#include "TimerHandler.h"
+#include "Kismet/GameplayStatics.h"
+
+
 #include "Components/TextBlock.h"
 
 UTimeWidget::UTimeWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
@@ -30,17 +35,26 @@ bool UTimeWidget::Initialize()
 	{
 		UWorld* World = GetWorld();
 
+
 		if (World != nullptr)
 		{
-			AFindAppleGameMode* FindAppleGameMode = Cast<AFindAppleGameMode>(World->GetAuthGameMode());
 
-			if (FindAppleGameMode)
-			{
+			TArray<AActor*> TimeOfDayHandler;
+
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATimerHandler::StaticClass(), TimeOfDayHandler);
+
+			if (TimeOfDayHandler.Num() != 0) {
+				auto TimerHandler = Cast<ATimerHandler>(TimeOfDayHandler[0]);
 				TimeText->SetText(FText::FromString("Game Mode Set"));
 
 				TimeText->TextDelegate.BindUFunction(this, "SetTimeText");
+
 			}
+
+		
+
 		}
+	
 	}
 
 	return false;
@@ -52,19 +66,27 @@ FText UTimeWidget::SetTimeText()
 
 	if (World != nullptr)
 	{
-		AFindAppleGameMode* FindAppleGameMode = Cast<AFindAppleGameMode>(World->GetAuthGameMode());
 
-		if (FindAppleGameMode)
-		{
-			FString GameTimeString = FindAppleGameMode->GetGameTime();
+		TArray<AActor*> TimeOfDayHandler;
 
-			return FText::FromString(FindAppleGameMode->GetGameTime());
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATimerHandler::StaticClass(), TimeOfDayHandler);
+
+		if (TimeOfDayHandler.Num() != 0) {
+			auto TimerHandler = Cast<ATimerHandler>(TimeOfDayHandler[0]);
+			FString GameTimeString = TimerHandler->GetGameTime();
+
+			return FText::FromString(TimerHandler->GetGameTime());
+
 		}
-		else 
-		{
+		else {
 			return FText::FromString("NULL");
+
 		}
+
+
+
 	}
+
 
 	return FText::FromString("NULL");
 }

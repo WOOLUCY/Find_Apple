@@ -25,32 +25,9 @@ void AFindAppleGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	SetGameTime(DeltaTime);
 }
 
-void AFindAppleGameMode::SetGameTime(float DeltaTime)
-{
-	TotalGameTime += DeltaTime * 100;
 
-	//totalGameTime += DeltaSeconds;
-
-	TimeFormatter = FTimespan(0, 0, 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
-	TotalGameTimeString = TimeFormatter.ToString();
-
-	TArray< FStringFormatArg > args;
-	args.Add(FStringFormatArg(FString::FromInt(TimeFormatter.GetDays())));
-	args.Add(FStringFormatArg(FString::FromInt(TimeFormatter.GetHours())));
-	args.Add(FStringFormatArg(FString::FromInt(TimeFormatter.GetMinutes())));
-	args.Add(FStringFormatArg(FString::FromInt(TimeFormatter.GetSeconds())));
-
-	GameTimeStirng = FString::Format(TEXT("Day {0} | {1}:{2}:{3}"), args);
-
-}
-
-FString AFindAppleGameMode::GetGameTime()
-{
-	return GameTimeStirng;
-}
 
 void AFindAppleGameMode::PostLogin(APlayerController* NewPlayer)
 {

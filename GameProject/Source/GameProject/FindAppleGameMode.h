@@ -12,6 +12,8 @@
  */
 
 
+DECLARE_MULTICAST_DELEGATE(TimerHandlerMultiDelegate)
+
 UCLASS()
 class GAMEPROJECT_API AFindAppleGameMode : public AGameModeBase
 {
@@ -23,27 +25,11 @@ public:
 
 	virtual void BeginPlay() override;
 
-	UPROPERTY()
-	FTimespan GameTime;
-	UPROPERTY()
-	float TotalGameTime;
-	UPROPERTY()
-	FString TotalGameTimeString;
-	UPROPERTY()
-	FString GameTimeStirng;
-	UPROPERTY()
-	FTimespan TimeFormatter;
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
-	void SetGameTime(float DeltaTime);
-
-	UFUNCTION()
-	FString GetGameTime();
-
+	TimerHandlerMultiDelegate DayChangeDelegate;
+	TimerHandlerMultiDelegate SunsetDelegate;
 
 private:
 
-public:
 };
