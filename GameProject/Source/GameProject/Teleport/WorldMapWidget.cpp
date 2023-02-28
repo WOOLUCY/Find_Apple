@@ -1,14 +1,16 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "WorldMapWidget.h"
 #include "Components/Button.h"
 #include "BlackScreenBegin.h"
 #include "BlackScreenEnd.h"
+#include "TeleportNameWidget.h"
 #include "LightHouse.h"
 #include "../PlayerHouse.h"
 #include "Kismet/GameplayStatics.h"
 #include "../FindAppleCharacter.h"
+#include "Components/TextBlock.h"
 
 
 UWorldMapWidget::UWorldMapWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
@@ -23,6 +25,12 @@ UWorldMapWidget::UWorldMapWidget(const FObjectInitializer& objectInitializer) : 
 	if (UBlackScreenEndWidget.Succeeded())
 	{
 		BlackScreenEndClass = UBlackScreenEndWidget.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UTeleportNameWidget>  TeleportNameWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Map/WBP_TeleportName.WBP_TeleportName_C'"));
+	if (TeleportNameWidget.Succeeded())
+	{
+		TeleportNameWidgetClass = TeleportNameWidget.Class;
 	}
 }
 
@@ -91,21 +99,24 @@ void UWorldMapWidget::BridgeButtonNotHovered()
 
 void UWorldMapWidget::NPCHouseButtonClick()
 {
-	/* ¾îµÎ¿öÁö´Â À§Á¬ ¾Ö´Ï¸ÞÀÌ¼Ç Ãß°¡ */
+	/* ì–´ë‘ì›Œì§€ëŠ” ìœ„ì ¯ ì• ë‹ˆë©”ì´ì…˜ ì¶”ê°€ */
 	BlackScreenPopStart();
 	FTimerHandle TimerHandle;
 	float BlackScreenBeginTime = 0.8;
 
-	/* Å¸ÀÌ¸Ó ÁøÇà, À§Á¬ÀÌ Èå·ÁÁö´Â µ¿¾ÈÀº ÀÌµ¿ÇÏÁö ¾Êµµ·Ï Àá½Ã Delay È¿°ú */
+	CurrentPlaceNum = 2;
+
+	/* íƒ€ì´ë¨¸ ì§„í–‰, ìœ„ì ¯ì´ íë ¤ì§€ëŠ” ë™ì•ˆì€ ì´ë™í•˜ì§€ ì•Šë„ë¡ ìž ì‹œ Delay íš¨ê³¼ */
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
-			/* (FName) À§Ä¡·Î ÇÃ·¹ÀÌ¾î ÀÌµ¿ */
+			/* (FName) ìœ„ì¹˜ë¡œ í”Œë ˆì´ì–´ ì´ë™ */
 			TeleportPlayer("NPChouse");
 
 			BlackScreenBeginUIObject->RemoveFromParent();
 
-			/* Á¡Á¡ ¹à¾ÆÁö´Â À§Á¬ ¾Ö´Ï¸ÞÀÌ¼Ç Ãß°¡ */
+			/* ì ì  ë°ì•„ì§€ëŠ” ìœ„ì ¯ ì• ë‹ˆë©”ì´ì…˜ ì¶”ê°€ */
 			BlackScreenPopEnd();
+
 
 			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 		}), BlackScreenBeginTime, false);
@@ -119,6 +130,8 @@ void UWorldMapWidget::FrontDungeonButtonClick()
 	BlackScreenPopStart();
 	FTimerHandle TimerHandle;
 	float BlackScreenBeginTime = 0.8;
+
+	CurrentPlaceNum = 4;
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
@@ -141,6 +154,8 @@ void UWorldMapWidget::HomeButtonClick()
 	FTimerHandle TimerHandle;
 	float BlackScreenBeginTime = 0.8;
 
+	CurrentPlaceNum = 1;
+
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
 			TeleportPlayer("Home");
@@ -162,6 +177,8 @@ void UWorldMapWidget::BridgeButtonClick()
 	FTimerHandle TimerHandle;
 	float BlackScreenBeginTime = 0.8;
 
+	CurrentPlaceNum = 3;
+
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
 			TeleportPlayer("Bridge");
@@ -179,7 +196,6 @@ void UWorldMapWidget::BridgeButtonClick()
 
 void UWorldMapWidget::TeleportPlayer(FName Place)
 {
-	UE_LOG(LogTemp, Warning, TEXT("TeleportPlayer"));
 	if (Place == "Home")
 	{
 		TArray<AActor*> HomeActor;
@@ -196,7 +212,6 @@ void UWorldMapWidget::TeleportPlayer(FName Place)
 
 				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 				CharacterActor->SetActorRelativeLocation(MoveLocation);
-				UE_LOG(LogTemp, Warning, TEXT("Home teleport"));
 			}
 		}
 	}
@@ -242,4 +257,38 @@ void UWorldMapWidget::BlackScreenPopEnd()
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	//PlayerController->SetInputMode(FInputModeUIOnly());
 	PlayerController->SetShowMouseCursor(false);
+
+
+	FTimerHandle TimerHandle;
+	float BlackScreenBeginTime = 1.f;
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			BlackScreenEndUIObject->RemoveFromParent();
+
+			DisplayNameWidget();
+		}), BlackScreenBeginTime, false);
+}
+
+void UWorldMapWidget::DisplayNameWidget()
+{
+	TeleportNameWidgetUIObject = CreateWidget<UTeleportNameWidget>(GetWorld(), TeleportNameWidgetClass);
+
+	FString PlaceName;
+	if (CurrentPlaceNum == 1 ) { PlaceName = FString(TEXT("ë‚˜ì˜ ì§‘ ì•ž")); }
+	if (CurrentPlaceNum == 2) { PlaceName = FString(TEXT("íŒŒì¸ ì§‘ ì•ž ë“±ëŒ€")); }
+	if (CurrentPlaceNum == 3) { PlaceName = FString(TEXT("ë‹¤ë¦¬ ì•ž ë“±ëŒ€")); }
+	if (CurrentPlaceNum == 4) { PlaceName = FString(TEXT("ë˜ì „ ì•ž ë“±ëŒ€")); }
+	
+	TeleportNameWidgetUIObject->PlaceText->SetText(FText::FromString(PlaceName));
+
+	TeleportNameWidgetUIObject->AddToViewport();
+
+	FTimerHandle TimerHandle;
+	float AnimationTime = 5.5f;
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			TeleportNameWidgetUIObject->RemoveFromParent();
+		}), AnimationTime, false);
 }

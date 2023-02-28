@@ -40,7 +40,7 @@ ADropedItem::ADropedItem()
 	CollisionMesh->SetBoxExtent(FVector(15.f, 15.f, 15.f));
 	CollisionMesh->SetupAttachment(MyBox);
 	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
-	CollisionMesh->SetHiddenInGame(false);
+	CollisionMesh->SetHiddenInGame(true);
 
 	/* Press key Widget */
 	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_PressE.WBP_PressE_C'"));

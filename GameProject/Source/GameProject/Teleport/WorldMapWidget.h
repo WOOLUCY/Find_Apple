@@ -41,6 +41,11 @@ public:
 	TSubclassOf<class UUserWidget> BlackScreenEndClass;
 	UPROPERTY()
 	class UBlackScreenEnd* BlackScreenEndUIObject;
+	/* Teleport Name Widget */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> TeleportNameWidgetClass;
+	UPROPERTY()
+	class UTeleportNameWidget* TeleportNameWidgetUIObject;
 
 	/* Hover Action */
 	UFUNCTION()
@@ -71,10 +76,14 @@ public:
 	void BridgeButtonClick();
 
 private:
+	UPROPERTY()
+	int32 CurrentPlaceNum = 0;
 	UFUNCTION()
 	void TeleportPlayer(FName Place);
 	UFUNCTION()
 	void BlackScreenPopStart();
 	UFUNCTION()
 	void BlackScreenPopEnd();
+	UFUNCTION()
+	void DisplayNameWidget();
 };
