@@ -3,19 +3,28 @@
 
 #include "FarmGround.h"
 #include "Kismet/GameplayStatics.h"
-#include "FindAppleGameMode.h"
-#include "FindApplePlayerController.h"
-#include "FindAppleCharacter.h"
+
+#include "../FindAppleGameMode.h"
+#include "../FindApplePlayerController.h"
+#include "../FindAppleCharacter.h"
+
+#include "Plant.h"
+#include "Tomato.h"
+#include "RootPlant.h"
+
 
 // Sets default values
 AFarmGround::AFarmGround()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	
+
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("mesh"));
 	CheckMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CheckMesh"));
-
+	
 
 	Overlap = CreateDefaultSubobject<UMaterial>(TEXT("BLUE"));
 	NotWet = CreateDefaultSubobject<UMaterial>(TEXT("NotWet"));
@@ -39,7 +48,7 @@ AFarmGround::AFarmGround()
 	IsEmpty = true;
 	CanPutSeed = false;
 	IsWet = false;
-
+	Planted = nullptr;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_MESH
 	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/MouseOverlap.MouseOverlap'"));
@@ -106,20 +115,24 @@ void AFarmGround::BeginPlay()
 
 	if (TheWorld != nullptr) {
 
-		auto hero = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
 		Anim = Cast<UFindAppleAnimInstance>(hero->GetMesh()->GetAnimInstance());
 
-		if (Anim != nullptr) {
-			Anim->GrabSeed.BindUObject(this, &AFarmGround::GrabSeed);
-			Anim->RelaseSeed.BindUObject(this, &AFarmGround::ReleaseSeed);
+		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
+		AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(GameMode);
 
-
-
+		if (MyMode != nullptr) {
+			MyDelegateHandle = MyMode->DayChangeDelegate.AddUObject(
+				this, &AFarmGround::DayChange);
 		}
 
+
 	}
+
 }
 
+
+//필요없을듯??
 void AFarmGround::NotifyActorOnClicked(FKey PressedButton)
 {
 	if (PressedButton == EKeys::LeftMouseButton) {
@@ -127,18 +140,12 @@ void AFarmGround::NotifyActorOnClicked(FKey PressedButton)
 
 
 	}
-
-
-
-
 }
 
 void AFarmGround::NotifyActorBeginCursorOver()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("being dfkldkfldf"));
 	//여기서 뭐 파란색으로 표시한다거나하기
-
-
 
 }
 
@@ -148,50 +155,6 @@ void AFarmGround::NotifyActorEndCursorOver()
 
 
 }
-
-
-// Called every frame
-void AFarmGround::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-void AFarmGround::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	
-
-	auto hero = Cast<AFindAppleCharacter>(OtherActor);
-	if (hero != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("Overlap with Character"));
-		CheckMesh->SetVisibility(true);
-
-		ShowPlantWidget();
-		PlantWdiget->SeedDelegate.BindUObject(this, &AFarmGround::PutSeed);
-		PlantWdiget->WaterDelegate.BindUObject(this, &AFarmGround::Makecloud);
-
-	}
-	else {
-		return;
-	}
-
-}
-
-void AFarmGround::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	auto hero = Cast<AFindAppleCharacter>(OtherActor);
-	if (hero != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap end with Character"));
-		CheckMesh->SetVisibility(false);
-		HiddenPlantWidget();
-		PlantWdiget->SeedDelegate.Unbind();
-		PlantWdiget->WaterDelegate.Unbind();
-
-	}
-
-
-}
-
 void AFarmGround::ReleaseSeed()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("ReleaseSeed "));
@@ -208,23 +171,69 @@ void AFarmGround::GrabSeed()
 
 
 }
+//여기까지 필요엾을듯????
 
-void AFarmGround::Makecloud()
+// Called every frame
+void AFarmGround::Tick(float DeltaTime)
 {
-	if (IsWet) {
-		return;
+	Super::Tick(DeltaTime);
+
+}
+
+void AFarmGround::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+	auto hero = Cast<AFindAppleCharacter>(OtherActor);
+	if (hero != nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("Overlap with Character"));
+		CheckMesh->SetVisibility(true);
+
+		ShowPlantWidget();
 	}
 	else {
+		return;
+	}
+
+}
+
+void AFarmGround::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	auto hero = Cast<AFindAppleCharacter>(OtherActor);
+	if (hero != nullptr) {
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap end with Character"));
+		CheckMesh->SetVisibility(false);
+		HiddenPlantWidget();
+
+	}
+	else {
+		return;
+	}
+
+
+}
+
+void AFarmGround::PutWater()
+{
+	UE_LOG(LogTemp, Warning, TEXT("WHY??"));
+	if (IsWet ) {
+		return;
+	}
+	else if(!IsWet && !IsEmpty) {
 		cloud = GetWorld()->SpawnActor<ACloud>(GetActorLocation(), GetActorRotation());
 		Mesh->SetMaterial(0, Wet);
 		IsWet = true;
+		Planted->Check = true;
+		cloud = nullptr;
+		Planted->PutWater();
 	}
+	
 
 	
 }
 
 void AFarmGround::PutSeed()
 {
+
 	if (IsEmpty==false) {
 		//이미 점유되어있음 - 안내문띄우기
 
@@ -232,11 +241,22 @@ void AFarmGround::PutSeed()
 	}
 	else {
 
-
-
 		Anim->PlayPlantMontage();
 		IsEmpty = false;
+
+		UWorld* TheWorld = GetWorld();
+		if (TheWorld) {
+			//여기서 랜덤으로 나타나게 변경해야한다.
+			Planted = TheWorld->SpawnActor<APlant>(ATomato::StaticClass(), GetActorLocation(), FRotator());
+				
+		}
+
 	}
+}
+
+void AFarmGround::Harvest()
+{
+	Planted->Harvest();
 }
 
 
@@ -253,7 +273,15 @@ void AFarmGround::ShowPlantWidget()
 			PlantWdiget->AddToViewport();
 			MyContorller->SetInputMode(FInputModeGameAndUI());
 			MyContorller->bShowMouseCursor = true;
+
+			PlantWdiget->SeedDelegate.BindUObject(this, &AFarmGround::PutSeed);
+			PlantWdiget->WaterDelegate.BindUObject(this, &AFarmGround::PutWater);
+			PlantWdiget->HarvestDelegate.BindUObject(this, &AFarmGround::Harvest);
+
 		}
+
+
+
 	}
 
 
@@ -271,12 +299,34 @@ void AFarmGround::HiddenPlantWidget()
 		if (MyContorller != nullptr) {
 			PlantWdiget->RemoveFromParent();
 			MyContorller->SetInputMode(FInputModeGameOnly());
-
 			MyContorller->bShowMouseCursor = false;
+
+			PlantWdiget->SeedDelegate.Unbind();
+			PlantWdiget->WaterDelegate.Unbind();
+			PlantWdiget->HarvestDelegate.Unbind();
+
 		}
 	}
 
+}
+
+void AFarmGround::DayChange()
+{
+	UE_LOG(LogTemp, Warning, TEXT("FarmDaychange"));
+	if (IsWet) {
+		Mesh->SetMaterial(0, NotWet);	
+	//	Planted->DayChange(IsWet); 이게 문제인듯?? Planted에도 델리게이트를 넣어줘야할듯
+		//근데 IsWet은 어케넣어주냐 이말이지 - 		Planted->Check 로 해주고 거기서 바꾸자
+		
+
+		IsWet = false;
+	}
+	else {
+		if (Planted->Change == false &&!IsEmpty) {
+			IsEmpty = true;
+		}
 
 
+	}
 
 }

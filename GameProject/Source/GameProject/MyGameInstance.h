@@ -42,11 +42,16 @@ class GAMEPROJECT_API UMyGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 public:
+	UMyGameInstance();
 	Day Today;
 
-	FRotator Sun;
+	FRotator Sun{ 0,180.f,180.f };
+	void SetCharLoc(FVector Loc);
+	FVector GetCharLoc() { return CharLoc; };
+private:
+	FVector CharLoc{ 0,0,0 };
 
 
-
+	
 	
 };

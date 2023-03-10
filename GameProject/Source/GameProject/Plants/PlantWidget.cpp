@@ -3,9 +3,8 @@
 
 #include "PlantWidget.h"
 #include "Kismet/GamePlayStatics.h"
-#include "FindAppleGameMode.h"
+#include "../FindAppleGameMode.h"
 #include "Components/Button.h"
-
 
 
 void UPlantWidget::NativeConstruct() 
@@ -35,7 +34,7 @@ void UPlantWidget::PutSeed()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("PutSeed "));
 	SeedDelegate.ExecuteIfBound();
-
+	//SeedDelegate.Broadcast();
 }
 
 void UPlantWidget::PutWater()
@@ -43,12 +42,12 @@ void UPlantWidget::PutWater()
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("PutWater "));
 
 	WaterDelegate.ExecuteIfBound();
-
+	//WaterDelegate.Broadcast();
 }
 
 void UPlantWidget::GetHarvest()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("GetHarvest "));
 	HarvestDelegate.ExecuteIfBound();
-
+	//HarvestDelegate.Broadcast();
 }

@@ -11,7 +11,6 @@
  * 
  */
 
-
 DECLARE_MULTICAST_DELEGATE(TimerHandlerMultiDelegate)
 
 UCLASS()
@@ -28,7 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	TimerHandlerMultiDelegate DayChangeDelegate;
-	TimerHandlerMultiDelegate SunsetDelegate;
+	//TimerHandlerMultiDelegate SunsetDelegate;
 
 private:
 

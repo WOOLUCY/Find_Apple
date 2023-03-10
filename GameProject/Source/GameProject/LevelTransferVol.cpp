@@ -3,6 +3,7 @@
 
 #include "LevelTransferVol.h"
 #include "FindAppleGameMode.h"
+#include "MyGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -13,23 +14,45 @@ ALevelTransferVol::ALevelTransferVol()
 
 	TransferVol = CreateDefaultSubobject<UBoxComponent>(TEXT("TransferVolume"));
 	RootComponent = TransferVol;
-
+	
 	TransferVol->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 }
 
 void ALevelTransferVol::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	APawn* Pawn = Cast<APawn>(OtherActor);
-	//시간도 저장할까해서 넘겨줘야나,,
 	auto RecentMode = UGameplayStatics::GetGameMode(GetWorld());
 	
+	UWorld* TheWorld = GetWorld();
+	if (TheWorld != nullptr) {
+		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
+		AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(GameMode);
 
+		auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+		if (GameInstance != nullptr) {
+			FString LevelName = UGameplayStatics::GetCurrentLevelName(TheWorld);
+			FString Name = "MainMap1";
+			if (LevelName.Equals(Name)) {
+
+				UE_LOG(LogTemp, Warning, TEXT("LevelTransfer cpp eqaul"));
+				FVector temp = TransferVol->GetRelativeLocation();
+				FVector ForwardVector = TransferVol->GetForwardVector();
+				FVector MoveDirection = ForwardVector * 200;
+				FVector NewLocation = temp + MoveDirection;
+				GameInstance->SetCharLoc(NewLocation);
+
+			}
+
+		}
+	}
 	if (Cast<AFindAppleGameMode>(RecentMode) != nullptr) {
 
 
 	}
 
 	if (Pawn != nullptr) {
+
 		UGameplayStatics::OpenLevel(this, *TransferLevelName);
 	}
 }
@@ -39,6 +62,11 @@ void ALevelTransferVol::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ALevelTransferVol::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
 }
 
 // Called every frame

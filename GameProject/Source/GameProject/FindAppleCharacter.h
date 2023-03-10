@@ -9,6 +9,7 @@
 #include "Pick.h"
 #include "Ax.h"
 
+
 #include "FindAppleCharacter.generated.h"
 
 class UInputMappingContext;
@@ -30,6 +31,8 @@ protected:
 	virtual void PostInitializeComponents() override;
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason)override;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* CharacterMappingContext;
@@ -92,7 +95,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Action();
+	void DayChange();
 
+	FDelegateHandle MyDelegateHandle;
 
 	
 	UFUNCTION()
@@ -154,7 +159,9 @@ private:
 	float MaxHealth = 200;
 
 	UPROPERTY(VisibleAnywhere)
-	float Health;
+	float CurHealth;
+
+
 
 
 	UPROPERTY(VisibleAnywhere)

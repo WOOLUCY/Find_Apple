@@ -10,6 +10,7 @@
  * 
  */
 DECLARE_DELEGATE(AboutPlantDelegate)
+
 UCLASS()
 class GAMEPROJECT_API UPlantWidget : public UUserWidget
 {

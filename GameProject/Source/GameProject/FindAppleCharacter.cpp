@@ -3,7 +3,10 @@
 
 #include "FindAppleCharacter.h"
 #include "FindAppleAnimInstance.h"
-#include "FarmGround.h"
+#include "Plants/FarmGround.h"
+#include "FindAppleGameMode.h"
+#include "MyGameInstance.h"
+
 
 #include "InputMappingContext.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -187,12 +190,14 @@ AFindAppleCharacter::AFindAppleCharacter()
 
 }
 
+
+
 // Called when the game starts or when spawned
 void AFindAppleCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Health = MaxHealth;
+	CurHealth = MaxHealth;
 
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController)
@@ -215,6 +220,39 @@ void AFindAppleCharacter::BeginPlay()
 	else
 	{
 		QuestListUIObject->SetVisibility(ESlateVisibility::Visible);
+	}
+	
+	UWorld* TheWorld = GetWorld();
+	if (TheWorld != nullptr) {
+		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
+		AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(GameMode);
+
+		auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+		if (GameInstance != nullptr) {
+			FVector Loc = GameInstance->GetCharLoc();
+			if (Loc.Size() != 0) {
+				FString LevelName = UGameplayStatics::GetCurrentLevelName(TheWorld);
+				FString Name = "MainMap1";
+				if (LevelName.Equals(Name)) {
+
+					//UE_LOG(LogTemp, Warning, TEXT("Begin No Zero Play~~"));
+					SetActorLocation(GameInstance->GetCharLoc());
+				}
+			}
+			else {
+				// 현재 월드 객체의 GetMapName 함수를 호출하여 현재 레벨 이름 가져오기
+				UE_LOG(LogTemp, Warning, TEXT("Begin Zero Play~~"));
+				
+
+			}
+		}
+		if (MyMode != nullptr) {
+			MyDelegateHandle = MyMode->DayChangeDelegate.AddUObject(
+				this, &AFindAppleCharacter::DayChange);
+		}
+
+
 	}
 }
 
@@ -239,6 +277,34 @@ void AFindAppleCharacter::PossessedBy(AController* NewController)
 void AFindAppleCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
+
+}
+
+void AFindAppleCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+
+	//UWorld* TheWorld = GetWorld();
+	//if (TheWorld != nullptr) {
+
+	//	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	//	if (GameInstance != nullptr) {
+	//		//FVector Loc = GameInstance->GetCharLoc();
+	//		FString LevelName = UGameplayStatics::GetCurrentLevelName(TheWorld);
+	//		FString Name = "MainMap1";
+	//		if (LevelName.Equals(Name)) {
+	//			SetActorRotation(FRotator(0, 90.f, 0.f));
+	//			GameInstance->SetCharLoc(GetActorLocation()+FVector(0,100.f,0));
+
+	//		}
+
+
+	//	}
+
+
+	//}
+
 
 }
 
@@ -452,6 +518,13 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//CurHealth -= 0.5f;
+	//if (CurHealth < 100) {
+	//	UE_LOG(LogTemp, Warning, TEXT("CurHealth<100!!"));
+
+	//}
+
+
 }
 
 // Called to bind functionality to input
@@ -496,6 +569,12 @@ void AFindAppleCharacter::Action()
 	}
 
 
+}
+
+void AFindAppleCharacter::DayChange()
+{
+	//여기서 하루 지나가면 초기화되는 정보들 저장하면된다.
+	CurHealth = MaxHealth;
 }
 
 

@@ -2,7 +2,11 @@
 
 
 #include "Bed.h"
+#include "LevelSequencePlayer.h"
+#include "LevelSequence.h"
 #include "FindAppleCharacter.h"
+
+
 
 // Sets default values
 ABed::ABed()
@@ -59,8 +63,32 @@ void ABed::BeginPlay()
 	
 }
 
+
+//
+//void AMyActor::PlayMyCinematic()
+//{
+//	// Load a level sequence asset
+//	ULevelSequence* Cinematic = LoadObject<ULevelSequence>(nullptr, TEXT("/Game/MyCinematic"));
+//
+//	// Create a level sequence player
+//	ULevelSequencePlayer* Player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), Cinematic, FMovieSceneSequencePlaybackSettings(), OnCinematicFinished);
+//
+//	// Set the position to start playing from
+//	Player->SetPlaybackPosition(0.0f);
+//
+//	// Play the level sequence
+//	Player->Play();
+//}
+//
+//void AMyActor::OnCinematicFinished()
+//{
+//	// Handle any cleanup or post-cinematic logic here
+//}
+
 void ABed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	//여기서 시네마틱 일단 해보자
+
 
 
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
@@ -70,8 +98,17 @@ void ABed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActo
 		if (Bedding->GetStaticMesh() == NotLaying) {
 			Bedding->SetStaticMesh(Laying);
 		}
+			// Load a level sequence asset
+	ULevelSequence* Cinematic = LoadObject<ULevelSequence>(nullptr, TEXT("/Script/LevelSequence.LevelSequence'/Game/kaon/Sequence/Sleep.Sleep'"));
 
-		
+	// Create a level sequence player
+	//ULevelSequencePlayer* Player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), Cinematic, FMovieSceneSequencePlaybackSettings(), OnCinematicFinished);
+
+	// Set the position to start playing from
+	//Player->SetPlaybackPosition(0.0f);
+
+	// Play the level sequence
+//	Player->Play();
 
 	}
 	else {

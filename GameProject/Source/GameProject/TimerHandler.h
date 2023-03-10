@@ -18,6 +18,8 @@ class GAMEPROJECT_API ATimerHandler : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATimerHandler();
+
+	const float speed = 2000.f;
 	
 	UPROPERTY()
 		double TotalGameTime;
@@ -38,7 +40,7 @@ public:
 		FString GetGameTime();
 
 	Day Today;
-	FRotator SunRotation{ 0.f,180.f,180.f };
+	FRotator SunRotation;
 
 protected:
 	// Called when the game starts or when spawned

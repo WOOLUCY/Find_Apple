@@ -4,7 +4,6 @@
 
 #include "EngineMinimal.h"
 #include "Animation/AnimInstance.h"
-
 #include "FindAppleAnimInstance.generated.h"
 
 
@@ -38,7 +37,6 @@ private:
 		UAnimMontage* ActionMontage;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* PlantMontage;
-
 
 
 public:

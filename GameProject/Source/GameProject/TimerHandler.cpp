@@ -4,6 +4,8 @@
 #include "TimerHandler.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "FindAppleGAmeMode.h"
+
 // Sets default values
 ATimerHandler::ATimerHandler()
 {
@@ -28,12 +30,12 @@ void ATimerHandler::BeginPlay()
 			Today.SetTime(temp.GetDays(), temp.GetHours(), temp.GetMin(), temp.GetSec(), temp.GetTotal());
 			TotalGameTime = Today.GetTotal();
 
-			GameInstance->Sun = SunRotation;
+			SunRotation = GameInstance->Sun;
 		}
 
 
 	}
-
+	
 
 }
 
@@ -45,7 +47,8 @@ void ATimerHandler::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	if (GameInstance != nullptr) {
 		GameInstance->Today.SetTime(Today.GetDays(), Today.GetHours(), Today.GetMin(), Today.GetSec(),Today.GetTotal());
 
-		GameInstance->Sun = SunRotation;
+		GameInstance->Sun= SunRotation;
+
 
 	}
 
@@ -58,7 +61,7 @@ void ATimerHandler::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	SunRotation = FRotator(18.f / 60.f / 60.f * DeltaTime * 200, 0, 0);
+	SunRotation+= FRotator(18.f / 60.f / 60.f * DeltaTime * speed, 0, 0);
 
 	SetGameTime(DeltaTime);
 
@@ -68,17 +71,46 @@ void ATimerHandler::Tick(float DeltaTime)
 
 void ATimerHandler::SetGameTime(float DeltaTime)
 {
-	TotalGameTime += DeltaTime * 200;//원래100
+	TotalGameTime += DeltaTime * speed;//원래100
 
-	if (Today.GetDays() < TimeFormatter.GetDays()) {
+//	if (Today.GetHours() >=23&&Today.GetMin()>=59) {
+	if(Today.GetDays()!= TimeFormatter.GetDays()){
+		UE_LOG(LogTemp, Warning, TEXT("DayChange~~"));
+
+
+		UWorld* TheWorld = GetWorld();
+		if (TheWorld != nullptr) {
+			AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
+			AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(GameMode);
+			if (MyMode != nullptr) {
+				MyMode->DayChangeDelegate.Broadcast();
+			}
+		}
 		Today.SetDay(TimeFormatter.GetDays());
+		TotalGameTime = 0;
+
 
 	}
+
+
+
 	if (Today.GetHours() == 23) {
-		TotalGameTime = 0;
 		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==23"));
-		Today.SetDay(Today.GetDays()+1);
+	//	Today.SetDay(Today.GetDays()+1);
+
+		//UE_LOG(LogTemp, Warning, TEXT("DayChange~1111~"));
+
+		//UWorld* TheWorld = GetWorld();
+		//if (TheWorld != nullptr) {
+		//	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
+		//	AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(GameMode);
+		//	if (MyMode != nullptr) {
+		//		MyMode->DayChangeDelegate.Broadcast();
+		//	}
+		//}
+
 	}
+	
 
 	TimeFormatter = FTimespan(Today.GetDays(), 8 , 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
 	TotalGameTimeString = TimeFormatter.ToString();

@@ -12,3 +12,14 @@ void Day::SetTime(int Day, int Hour, int Min, int Sec,double total)
 	TotalGameTime = total;
 }
 
+UMyGameInstance::UMyGameInstance()
+{
+	Sun = FRotator(0, 180, 180);
+
+	//UE_LOG(LogTemp, Warning, TEXT("UMyInstance init??"));
+}
+
+void UMyGameInstance::SetCharLoc(FVector Loc)
+{
+	CharLoc = Loc;
+}

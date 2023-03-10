@@ -4,10 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "FindAppleAnimInstance.h"
 #include "Components/BoxComponent.h"
-#include "PlantWidget.h"
+
+#include "../FindAppleAnimInstance.h"
+
 #include "Cloud.h"
+#include "PlantWidget.h"
+
 #include "FarmGround.generated.h"
 
 UCLASS()
@@ -39,11 +42,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
 		TSubclassOf<class UPlantWidget> PlantWidgetClass;
 
+	FDelegateHandle MyDelegateHandle;
+
+
 private:
 	UPROPERTY()
 		class UPlantWidget* PlantWdiget;
 
 
+	class APlant* Planted;
 
 
 protected:
@@ -77,13 +84,16 @@ public:
 	void ShowPlantWidget();
 	void HiddenPlantWidget();
 
+	void DayChange();
 
 	void ReleaseSeed();
 	void GrabSeed();
 	
 	UFUNCTION()
-	void Makecloud();
+	void PutWater();
 	UFUNCTION()
 	void PutSeed();
+	UFUNCTION()
+	void Harvest();
 
 };
