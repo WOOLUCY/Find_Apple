@@ -25,21 +25,17 @@ ASunLight::ASunLight()
 	}
 
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> M_DAY
-	(TEXT("/Script/Engine.MaterialInstanceConstant'/Engine/MapTemplates/Sky/M_Procedural_Sky_Daytime.M_Procedural_Sky_Daytime'"));
-	if (M_DAY.Succeeded()) {
-		MDay = M_DAY.Object;
-		Sky->SetMaterial(0, M_DAY.Object);
-
-	}
-
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> M_NIGHT
 	(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/kaon/M_Procedural_Sky_Night.M_Procedural_Sky_Night'"));
 	if (M_NIGHT.Succeeded()) {
 		MNight = M_NIGHT.Object;
+		Sky->SetMaterial(0, MNight);
+
 
 	}
 	IsNight = false;
+
+	
 
 }
 
@@ -57,6 +53,14 @@ void ASunLight::BeginPlay()
 		
 		GameTimer = Cast<ATimerHandler>(TimeOfDayHandler[0]);
 	}
+
+	if (IsNight) {
+		Sky->SetVisibility(true);
+	}
+	else {
+		Sky->SetVisibility(false);
+
+	}
 }
 
 // Called every frame
@@ -65,26 +69,29 @@ void ASunLight::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	//static float sum = 0;
 
-	if (Sun->GetComponentRotation().Equals(FRotator(0, 0, 0),0.5f)) {
+	if (GameTimer->Today.GetHours() >= 18) {
 		//UE_LOG(LogTemp, Warning, TEXT("%f"), sum);
 		SetNight();
 	}
 
-	if (IsNight && GameTimer->Today.GetHours() == 20) {
-		Sun->SetIntensity(6.f);
-		Sun->LightingChannels.bChannel0 = false;
-	}
+	//if (IsNight && GameTimer->Today.GetHours()>= 20) {
+	//	Sun->SetIntensity(6.f);
+	////	Sun->LightingChannels.bChannel0 = false;
+	//}
 	if (IsNight && GameTimer->Today.GetHours() == 8  ) {
 		Sunrise();
 	}
 	
 
 	if (!IsNight) {
-		Sun->AddLocalRotation(GameTimer->SunRotation);
+		Sun->SetWorldRotation(FRotator(-GameTimer->SunRotation.Pitch, GameTimer->SunRotation.Yaw, GameTimer->SunRotation.Roll));
+
 	}
 	else {
 		Sky->AddLocalRotation(FRotator(0, DeltaTime, 0));
+
 	}
+
 }
 
 
@@ -93,9 +100,11 @@ void ASunLight::Sunrise()
 {
 	UE_LOG(LogTemp, Warning, TEXT("SUNRISZE"));
 
+	Sky->SetVisibility(false);
+
+
 	IsNight = false;		
 	Sun->LightingChannels.bChannel0 = true;
-	Sky->SetMaterial(0, MDay);
 	Sun->SetLightFColor(FColor(255.f,255.f,255.f,255.f));
 	GameTimer->SunRotation = FRotator(BasicRot);
 	Sun->SetWorldRotation(GameTimer->SunRotation);
@@ -107,13 +116,13 @@ void ASunLight::Sunrise()
 void ASunLight::SetNight()
 {
 	IsNight = true;
-	GameTimer->SunRotation = FRotator(-90.f, 0, 0);
+	GameTimer->SunRotation = FRotator(10, 0, 0);
+	Sky->SetVisibility(true);
 
 	Sun->SetWorldRotation(GameTimer->SunRotation);
 	Sun->SetIntensity(4.f);
-	Sun->SetLightFColor(BlueColor); //B=179,G=101,R=73,A=255)
+//	Sun->SetLightFColor(BlueColor); //B=179,G=101,R=73,A=255)
 	Sky->SetMaterial(0, MNight);
-
 
 
 }
