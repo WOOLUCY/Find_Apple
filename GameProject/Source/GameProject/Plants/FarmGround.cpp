@@ -315,18 +315,18 @@ void AFarmGround::DayChange()
 	UE_LOG(LogTemp, Warning, TEXT("FarmDaychange"));
 	if (IsWet) {
 		Mesh->SetMaterial(0, NotWet);	
-	//	Planted->DayChange(IsWet); 이게 문제인듯?? Planted에도 델리게이트를 넣어줘야할듯
+		Planted->DayChange();// 이게 문제인듯?? Planted에도 델리게이트를 넣어줘야할듯
 		//근데 IsWet은 어케넣어주냐 이말이지 - 		Planted->Check 로 해주고 거기서 바꾸자
 		
 
 		IsWet = false;
 	}
-	else {
-		if (Planted->Change == false &&!IsEmpty) {
-			IsEmpty = true;
-		}
+	//else {
+	//	if (Planted->Change == false &&!IsEmpty) {
+	//		IsEmpty = true;
+	//	}
 
 
-	}
+	//}
 
 }

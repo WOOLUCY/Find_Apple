@@ -19,22 +19,7 @@ void APlant::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UWorld* TheWorld = GetWorld();
 
-	if (TheWorld != nullptr) {
-
-
-		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
-		AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(GameMode);
-
-		if (MyMode != nullptr) {
-			MyDelegateHandle = MyMode->DayChangeDelegate.AddUObject(
-				this, &APlant::DayChange);
-		}
-
-
-	}
-	
 }
 
 void APlant::EndPlay(const EEndPlayReason::Type EndPlayReason)
