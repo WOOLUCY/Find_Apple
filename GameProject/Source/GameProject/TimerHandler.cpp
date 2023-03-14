@@ -74,7 +74,7 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 	TotalGameTime += DeltaTime * speed;//¿ø·¡100
 
 //	if (Today.GetHours() >=23&&Today.GetMin()>=59) {
-	if(Today.GetDays()!= TimeFormatter.GetDays()){
+	if(Today.GetDays()!= TimeFormatter.GetDays() &&TimeFormatter.GetSeconds()==0){
 		UE_LOG(LogTemp, Warning, TEXT("DayChange~~"));
 
 
@@ -112,7 +112,7 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 	}
 	
 
-	TimeFormatter = FTimespan(Today.GetDays(), 8 , 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
+	TimeFormatter = FTimespan(Today.GetDays(), 20 , 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
 	TotalGameTimeString = TimeFormatter.ToString();
 
 
