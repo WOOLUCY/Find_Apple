@@ -29,7 +29,7 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	UFUNCTION()
-		void UpdateHeartCount();
+		void UpdateHeartCount(float DeltaSeconds);
 
 	UFUNCTION()
 		void UpdateToolImage();

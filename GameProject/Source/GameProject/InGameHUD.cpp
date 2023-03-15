@@ -43,15 +43,15 @@ void AInGameHUD::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	UpdateHeartCount();
+	UpdateHeartCount(DeltaSeconds);
 	UpdateToolImage();
 }
 
-void AInGameHUD::UpdateHeartCount()
+void AInGameHUD::UpdateHeartCount(float DeltaSeconds)
 {
 	if (ToolWidget)
 	{
-		ToolWidget->UpdateHeartCount();
+		ToolWidget->UpdateHeartCount(DeltaSeconds);
 	}
 }
 

@@ -28,7 +28,7 @@ void UToolWidget::UpdateComboCount(int32 Value)
 	//}
 }
 
-void UToolWidget::UpdateHeartCount()
+void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 {
 	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
 	//auto PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
@@ -38,6 +38,98 @@ void UToolWidget::UpdateHeartCount()
 	//	UE_LOG(LogClass, Warning, TEXT("Player's HP Is FULL"));
 	//}
 
+	// TODO: 투명도 서서히 줄이기
+	if (MyChar->CurHealth >= 200.f)
+	{
+		HeartImg_10->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_10->SetOpacity(0.f);
+	}
+
+	if (MyChar->CurHealth >= 180.f)
+	{
+		HeartImg_09->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_09->SetOpacity(0.f);
+	}
+
+	if (MyChar->CurHealth >= 160.f)
+	{
+		HeartImg_08->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_08->SetOpacity(0.f);
+	}
+
+	if (MyChar->CurHealth >= 140.f)
+	{
+		HeartImg_07->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_07->SetOpacity(0.f);
+	}
+
+	if (MyChar->CurHealth >= 120.f)
+	{
+		HeartImg_06->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_06->SetOpacity(0.f);
+	}
+
+	if (MyChar->CurHealth >= 100.f)
+	{
+		HeartImg_05->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_05->SetOpacity(0.f);
+	}
+
+	if (MyChar->CurHealth >= 80.f)
+	{
+		HeartImg_04->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_04->SetOpacity(0.f);
+	}
+
+	if (MyChar->CurHealth >= 60.f)
+	{
+		HeartImg_03->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_03->SetOpacity(0.f);
+	}
+
+
+	if (MyChar->CurHealth >= 40.f)
+	{
+		HeartImg_02->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_02->SetOpacity(0.f);
+	}
+
+
+	if (MyChar->CurHealth >= 20.f)
+	{
+		HeartImg_01->SetOpacity(1.f);
+	}
+	else
+	{
+		HeartImg_01->SetOpacity(0.f);
+	}
 }
 
 void UToolWidget::UpdateToolImage()
@@ -69,30 +161,7 @@ void UToolWidget::UpdateToolImage()
 		PickImg->SetOpacity(0.f);
 	}
 
-	//if (MyChar->CurEquipNum == 1)
-	//{
-	//	SwordImg->SetVisibility(ESlateVisibility::Visible);
-	//	AxeImg->SetVisibility(ESlateVisibility::Hidden);
-	//	PickImg->SetVisibility(ESlateVisibility::Hidden);
-	//}
-	//else if (MyChar->CurEquipNum == 2)
-	//{
-	//	SwordImg->SetVisibility(ESlateVisibility::Hidden);
-	//	AxeImg->SetVisibility(ESlateVisibility::Visible);
-	//	PickImg->SetVisibility(ESlateVisibility::Hidden);
-	//}
-	//else if (MyChar->CurEquipNum == 3)
-	//{
-	//	SwordImg->SetVisibility(ESlateVisibility::Hidden);
-	//	AxeImg->SetVisibility(ESlateVisibility::Hidden);
-	//	PickImg->SetVisibility(ESlateVisibility::Visible);
-	//}
-	//else if (MyChar->CurEquipNum == 0)
-	//{
-	//	SwordImg->SetVisibility(ESlateVisibility::Hidden);
-	//	AxeImg->SetVisibility(ESlateVisibility::Hidden);
-	//	PickImg->SetVisibility(ESlateVisibility::Hidden);
-	//}
+
 }
 
 void UToolWidget::ResetCombo()
