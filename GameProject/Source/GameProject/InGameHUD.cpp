@@ -42,6 +42,25 @@ void AInGameHUD::DrawHUD()
 void AInGameHUD::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	UpdateHeartCount(DeltaSeconds);
+	UpdateToolImage();
+}
+
+void AInGameHUD::UpdateHeartCount(float DeltaSeconds)
+{
+	if (ToolWidget)
+	{
+		ToolWidget->UpdateHeartCount(DeltaSeconds);
+	}
+}
+
+void AInGameHUD::UpdateToolImage()
+{
+	if (ToolWidget)
+	{
+		ToolWidget->UpdateToolImage();
+	}
 }
 
 void AInGameHUD::UpdateComboCount(int32 Value)

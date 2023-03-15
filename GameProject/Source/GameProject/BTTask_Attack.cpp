@@ -4,6 +4,7 @@
 #include "BTTask_Attack.h"
 #include "AIController.h"
 #include "FindAppleCharacter.h"
+#include "Widgets/Text/ISlateEditableTextWidget.h"
 
 UBTTask_Attack::UBTTask_Attack()
 {
@@ -14,16 +15,26 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
+	/* Attack Player */
+	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	// TODO: 피격 상황 더 매끄럽게 고칠 것
+	MyChar->CurHealth -= 20.f;	// damage
+	UE_LOG(LogClass, Warning, TEXT("Enemy Is Attacking"));
+	UE_LOG(LogClass, Warning, TEXT("Player Current HP: %f"), MyChar->CurHealth);
+
 	if (OwnerComp.GetAIOwner() == nullptr)
 	{
 		return EBTNodeResult::Failed;
 	}
 
 	AFindAppleCharacter* Character = Cast<AFindAppleCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+
 	if (Character == nullptr)
 	{
 		return EBTNodeResult::Failed;
 	}
+
 
 	Character->Action();
 

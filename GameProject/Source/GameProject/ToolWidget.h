@@ -20,22 +20,39 @@ protected:
 public:
 	//UToolWidget(const FObjectInitializer& ObjectInitalizer);
 
+	// TODO: Combo 관련 함수 삭제
 	void UpdateComboCount(int32 Value);
+	void UpdateHeartCount(float DeltaSeconds);
+	void UpdateToolImage();
 
 	void ResetCombo();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	//class UTextBlock* TXTCombo;
 	class UImage* SwordImg;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UImage* PickImg;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UImage* AxeImg;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_01;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_02;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_03;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_04;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_05;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_06;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_07;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_08;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_09;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_10;
 
 };
