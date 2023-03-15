@@ -117,7 +117,7 @@ float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 			Health -= 20.f;
 
 			UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
-			UE_LOG(LogClass, Warning, TEXT("Slime Currnent HP: %f"), Health);
+			UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
 
 			IsAttacked = false;
 		}, 0.5f, false);
