@@ -29,6 +29,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	float Health = 100.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	bool IsAttacked = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	bool IsAttacking = false;
+
 	UPROPERTY(EditAnywhere, Category = "Interaction")
 	UMaterialInterface* Material01 = nullptr;
 
@@ -45,4 +51,5 @@ public:
 	UMaterialInterface* Material05 = nullptr;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 };

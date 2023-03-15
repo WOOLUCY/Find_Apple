@@ -109,10 +109,20 @@ float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	Health -= 20.f;
 
-	UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
-	UE_LOG(LogClass, Warning, TEXT("Slime Currnent HP: %f"), Health);
+
+	IsAttacked = true;
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+		{
+			Health -= 20.f;
+
+			UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
+			UE_LOG(LogClass, Warning, TEXT("Slime Currnent HP: %f"), Health);
+
+			IsAttacked = false;
+		}, 0.5f, false);
 
 	return Damage;
 }
