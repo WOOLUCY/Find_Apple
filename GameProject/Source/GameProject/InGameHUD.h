@@ -29,13 +29,19 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	UFUNCTION()
+		void UpdateHeartCount();
+
+	UFUNCTION()
+		void UpdateToolImage();
+
+	UFUNCTION()
 		void UpdateComboCount(int32 Value);
 
 	UFUNCTION()
 		void ResetCombo();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
-		TSubclassOf<UUserWidget> ToolWidgetClass;
+	TSubclassOf<UUserWidget> ToolWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> TimeWidgetClass;

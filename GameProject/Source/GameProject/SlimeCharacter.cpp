@@ -109,8 +109,6 @@ float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-
-
 	IsAttacked = true;
 
 	FTimerHandle TimerHandle;

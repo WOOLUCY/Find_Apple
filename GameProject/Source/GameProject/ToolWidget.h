@@ -21,12 +21,18 @@ public:
 	//UToolWidget(const FObjectInitializer& ObjectInitalizer);
 
 	void UpdateComboCount(int32 Value);
+	void UpdateHeartCount();
+	void UpdateToolImage();
 
 	void ResetCombo();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	//class UTextBlock* TXTCombo;
 	class UImage* SwordImg;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UImage* PickImg;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UImage* AxeImg;
+
 	class UImage* HeartImg_01;
 	class UImage* HeartImg_02;
 	class UImage* HeartImg_03;

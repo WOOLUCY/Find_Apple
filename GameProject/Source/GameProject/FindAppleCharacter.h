@@ -142,6 +142,13 @@ public:
 	UPROPERTY()
 	bool bWorldMapWidget = false;
 
+	// HUD에서 사용해야 돼가지고, private에서 public으로 뺐습니다.
+	UPROPERTY(VisibleAnywhere)
+	float CurHealth;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 CurEquipNum;
+
 private:
 
 
@@ -158,14 +165,7 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 200;
 
-	UPROPERTY(VisibleAnywhere)
-	float CurHealth;
 
-
-
-
-	UPROPERTY(VisibleAnywhere)
-	int32 CurEquipNum; 
 
 	
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
