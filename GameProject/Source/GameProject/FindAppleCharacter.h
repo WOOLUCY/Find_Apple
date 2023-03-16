@@ -149,6 +149,10 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	int32 CurEquipNum;
 
+	/* Camera Shake */
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TSubclassOf<class UCameraShakeBase>  HitCameraShakeClass;
+
 private:
 
 
