@@ -32,7 +32,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Sword)
 		UStaticMeshComponent* Sword;
-	UPROPERTY(VisibleAnywhere, Category = Sword)
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = Sword)
 		UBoxComponent* CollisionBox;
 
 	UPROPERTY(VisibleAnywhere, Category = Sword)

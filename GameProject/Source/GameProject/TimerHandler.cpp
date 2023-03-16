@@ -77,6 +77,7 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 	if(Today.GetDays()!= TimeFormatter.GetDays() &&TimeFormatter.GetSeconds()==0){
 		UE_LOG(LogTemp, Warning, TEXT("DayChange~~"));
 
+		Today.SetDay(TimeFormatter.GetDays());
 
 		UWorld* TheWorld = GetWorld();
 		if (TheWorld != nullptr) {
@@ -86,7 +87,6 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 				MyMode->DayChangeDelegate.Broadcast();
 			}
 		}
-		Today.SetDay(TimeFormatter.GetDays());
 		TotalGameTime = 0;
 
 

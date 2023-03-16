@@ -15,9 +15,8 @@ ASword::ASword()
 	RootComponent = Sword;
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
 	CollisionBox->SetupAttachment(RootComponent);
-	CollisionBox->SetRelativeScale3D(FVector(0.06f, 0.73f, 0.04f));
-	CollisionBox->SetRelativeLocation(FVector(0.f, 37.191134f, 0.f));
-
+	CollisionBox->SetRelativeScale3D(FVector(1.360000, 1.400000, 2.925000));
+	CollisionBox->SetRelativeLocation(FVector(0.f, 49.554264, 1.848582));
 
 	Damage = 10.f;
 

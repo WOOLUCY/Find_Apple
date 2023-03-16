@@ -26,7 +26,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Pick)
 		UStaticMeshComponent* Pick;
-	UPROPERTY(VisibleAnywhere, Category = Pick)
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = Pick)
 		UBoxComponent* CollisionBox;
 
 	UPROPERTY(VisibleAnywhere, Category = Pick)
