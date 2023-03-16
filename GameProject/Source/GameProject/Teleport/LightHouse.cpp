@@ -105,11 +105,15 @@ void ALightHouse::Tick(float DeltaTime)
 
 void ALightHouse::TimelineProgress(float Value)
 {
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
 	FVector NewLocation = FMath::Lerp(StartLoc, EndLoc, Value);
 	FRotator NewRotation = FMath::Lerp(StartRot, EndRot, Value);
 
 	FirstCameraComponent->SetWorldLocation(NewLocation);
 	FirstCameraComponent->SetWorldRotation(NewRotation);
+
+	PlayerController->SetViewTarget(FirstCameraComponent->GetOwner());
 
 	//PlayerController->GetCharacter()->GetCharacterMovement()->Velocity.X = 80.f;
 }
@@ -144,7 +148,6 @@ void ALightHouse::TimelineFinished()
 
 			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 
-			PrimaryActorTick.bCanEverTick = false;
 		}), 1.f, false);
 }
 
@@ -264,6 +267,8 @@ void ALightHouse::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 				{
+					PrimaryActorTick.bCanEverTick = false;
+
 					MapNameWidgetUIObject->RemoveFromParent();
 
 					GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
