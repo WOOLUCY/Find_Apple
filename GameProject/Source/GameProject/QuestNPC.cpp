@@ -358,6 +358,8 @@ void AQuestNPC::TimelineProgress(float Value)
 	FVector NewLocation = FMath::Lerp(StartLoc, EndLoc, Value);
 	FRotator NewRotation = FMath::Lerp(StartRot, EndRot, Value);
 
+	UE_LOG(LogTemp, Warning, TEXT("TimeLine Progress"));
+
 	CharacterActor->SetActorRelativeLocation(NewLocation);
 	CharacterActor->SetActorRelativeRotation(NewRotation);
 	PlayerController->GetCharacter()->GetCharacterMovement()->Velocity.X = 80.f;
