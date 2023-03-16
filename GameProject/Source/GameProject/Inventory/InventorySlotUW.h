@@ -70,6 +70,4 @@ public:
 
 	UFUNCTION()
 	void ShowToolTip();
-
-
 };

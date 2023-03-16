@@ -30,23 +30,75 @@ void UWorldMapWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	// NPC 집에 대한 클릭, 호버, 비호버 처리
+	TArray<AActor*> NPCHouses;
+	//tag = FrontDungeon, NPCHouse, Bridge
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ALightHouse::StaticClass(), "NPCHouse", NPCHouses);
+
+	for (AActor* Actor : NPCHouses)
+	{
+		ALightHouse* LightHouse = Cast<ALightHouse>(Actor);
+
+		if (LightHouse != nullptr)
+		{
+			// 등록이 완료된 곳이라면 
+			if (LightHouse->isPressed) 
+			{
+				NPChouse->OnHovered.AddDynamic(this, &UWorldMapWidget::NPCHouseButtonHovered);
+				NPChouse->OnUnhovered.AddDynamic(this, &UWorldMapWidget::NPCHouseButtonNotHovered);
+				NPChouse->OnClicked.AddDynamic(this, &UWorldMapWidget::NPCHouseButtonClick);
+			}
+		}
+	}
+
+	// 다리 앞 등대에 대한 클릭, 호버, 비호버 처리
+	TArray<AActor*> Bridges;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ALightHouse::StaticClass(), "Bridge", Bridges);
+
+	for (AActor* Actor : Bridges)
+	{
+		ALightHouse* LightHouse = Cast<ALightHouse>(Actor);
+
+		if (LightHouse != nullptr)
+		{
+			// 등록이 완료된 곳이라면 
+			if (LightHouse->isPressed)
+			{
+				Bridge->OnHovered.AddDynamic(this, &UWorldMapWidget::BridgeButtonHovered);
+				Bridge->OnUnhovered.AddDynamic(this, &UWorldMapWidget::BridgeButtonNotHovered);
+				Bridge->OnClicked.AddDynamic(this, &UWorldMapWidget::BridgeButtonClick);
+			}
+		}
+	}
+	
+	// 던전 앞 등대에 대한 클릭, 호버, 비호버 처리
+	TArray<AActor*> Dungeons;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ALightHouse::StaticClass(), "FrontDungeon", Dungeons);
+
+	for (AActor* Actor : Dungeons)
+	{
+		ALightHouse* LightHouse = Cast<ALightHouse>(Actor);
+
+		if (LightHouse != nullptr)
+		{
+			// 등록이 완료된 곳이라면 
+			if (LightHouse->isPressed)
+			{
+				FrontDungeon->OnHovered.AddDynamic(this, &UWorldMapWidget::FrontDungeonButtonHovered);
+				FrontDungeon->OnUnhovered.AddDynamic(this, &UWorldMapWidget::FrontDungeonButtonNotHovered);
+				FrontDungeon->OnClicked.AddDynamic(this, &UWorldMapWidget::FrontDungeonButtonClick);
+			}
+		}
+	}
+
 	/* Hover */
-	NPChouse->OnHovered.AddDynamic(this, &UWorldMapWidget::NPCHouseButtonHovered);
 	Home->OnHovered.AddDynamic(this, &UWorldMapWidget::HomeButtonHovered);
-	FrontDungeon->OnHovered.AddDynamic(this, &UWorldMapWidget::FrontDungeonButtonHovered);
-	Bridge->OnHovered.AddDynamic(this, &UWorldMapWidget::BridgeButtonHovered);
 
 	/* Not Hover */
-	NPChouse->OnUnhovered.AddDynamic(this, &UWorldMapWidget::NPCHouseButtonNotHovered);
 	Home->OnUnhovered.AddDynamic(this, &UWorldMapWidget::HomeButtonNotHovered);
-	FrontDungeon->OnUnhovered.AddDynamic(this, &UWorldMapWidget::FrontDungeonButtonNotHovered);
-	Bridge->OnUnhovered.AddDynamic(this, &UWorldMapWidget::BridgeButtonNotHovered);
 
 	/* Click (Teleport) */
-	NPChouse->OnClicked.AddDynamic(this, &UWorldMapWidget::NPCHouseButtonClick);
 	Home->OnClicked.AddDynamic(this, &UWorldMapWidget::HomeButtonClick);
-	FrontDungeon->OnClicked.AddDynamic(this, &UWorldMapWidget::FrontDungeonButtonClick);
-	Bridge->OnClicked.AddDynamic(this, &UWorldMapWidget::BridgeButtonClick);
 }
 
 void UWorldMapWidget::NPCHouseButtonHovered()
@@ -179,7 +231,6 @@ void UWorldMapWidget::BridgeButtonClick()
 
 void UWorldMapWidget::TeleportPlayer(FName Place)
 {
-	UE_LOG(LogTemp, Warning, TEXT("TeleportPlayer"));
 	if (Place == "Home")
 	{
 		TArray<AActor*> HomeActor;
