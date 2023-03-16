@@ -21,11 +21,15 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	// TODO: 피격 상황 더 매끄럽게 고칠 것
 	if(MyChar->HitCameraShakeClass)
 	{
+		// Camera Shake
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(MyChar->HitCameraShakeClass);
 	}
-	MyChar->CurHealth -= 20.f;	// damage
+
+	float NewHealth = MyChar->GetCurHealth();
+	NewHealth -= 20.f;
+	MyChar->SetCurHealth(NewHealth);
 	UE_LOG(LogClass, Warning, TEXT("Enemy Is Attacking"));
-	UE_LOG(LogClass, Warning, TEXT("Player Current HP: %f"), MyChar->CurHealth);
+	UE_LOG(LogClass, Warning, TEXT("Player Current HP: %f"), NewHealth);
 
 
 	if (OwnerComp.GetAIOwner() == nullptr)

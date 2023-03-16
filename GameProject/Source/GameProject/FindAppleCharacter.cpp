@@ -24,6 +24,7 @@
 #include "Dialogue/QuestListWidget.h"
 #include "Teleport/WorldMapWidget.h"
 #include "Components/InputComponent.h"
+#include "Components/PostProcessComponent.h"
 
 // Sets default values
 AFindAppleCharacter::AFindAppleCharacter()
@@ -188,6 +189,9 @@ AFindAppleCharacter::AFindAppleCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
 
+	/* Post Process Material */
+	PostProcessComp = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcessComponent"));
+	PostProcessComp->SetupAttachment(GetRootComponent());
 }
 
 
@@ -221,7 +225,7 @@ void AFindAppleCharacter::BeginPlay()
 	{
 		QuestListUIObject->SetVisibility(ESlateVisibility::Visible);
 	}
-	
+
 	UWorld* TheWorld = GetWorld();
 	if (TheWorld != nullptr) {
 		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
@@ -243,7 +247,7 @@ void AFindAppleCharacter::BeginPlay()
 			else {
 				// 현재 월드 객체의 GetMapName 함수를 호출하여 현재 레벨 이름 가져오기
 				UE_LOG(LogTemp, Warning, TEXT("Begin Zero Play~~"));
-				
+
 
 			}
 		}
@@ -254,6 +258,9 @@ void AFindAppleCharacter::BeginPlay()
 
 
 	}
+
+	/* Post Process Effect */
+	PostProcessComp->Settings.VignetteIntensity = 1.f;
 }
 
 void AFindAppleCharacter::PostInitializeComponents()
