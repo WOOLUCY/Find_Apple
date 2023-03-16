@@ -3,6 +3,8 @@
 
 
 #include "FindAppleAnimInstance.h"
+#include "FindApplePlayerController.h"
+#include "Engine/EngineTypes.h"
 #include "FindAppleCharacter.h"
 
 UFindAppleAnimInstance::UFindAppleAnimInstance()
@@ -48,18 +50,56 @@ void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UFindAppleAnimInstance::PlayActionMontage()
 {
+	static float PlayLength = ActionMontage->GetPlayLength();
 
-	Montage_Play(ActionMontage, 1.f);
-	//Montage_JumpToSection(TEXT("PlantSeed"));
+	if (OffInput()) {
+		Montage_Play(ActionMontage, 1.f);
+		UWorld* World = GetWorld();
+		if (World){
+			FTimerManager& TimerManager = World->GetTimerManager();
+			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, PlayLength, false);
+		}
+
+	}
+	// 애니메이션이 끝나면 입력 활성화
 
 }
 
 void UFindAppleAnimInstance::PlayPlantMontage()
 {
+	static float PlayLength = PlantMontage->GetPlayLength()/2.f;
 
-	Montage_Play(PlantMontage, 1.5f);
-	//Montage_JumpToSection(TEXT("PlantSeed"));
+	if (OffInput()) {
+		Montage_Play(PlantMontage, 2.f);
+		UWorld* World = GetWorld();
+		if (World) {
+			FTimerManager& TimerManager = World->GetTimerManager();
+			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, PlayLength, false);
+		}
+	}
 
+
+}
+
+bool UFindAppleAnimInstance::OffInput()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	AFindApplePlayerController* Mycontol = Cast<AFindApplePlayerController>(PlayerController);
+	if (Mycontol != nullptr) {
+		Mycontol->GetPawn()->DisableInput(Mycontol);
+		return true;
+	}
+	return false;
+
+}
+
+void UFindAppleAnimInstance::OnInput()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	AFindApplePlayerController* Mycontol = Cast<AFindApplePlayerController>(PlayerController);
+	if (Mycontol != nullptr) {
+		Mycontol->GetPawn()->EnableInput(Mycontol);
+	}
 }
 
 void UFindAppleAnimInstance::AnimNotify_HitStart()
@@ -74,17 +114,6 @@ void UFindAppleAnimInstance::AnimNotify_HitEnd()
 	HitCheckEnd.ExecuteIfBound();
 
 
-}
-
-void UFindAppleAnimInstance::AnimNotify_Release()
-{
-	RelaseSeed.ExecuteIfBound();
-
-}
-
-void UFindAppleAnimInstance::AnimNotify_Grab()
-{
-	GrabSeed.ExecuteIfBound();
 }
 
 
