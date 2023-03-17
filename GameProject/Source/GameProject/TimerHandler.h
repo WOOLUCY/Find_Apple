@@ -19,7 +19,7 @@ public:
 	// Sets default values for this actor's properties
 	ATimerHandler();
 
-	const float speed = 200.f;
+	const float speed = 2000.f;
 	
 	UPROPERTY()
 		double TotalGameTime;
