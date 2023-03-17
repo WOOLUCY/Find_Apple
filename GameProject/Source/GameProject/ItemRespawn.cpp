@@ -97,10 +97,8 @@ void AItemRespawn::GetRandomPointInCollisionBox()
 
 	ADropedItem* DropedActor;
 
-	DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), FVector(10000.f, 10000.f, 10000.f), SpawnRotation, SpawnParams);
+	DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
 	DropedActor->CollisionMesh->SetBoxExtent(FVector(15.f, 15.f, 15.f));
-	/* 자꾸 캐릭터와 충돌이 나서 먼 곳으로 보내버리고 위치 조정 */
-	DropedActor->SetActorLocation(SpawnLocation);
 	DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
 	DropedActor->ItemFresh(SpawnItemName);
 

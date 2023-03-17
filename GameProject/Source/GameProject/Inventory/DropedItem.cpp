@@ -65,7 +65,9 @@ void ADropedItem::BeginPlay()
 	Super::BeginPlay();
 
 	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
-	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &ADropedItem::CollisionStart, 3.0f, false);
+
+	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
+	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
 
 	if (ItemDataTable != nullptr)
 	{
@@ -87,8 +89,7 @@ void ADropedItem::BeginPlay()
 	bIsPressKeyValid = false;
 	CollisionValid = false;
 
-	CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &ADropedItem::OnOverlapEnd);
-	CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &ADropedItem::OnOverlapBegin);
+	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &ADropedItem::CollisionStart, 1.0f, false);
 }
 
 // Called every frame
@@ -106,17 +107,18 @@ void ADropedItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	{
 		if (CollisionValid) 
 		{
-			AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-			AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
-			MyCharacter->PressE = true;
-			MyCharacter->LookAtActorPressE = this;
+			AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(OtherActor);
 
-			if (bIsPressKeyValid == false) 
-			{
-				bIsPressKeyValid = true;
-				PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
-				PressKeyWidgetUIObejct->AddToViewport();
-				// UE_LOG(LogTemp, Warning, TEXT("Item Name: %s"), *ItemName.ToString());
+			if (MyCharacter) {
+				if (bIsPressKeyValid == false)
+				{
+					MyCharacter->PressE = true;
+					MyCharacter->LookAtActorPressE = this;
+					bIsPressKeyValid = true;
+					PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
+					PressKeyWidgetUIObejct->AddToViewport();
+					// UE_LOG(LogTemp, Warning, TEXT("Item Name: %s"), *ItemName.ToString());
+				}
 			}
 		}
 	}
@@ -129,14 +131,15 @@ void ADropedItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	{
 		if (CollisionValid)
 		{
-			AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-			AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
-			MyCharacter->PressE = false;
+			AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(OtherActor);
 
-			if (bIsPressKeyValid == true)
-			{
-				PressKeyWidgetUIObejct->RemoveFromParent();
-				bIsPressKeyValid = false;
+			if (MyCharacter) {
+				if (bIsPressKeyValid == true)
+				{
+					MyCharacter->PressE = false;
+					PressKeyWidgetUIObejct->RemoveFromParent();
+					bIsPressKeyValid = false;
+				}
 			}
 		}
 	}
@@ -203,4 +206,5 @@ void ADropedItem::CollisionStart()
 {
 	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 	CollisionValid = true;
+
 }

@@ -42,7 +42,7 @@ void UWorldMapWidget::NativeConstruct()
 		if (LightHouse != nullptr)
 		{
 			// 등록이 완료된 곳이라면 
-			if (LightHouse->isPressed) 
+			if ( true /*LightHouse->isPressed*/)
 			{
 				NPChouse->OnHovered.AddDynamic(this, &UWorldMapWidget::NPCHouseButtonHovered);
 				NPChouse->OnUnhovered.AddDynamic(this, &UWorldMapWidget::NPCHouseButtonNotHovered);
@@ -62,7 +62,7 @@ void UWorldMapWidget::NativeConstruct()
 		if (LightHouse != nullptr)
 		{
 			// 등록이 완료된 곳이라면 
-			if (LightHouse->isPressed)
+			if (true /*LightHouse->isPressed*/)
 			{
 				Bridge->OnHovered.AddDynamic(this, &UWorldMapWidget::BridgeButtonHovered);
 				Bridge->OnUnhovered.AddDynamic(this, &UWorldMapWidget::BridgeButtonNotHovered);
@@ -82,7 +82,7 @@ void UWorldMapWidget::NativeConstruct()
 		if (LightHouse != nullptr)
 		{
 			// 등록이 완료된 곳이라면 
-			if (LightHouse->isPressed)
+			if (true /*LightHouse->isPressed*/)
 			{
 				FrontDungeon->OnHovered.AddDynamic(this, &UWorldMapWidget::FrontDungeonButtonHovered);
 				FrontDungeon->OnUnhovered.AddDynamic(this, &UWorldMapWidget::FrontDungeonButtonNotHovered);
