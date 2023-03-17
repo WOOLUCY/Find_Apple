@@ -142,15 +142,33 @@ public:
 	UPROPERTY()
 	bool bWorldMapWidget = false;
 
-	// HUD에서 사용해야 돼가지고, private에서 public으로 뺐습니다.
-	UPROPERTY(VisibleAnywhere)
-	float CurHealth;
 
-	UPROPERTY(VisibleAnywhere)
-	int32 CurEquipNum;
+
+	/* Combat */
+	//UPROPERTY(EditAnywhere, Category = "Combat")
+	//bool IsAttacking = false;
+	float GetCurHealth() { return CurHealth; }
+	void SetCurHealth(float _health) { CurHealth = _health; }
+	int32 GetEquipNum() { return CurEquipNum; }
+
+	/* Post Process Effect */
+	UPROPERTY(EditAnywhere, Category = "PostProcessMaterial")
+	class UPostProcessComponent* PostProcessComp;
+
+
+	/* Camera Shake */
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TSubclassOf<class UCameraShakeBase>  HitCameraShakeClass;
+
+
 
 private:
+	// HUD에서 사용해야 돼가지고, private에서 public으로 뺐습니다.
+	UPROPERTY(VisibleAnywhere)
+		float CurHealth;
 
+	UPROPERTY(VisibleAnywhere)
+		int32 CurEquipNum;
 
 	UPROPERTY(VisibleAnywhere)
 		AActor* CurEquipActor;

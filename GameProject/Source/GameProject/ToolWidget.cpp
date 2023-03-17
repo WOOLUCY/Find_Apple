@@ -37,9 +37,9 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 	//	SwordImg->SetVisibility(ESlateVisibility::Hidden);
 	//	UE_LOG(LogClass, Warning, TEXT("Player's HP Is FULL"));
 	//}
-
+	
 	// TODO: 투명도 서서히 줄이기
-	if (MyChar->CurHealth >= 200.f)
+	if (MyChar->GetCurHealth() >= 200.f)
 	{
 		HeartImg_10->SetOpacity(1.f);
 	}
@@ -48,7 +48,7 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 		HeartImg_10->SetOpacity(0.f);
 	}
 
-	if (MyChar->CurHealth >= 180.f)
+	if (MyChar->GetCurHealth() >= 180.f)
 	{
 		HeartImg_09->SetOpacity(1.f);
 	}
@@ -57,7 +57,7 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 		HeartImg_09->SetOpacity(0.f);
 	}
 
-	if (MyChar->CurHealth >= 160.f)
+	if (MyChar->GetCurHealth() >= 160.f)
 	{
 		HeartImg_08->SetOpacity(1.f);
 	}
@@ -66,7 +66,7 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 		HeartImg_08->SetOpacity(0.f);
 	}
 
-	if (MyChar->CurHealth >= 140.f)
+	if (MyChar->GetCurHealth() >= 140.f)
 	{
 		HeartImg_07->SetOpacity(1.f);
 	}
@@ -75,7 +75,7 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 		HeartImg_07->SetOpacity(0.f);
 	}
 
-	if (MyChar->CurHealth >= 120.f)
+	if (MyChar->GetCurHealth() >= 120.f)
 	{
 		HeartImg_06->SetOpacity(1.f);
 	}
@@ -84,7 +84,7 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 		HeartImg_06->SetOpacity(0.f);
 	}
 
-	if (MyChar->CurHealth >= 100.f)
+	if (MyChar->GetCurHealth() >= 100.f)
 	{
 		HeartImg_05->SetOpacity(1.f);
 	}
@@ -93,7 +93,7 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 		HeartImg_05->SetOpacity(0.f);
 	}
 
-	if (MyChar->CurHealth >= 80.f)
+	if (MyChar->GetCurHealth() >= 80.f)
 	{
 		HeartImg_04->SetOpacity(1.f);
 	}
@@ -102,7 +102,7 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 		HeartImg_04->SetOpacity(0.f);
 	}
 
-	if (MyChar->CurHealth >= 60.f)
+	if (MyChar->GetCurHealth() >= 60.f)
 	{
 		HeartImg_03->SetOpacity(1.f);
 	}
@@ -112,7 +112,7 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 	}
 
 
-	if (MyChar->CurHealth >= 40.f)
+	if (MyChar->GetCurHealth() >= 40.f)
 	{
 		HeartImg_02->SetOpacity(1.f);
 	}
@@ -122,7 +122,7 @@ void UToolWidget::UpdateHeartCount(float DeltaSeconds)
 	}
 
 
-	if (MyChar->CurHealth >= 20.f)
+	if (MyChar->GetCurHealth() >= 20.f)
 	{
 		HeartImg_01->SetOpacity(1.f);
 	}
@@ -136,19 +136,19 @@ void UToolWidget::UpdateToolImage()
 {
 	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
 
-	if (MyChar->CurEquipNum == 1)
+	if (MyChar->GetEquipNum() == 1)
 	{
 		SwordImg->SetOpacity(1.f);
 		AxeImg->SetOpacity(0.f);
 		PickImg->SetOpacity(0.f);
 	}
-	else if (MyChar->CurEquipNum == 2)
+	else if (MyChar->GetEquipNum() == 2)
 	{
 		SwordImg->SetOpacity(0.f);
 		AxeImg->SetOpacity(1.f);
 		PickImg->SetOpacity(0.f);
 	}
-	else if (MyChar->CurEquipNum == 3)
+	else if (MyChar->GetEquipNum() == 3)
 	{
 		SwordImg->SetOpacity(0.f);
 		AxeImg->SetOpacity(0.f);
