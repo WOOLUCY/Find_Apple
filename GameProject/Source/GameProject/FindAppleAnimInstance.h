@@ -38,13 +38,16 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* PlantMontage;
 
+	FTimerHandle TimerHandle;
+
+
 
 public:
 	FonActionCheckDelegate HitCheckStart; 
 	FonActionCheckDelegate HitCheckEnd;
 
-	FonActionCheckDelegate GrabSeed;
-	FonActionCheckDelegate RelaseSeed;
+	bool  OffInput();
+	void  OnInput();
 
 private:
 	UFUNCTION()
@@ -53,12 +56,6 @@ private:
 	UFUNCTION()
 	void AnimNotify_HitEnd();
 
-
-	UFUNCTION()
-		void AnimNotify_Release();
-
-	UFUNCTION()
-		void AnimNotify_Grab();
 
 
 

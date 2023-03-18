@@ -8,6 +8,7 @@
 #include "MyGameInstance.h"
 
 
+
 #include "InputMappingContext.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "UObject/ConstructorHelpers.h"
@@ -348,11 +349,15 @@ void AFindAppleCharacter::Inventory(const FInputActionValue& Value)
 	}
 	else  
 	{
+
+
 		InventoryUIObject = CreateWidget<UInventoryUW>(GetWorld(), InventoryWidgetClass);
 		InventoryUIObject->AddToViewport();
 		bInventoryWidget = true;
 		PlayerController->SetInputMode(FInputModeGameAndUI());
 		PlayerController->SetShowMouseCursor(true);
+
+
 	}
 }
 

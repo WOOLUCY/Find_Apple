@@ -14,9 +14,6 @@ class GAMEPROJECT_API APlant : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APlant();
-	bool Check = false;
-	bool Change = false;
-	FDelegateHandle MyDelegateHandle;
 
 protected:
 	// Called when the game starts or when spawned

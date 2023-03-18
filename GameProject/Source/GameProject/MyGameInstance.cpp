@@ -5,11 +5,18 @@
 
 void Day::SetTime(int Day, int Hour, int Min, int Sec,double total)
 {
-	days = Day;
-	hours = Hour;
-	minutes = Min;
-	seconds = Sec;
-	TotalGameTime = total;
+
+	if (total == 0) {
+		TotalGameTime = 3600 * 8;
+	}
+	else {
+		days = Day;
+		hours = Hour;
+		minutes = Min;
+		seconds = Sec;
+		TotalGameTime = total;
+
+	}
 }
 
 UMyGameInstance::UMyGameInstance()

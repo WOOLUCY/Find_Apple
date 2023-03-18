@@ -19,15 +19,17 @@ ATimerHandler::ATimerHandler()
 void ATimerHandler::BeginPlay()
 {
 	Super::BeginPlay();
-
 	UWorld* TheWorld = GetWorld();
 	if (TheWorld != nullptr) {
-
+		
 		auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 		if (GameInstance != nullptr) {
 			Day temp = GameInstance->Today;
-
+			
 			Today.SetTime(temp.GetDays(), temp.GetHours(), temp.GetMin(), temp.GetSec(), temp.GetTotal());
+			UE_LOG(LogTemp, Warning, TEXT("%d/!?!"), TotalGameTime);
+
+
 			TotalGameTime = Today.GetTotal();
 
 			SunRotation = GameInstance->Sun;
@@ -35,19 +37,18 @@ void ATimerHandler::BeginPlay()
 
 
 	}
-	
+
 
 }
 
 void ATimerHandler::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-
 	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance != nullptr) {
-		GameInstance->Today.SetTime(Today.GetDays(), Today.GetHours(), Today.GetMin(), Today.GetSec(),Today.GetTotal());
+		GameInstance->Today.SetTime(Today.GetDays(), Today.GetHours(), Today.GetMin(), Today.GetSec(), Today.GetTotal());
 
-		GameInstance->Sun= SunRotation;
+		GameInstance->Sun = SunRotation;
 
 
 	}
@@ -61,7 +62,7 @@ void ATimerHandler::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	SunRotation+= FRotator(18.f / 60.f / 60.f * DeltaTime * speed, 0, 0);
+	SunRotation += FRotator(18.f / 60.f / 60.f * DeltaTime * speed, 0, 0);
 
 	SetGameTime(DeltaTime);
 
@@ -73,11 +74,10 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 {
 	TotalGameTime += DeltaTime * speed;//원래100
 
-//	if (Today.GetHours() >=23&&Today.GetMin()>=59) {
-	if(Today.GetDays()!= TimeFormatter.GetDays() &&TimeFormatter.GetSeconds()==0){
-		UE_LOG(LogTemp, Warning, TEXT("DayChange~~"));
-
-		Today.SetDay(TimeFormatter.GetDays());
+	static bool flag = true;
+	if ((Today.GetDays() != TimeFormatter.GetDays()) && flag) {
+		UE_LOG(LogTemp, Warning, TEXT("DayChange :%d %d %d %d"),
+			Today.GetDays(), TimeFormatter.GetHours(), TimeFormatter.GetMinutes(), TimeFormatter.GetSeconds());
 
 		UWorld* TheWorld = GetWorld();
 		if (TheWorld != nullptr) {
@@ -87,37 +87,27 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 				MyMode->DayChangeDelegate.Broadcast();
 			}
 		}
-		TotalGameTime = 0;
-
-
+		flag = false;
 	}
 
 
+	if (Today.GetHours() == 2) {
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==02"));
+		Today.SetDay(TimeFormatter.GetDays());
 
-	if (Today.GetHours() == 23) {
-		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==23"));
-	//	Today.SetDay(Today.GetDays()+1);
-
-		//UE_LOG(LogTemp, Warning, TEXT("DayChange~1111~"));
-
-		//UWorld* TheWorld = GetWorld();
-		//if (TheWorld != nullptr) {
-		//	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
-		//	AFindAppleGameMode* MyMode = Cast<AFindAppleGameMode>(GameMode);
-		//	if (MyMode != nullptr) {
-		//		MyMode->DayChangeDelegate.Broadcast();
-		//	}
-		//}
-
+		//캐릭터 관련 초기화하던가 그러는게 좋으륻ㅅ?
+		TotalGameTime = 3600 * 8;
+		flag = true;
 	}
-	
 
-	TimeFormatter = FTimespan(Today.GetDays(), 20 , 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
+	TimeFormatter = FTimespan(Today.GetDays(), 0, 0, FMath::Floor(TotalGameTime), FMath::Floor(FMath::Fmod(TotalGameTime, 1.0f) * 1000.0f));
+
+
 	TotalGameTimeString = TimeFormatter.ToString();
 
 
-	Today.SetHour( TimeFormatter.GetHours());
-	Today.SetMin( TimeFormatter.GetMinutes());
+	Today.SetHour(TimeFormatter.GetHours());
+	Today.SetMin(TimeFormatter.GetMinutes());
 	Today.SetSec(TimeFormatter.GetSeconds());
 	Today.SetTotal(TotalGameTime);
 
