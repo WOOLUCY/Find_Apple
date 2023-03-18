@@ -56,9 +56,6 @@ private:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void NotifyActorOnClicked(FKey PressedButton) override;
-	virtual void NotifyActorBeginCursorOver() override;
-	virtual void NotifyActorEndCursorOver() override;
 	virtual void PostInitializeComponents() override;
 	
 	UFUNCTION()
@@ -85,9 +82,6 @@ public:
 	void HiddenPlantWidget();
 
 	void DayChange();
-
-	void ReleaseSeed();
-	void GrabSeed();
 	
 	UFUNCTION()
 	void PutWater();
