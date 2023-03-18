@@ -13,5 +13,5 @@ public:
 	FName ItemName;
 
 	UPROPERTY()
-	int32 ItemCnt;
+	int32 ItemCnt = 0;
 };
