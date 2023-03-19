@@ -2,17 +2,46 @@
 
 
 #include "HungerWidget.h"
+#include "FindAppleCharacter.h"
 
-UHungerWidget::UHungerWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
-{
-}
+#include "Components/ProgressBar.h"
+
+
+//UHungerWidget::UHungerWidget(const FObjectInitializer& objectInitializer)
+//{
+//}
 
 void UHungerWidget::NativeConstruct()
 {
-    Super::NativeConstruct();
+	Super::NativeConstruct();
 }
 
 bool UHungerWidget::Initialize()
 {
-    return false;
+	bool Success = Super::Initialize();
+
+	if (Success)
+		return true;
+
+	return false;
+}
+	if (Success)
+		return true;
+
+	return false;
+}
+
+void UHungerWidget::UpdateHunger()
+{
+	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
+
+	float percent = (MyChar->GetCurHunger()) / (MyChar->GetMaxHunger());
+	HungerBar->SetPercent(percent);
+}
+void UHungerWidget::UpdateHunger()
+{
+	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
+
+	float percent = (MyChar->GetCurHunger()) /(MyChar->GetMaxHunger());
+	HungerBar->SetPercent(percent);
 }

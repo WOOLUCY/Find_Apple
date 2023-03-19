@@ -19,7 +19,6 @@ void UTimeWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-
 }
 
 bool UTimeWidget::Initialize()

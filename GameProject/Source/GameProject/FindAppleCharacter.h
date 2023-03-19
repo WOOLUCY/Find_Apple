@@ -160,10 +160,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TSubclassOf<class UCameraShakeBase>  HitCameraShakeClass;
 
-
+	/* Hunger */
+	float GetCurHunger() { return CurHunger; }
+	void SetCurHunger(float _hunger) { CurHunger = _hunger; }
+	float GetMaxHunger() { return MaxHunger; }
 
 private:
-	// HUD에서 사용해야 돼가지고, private에서 public으로 뺐습니다.
 	UPROPERTY(VisibleAnywhere)
 		float CurHealth;
 
@@ -183,9 +185,14 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 200;
 
+	// Hunger
+	UPROPERTY(EditDefaultsOnly)
+	float MaxHunger = 100.f;
+
+	UPROPERTY(EditDefaultsOnly)
+	float CurHunger;
 
 
-	
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsAction;
 

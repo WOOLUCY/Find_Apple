@@ -75,6 +75,10 @@ void ASlimeCharacter::Tick(float DeltaTime)
 	}
 
 	// TODO: Destroy Slime
+	else if (Health <= 0.f)
+	{
+		Destroy();
+	}
 	//else if (Health <= 0.f)
 	//{
 	//	GetMesh()->Stop();

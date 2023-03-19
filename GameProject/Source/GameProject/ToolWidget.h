@@ -28,13 +28,18 @@ public:
 
 	void ResetCombo();
 
+	/* Tool */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* SwordImg;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* PickImg;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* AxeImg;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UImage* HandImg;
 
+	/* Heart */
+	// TODO: 체력 위젯 프로그레스 바로 변경
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HeartImg_01;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))

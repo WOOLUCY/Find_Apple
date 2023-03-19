@@ -3,6 +3,7 @@
 #include "InGameHUD.h"
 #include "TimeWidget.h"
 #include "ToolWidget.h"
+#include "HungerWidget.h"
 
 
 AInGameHUD::AInGameHUD()
@@ -19,6 +20,13 @@ AInGameHUD::AInGameHUD()
 		ToolWidgetClass = ToolWidgetObject.Class;
 	}
 
+	ConstructorHelpers::FClassFinder<UHungerWidget> HungerWidgetObject(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/UI/HungerWidget.HungerWidget_C'"));
+	if (HungerWidgetObject.Succeeded())
+	{
+		HungerWidgetClass = HungerWidgetObject.Class;
+	}
+
+	
 }
 
 void AInGameHUD::BeginPlay()
@@ -40,6 +48,15 @@ void AInGameHUD::BeginPlay()
 			TimeWidget->AddToViewport();
 		}
 	}
+	if (HungerWidgetClass)
+	{
+		HungerWidget = CreateWidget<UHungerWidget>(GetWorld(), HungerWidgetClass);
+		if (HungerWidget)
+		{
+			HungerWidget->AddToViewport();
+		}
+	}
+
 }
 
 void AInGameHUD::DrawHUD()
@@ -60,6 +77,15 @@ void AInGameHUD::UpdateHeartCount(float DeltaSeconds)
 	if (ToolWidget)
 	{
 		ToolWidget->UpdateHeartCount(DeltaSeconds);
+	}
+}
+
+void AInGameHUD::UpdateHunger()
+{
+	if (HungerWidget)
+	{
+		// TODO: 허기 위젯 바인딩 수정
+		HungerWidget->UpdateHunger();
 	}
 }
 
