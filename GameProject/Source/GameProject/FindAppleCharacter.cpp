@@ -203,6 +203,7 @@ void AFindAppleCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	CurHealth = MaxHealth;
+	CurHunger = MaxHunger;
 
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController)

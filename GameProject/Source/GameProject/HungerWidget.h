@@ -14,11 +14,14 @@ class GAMEPROJECT_API UHungerWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-	UHungerWidget(const FObjectInitializer& objectInitializer);
+	//UHungerWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer);
 
 	virtual void NativeConstruct() override;
 
 	bool Initialize() override;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		class UProgressBar* HungerBar;
+
+	void UpdateHunger();
 };

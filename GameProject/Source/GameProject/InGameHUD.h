@@ -8,7 +8,6 @@
 #include "Components/WidgetComponent.h"
 
 #include "ToolWidget.h"
-
 #include "InGameHUD.generated.h"
 
 /**
@@ -32,6 +31,9 @@ public:
 		void UpdateHeartCount(float DeltaSeconds);
 
 	UFUNCTION()
+		void UpdateHunger();
+
+	UFUNCTION()
 		void UpdateToolImage();
 
 	UFUNCTION()
@@ -46,10 +48,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> TimeWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> HungerWidgetClass;
 private:
 	UPROPERTY()
 	class UToolWidget* ToolWidget;
 	UPROPERTY()
 	class UTimeWidget* TimeWidget;
+	UPROPERTY()
+	class UHungerWidget* HungerWidget;
+
 
 };
