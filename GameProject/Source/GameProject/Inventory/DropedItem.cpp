@@ -12,6 +12,7 @@
 #include "InventoryComponent.h"
 #include "../QuestNPC.h"
 #include "../FindAppleCharacter.h"
+#include "../PressKeyWidget.h"
 
 // Sets default values
 ADropedItem::ADropedItem()
@@ -43,7 +44,7 @@ ADropedItem::ADropedItem()
 	CollisionMesh->SetHiddenInGame(false);
 
 	/* Press key Widget */
-	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_PressE.WBP_PressE_C'"));
+	ConstructorHelpers::FClassFinder<UPressKeyWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_PressE.WBP_PressE_C'"));
 	if (PressKeyWidget.Succeeded())
 	{
 		PressKeyWidgetClass = PressKeyWidget.Class;
@@ -115,7 +116,7 @@ void ADropedItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 					MyCharacter->PressE = true;
 					MyCharacter->LookAtActorPressE = this;
 					bIsPressKeyValid = true;
-					PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
+					PressKeyWidgetUIObejct = CreateWidget<UPressKeyWidget>(GetWorld(), PressKeyWidgetClass);
 					PressKeyWidgetUIObejct->AddToViewport();
 					// UE_LOG(LogTemp, Warning, TEXT("Item Name: %s"), *ItemName.ToString());
 				}

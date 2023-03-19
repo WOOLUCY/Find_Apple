@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "CraftingAllWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "../PressKeyWidget.h"
 
 
 // Sets default values
@@ -30,7 +31,7 @@ ACraftingActor::ACraftingActor()
 	CollisionMesh->SetupAttachment(StaticMesh);
 
 	/* Press key Widget */
-	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Crafting/UI/WBP_PressQtoCrafting.WBP_PressQtoCrafting_C'"));
+	ConstructorHelpers::FClassFinder<UPressKeyWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Crafting/UI/WBP_PressQtoCrafting.WBP_PressQtoCrafting_C'"));
 	if (PressKeyWidget.Succeeded())
 	{
 		PressKeyWidgetClass = PressKeyWidget.Class;
@@ -89,7 +90,7 @@ void ACraftingActor::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, c
 		if (bIsPressKeyValid == false)
 		{
 			bIsPressKeyValid = true;
-			PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
+			PressKeyWidgetUIObejct = CreateWidget<UPressKeyWidget>(GetWorld(), PressKeyWidgetClass);
 			PressKeyWidgetUIObejct->AddToViewport();
 		}
 

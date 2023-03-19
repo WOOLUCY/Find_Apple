@@ -12,6 +12,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/TextBlock.h"
 #include "AddMapWidget.h"
+#include "../PressKeyWidget.h"
 
 /* -------------------------------------------------------------------------- */
 // 스폰 지점으로 지정하고 싶으면 배치한 액터에 "태그"를 추가해야 한다.
@@ -65,7 +66,7 @@ ALightHouse::ALightHouse()
 	}
 
 	/* Press Key Widget */
-	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Map/WBP_PressQ.WBP_PressQ_C'"));
+	ConstructorHelpers::FClassFinder<UPressKeyWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Map/WBP_PressQ.WBP_PressQ_C'"));
 	if (PressKeyWidget.Succeeded())
 	{
 		PressKeyClass = PressKeyWidget.Class;
@@ -79,7 +80,7 @@ ALightHouse::ALightHouse()
 	}
 
 	// Add to Map Widget
-	ConstructorHelpers::FClassFinder<UUserWidget>  AddMapWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Map/WBP_AddMap.WBP_AddMap_C'"));
+	ConstructorHelpers::FClassFinder<UAddMapWidget>  AddMapWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Map/WBP_AddMap.WBP_AddMap_C'"));
 	if (AddMapWidget.Succeeded())
 	{
 		AddToMapWidgetClass = AddMapWidget.Class;
@@ -249,7 +250,7 @@ void ALightHouse::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		}
 		else
 		{
-			PressKeyUIObject = CreateWidget<UUserWidget>(GetWorld(), PressKeyClass);
+			PressKeyUIObject = CreateWidget<UPressKeyWidget>(GetWorld(), PressKeyClass);
 			PressKeyUIObject->AddToViewport();
 			isKeyWidget = true;
 		}

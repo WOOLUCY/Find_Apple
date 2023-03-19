@@ -25,6 +25,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "FindAppleCharacter.h"
+#include "PressKeyWidget.h"
 
 
 // Sets default values
@@ -95,7 +96,7 @@ AQuestNPC::AQuestNPC()
 		DialoguePopWidgetClass = DialoguePopWidgetObject.Class;
 	}
 	/* Press key Widget */
-	ConstructorHelpers::FClassFinder<UUserWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_PressQ.WBP_PressQ_C'"));
+	ConstructorHelpers::FClassFinder<UPressKeyWidget>  PressKeyWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_PressQ.WBP_PressQ_C'"));
 	if (PressKeyWidget.Succeeded())
 	{
 		PressKeyWidgetClass = PressKeyWidget.Class;
@@ -399,7 +400,7 @@ void AQuestNPC::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
 		if (bIsPressKeyValid == false)
 		{
 			bIsPressKeyValid = true;
-			PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
+			PressKeyWidgetUIObejct = CreateWidget<UPressKeyWidget>(GetWorld(), PressKeyWidgetClass);
 			PressKeyWidgetUIObejct->AddToViewport();
 		}
 	}
