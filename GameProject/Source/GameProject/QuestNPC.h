@@ -145,7 +145,7 @@ private:
 	UPROPERTY()
 	TSubclassOf<class UUserWidget> PressKeyWidgetClass;
 	UPROPERTY()
-	class UUserWidget* PressKeyWidgetUIObejct;
+	class UPressKeyWidget* PressKeyWidgetUIObejct;
 
 	UPROPERTY()
 	class UDataTable* DialogueDatatable;

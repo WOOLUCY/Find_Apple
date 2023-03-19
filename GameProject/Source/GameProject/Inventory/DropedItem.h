@@ -57,7 +57,7 @@ private:
 	UPROPERTY()
 	TSubclassOf<class UUserWidget> PressKeyWidgetClass;
 	UPROPERTY()
-	class UUserWidget* PressKeyWidgetUIObejct;
+	class UPressKeyWidget* PressKeyWidgetUIObejct;
 	UPROPERTY()
 	bool bIsPressKeyValid = false;
 	/* 위젯 생성 후 3 초 뒤부터 충돌 감지 */

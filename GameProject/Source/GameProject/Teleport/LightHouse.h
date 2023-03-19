@@ -78,7 +78,7 @@ private:
 	class UShowMapNameWidget* MapNameWidgetUIObject;
 
 	TSubclassOf<class UUserWidget> PressKeyClass;
-	class UUserWidget* PressKeyUIObject;
+	class UPressKeyWidget* PressKeyUIObject;
 
 	TSubclassOf<class UUserWidget> AddToMapWidgetClass;
 	class UAddMapWidget* AddToMapWidgetUIObject;
