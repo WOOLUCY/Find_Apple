@@ -47,7 +47,8 @@ public:
 	TSubclassOf<UUserWidget> TimeWidgetClass;
 
 private:
-	UToolWidget* ToolWidget;
+	UPROPERTY()
+	class UToolWidget* ToolWidget;
 	UPROPERTY()
 	class UTimeWidget* TimeWidget;
 

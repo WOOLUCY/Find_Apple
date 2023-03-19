@@ -2,6 +2,7 @@
 
 #include "InGameHUD.h"
 #include "TimeWidget.h"
+#include "ToolWidget.h"
 
 
 AInGameHUD::AInGameHUD()
@@ -11,6 +12,13 @@ AInGameHUD::AInGameHUD()
 	{
 		TimeWidgetClass = TimeWidgetObject.Class;
 	}
+
+	ConstructorHelpers::FClassFinder<UToolWidget> ToolWidgetObject(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/UI/ToolWidget.ToolWidget_C'"));
+	if (ToolWidgetObject.Succeeded())
+	{
+		ToolWidgetClass = ToolWidgetObject.Class;
+	}
+
 }
 
 void AInGameHUD::BeginPlay()

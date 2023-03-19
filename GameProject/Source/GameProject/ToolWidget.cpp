@@ -9,10 +9,17 @@ void UToolWidget::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-//UToolWidget::UToolWidget(const FObjectInitializer& ObjectInitalizer)
-//{
-//
-//}
+bool UToolWidget::Initialize()
+{
+	bool Success = Super::Initialize();
+
+	if (Success)
+	{
+		return true;
+	}
+
+	return false;
+}
 
 void UToolWidget::UpdateComboCount(int32 Value)
 {

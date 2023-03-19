@@ -19,6 +19,7 @@ protected:
 
 public:
 	//UToolWidget(const FObjectInitializer& ObjectInitalizer);
+	bool Initialize() override;
 
 	// TODO: Combo 관련 함수 삭제
 	void UpdateComboCount(int32 Value);
