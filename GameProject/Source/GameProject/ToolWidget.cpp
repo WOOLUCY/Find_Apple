@@ -145,24 +145,28 @@ void UToolWidget::UpdateToolImage()
 
 	if (MyChar->GetEquipNum() == 1)
 	{
+		HandImg->SetOpacity(0.f);
 		SwordImg->SetOpacity(1.f);
 		AxeImg->SetOpacity(0.f);
 		PickImg->SetOpacity(0.f);
 	}
 	else if (MyChar->GetEquipNum() == 2)
 	{
+		HandImg->SetOpacity(0.f);
 		SwordImg->SetOpacity(0.f);
 		AxeImg->SetOpacity(1.f);
 		PickImg->SetOpacity(0.f);
 	}
 	else if (MyChar->GetEquipNum() == 3)
 	{
+		HandImg->SetOpacity(0.f);
 		SwordImg->SetOpacity(0.f);
 		AxeImg->SetOpacity(0.f);
 		PickImg->SetOpacity(1.f);
 	}
 	else
 	{
+		HandImg->SetOpacity(1.f);
 		SwordImg->SetOpacity(0.f);
 		AxeImg->SetOpacity(0.f);
 		PickImg->SetOpacity(0.f);
