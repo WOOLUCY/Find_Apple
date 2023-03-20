@@ -92,7 +92,7 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 
 
 	if (Today.GetHours() == 2) {
-		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==02"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==02"));
 		Today.SetDay(TimeFormatter.GetDays());
 
 		//캐릭터 관련 초기화하던가 그러는게 좋으륻ㅅ?

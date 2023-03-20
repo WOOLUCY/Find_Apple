@@ -229,7 +229,7 @@ void AQuestNPC::DialogueGetLine()
 										{
 											if (*MyCharacter->InventoryComponent->InventoryContent.Find(Dialogue.Conditions_Item) >= Dialogue.Conditions_cnt)
 											{
-												GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
+												//GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Have Quest Item !!"));
 												Text->SetText(FText::FromString(TEXT("?")));
 												Conversation_ID += 1;
 												CurrentLine = 0;

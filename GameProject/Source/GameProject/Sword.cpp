@@ -47,7 +47,7 @@ void ASword::BeginPlay()
 			Anim->HitCheckStart.BindUObject(this, &ASword::SetCollisionStart);
 			Anim->HitCheckEnd.BindUObject(this, &ASword::SetCollisionEnd);
 
-			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("delegate connetec "));
+			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("delegate connetec "));
 
 		}
 	}
@@ -65,7 +65,7 @@ void ASword::SetCollisionStart()
 {
 	//근데 스월드는 항상 노콜리전임 박스를바꿔줘야함
 	CollisionBox->SetCollisionProfileName(TEXT("OverlapAll"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SWORDSetCollisionStart "));
+	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SWORDSetCollisionStart "));
 
 
 }
@@ -73,7 +73,7 @@ void ASword::SetCollisionStart()
 void ASword::SetCollisionEnd()
 {
 	CollisionBox->SetCollisionProfileName(TEXT("NoCollision"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SWORDSetCollisionEnd "));
+	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("SWORDSetCollisionEnd "));
 
 }
 
@@ -95,12 +95,12 @@ void ASword::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (TheWorld != nullptr) {
 		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
 		if (Cast<AFindAppleCharacter>(OtherActor) != hero) {
-			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, name);
+			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, name);
 			//데미지를주겠다.
 
 			FDamageEvent DamageEvent;
 			OtherActor->TakeDamage(Damage, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), this);
-			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("TakeDamage"));
+		//	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("TakeDamage"));
 		}
 		else {
 			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OverlapSelf"));
@@ -113,7 +113,7 @@ void ASword::NotifyActorBeginOverlap(AActor* OtherActor)
 void ASword::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("NotifyHit "));
+//	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("NotifyHit "));
 
 	//피해를 주겠다.
 	FDamageEvent DamageEvent;
