@@ -25,23 +25,11 @@ bool UHungerWidget::Initialize()
 
 	return false;
 }
-	if (Success)
-		return true;
-
-	return false;
-}
 
 void UHungerWidget::UpdateHunger()
 {
 	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
 
 	float percent = (MyChar->GetCurHunger()) / (MyChar->GetMaxHunger());
-	HungerBar->SetPercent(percent);
-}
-void UHungerWidget::UpdateHunger()
-{
-	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
-
-	float percent = (MyChar->GetCurHunger()) /(MyChar->GetMaxHunger());
-	HungerBar->SetPercent(percent);
+	HungerBar->SetPercent(percent); 
 }
