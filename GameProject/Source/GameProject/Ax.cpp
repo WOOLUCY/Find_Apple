@@ -40,7 +40,7 @@ void AAx::BeginPlay()
 			Anim->HitCheckStart.BindUObject(this, &AAx::SetCollisionStart);
 			Anim->HitCheckEnd.BindUObject(this, &AAx::SetCollisionEnd);
 
-			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("AAx - delegate connetec "));
+			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("AAx - delegate connetec "));
 
 		}
 	}
@@ -60,21 +60,21 @@ void AAx::SetAxVisibiltiy(bool IsVisible)
 
 void AAx::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("AAx -NotifyAcotrBeginOverlap "));
+//	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("AAx -NotifyAcotrBeginOverlap "));
 	FString name = OtherActor->GetName();
 
 	UWorld* TheWorld = GetWorld();
 	if (TheWorld != nullptr) {
 		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
 		if (Cast<AFindAppleCharacter>(OtherActor) != hero) {
-			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, name);
+			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, name);
 			//데미지를주겠다.
 			FDamageEvent DamageEvent;
 			OtherActor->TakeDamage(Damage, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), this);
-			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("TakeDamage"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("TakeDamage"));
 		}
 		else {
-			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OverlapSelf"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OverlapSelf"));
 		}
 	}
 
@@ -88,13 +88,13 @@ void AAx::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveCompon
 void AAx::SetCollisionStart()
 {
 	CollisionBox->SetCollisionProfileName(TEXT("OverlapAll"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("AX - OverlapAll"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("AX - OverlapAll"));
 
 }
 
 void AAx::SetCollisionEnd()
 {
 	CollisionBox->SetCollisionProfileName(TEXT("NoCollision"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("AX - SetCollisionEnd"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("AX - SetCollisionEnd"));
 
 }

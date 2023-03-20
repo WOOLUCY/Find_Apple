@@ -40,6 +40,8 @@ public:
 		USceneComponent* Pivot;
 
 	UStaticMesh* Leafs[3];
+	UStaticMesh* Uppers[3];
+	UStaticMesh* Lowers[3];
 
 	UPROPERTY(VisibleAnywhere, Category=Damage)
 		float MaxDamage;

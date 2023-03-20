@@ -146,7 +146,7 @@ void AFarmGround::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
 	if (hero != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("Overlap with Character"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("Overlap with Character"));
 		CheckMesh->SetVisibility(true);
 
 		ShowPlantWidget();
@@ -161,7 +161,7 @@ void AFarmGround::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 {
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
 	if (hero != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap end with Character"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Overlap end with Character"));
 		CheckMesh->SetVisibility(false);
 		HiddenPlantWidget();
 

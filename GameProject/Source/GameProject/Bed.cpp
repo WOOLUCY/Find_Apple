@@ -93,7 +93,7 @@ void ABed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActo
 
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
 	if (hero != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("Overlap with Character"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("Overlap with Character"));
 
 		if (Bedding->GetStaticMesh() == NotLaying) {
 			Bedding->SetStaticMesh(Laying);

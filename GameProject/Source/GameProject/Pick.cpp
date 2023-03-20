@@ -33,14 +33,15 @@ APick::APick()
 void APick::SetCollisionStart()
 {
 	CollisionBox->SetCollisionProfileName(TEXT("OverlapAll"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OverlapAll"));
+	
+	//->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OverlapAll"));
 
 }
 
 void APick::SetCollisionEnd()
 {
 	CollisionBox->SetCollisionProfileName(TEXT("NoCollision"));
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("NoCollision"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("NoCollision"));
 
 }
 
@@ -64,7 +65,7 @@ void APick::BeginPlay()
 			Anim->HitCheckStart.BindUObject(this, &APick::SetCollisionStart);
 			Anim->HitCheckEnd.BindUObject(this, &APick::SetCollisionEnd);
 
-			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Pick - delegate connetec "));
+		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Pick - delegate connetec "));
 
 		}
 	}
