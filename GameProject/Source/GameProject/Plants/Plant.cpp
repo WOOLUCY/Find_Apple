@@ -41,7 +41,7 @@ void APlant::PutWater()
 {
 	++WaterCount;
 	DeathCount = 0;//물주면 초기화해주기
-	if (WaterCount > LevelUp) {
+	if (WaterCount >= LevelUp) {
 		//레벨업할때 하는일
 		//1. watercount 초기화 - 그래야 다음 레벨에 갈 횟수 저장한다.
 		WaterCount = 0;
