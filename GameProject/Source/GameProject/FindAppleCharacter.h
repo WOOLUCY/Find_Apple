@@ -162,12 +162,12 @@ public:
 	//bool IsAttacking = false;
 	float GetCurHealth() { return CurHealth; }
 	void SetCurHealth(float _health) { CurHealth = _health; }
+	float GetMaxHealth() { return MaxHealth; }
 	int32 GetEquipNum() { return CurEquipNum; }
 
 	/* Post Process Effect */
 	UPROPERTY(EditAnywhere, Category = "PostProcessMaterial")
 	class UPostProcessComponent* PostProcessComp;
-
 
 	/* Camera Shake */
 	UPROPERTY(EditAnywhere, Category = "Combat")

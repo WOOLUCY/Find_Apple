@@ -28,7 +28,7 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	UFUNCTION()
-		void UpdateHeartCount(float DeltaSeconds);
+		void UpdateHeartCount();
 
 	UFUNCTION()
 		void UpdateHunger();
@@ -43,6 +43,9 @@ public:
 		void ResetCombo();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> HPWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> ToolWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
@@ -51,6 +54,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> HungerWidgetClass;
 private:
+	UPROPERTY()
+	class UHPWidget* HPWidget;
 	UPROPERTY()
 	class UToolWidget* ToolWidget;
 	UPROPERTY()

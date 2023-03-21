@@ -4,6 +4,7 @@
 #include "TimeWidget.h"
 #include "ToolWidget.h"
 #include "HungerWidget.h"
+#include "HPWidget.h"
 
 
 AInGameHUD::AInGameHUD()
@@ -12,6 +13,12 @@ AInGameHUD::AInGameHUD()
 	if (TimeWidgetObject.Succeeded())
 	{
 		TimeWidgetClass = TimeWidgetObject.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UHPWidget> HPWidgetObject(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/UI/HPWidget.HPWidget_C'"));
+	if (HPWidgetObject.Succeeded())
+	{
+		HPWidgetClass = HPWidgetObject.Class;
 	}
 
 	ConstructorHelpers::FClassFinder<UToolWidget> ToolWidgetObject(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/UI/ToolWidget.ToolWidget_C'"));
@@ -26,12 +33,20 @@ AInGameHUD::AInGameHUD()
 		HungerWidgetClass = HungerWidgetObject.Class;
 	}
 
-	
 }
 
 void AInGameHUD::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (HPWidgetClass)
+	{
+		HPWidget = CreateWidget<UHPWidget>(GetWorld(), HPWidgetClass);
+		if (HPWidget)
+		{
+			HPWidget->AddToViewport();
+		}
+	}
 	if (ToolWidgetClass)
 	{
 		ToolWidget = CreateWidget<UToolWidget>(GetWorld(), ToolWidgetClass);
@@ -68,16 +83,16 @@ void AInGameHUD::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	UpdateHeartCount(DeltaSeconds);
+	UpdateHeartCount();
 	UpdateToolImage();
 	UpdateHunger();
 }
 
-void AInGameHUD::UpdateHeartCount(float DeltaSeconds)
+void AInGameHUD::UpdateHeartCount()
 {
-	if (ToolWidget)
+	if (HPWidget)
 	{
-		ToolWidget->UpdateHeartCount(DeltaSeconds);
+		HPWidget->UpdateHP();
 	}
 }
 
