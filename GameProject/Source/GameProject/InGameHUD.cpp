@@ -70,6 +70,7 @@ void AInGameHUD::Tick(float DeltaSeconds)
 
 	UpdateHeartCount(DeltaSeconds);
 	UpdateToolImage();
+	UpdateHunger();
 }
 
 void AInGameHUD::UpdateHeartCount(float DeltaSeconds)

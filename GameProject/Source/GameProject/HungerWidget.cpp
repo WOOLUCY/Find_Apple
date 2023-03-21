@@ -31,5 +31,5 @@ void UHungerWidget::UpdateHunger()
 	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
 
 	float percent = (MyChar->GetCurHunger()) / (MyChar->GetMaxHunger());
-	HungerBar->SetPercent(percent); 
+	HungerBar->SetPercent(percent);
 }
