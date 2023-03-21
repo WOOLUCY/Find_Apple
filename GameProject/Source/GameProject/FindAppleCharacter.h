@@ -57,6 +57,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* WorldMapAction;
 
+	// W: Pause Menu
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* PauseAction;
+
 	//가온 - 도구선택, 대쉬
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 		UInputAction* DashMapping;
@@ -79,6 +83,7 @@ protected:
 	void PickItem(const FInputActionValue& Value);
 	void MouseToggle(const FInputActionValue& Value);
 	void ShowWorldMap(const FInputActionValue& Value);
+	void ShowPauseMenu(const FInputActionValue& Value);
 
 	void EquipSword(const FInputActionValue& Value);
 	void EquipAx(const FInputActionValue& Value);
@@ -141,6 +146,14 @@ public:
 	class UWorldMapWidget* WorldMapUIObject;
 	UPROPERTY()
 	bool bWorldMapWidget = false;
+
+	/* PauseMenu Widget Class */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> PauseWidgetClass;
+	UPROPERTY()
+	class UPauseWidget* PauseUIObject;
+	UPROPERTY()
+	bool bPauseWidget = false;
 
 
 
