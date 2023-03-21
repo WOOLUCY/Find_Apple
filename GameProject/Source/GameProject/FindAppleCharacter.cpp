@@ -438,21 +438,30 @@ void AFindAppleCharacter::ShowWorldMap(const FInputActionValue& Value)
 void AFindAppleCharacter::ShowPauseMenu(const FInputActionValue& Value)
 {
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (bPauseWidget)
-	{
-		PauseUIObject->RemoveFromParent();
-		bPauseWidget = false;
-		PlayerController->SetInputMode(FInputModeGameOnly());
-		PlayerController->SetShowMouseCursor(false);
-	}
-	else
-	{
-		PauseUIObject = CreateWidget<UPauseWidget>(GetWorld(), PauseWidgetClass);
-		PauseUIObject->AddToViewport();
-		bPauseWidget = true;
-		PlayerController->SetInputMode(FInputModeGameAndUI());
-		PlayerController->SetShowMouseCursor(true);
-	}
+	//if (bPauseWidget)
+	//{
+	//	PauseUIObject->RemoveFromParent();
+	//	PlayerController->SetPause(!bPauseWidget);
+	//	bPauseWidget = false;
+	//	PlayerController->SetInputMode(FInputModeGameOnly());
+	//	PlayerController->SetShowMouseCursor(false);
+	//}
+	//else
+	//{
+	//	PlayerController->SetPause(!bPauseWidget);
+	//	PauseUIObject = CreateWidget<UPauseWidget>(GetWorld(), PauseWidgetClass);
+	//	PauseUIObject->AddToViewport();
+	//	bPauseWidget = true;
+	//	PlayerController->SetInputMode(FInputModeGameAndUI());
+	//	PlayerController->SetShowMouseCursor(true);
+	//}
+
+	PlayerController->SetPause(!bPauseWidget);
+	PauseUIObject = CreateWidget<UPauseWidget>(GetWorld(), PauseWidgetClass);
+	PauseUIObject->AddToViewport();
+	bPauseWidget = true;
+	PlayerController->SetInputMode(FInputModeGameAndUI());
+	PlayerController->SetShowMouseCursor(true);
 }
 
 

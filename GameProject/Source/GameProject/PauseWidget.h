@@ -18,9 +18,22 @@ public:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UButton* RestartButton;
+	class UButton* ResumeButton;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* OptionButton;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* ExitButton;
+
+public:
+	/* Click Action */
+	UFUNCTION()
+	void ResumeButtonClick();
+
+	UFUNCTION()
+	void ExitButtonClick();
+
+
 
 };
