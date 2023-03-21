@@ -26,6 +26,7 @@
 #include "Teleport/WorldMapWidget.h"
 #include "Components/InputComponent.h"
 #include "Components/PostProcessComponent.h"
+#include "PauseWidget.h"
 
 // Sets default values
 AFindAppleCharacter::AFindAppleCharacter()
@@ -125,6 +126,12 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		WorldMapAction = Input_WorldMap.Object;
 	}
+	/* 일시정지 키 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Pause(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_Pause.IA_Pause'"));
+	if (Input_Pause.Succeeded())
+	{
+		PauseAction = Input_Pause.Object;
+	}
 
 
 	//kaon - 대쉬, 도구선택
@@ -179,6 +186,15 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		WorldMapWidgetClass = WorldMapWidget.Class;
 	}
+
+	/* Pause Menu Widget */
+	ConstructorHelpers::FClassFinder<UPauseWidget>  PauseWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/UI/PauseWidget.PauseWidget_C'"));
+	if (PauseWidget.Succeeded())
+	{
+		PauseWidgetClass = PauseWidget.Class;
+	}
+
+
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -419,6 +435,26 @@ void AFindAppleCharacter::ShowWorldMap(const FInputActionValue& Value)
 	}
 }
 
+void AFindAppleCharacter::ShowPauseMenu(const FInputActionValue& Value)
+{
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (bPauseWidget)
+	{
+		PauseUIObject->RemoveFromParent();
+		bPauseWidget = false;
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		PlayerController->SetShowMouseCursor(false);
+	}
+	else
+	{
+		PauseUIObject = CreateWidget<UPauseWidget>(GetWorld(), PauseWidgetClass);
+		PauseUIObject->AddToViewport();
+		bPauseWidget = true;
+		PlayerController->SetInputMode(FInputModeGameAndUI());
+		PlayerController->SetShowMouseCursor(true);
+	}
+}
+
 
 void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
 {
@@ -556,7 +592,8 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(PickItemAction, ETriggerEvent::Started, this, &AFindAppleCharacter::PickItem);
 		EnhancedInputComponent->BindAction(MouseToggleAction, ETriggerEvent::Started, this, &AFindAppleCharacter::MouseToggle);
 		EnhancedInputComponent->BindAction(WorldMapAction, ETriggerEvent::Started, this, &AFindAppleCharacter::ShowWorldMap);
-		
+		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AFindAppleCharacter::ShowPauseMenu);
+
 		//kaon - dash, equipment
 		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);
 		EnhancedInputComponent->BindAction(SwordMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipSword);
