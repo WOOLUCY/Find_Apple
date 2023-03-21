@@ -36,11 +36,6 @@ public:
 	UFUNCTION()
 		void UpdateToolImage();
 
-	UFUNCTION()
-		void UpdateComboCount(int32 Value);
-
-	UFUNCTION()
-		void ResetCombo();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> HPWidgetClass;

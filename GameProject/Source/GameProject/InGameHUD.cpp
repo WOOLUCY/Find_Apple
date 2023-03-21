@@ -112,20 +112,3 @@ void AInGameHUD::UpdateToolImage()
 		ToolWidget->UpdateToolImage();
 	}
 }
-
-void AInGameHUD::UpdateComboCount(int32 Value)
-{
-	if (ToolWidget)
-	{
-		ToolWidget->
-			UpdateComboCount(Value);
-	}
-}
-
-void AInGameHUD::ResetCombo()
-{
-	if (ToolWidget)
-	{
-		ToolWidget->ResetCombo();
-	}
-}

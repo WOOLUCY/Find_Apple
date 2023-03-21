@@ -20,9 +20,11 @@ protected:
 public:
 	bool Initialize() override;
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UProgressBar* HPBar;
+
+	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
+	class UWidgetAnimation* HPWidgetAnimation;
 
 	void UpdateHP();
 };
