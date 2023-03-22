@@ -25,13 +25,6 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		// 피격 상태 변환 -> 캐릭터에서 할 것
 		//MyChar->SetIsAttacked(true);
 
-		// 카메라 쉐이크
-		if (MyChar->HitCameraShakeClass)
-		{
-			// Camera Shake
-			GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(MyChar->HitCameraShakeClass);
-		}
-
 		// 체력을 변경
 		//float NewHealth = MyChar->GetCurHealth();
 		UWorld* TheWorld = GetWorld();

@@ -165,7 +165,13 @@ AFindAppleCharacter::AFindAppleCharacter()
 		ResetEquipMapping = Input_Reset.Object;
 	}
 
-	
+	/* CameraShake */
+	ConstructorHelpers::FClassFinder<UCameraShakeBase>  CameraShake(TEXT("/Script/Engine.Blueprint'/Game/Woo/Camera/BP_HitCS.BP_HitCS_C'"));
+	if (CameraShake.Succeeded())
+	{
+		HitCameraShakeClass = CameraShake.Class;
+	}
+
 	/* Inventory Widget */
 	ConstructorHelpers::FClassFinder<UInventoryUW>  InventoryWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_InventoryCPP.WBP_InventoryCPP_C'"));
 	if (InventoryWidget.Succeeded())
@@ -647,12 +653,24 @@ float AFindAppleCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	// 피격 불가 상태로 변경
 	SetIsAttacked(true);
+
+	// 체력 변경
 	SetCurHealth((GetCurHealth() - Damage));
 
+	// 카메라 쉐이크
+	if (HitCameraShakeClass)
+	{
+		// Camera Shake
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShakeClass);
+	}
+
+	// Log
 	UE_LOG(LogClass, Warning, TEXT("Player Is Attacked"));
 	UE_LOG(LogClass, Warning, TEXT("Player Current HP: %f"), GetCurHealth());
 
+	// 딜레이 후 피격 가능 상태로 변경
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 		{
