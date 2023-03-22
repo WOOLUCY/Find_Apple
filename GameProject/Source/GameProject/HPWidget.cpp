@@ -25,4 +25,18 @@ void UHPWidget::UpdateHP()
 
 	float percent = (MyChar->GetCurHealth()) / (MyChar->GetMaxHealth());
 	HPBar->SetPercent(percent);
+
+	// 피격 시 위젯 애니메이션 재생
+	if (MyChar->GetIsAttacked())
+		PlayHPWidgetAnimation();
+}
+
+void UHPWidget::PlayHPWidgetAnimation()
+{
+	PlayAnimation(HPWidgetAnimation);
+}
+
+void UHPWidget::StopHPWidgetAnimation()
+{
+	StopAnimation(HPWidgetAnimation);
 }

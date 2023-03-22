@@ -155,16 +155,6 @@ public:
 	UPROPERTY()
 	bool bPauseWidget = false;
 
-
-
-	/* Combat */
-	//UPROPERTY(EditAnywhere, Category = "Combat")
-	//bool IsAttacking = false;
-	float GetCurHealth() { return CurHealth; }
-	void SetCurHealth(float _health) { CurHealth = _health; }
-	float GetMaxHealth() { return MaxHealth; }
-	int32 GetEquipNum() { return CurEquipNum; }
-
 	/* Post Process Effect */
 	UPROPERTY(EditAnywhere, Category = "PostProcessMaterial")
 	class UPostProcessComponent* PostProcessComp;
@@ -178,7 +168,29 @@ public:
 	void SetCurHunger(float _hunger) { CurHunger = _hunger; }
 	float GetMaxHunger() { return MaxHunger; }
 
+	/* Combat */
+	//UPROPERTY(EditAnywhere, Category = "Combat")
+	//bool IsAttacking = false;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	float GetCurHealth() { return CurHealth; }
+	void SetCurHealth(float _health) { CurHealth = _health; }
+	float GetMaxHealth() { return MaxHealth; }
+	int32 GetEquipNum() { return CurEquipNum; }
+
+	bool GetIsAttacked() { return bIsAttacked; }
+	void SetIsAttacked(bool _in) { bIsAttacked = _in; }
+	bool GetIsAttacking() { return bIsAttacking; }
+	void SetIsAttacking(bool _in) { bIsAttacking = _in; }
+
 private:
+	/* Combat */
+	UPROPERTY(VisibleAnywhere)
+		bool bIsAttacked;
+
+	UPROPERTY(VisibleAnywhere)
+		bool bIsAttacking;
+
 	UPROPERTY(VisibleAnywhere)
 		float CurHealth;
 

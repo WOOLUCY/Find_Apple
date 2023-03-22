@@ -637,9 +637,30 @@ void AFindAppleCharacter::DayChange()
 }
 
 
-
 void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted)
 {
 	IsAction = false;
+}
+
+float AFindAppleCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	SetIsAttacked(true);
+	SetCurHealth((GetCurHealth() - Damage));
+
+	UE_LOG(LogClass, Warning, TEXT("Player Is Attacked"));
+	UE_LOG(LogClass, Warning, TEXT("Player Current HP: %f"), GetCurHealth());
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+		{
+			SetIsAttacked(false);
+		}, 3.f, false);	// 무적 시간
+
+	return Damage;
+
+	//return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 

@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "InGameHUD.h"
+
+#include "FindAppleCharacter.h"
 #include "TimeWidget.h"
 #include "ToolWidget.h"
 #include "HungerWidget.h"

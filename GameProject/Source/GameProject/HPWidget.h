@@ -27,4 +27,6 @@ public:
 	class UWidgetAnimation* HPWidgetAnimation;
 
 	void UpdateHP();
+	void PlayHPWidgetAnimation();
+	void StopHPWidgetAnimation();
 };
