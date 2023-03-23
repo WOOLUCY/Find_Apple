@@ -10,12 +10,6 @@
 
 UGameOptionWidget::UGameOptionWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
-	/* Pause Widget */
-	ConstructorHelpers::FClassFinder<UPauseWidget>  PauseWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/UI/PauseWidget.PauseWidget_C'"));
-	if (PauseWidget.Succeeded())
-	{
-		PauseWidgetClass = PauseWidget.Class;
-	}
 }
 
 void UGameOptionWidget::NativeConstruct()
@@ -408,9 +402,6 @@ void UGameOptionWidget::SetShadowEpic()
 
 void UGameOptionWidget::WidgetClose()
 {
-	//PauseWidgetUIObject = CreateWidget<UPauseWidget>(GetWorld(), PauseWidgetClass);
-	//PauseWidgetUIObject->AddToViewport();
-
 	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 

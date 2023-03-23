@@ -19,14 +19,6 @@ protected:
 
 	virtual void NativeConstruct() override;
 
-private:
-	/* Pause Widget */
-	UPROPERTY()
-	TSubclassOf<class UUserWidget> PauseWidgetClass;
-	UPROPERTY()
-	class UPauseWidget* PauseWidgetUIObject;
-
-
 public:
 	/* 화면 크기 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
