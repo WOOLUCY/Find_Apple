@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "DoOnce.h"
 #include "HPWidget.generated.h"
 
 /**
@@ -25,6 +26,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
 	class UWidgetAnimation* HPWidgetAnimation;
+
+	UPROPERTY(VisibleAnywhere)
+	FDoOnce DoOnce;
 
 	void UpdateHP();
 	void PlayHPWidgetAnimation();
