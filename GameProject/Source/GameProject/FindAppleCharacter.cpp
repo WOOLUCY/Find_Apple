@@ -214,7 +214,13 @@ AFindAppleCharacter::AFindAppleCharacter()
 
 	/* Post Process Material */
 	PostProcessComp = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcessComponent"));
-	PostProcessComp->SetupAttachment(GetRootComponent());
+	PostProcessComp->SetupAttachment(CameraComponent);
+
+	/* Post Process Effect */
+	FPostProcessSettings settings;
+	settings.BloomIntensity = 5.f;
+	PostProcessComp->Settings = settings;
+
 
 	/* Combat */
 	SetIsAttacked(false);
@@ -285,9 +291,6 @@ void AFindAppleCharacter::BeginPlay()
 
 
 	}
-
-	/* Post Process Effect */
-	PostProcessComp->Settings.VignetteIntensity = 1.f;
 }
 
 void AFindAppleCharacter::PostInitializeComponents()

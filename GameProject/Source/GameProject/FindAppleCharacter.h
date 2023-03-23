@@ -156,7 +156,7 @@ public:
 	bool bPauseWidget = false;
 
 	/* Post Process Effect */
-	UPROPERTY(EditAnywhere, Category = "PostProcessMaterial")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PostProcessMaterial")
 	class UPostProcessComponent* PostProcessComp;
 
 	/* Camera Shake */

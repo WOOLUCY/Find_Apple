@@ -1,11 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Runtime/UMG/Public/UMG.h"
+#include "DoOnce.h"
 #include "ToolWidget.generated.h"
+
 
 /**
  * 
@@ -23,7 +24,17 @@ public:
 
 	void UpdateToolImage();
 
-	void ResetCombo();
+	FDoOnce DoOnce;
+
+	/* Animation */
+	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
+	class UWidgetAnimation* SwordAnimation;
+	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
+	class UWidgetAnimation* AxeAnimation;
+	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
+	class UWidgetAnimation* PickAnimation;
+	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
+	class UWidgetAnimation* HandAnimation;
 
 	/* Tool */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -35,4 +46,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HandImg;
 
+	int PrevEquipNum = 0;
 };
