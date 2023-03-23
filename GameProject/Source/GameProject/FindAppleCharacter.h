@@ -183,6 +183,7 @@ public:
 	//bool IsAttacking = false;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	/* Gettor & Settor */
 	float GetCurHealth() { return CurHealth; }
 	void SetCurHealth(float _health) { CurHealth = _health; }
 	float GetMaxHealth() { return MaxHealth; }
@@ -194,9 +195,15 @@ public:
 	void SetIsAttacked(bool _in) { bIsAttacked = _in; }
 	bool GetIsAttacking() { return bIsAttacking; }
 	void SetIsAttacking(bool _in) { bIsAttacking = _in; }
+
+	bool GetIsRunning() { return bIsRunning; }
+	void SetIsRunning(bool _in) { bIsRunning = _in; }
 	
 
 private:
+	UPROPERTY(VisibleAnywhere)
+		bool bIsRunning;
+
 	/* Combat */
 	UPROPERTY(VisibleAnywhere)
 		bool bIsAttacked;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "DoOnce.h"
 #include "HungerWidget.generated.h"
 
 /**
@@ -22,6 +23,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		class UProgressBar* HungerBar;
+
+	/* Animation */
+	UPROPERTY(BlueprintReadWrite, Transient, meta = (BindWidgetAnim))
+		class UWidgetAnimation* HungerAnimation;
+
+	UPROPERTY(VisibleAnywhere)
+		FDoOnce DoOnce;
+
+	float PrevHunger = 100.f;
 
 	void UpdateHunger();
 };

@@ -249,6 +249,7 @@ void AFindAppleCharacter::BeginPlay()
 
 	CurHealth = MaxHealth;
 	CurHunger = MaxHunger;
+	bIsRunning = false;
 
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController)
@@ -565,6 +566,24 @@ void AFindAppleCharacter::EquipReset(const FInputActionValue& Value)
 void AFindAppleCharacter::ChangeSpeed(const FInputActionValue& Value)
 {
 	//여기서 스피드를 바꾸던가 올리던가 어쩌구저쩌구해야함
+	// 알겠읍니다
+
+	if (GetIsRunning())	return;		// 이미 달리고 있는 상황이면 그냥 리턴
+
+	// 만약 캐릭터가 달리고 있지 않다면
+	// 캐릭터의 속도를 올림
+	GetCharacterMovement()->MaxWalkSpeed = 2000.f;
+
+	// 허기를 감소시킴
+
+	// 일정 시간 이후 속도를 다시 줄임
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+		{
+			GetCharacterMovement()->MaxWalkSpeed = 600.f;
+			SetIsRunning(false);
+		}, 5.f, false);
+
 }
 
 
@@ -607,6 +626,7 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 
 	//}
 
+	// TODO: 실시간으로 허기가 줄어들게
 
 }
 
@@ -727,7 +747,9 @@ void AFindAppleCharacter::Action()
 		}
 	}
 
-
+	// When Player use Equipment, CurHunger decreases
+	if(GetEquipNum() != 0)
+		SetCurHunger((GetCurHunger() - 10.f));
 }
 
 void AFindAppleCharacter::DayChange()

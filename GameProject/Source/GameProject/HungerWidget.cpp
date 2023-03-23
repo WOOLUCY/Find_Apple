@@ -14,6 +14,7 @@
 void UHungerWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+	DoOnce.Reset();
 }
 
 bool UHungerWidget::Initialize()
@@ -32,4 +33,14 @@ void UHungerWidget::UpdateHunger()
 
 	float percent = (MyChar->GetCurHunger()) / (MyChar->GetMaxHunger());
 	HungerBar->SetPercent(percent);
+
+	if (PrevHunger != MyChar->GetCurHunger() && DoOnce.Execute())
+	{
+		PlayAnimation(HungerAnimation);
+		UE_LOG(LogClass, Warning, TEXT("Player's Current Hunger:%f"), MyChar->GetCurHunger());
+		PrevHunger = MyChar->GetCurHunger();
+	}
+
+	else if (PrevHunger == MyChar->GetCurHunger())
+		DoOnce.Reset();
 }
