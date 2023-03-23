@@ -133,6 +133,19 @@ AFindAppleCharacter::AFindAppleCharacter()
 		PauseAction = Input_Pause.Object;
 	}
 
+	/* 도구 휠 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_WheelUp(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_ToolUp.IA_ToolUp'"));
+	if (Input_WheelUp.Succeeded())
+	{
+		WheelUpAction = Input_WheelUp.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_WheelDown(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_ToolDown.IA_ToolDown'"));
+	if (Input_WheelDown.Succeeded())
+	{
+		WheelDownAction = Input_WheelDown.Object;
+	}
+
 
 	//kaon - 대쉬, 도구선택
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Dash(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_Dash.IA_Dash'"));
@@ -597,6 +610,77 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 
 }
 
+
+void AFindAppleCharacter::ChangeEquipment(int in)
+{
+	if (CurEquipActor)
+		CurEquipActor->Destroy();
+
+	if (in == 1) 
+	{
+		CurEquipActor = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
+		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
+		
+		//CurEquipNum = 1;
+	}
+
+	else if (in == 2) 
+	{
+		CurEquipActor = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
+		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
+		//CurEquipNum = 2;
+
+	}
+
+	else if (in == 3) 
+	{
+
+		CurEquipActor = GetWorld()->SpawnActor<APick>(FVector::ZeroVector, FRotator::ZeroRotator);
+		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("PickSocket"));
+		//CurEquipNum = 3;
+	}
+
+	else if (in == 0)
+	{
+		if (CurEquipActor)
+			CurEquipActor->Destroy();
+	}
+}
+
+void AFindAppleCharacter::UpEquip(const FInputActionValue& Value)
+{
+	// 도구 번호 변환
+	int temp = GetEquipNum();
+
+	if (temp + 1 > 3)
+	{
+		SetEquipNum(0);
+	}
+	else
+		SetEquipNum(++temp);
+
+	ChangeEquipment(GetEquipNum());
+
+	UE_LOG(LogClass, Warning, TEXT("CurEquipNum:%d"), GetEquipNum());
+}
+
+void AFindAppleCharacter::DownEquip(const FInputActionValue& Value)
+{
+	int temp = GetEquipNum();
+
+	if (temp - 1 < 0)
+	{
+		SetEquipNum(3);
+	}
+	else
+		SetEquipNum(--temp);
+
+	ChangeEquipment(GetEquipNum());
+
+	UE_LOG(LogClass, Warning, TEXT("CurEquipNum:%d"), GetEquipNum());
+
+}
+
 // Called to bind functionality to input
 void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -621,6 +705,10 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(AxMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipAx);
 		EnhancedInputComponent->BindAction(PickMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipPick);
 		EnhancedInputComponent->BindAction(ResetEquipMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipReset);
+
+		// W: Wheel Equipment
+		EnhancedInputComponent->BindAction(WheelUpAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::UpEquip);
+		EnhancedInputComponent->BindAction(WheelDownAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::DownEquip);
 
 	}
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);

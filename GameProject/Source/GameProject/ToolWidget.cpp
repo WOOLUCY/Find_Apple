@@ -19,10 +19,10 @@ bool UToolWidget::Initialize()
 		return true;
 	}
 
-	HandImg->SetOpacity(1.f);
-	SwordImg->SetOpacity(0.f);
-	AxeImg->SetOpacity(0.f);
-	PickImg->SetOpacity(0.f);
+	//HandImg->SetOpacity(1.f);
+	//SwordImg->SetOpacity(0.f);
+	//AxeImg->SetOpacity(0.f);
+	//PickImg->SetOpacity(0.f);
 
 	return false;
 }

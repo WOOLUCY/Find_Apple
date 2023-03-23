@@ -46,5 +46,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* HandImg;
 
-	int PrevEquipNum = 0;
+	int PrevEquipNum = -1;
 };

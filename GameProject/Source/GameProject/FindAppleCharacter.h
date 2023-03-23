@@ -61,6 +61,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* PauseAction;
 
+	// W: Wheel Tool
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* WheelUpAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* WheelDownAction;
+
 	//가온 - 도구선택, 대쉬
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 		UInputAction* DashMapping;
@@ -90,6 +97,9 @@ protected:
 	void EquipPick(const FInputActionValue& Value);
 	void EquipReset(const FInputActionValue& Value);
 	void ChangeSpeed(const FInputActionValue& Value);
+
+	void UpEquip(const FInputActionValue& Value);
+	void DownEquip(const FInputActionValue& Value);
 
 
 public:	
@@ -177,6 +187,8 @@ public:
 	void SetCurHealth(float _health) { CurHealth = _health; }
 	float GetMaxHealth() { return MaxHealth; }
 	int32 GetEquipNum() { return CurEquipNum; }
+	void SetEquipNum(int in) { CurEquipNum = in; }
+	void ChangeEquipment(int in);
 
 	bool GetIsAttacked() { return bIsAttacked; }
 	void SetIsAttacked(bool _in) { bIsAttacked = _in; }
@@ -227,3 +239,4 @@ private:
 
 
 };
+
