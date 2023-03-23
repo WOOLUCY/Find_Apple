@@ -14,7 +14,7 @@ class GAMEPROJECT_API UPauseWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-	//UPauseWidget(const FObjectInitializer& objectInitializer);
+	UPauseWidget(const FObjectInitializer& objectInitializer);
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -26,6 +26,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* ExitButton;
 
+	/* Option Widget */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> OptionWidgetClass;
+	UPROPERTY()
+	class UGameOptionWidget* OptionWidgetUIObject;
+
 public:
 	/* Click Action */
 	UFUNCTION()
@@ -34,6 +40,6 @@ public:
 	UFUNCTION()
 	void ExitButtonClick();
 
-
-
+	UFUNCTION()
+	void OptionButtononClick();
 };

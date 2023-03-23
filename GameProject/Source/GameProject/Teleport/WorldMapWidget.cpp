@@ -163,6 +163,9 @@ void UWorldMapWidget::NPCHouseButtonClick()
 		}), BlackScreenBeginTime, false);
 
 
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->SetInputMode(FInputModeGameOnly());
+	PlayerController->SetShowMouseCursor(false);
 	RemoveFromParent();
 }
 
@@ -183,6 +186,9 @@ void UWorldMapWidget::FrontDungeonButtonClick()
 			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 		}), BlackScreenBeginTime, false);
 
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->SetInputMode(FInputModeGameOnly());
+	PlayerController->SetShowMouseCursor(false);
 
 	RemoveFromParent();
 }
@@ -205,6 +211,9 @@ void UWorldMapWidget::HomeButtonClick()
 		}), BlackScreenBeginTime, false);
 
 
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->SetInputMode(FInputModeGameOnly());
+	PlayerController->SetShowMouseCursor(false);
 	RemoveFromParent();
 }
 
@@ -226,6 +235,9 @@ void UWorldMapWidget::BridgeButtonClick()
 		}), BlackScreenBeginTime, false);
 
 
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->SetInputMode(FInputModeGameOnly());
+	PlayerController->SetShowMouseCursor(false);
 	RemoveFromParent();
 }
 

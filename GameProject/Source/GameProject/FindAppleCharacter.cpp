@@ -237,7 +237,6 @@ void AFindAppleCharacter::BeginPlay()
 		}
 	}
 
-
 	/* Quest List 위젯 생성, 얘는 항상 Viewport 위에 있음 */
 	QuestListUIObject = CreateWidget<UQuestListWidget>(GetWorld(), QuestListWidgetClass);
 	QuestListUIObject->AddToViewport();

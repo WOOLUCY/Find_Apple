@@ -19,7 +19,15 @@ protected:
 
 	virtual void NativeConstruct() override;
 
-	
+private:
+	/* Pause Widget */
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> PauseWidgetClass;
+	UPROPERTY()
+	class UPauseWidget* PauseWidgetUIObject;
+
+
+public:
 	/* 화면 크기 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* FullScreenBtn;
@@ -159,7 +167,9 @@ protected:
 
 	/*  뒤로 가기 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UButton* BackButton;
+	class UButton* CloseButton;
+	UFUNCTION()
+	void WidgetClose();
 
 	UPROPERTY()
 	UGameUserSettings* setting;

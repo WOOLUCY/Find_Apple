@@ -4,10 +4,18 @@
 #include "GameOptionWidget.h"
 #include "Components/Button.h"
 #include "GameFramework/GameUserSettings.h"
+#include "Kismet/GameplayStatics.h"
+#include "../FindAppleCharacter.h"
+#include "../PauseWidget.h"
 
 UGameOptionWidget::UGameOptionWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
-
+	/* Pause Widget */
+	ConstructorHelpers::FClassFinder<UPauseWidget>  PauseWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/UI/PauseWidget.PauseWidget_C'"));
+	if (PauseWidget.Succeeded())
+	{
+		PauseWidgetClass = PauseWidget.Class;
+	}
 }
 
 void UGameOptionWidget::NativeConstruct()
@@ -22,6 +30,10 @@ void UGameOptionWidget::NativeConstruct()
 	else if (setting->GetFullscreenMode() == EWindowMode::Windowed) {
 		WindowBtn->SetIsEnabled(false);
 	}
+
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->SetInputMode(FInputModeUIOnly());
+	PlayerController->SetShowMouseCursor(true);
 
 	/* 화면 모드 */
 	WindowBtn->OnClicked.AddDynamic(this, &UGameOptionWidget::SetWindowScreen);
@@ -56,7 +68,8 @@ void UGameOptionWidget::NativeConstruct()
 	ShadowMedium->OnClicked.AddDynamic(this, &UGameOptionWidget::SetShadowMedium);
 	ShadowHigh->OnClicked.AddDynamic(this, &UGameOptionWidget::SetShadowHigh);
 	ShadowEpic->OnClicked.AddDynamic(this, &UGameOptionWidget::SetShadowEpic);
-
+	// close
+	CloseButton->OnClicked.AddDynamic(this, &UGameOptionWidget::WidgetClose);
 }
 
 void UGameOptionWidget::SetFullScreen()
@@ -391,4 +404,20 @@ void UGameOptionWidget::SetShadowEpic()
 		ShadowHigh->SetIsEnabled(true);
 		ShadowEpic->SetIsEnabled(false);
 	}
+}
+
+void UGameOptionWidget::WidgetClose()
+{
+	//PauseWidgetUIObject = CreateWidget<UPauseWidget>(GetWorld(), PauseWidgetClass);
+	//PauseWidgetUIObject->AddToViewport();
+
+	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	MyChar->bPauseWidget = false;
+	PlayerController->SetPause(MyChar->bPauseWidget);
+	PlayerController->SetShowMouseCursor(false);
+	PlayerController->SetInputMode(FInputModeGameOnly());
+
+	RemoveFromParent();
 }
