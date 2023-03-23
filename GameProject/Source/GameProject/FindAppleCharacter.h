@@ -182,6 +182,7 @@ public:
 	void SetIsAttacked(bool _in) { bIsAttacked = _in; }
 	bool GetIsAttacking() { return bIsAttacking; }
 	void SetIsAttacking(bool _in) { bIsAttacking = _in; }
+	
 
 private:
 	/* Combat */

@@ -215,6 +215,10 @@ AFindAppleCharacter::AFindAppleCharacter()
 	/* Post Process Material */
 	PostProcessComp = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcessComponent"));
 	PostProcessComp->SetupAttachment(GetRootComponent());
+
+	/* Combat */
+	SetIsAttacked(false);
+	SetIsAttacking(false);
 }
 
 

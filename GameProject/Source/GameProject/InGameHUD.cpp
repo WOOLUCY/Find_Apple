@@ -73,7 +73,6 @@ void AInGameHUD::BeginPlay()
 			HungerWidget->AddToViewport();
 		}
 	}
-
 }
 
 void AInGameHUD::DrawHUD()

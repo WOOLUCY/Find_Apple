@@ -8,6 +8,7 @@
 void UHPWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+	DoOnce.Reset();
 }
 
 bool UHPWidget::Initialize()
@@ -23,12 +24,22 @@ void UHPWidget::UpdateHP()
 {
 	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
 
+	// 피격 시 위젯 애니메이션 재생
 	float percent = (MyChar->GetCurHealth()) / (MyChar->GetMaxHealth());
+
+	if (MyChar->GetIsAttacked() && DoOnce.Execute())
+	{
+		UE_LOG(LogClass, Warning, TEXT("Widget Animation Is Playing"));
+		PlayHPWidgetAnimation();
+	}
+
+	else if (!MyChar->GetIsAttacked())
+	{
+		DoOnce.Reset();
+	}
+
 	HPBar->SetPercent(percent);
 
-	// 피격 시 위젯 애니메이션 재생
-	if (MyChar->GetIsAttacked())
-		PlayHPWidgetAnimation();
 }
 
 void UHPWidget::PlayHPWidgetAnimation()
