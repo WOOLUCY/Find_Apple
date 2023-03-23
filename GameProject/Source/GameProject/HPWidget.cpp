@@ -24,9 +24,11 @@ void UHPWidget::UpdateHP()
 {
 	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
 
-	// 피격 시 위젯 애니메이션 재생
+	// 체력 감소
 	float percent = (MyChar->GetCurHealth()) / (MyChar->GetMaxHealth());
+	HPBar->SetPercent(percent);
 
+	// 피격 시 위젯 애니메이션 재생
 	if (MyChar->GetIsAttacked() && DoOnce.Execute())
 	{
 		UE_LOG(LogClass, Warning, TEXT("Widget Animation Is Playing"));
@@ -37,9 +39,6 @@ void UHPWidget::UpdateHP()
 	{
 		DoOnce.Reset();
 	}
-
-	HPBar->SetPercent(percent);
-
 }
 
 void UHPWidget::PlayHPWidgetAnimation()
