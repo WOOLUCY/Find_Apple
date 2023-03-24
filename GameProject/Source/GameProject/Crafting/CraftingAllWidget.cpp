@@ -2,7 +2,7 @@
 
 
 #include "CraftingAllWidget.h"
-#include "CraftingActor.h"
+//#include "CraftingActor.h"
 #include "CraftingItemWidget.h"
 #include "CraftingDataTable.h"
 #include "Components/Button.h"
@@ -92,7 +92,7 @@ void UCraftingAllWidget::ClickedCloseButton()
 {
 	TArray<AActor*> CraftableActors;
 
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACraftingActor::StaticClass(), CraftableActors);
+	/*UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACraftingActor::StaticClass(), CraftableActors);
 
 	AActor* ActorItr = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(ActorItr);
@@ -111,8 +111,8 @@ void UCraftingAllWidget::ClickedCloseButton()
 				CraftingActor->bIsWidgetValid = false;
 			}
 		}
-	}
+	}*/
 
-	RemoveFromParent();
+	//RemoveFromParent();
 }
 
