@@ -2,8 +2,8 @@
 
 
 #include "CraftingAllWidget.h"
-//#include "CraftingActor.h"
-#include "CraftingItemWidget.h"
+#include "CraftingActor.h"
+#include "CraftingItemsWidget.h"
 #include "CraftingDataTable.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
@@ -13,8 +13,9 @@
 
 UCraftingAllWidget::UCraftingAllWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
+
 	/* Crafting Item Widget */
-	ConstructorHelpers::FClassFinder<UCraftingItemWidget>  CraftingItemWidgetFind(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Crafting/UI/WBP_CraftingItem.WBP_CraftingItem_C'"));
+	static ConstructorHelpers::FClassFinder<UCraftingItemsWidget> CraftingItemWidgetFind(TEXT("WidgetBlueprint'/Game/Semin/UI/Crafting/WBP_CraftingItem.WBP_CraftingItem_C'"));
 	if (CraftingItemWidgetFind.Succeeded())
 	{
 		CraftingItemWidgetClass = CraftingItemWidgetFind.Class;
@@ -64,7 +65,7 @@ void UCraftingAllWidget::CreateItemWidget(FName CraftingItemName)
 /* ���� ��ư */
 void UCraftingAllWidget::ClickedAXButton()
 {
-	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemWidget>(GetWorld(), CraftingItemWidgetClass);
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
 
 	/* ��ư���� �ٲ��� �ϴ� �̸�, �����ͺ��̽��� �� �̸� */
 	FName ButtonName = FName(TEXT("AX"));
@@ -77,8 +78,8 @@ void UCraftingAllWidget::ClickedAXButton()
 /* ��� ��ư */
 void UCraftingAllWidget::ClickedPickButton()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("ClickedAXButton"));
-	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemWidget>(GetWorld(), CraftingItemWidgetClass);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("ClickedAXButton"));
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
 
 	/* ��ư���� �ٲ��� �ϴ� �̸�, �����ͺ��̽��� �� �̸� */
 	FName ButtonName = FName(TEXT("Pick"));
@@ -92,7 +93,7 @@ void UCraftingAllWidget::ClickedCloseButton()
 {
 	TArray<AActor*> CraftableActors;
 
-	/*UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACraftingActor::StaticClass(), CraftableActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACraftingActor::StaticClass(), CraftableActors);
 
 	AActor* ActorItr = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(ActorItr);
@@ -111,8 +112,8 @@ void UCraftingAllWidget::ClickedCloseButton()
 				CraftingActor->bIsWidgetValid = false;
 			}
 		}
-	}*/
+	}
 
-	//RemoveFromParent();
+	RemoveFromParent();
 }
 

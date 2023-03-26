@@ -47,8 +47,8 @@ public:
 		TSubclassOf<class UUserWidget> CraftingListWidgetClass;
 	UPROPERTY()
 		class UCraftingListWidget* CraftingListUIObject;
-	UFUNCTION()
-		void SetCraftListWidget(FName CraftRowName);
+	//UFUNCTION()
+	//	void SetCraftListWidget(FName CraftRowName);
 
 	UPROPERTY()
 		class UDataTable* CraftingDataTable;
@@ -81,13 +81,13 @@ public:
 
 	UFUNCTION()
 		void ClickedBackButton();
-	/* Close */
-	UFUNCTION()
-		void ClickedCloseButton();
-	UFUNCTION()
-		void ClickedCreateButton();
-	UFUNCTION()
-		void CreateButtonSet(FName CraftRowName);
+	/////* Close */
+	////UFUNCTION()
+	////	void ClickedCloseButton();
+	////UFUNCTION()
+	////	void ClickedCreateButton();
+	////UFUNCTION()
+	////	void CreateButtonSet(FName CraftRowName);
 	UPROPERTY()
 		FName CraftingName;
 };

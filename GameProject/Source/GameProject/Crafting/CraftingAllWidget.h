@@ -29,9 +29,9 @@ public:
 
 	/* Crafting Item Widget */
 	UPROPERTY()
-		TSubclassOf<class UUserWidget> CraftingItemWidgetClass;
+	TSubclassOf<class UUserWidget> CraftingItemWidgetClass;
 	UPROPERTY()
-		class UCraftingItemWidget* CraftingItemWidgetUIObject;
+	class UCraftingItemsWidget* CraftingItemWidgetUIObject;
 
 	UPROPERTY()
 		class UDataTable* CraftingDataTable;
