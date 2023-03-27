@@ -574,7 +574,7 @@ void AFindAppleCharacter::ChangeSpeed(const FInputActionValue& Value)
 	// 캐릭터의 속도를 올림
 	GetCharacterMovement()->MaxWalkSpeed = 2000.f;
 
-	// 허기를 감소시킴
+	// TODO: 허기를 감소시킴
 
 	// 일정 시간 이후 속도를 다시 줄임
 	FTimerHandle TimerHandle;
@@ -698,7 +698,6 @@ void AFindAppleCharacter::DownEquip(const FInputActionValue& Value)
 	ChangeEquipment(GetEquipNum());
 
 	UE_LOG(LogClass, Warning, TEXT("CurEquipNum:%d"), GetEquipNum());
-
 }
 
 // Called to bind functionality to input
