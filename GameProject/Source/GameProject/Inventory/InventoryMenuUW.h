@@ -31,6 +31,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UInventoryUW* InventoryWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
+
+	TArray<struct FInventoryTableRow*> InventoryData;
 	
 	/* Inventory Slot Class */
 	UPROPERTY(EditAnywhere, Category = "Components")

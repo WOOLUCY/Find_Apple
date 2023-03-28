@@ -7,6 +7,8 @@
 #include "CraftingAllWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "../PressKeyWidget.h"
+#include "../FindAppleCharacter.h"
+#include "../Inventory/InventoryComponent.h"
 
 
 // Sets default values
@@ -92,6 +94,10 @@ void ACraftingActor::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, c
 			bIsPressKeyValid = true;
 			PressKeyWidgetUIObejct = CreateWidget<UUserWidget>(GetWorld(), PressKeyWidgetClass);
 			PressKeyWidgetUIObejct->AddToViewport();
+
+			AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+			AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+			MyCharacter->InventoryComponent->AddToInventory(FName("Sleep"), 1);
 		}
 
 	}

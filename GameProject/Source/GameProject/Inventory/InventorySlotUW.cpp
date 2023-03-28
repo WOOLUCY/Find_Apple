@@ -62,13 +62,16 @@ void UInventorySlotUW::NativePreConstruct()
 
 			if (RowName == ItemName)
 			{
-				SlotImage->SetBrushFromTexture(InventoryRow.Thumbnail);
-				SlotImage->SetBrushColor(FColor::White);
-				Descript = InventoryRow.Descript;
-				Name = InventoryRow.DisplayName;
-				if ( InventoryRow.ItemType == 1 ) 
-				{
-					Eatable = true;
+				if (InventoryRow.ItemType != 2) {
+					// ItemType = 0은 섭취 불가능, 1 는 가능, 2 는인벤토리상 안 보이는 템
+					SlotImage->SetBrushFromTexture(InventoryRow.Thumbnail);
+					SlotImage->SetBrushColor(FColor::White);
+					Descript = InventoryRow.Descript;
+					Name = InventoryRow.DisplayName;
+					if (InventoryRow.ItemType == 1)
+					{
+						Eatable = true;
+					}
 				}
 			}
 		}
