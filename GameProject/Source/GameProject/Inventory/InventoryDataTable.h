@@ -15,7 +15,7 @@ struct FInventoryTableRow : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	int32 ItemType = 0;		/* 먹을 수 있으면 1 / eatable = 1 */
+	int32 ItemType = 0;		/* 먹을 수 있으면 1 / eatable = 1 / not visible = 2 */
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 	FText DisplayName;

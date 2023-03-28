@@ -4,11 +4,18 @@
 #include "InventoryMenuUW.h"
 #include "InventoryComponent.h"
 #include "InventorySlotUW.h"
+#include "InventoryDataTable.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/WrapBox.h"
 
 UInventoryMenuUW::UInventoryMenuUW(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
+	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
+	if (DataTable.Succeeded())
+	{
+		ItemDataTable = DataTable.Object;
+	}
+
 	/* Inventory Widget */
 	ConstructorHelpers::FClassFinder<UInventorySlotUW>  InventoryWidgetFind(TEXT("WidgetBlueprint'/Game/Semin/UI/Inventory/UI/BP/WBP_InventoryMenuSlotCPP.WBP_InventoryMenuSlotCPP_C'"));
 	if (InventoryWidgetFind.Succeeded())
@@ -29,11 +36,29 @@ void UInventoryMenuUW::Refresh()
 	if (InventoryComponent) {
 		for (auto& InventoryElement : InventoryComponent->InventoryContent)
 		{
-			InventorySlotUIObject = CreateWidget<UInventorySlotUW>(GetWorld(), InventorySlotWidgetClass);
-			InventorySlotUIObject->Quantity = InventoryElement.Value;
-			InventorySlotUIObject->ItemName = InventoryElement.Key;
-			InventorySlotUIObject->Widget = InventoryWidget;
-			InventoryContentsWrap->AddChildToWrapBox(InventorySlotUIObject);
+			if (ItemDataTable != nullptr)
+			{
+				ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+				TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+				for (FName RowName : RowNames)
+				{
+					FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+					if (InventoryElement.Key == RowName)
+					{
+						if (InventoryRow.ItemType != 2) {
+
+							InventorySlotUIObject = CreateWidget<UInventorySlotUW>(GetWorld(), InventorySlotWidgetClass);
+							InventorySlotUIObject->Quantity = InventoryElement.Value;
+							InventorySlotUIObject->ItemName = InventoryElement.Key;
+							InventorySlotUIObject->Widget = InventoryWidget;
+							InventoryContentsWrap->AddChildToWrapBox(InventorySlotUIObject);
+						}
+					}
+				}
+			}
+
 		};
 	}
 }
