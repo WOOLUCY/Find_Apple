@@ -56,6 +56,8 @@ protected:
 	UInputAction* MouseToggleAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* WorldMapAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* SkipAction;
 
 	// W: Pause Menu
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
@@ -91,6 +93,7 @@ protected:
 	void MouseToggle(const FInputActionValue& Value);
 	void ShowWorldMap(const FInputActionValue& Value);
 	void ShowPauseMenu(const FInputActionValue& Value);
+	void SkipQuest(const FInputActionValue& Value);
 
 	void EquipSword(const FInputActionValue& Value);
 	void EquipAx(const FInputActionValue& Value);

@@ -44,6 +44,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyCategory")
 	void OnActivate(); virtual void OnActivate_Implementation() override;
 
+	/* 플레이어가 collised 상태에서 `를 눌렀을 경우 다음 퀘스트로 바로 넘어감 */
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyCategory")
+	void NextDialouge(); virtual void NextDialouge_Implementation() override;
+
 	UFUNCTION()
 	void DialogueCreate();
 

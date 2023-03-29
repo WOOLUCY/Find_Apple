@@ -210,6 +210,7 @@ void AQuestNPC::DialogueGetLine()
 								QuestRequirItem.Add(Dialogue.Conditions_Item, Dialogue.Conditions_cnt);
 								QuestRequirItemName = Dialogue.Conditions_Item;
 								QuestRequirItemCnt = Dialogue.Conditions_cnt;
+								UE_LOG(LogTemp, Warning, TEXT("Add to require item %s"), *QuestRequirItemName.ToString());
 							}
 
 
@@ -287,7 +288,34 @@ void AQuestNPC::DialogueGetLine()
 
 }
 
-void AQuestNPC::DialogueCreate() 
+void AQuestNPC::NextDialouge_Implementation()
+{
+	/* FindAppleCharacter로 Cast */
+	AActor* ActorItr = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(ActorItr);
+
+	// 인벤토리에 아이템이 있기는 한지
+	if (MyCharacter->InventoryComponent->InventoryContent.Contains(QuestRequirItemName))
+	{	
+		// 인벤토리에 있다면 퀘스트 요구 개수보다 작은지 검사
+		if (*MyCharacter->InventoryComponent->InventoryContent.Find(QuestRequirItemName) < *QuestRequirItem.Find(QuestRequirItemName)) {
+			MyCharacter->InventoryComponent->AddToInventory(QuestRequirItemName, QuestRequirItemCnt - *MyCharacter->InventoryComponent->InventoryContent.Find(QuestRequirItemName));
+			UE_LOG(LogTemp, Warning, TEXT("NextDialouge"));
+			Text->SetText(FText::FromString(TEXT("?")));
+			Conversation_ID += 1;
+			CurrentLine = 0;
+		}
+	}
+	// 인벤토리 아예 없다면 다 채워 넣기
+	else {
+		MyCharacter->InventoryComponent->AddToInventory(QuestRequirItemName, QuestRequirItemCnt);
+		Text->SetText(FText::FromString(TEXT("?")));
+		Conversation_ID += 1;
+		CurrentLine = 0;
+	}
+}
+
+void AQuestNPC::DialogueCreate()
 {
 	if (bIsValid)	// Widget is 'not' valid !!
 	{
@@ -359,7 +387,7 @@ void AQuestNPC::TimelineProgress(float Value)
 	FVector NewLocation = FMath::Lerp(StartLoc, EndLoc, Value);
 	FRotator NewRotation = FMath::Lerp(StartRot, EndRot, Value);
 
-	UE_LOG(LogTemp, Warning, TEXT("TimeLine Progress"));
+	//UE_LOG(LogTemp, Warning, TEXT("TimeLine Progress"));
 
 	CharacterActor->SetActorRelativeLocation(NewLocation);
 	CharacterActor->SetActorRelativeRotation(NewRotation);

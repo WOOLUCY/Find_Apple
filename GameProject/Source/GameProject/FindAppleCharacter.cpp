@@ -132,6 +132,12 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		PauseAction = Input_Pause.Object;
 	}
+	/* 퀘스트 스킵 키 (다음으로 바로 넘어감) */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Skip(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_Skip.IA_Skip'"));
+	if (Input_Skip.Succeeded())
+	{
+		SkipAction = Input_Skip.Object;
+	}
 
 	/* 도구 휠 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_WheelUp(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_ToolUp.IA_ToolUp'"));
@@ -490,6 +496,26 @@ void AFindAppleCharacter::ShowPauseMenu(const FInputActionValue& Value)
 	PlayerController->SetShowMouseCursor(true);
 }
 
+void AFindAppleCharacter::SkipQuest(const FInputActionValue& Value)
+{
+	TArray<AActor*> TalkableActor;
+
+	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UFindAppleInterface::StaticClass(), TalkableActor);
+
+	for (AActor* Actor : TalkableActor)
+	{
+		IFindAppleInterface* Interface = Cast<IFindAppleInterface>(Actor);
+
+		if (Interface != nullptr)
+		{
+			if (this->IsOverlappingActor(Actor))
+			{
+				Interface->Execute_NextDialouge(Actor);
+			}
+		}
+	}
+}
+ 
 
 void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
 {
@@ -717,6 +743,7 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(MouseToggleAction, ETriggerEvent::Started, this, &AFindAppleCharacter::MouseToggle);
 		EnhancedInputComponent->BindAction(WorldMapAction, ETriggerEvent::Started, this, &AFindAppleCharacter::ShowWorldMap);
 		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AFindAppleCharacter::ShowPauseMenu);
+		EnhancedInputComponent->BindAction(SkipAction, ETriggerEvent::Started, this, &AFindAppleCharacter::SkipQuest);
 
 		//kaon - dash, equipment
 		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);

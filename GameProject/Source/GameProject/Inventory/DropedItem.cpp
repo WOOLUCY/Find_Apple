@@ -194,7 +194,7 @@ void ADropedItem::PicUpItem_Implementation()
 				//->AddOnScreenDebugMessage(-1, 4, FColor::Blue, TEXT("I Finished Quest !!"));
 				FoundActor->Text->SetText(FText::FromString(TEXT("?")));
 				FoundActor->Conversation_ID += 1;
-			//	UE_LOG(LogTemp, Warning, TEXT("%d Conversation ID "), FoundActor->Conversation_ID);
+				//UE_LOG(LogTemp, Warning, TEXT("%d Conversation ID "), FoundActor->Conversation_ID);
 				FoundActor->CurrentLine = 0;
 			}
 		}
