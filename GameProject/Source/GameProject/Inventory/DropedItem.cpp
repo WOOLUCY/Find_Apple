@@ -38,7 +38,7 @@ ADropedItem::ADropedItem()
 
 	/* Collision Mesh */
 	CollisionMesh = CreateDefaultSubobject<UBoxComponent>(FName("Collision Mesh"));
-	CollisionMesh->SetBoxExtent(FVector(15.f, 15.f, 15.f));
+	CollisionMesh->SetBoxExtent(FVector(30.f, 30.f, 30.f));
 	CollisionMesh->SetupAttachment(MyBox);
 	CollisionMesh->SetWorldLocation(MyBox->GetComponentLocation());
 	CollisionMesh->SetHiddenInGame(false);

@@ -284,8 +284,6 @@ void AQuestNPC::DialogueGetLine()
 	//	DialogueUIObject = nullptr;
 	//	CurrentLine = 0;
 	//}
-
-
 }
 
 void AQuestNPC::NextDialouge_Implementation()
