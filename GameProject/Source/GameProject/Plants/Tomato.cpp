@@ -36,7 +36,7 @@ ATomato::ATomato()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_FRUIT
 	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/tamato1_2.tamato1_2'"));
 	if (SM_FRUIT.Succeeded()) {
-		Fruit->SetStaticMesh(SM_FRUIT.Object);
+	//	Fruit->SetStaticMesh(SM_FRUIT.Object);
 	}
 
 
