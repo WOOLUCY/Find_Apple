@@ -29,6 +29,7 @@ protected:
 	int MaxLevel = 3;   //성장 최대단계
 	int LevelUp = 1;	//성장하는 물줘야하는 횟수
 	bool IsFruit = false;//열매있는지없는지
+	bool CanHarvest = false; //수확시킬수있는지 없는지를 확인
 
 	TArray<UStaticMesh*> Meshs;
 

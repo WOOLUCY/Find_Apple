@@ -12,12 +12,19 @@ APlant::APlant()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+
 }
 
 // Called when the game starts or when spawned
 void APlant::BeginPlay()
 {
 	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("Plant sPAnw!!"));
+
+	float RandYaw = FMath::RandRange(-90.f, 90.f);
+
+	SetActorRelativeRotation(FRotator(0.f, RandYaw, 0.f));
+
 
 
 }
@@ -49,7 +56,15 @@ void APlant::PutWater()
 		if (NowLevel < MaxLevel) {
 			Current->SetStaticMesh(Meshs[NowLevel]);
 			++NowLevel;
+
+			if (!IsFruit) { 
+				CanHarvest = true;
+			}
+	
+
+			
 		}
+		
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("PlantWater Put ++"));
@@ -69,7 +84,7 @@ void APlant::DayChange()
 
 void APlant::Harvest()
 {
-	if ((NowLevel == MaxLevel) && !IsFruit){
+	if (CanHarvest){
 		UE_LOG(LogTemp, Warning, TEXT("Call Harvest"));
 
 
