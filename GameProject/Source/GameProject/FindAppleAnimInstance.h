@@ -40,6 +40,8 @@ private:
 
 	FTimerHandle TimerHandle;
 
+	float PlaySpeed = 2.f;
+
 
 
 public:

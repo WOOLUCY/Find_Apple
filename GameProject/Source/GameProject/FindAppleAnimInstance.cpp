@@ -50,14 +50,17 @@ void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UFindAppleAnimInstance::PlayActionMontage()
 {
-	static float PlayLength = ActionMontage->GetPlayLength();
+	static float PlayLength = PlantMontage->GetPlayLength() / (PlaySpeed * 1.5f);
 
 	if (OffInput()) {
-		Montage_Play(ActionMontage, 1.f);
+		Montage_Play(ActionMontage, PlaySpeed);
 		UWorld* World = GetWorld();
 		if (World){
+			UE_LOG(LogTemp, Warning, TEXT("OnInpnut!!!!!!!!????????!"));
+
 			FTimerManager& TimerManager = World->GetTimerManager();
-			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, PlayLength, false);
+
+			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 0.2f, false);
 		}
 
 	}
@@ -67,13 +70,17 @@ void UFindAppleAnimInstance::PlayActionMontage()
 
 void UFindAppleAnimInstance::PlayPlantMontage()
 {
-	static float PlayLength = PlantMontage->GetPlayLength()/2.f;
+	static float PlayLength = PlantMontage->GetPlayLength()/ (PlaySpeed * 1.5f);
 
 	if (OffInput()) {
-		Montage_Play(PlantMontage, 2.f);
+		Montage_Play(PlantMontage, PlaySpeed);
+
+	
 		UWorld* World = GetWorld();
 		if (World) {
+
 			FTimerManager& TimerManager = World->GetTimerManager();
+
 			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, PlayLength, false);
 		}
 	}
@@ -95,6 +102,7 @@ bool UFindAppleAnimInstance::OffInput()
 
 void UFindAppleAnimInstance::OnInput()
 {
+	UE_LOG(LogTemp, Warning, TEXT("OnInpnut!!!!!!!!!"));
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	AFindApplePlayerController* Mycontol = Cast<AFindApplePlayerController>(PlayerController);
 	if (Mycontol != nullptr) {
