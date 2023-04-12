@@ -55,6 +55,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
 	FText QuestDes;				// UI에 나오게 될 간략한 퀘스트 내용
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
+	FName PlaceName;				// UI에 나오게 될 간략한 퀘스트 내용
 };
 
 
