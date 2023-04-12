@@ -23,6 +23,7 @@
 #include "Inventory/InventoryUW.h"
 #include "Inventory/InventoryComponent.h"
 #include "Dialogue/QuestListWidget.h"
+#include "Dialogue/TeleportPosition.h"
 #include "Teleport/WorldMapWidget.h"
 #include "Components/InputComponent.h"
 #include "Components/PostProcessComponent.h"
@@ -137,6 +138,18 @@ AFindAppleCharacter::AFindAppleCharacter()
 	if (Input_Skip.Succeeded())
 	{
 		SkipAction = Input_Skip.Object;
+	}
+	/* 퀘스트 텔레포트 이동 키 (퀘스트 수행 지역으로 이동) */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Teleport(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_Teleport.IA_Teleport'"));
+	if (Input_Teleport.Succeeded())
+	{
+		TeleportAction = Input_Teleport.Object;
+	}
+	/* 퀘스트 스킵 키 (다음으로 바로 넘어감) */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_TeleportQuestNPC(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_QuestNPCTeleport.IA_QuestNPCTeleport'"));
+	if (Input_TeleportQuestNPC.Succeeded())
+	{
+		QuestTeleportAction = Input_TeleportQuestNPC.Object;
 	}
 
 	/* 도구 휠 */
@@ -515,6 +528,50 @@ void AFindAppleCharacter::SkipQuest(const FInputActionValue& Value)
 		}
 	}
 }
+
+void AFindAppleCharacter::Teleport(const FInputActionValue& Value)
+{
+	TArray<AActor*> TeleportActors;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ATeleportPosition::StaticClass(), Place, TeleportActors);
+
+	{
+		for (AActor* Actor : TeleportActors)
+		{
+			ATeleportPosition* Position = Cast<ATeleportPosition>(Actor);
+
+			if (Position != nullptr)
+			{
+				FVector Location = Position->GetActorLocation();
+				FVector MoveLocation = Location + FVector(0.f, 0.f, 50.f);
+
+				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+				CharacterActor->SetActorRelativeLocation(MoveLocation);
+			}
+		}
+	}
+}
+
+void AFindAppleCharacter::TeleportAtQuestNPCAction(const FInputActionValue& Value)
+{
+	TArray<AActor*> TeleportActors;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ATeleportPosition::StaticClass(), "QuestNPC", TeleportActors);
+
+	{
+		for (AActor* Actor : TeleportActors)
+		{
+			ATeleportPosition* Position = Cast<ATeleportPosition>(Actor);
+
+			if (Position != nullptr)
+			{
+				FVector Location = Position->GetActorLocation();
+				FVector MoveLocation = Location + FVector(0.f, 0.f, 50.f);
+
+				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+				CharacterActor->SetActorRelativeLocation(MoveLocation);
+			}
+		}
+	}
+}
  
 
 void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
@@ -744,6 +801,8 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(WorldMapAction, ETriggerEvent::Started, this, &AFindAppleCharacter::ShowWorldMap);
 		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Started, this, &AFindAppleCharacter::ShowPauseMenu);
 		EnhancedInputComponent->BindAction(SkipAction, ETriggerEvent::Started, this, &AFindAppleCharacter::SkipQuest);
+		EnhancedInputComponent->BindAction(TeleportAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Teleport);
+		EnhancedInputComponent->BindAction(QuestTeleportAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportAtQuestNPCAction);
 
 		//kaon - dash, equipment
 		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);

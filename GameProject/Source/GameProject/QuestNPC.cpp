@@ -180,16 +180,20 @@ void AQuestNPC::DialogueGetLine()
 
 						Text->SetText(FText::FromString(TEXT("!")));
 
-						/* 만약 이전 퀘스트 필요 아이템 리스트가 있다면 ( 캐릭터가 NPC에게 줘야 하는 것 ) */
-						if (!QuestRequirItem.IsEmpty()) 
-						{
-							//UE_LOG(LogTemp, Warning,TEXT("Quest Item Need"));
-							MyCharacter->InventoryComponent->RemoveFromInventory(QuestRequirItemName, QuestRequirItemCnt);
-							QuestRequirItem.Remove(QuestRequirItemName);
-						}
-
 						if (!Dialogue.Conditions_Item.IsNone())	/* 만약 이 대화가 퀘스트라면 (필요 아이템 존재) */
 						{
+							if (!QuestRequirItem.IsEmpty()) {
+								// 인벤토리에 아이템이 있기는 한지
+								if (MyCharacter->InventoryComponent->InventoryContent.Contains(QuestRequirItemName))
+								{
+									// 인벤토리에 있다면 퀘스트 요구 개수보다 큰지 검사
+									if (*MyCharacter->InventoryComponent->InventoryContent.Find(QuestRequirItemName) >= *QuestRequirItem.Find(QuestRequirItemName)) {
+										MyCharacter->InventoryComponent->RemoveFromInventory(QuestRequirItemName, QuestRequirItemCnt);
+										QuestRequirItem.Remove(QuestRequirItemName);
+									}
+								}
+							}
+
 							/* 만약 대화의 끝이 퀘스트 아이템 필요로 끝난다면 */
 							if (SetQuestList == false) 
 							{
@@ -202,6 +206,9 @@ void AQuestNPC::DialogueGetLine()
 								QuestListTextUIObject->QuestDes->SetText(Dialogue.QuestDes);
 								MyCharacter->QuestListUIObject->ScrollBox->AddChild(QuestListTextUIObject);
 								SetQuestList = true;
+
+								/* 캐릭터 텔레포트 위치 지정 */
+								MyCharacter->Place = Dialogue.PlaceName;
 
 								/* 캐릭터의 퀘스트 개수 하나 증가 */
 								MyCharacter->QuestNum += 1;
@@ -339,8 +346,11 @@ void AQuestNPC::PlayerAdjustmentss()
 	PlayerController->SetInputMode(FInputModeUIOnly());
 
 	/* 위젯 생성 */
-	DialoguePopWidget = CreateWidget(GetWorld(), DialoguePopWidgetClass);
-	DialoguePopWidget->AddToViewport();
+	if (!DialoguePopWidget)
+	{
+		DialoguePopWidget = CreateWidget(GetWorld(), DialoguePopWidgetClass);
+		DialoguePopWidget->AddToViewport();
+	}
 
 	/* 2초 쉬기 */
 	FTimerHandle GravityTimerHandle;
@@ -423,12 +433,16 @@ void AQuestNPC::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
-		if (bIsPressKeyValid == false)
-		{
-			bIsPressKeyValid = true;
-			PressKeyWidgetUIObejct = CreateWidget<UPressKeyWidget>(GetWorld(), PressKeyWidgetClass);
-			PressKeyWidgetUIObejct->AddToViewport();
-		}
+		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(OtherActor);
+
+		if (MyCharacter) {
+			if (bIsPressKeyValid == false)
+			{
+				bIsPressKeyValid = true;
+				PressKeyWidgetUIObejct = CreateWidget<UPressKeyWidget>(GetWorld(), PressKeyWidgetClass);
+				PressKeyWidgetUIObejct->AddToViewport();
+			}
+		}	
 	}
 }
 
@@ -436,16 +450,19 @@ void AQuestNPC::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 {
 	if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Overlap End"));
-		if (bIsPressKeyValid == true)
-		{
-			PressKeyWidgetUIObejct->RemoveFromParent();
-			bIsPressKeyValid = false;
-		}
-		if (bIsValid) {
-			DialogueUIObject->RemoveFromParent();
-			bIsValid = false;
-			CurrentLine = 0;
+		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(OtherActor);
+
+		if (MyCharacter) {
+			if (bIsPressKeyValid == true)
+			{
+				PressKeyWidgetUIObejct->RemoveFromParent();
+				bIsPressKeyValid = false;
+			}
+			if (bIsValid) {
+				DialogueUIObject->RemoveFromParent();
+				bIsValid = false;
+				CurrentLine = 0;
+			}
 		}
 	}
 }
