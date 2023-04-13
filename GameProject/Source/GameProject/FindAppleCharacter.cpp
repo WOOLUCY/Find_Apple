@@ -212,11 +212,11 @@ AFindAppleCharacter::AFindAppleCharacter()
 	}
 
 	/* Quest List Widget */
-	ConstructorHelpers::FClassFinder<UQuestListWidget>  QuestListWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_QuestList.WBP_QuestList_C'"));
-	if (QuestListWidget.Succeeded())
-	{
-		QuestListWidgetClass = QuestListWidget.Class;
-	}
+	//ConstructorHelpers::FClassFinder<UQuestListWidget>  QuestListWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_QuestList.WBP_QuestList_C'"));
+	//if (QuestListWidget.Succeeded())
+	//{
+	//	QuestListWidgetClass = QuestListWidget.Class;
+	//}
 
 	/* World Map Widget */
 	ConstructorHelpers::FClassFinder<UWorldMapWidget>  WorldMapWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Map/WBP_WorldMap.WBP_WorldMap_C'"));
@@ -281,16 +281,16 @@ void AFindAppleCharacter::BeginPlay()
 	}
 
 	/* Quest List 위젯 생성, 얘는 항상 Viewport 위에 있음 */
-	QuestListUIObject = CreateWidget<UQuestListWidget>(GetWorld(), QuestListWidgetClass);
-	QuestListUIObject->AddToViewport();
-	if (QuestNum == 0)
-	{
-		QuestListUIObject->SetVisibility(ESlateVisibility::Hidden);
-	}
-	else
-	{
-		QuestListUIObject->SetVisibility(ESlateVisibility::Visible);
-	}
+	//QuestListUIObject = CreateWidget<UQuestListWidget>(GetWorld(), QuestListWidgetClass);
+	//QuestListUIObject->AddToViewport();
+	//if (QuestNum == 0)
+	//{
+	//	QuestListUIObject->SetVisibility(ESlateVisibility::Hidden);
+	//}
+	//else
+	//{
+	//	QuestListUIObject->SetVisibility(ESlateVisibility::Visible);
+	//}
 
 	UWorld* TheWorld = GetWorld();
 	if (TheWorld != nullptr) {
