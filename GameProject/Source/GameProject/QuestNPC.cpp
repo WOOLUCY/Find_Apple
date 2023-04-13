@@ -79,11 +79,11 @@ AQuestNPC::AQuestNPC()
 		ItemDataTable = InventoryDataTable.Object;
 	}
 	/* Quest List -> My Character에 추가하기 용도 */
-	ConstructorHelpers::FClassFinder<UQuestListTextWidget>  QuestListTextWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_QuestListText.WBP_QuestListText_C'"));
-	if (QuestListTextWidget.Succeeded())
-	{
-		QuestListTextWidgetClass = QuestListTextWidget.Class;
-	}
+	//ConstructorHelpers::FClassFinder<UQuestListTextWidget>  QuestListTextWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_QuestListText.WBP_QuestListText_C'"));
+	//if (QuestListTextWidget.Succeeded())
+	//{
+	//	QuestListTextWidgetClass = QuestListTextWidget.Class;
+	//}
 	/* Dialogue Widgets */
 	ConstructorHelpers::FClassFinder<UDialogueWidget>  DialogueWidget(TEXT("WidgetBlueprint'/Game/Semin/UI/Dialogue/WBP_Dialogue.WBP_Dialogue_C'"));
 	if (DialogueWidget.Succeeded())
@@ -198,20 +198,20 @@ void AQuestNPC::DialogueGetLine()
 							if (SetQuestList == false) 
 							{
 								/* 퀘스트 리스트 출력 */
-								MyCharacter->QuestListUIObject->SetVisibility(ESlateVisibility::Visible);
+								//MyCharacter->QuestListUIObject->SetVisibility(ESlateVisibility::Visible);
 
-								/* 퀘스트 리스트에 해당 퀘스트 추가 */
-								QuestListTextUIObject = CreateWidget<UQuestListTextWidget>(GetWorld(), QuestListTextWidgetClass);
-								QuestListTextUIObject->QuestTitle->SetText(Dialogue.QuestTitle);
-								QuestListTextUIObject->QuestDes->SetText(Dialogue.QuestDes);
-								MyCharacter->QuestListUIObject->ScrollBox->AddChild(QuestListTextUIObject);
+								///* 퀘스트 리스트에 해당 퀘스트 추가 */
+								//QuestListTextUIObject = CreateWidget<UQuestListTextWidget>(GetWorld(), QuestListTextWidgetClass);
+								//QuestListTextUIObject->QuestTitle->SetText(Dialogue.QuestTitle);
+								//QuestListTextUIObject->QuestDes->SetText(Dialogue.QuestDes);
+								//MyCharacter->QuestListUIObject->ScrollBox->AddChild(QuestListTextUIObject);
 								SetQuestList = true;
 
 								/* 캐릭터 텔레포트 위치 지정 */
 								MyCharacter->Place = Dialogue.PlaceName;
 
 								/* 캐릭터의 퀘스트 개수 하나 증가 */
-								MyCharacter->QuestNum += 1;
+								//MyCharacter->QuestNum += 1;
 
 								/* 퀘스트 아이템 조건 추가 */
 								QuestRequirItem.Add(Dialogue.Conditions_Item, Dialogue.Conditions_cnt);

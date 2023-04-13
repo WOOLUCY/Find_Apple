@@ -157,10 +157,10 @@ private:
 	class AFindAppleGameMode* FAGameMode;
 
 	/* Quest System */
-	UPROPERTY()
-	TSubclassOf<class UUserWidget> QuestListTextWidgetClass;
-	UPROPERTY()
-	class UQuestListTextWidget* QuestListTextUIObject;
+	//UPROPERTY()
+	//TSubclassOf<class UUserWidget> QuestListTextWidgetClass;
+	//UPROPERTY()
+	//class UQuestListTextWidget* QuestListTextUIObject;
 
 	UPROPERTY()
 	class UDataTable* ItemDataTable;

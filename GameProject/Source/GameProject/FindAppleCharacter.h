@@ -151,12 +151,12 @@ public:
 	bool HideToolTip = true;
 
 	/* Quest System */
-	UPROPERTY()
-	TSubclassOf<class UUserWidget> QuestListWidgetClass;
-	UPROPERTY()
-	class UQuestListWidget* QuestListUIObject;
-	UPROPERTY()
-	int32 QuestNum = 0; 
+	//UPROPERTY()
+	//TSubclassOf<class UUserWidget> QuestListWidgetClass;
+	//UPROPERTY()
+	//class UQuestListWidget* QuestListUIObject;
+	//UPROPERTY()
+	//int32 QuestNum = 0; 
 	UPROPERTY()
 	FName Place;
 
