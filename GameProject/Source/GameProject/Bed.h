@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+
 #include "Bed.generated.h"
 
 UCLASS()
@@ -22,9 +23,17 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UBoxComponent* Box;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
+		TSubclassOf<class USleepWidget> SleepWidgetClass;
+
+
 private:
 	UStaticMesh* Laying;
 	UStaticMesh* NotLaying;
+
+	UPROPERTY()
+		class USleepWidget* SleepWdiget;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,6 +49,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//void OnCinematicFinished()
+	void ShowWdiget();
+	void HiddenWidget();
+
+	void YesChoice();
+	void NoChoice();
 
 };
