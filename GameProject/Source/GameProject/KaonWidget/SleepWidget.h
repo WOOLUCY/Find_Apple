@@ -40,4 +40,6 @@ protected:
 	UPROPERTY()
 		class UButton* NoButton;
 
+	UPROPERTY()
+		class UTextBlock* TextBlock;
 };

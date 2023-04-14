@@ -172,9 +172,9 @@ void ABed::HiddenWidget()
 void ABed::YesChoice()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ABED YESCHOICE"));
+	FString Name = "SleepLevel";
+	UGameplayStatics::OpenLevel(this, *Name);
 
-	//시네마틱 재생하고 다음날로 넘어가기
-	//Daychange 델리게이트를 타이머 참조해서뿌리기
 }
 
 void ABed::NoChoice()

@@ -9,7 +9,7 @@
 #include "../FindApplePlayerController.h"
 #include "../FindAppleCharacter.h"
 
-
+#include "Components/TextBlock.h"
 void USleepWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -24,8 +24,12 @@ void USleepWidget::NativeConstruct()
 		NoButton->OnClicked.AddDynamic(this, &USleepWidget::NoChoice);
 	}
 
+	TextBlock = Cast<UTextBlock>(GetWidgetFromName(TEXT("Explanation")));
 
-	
+	if (TextBlock != nullptr) {
+		TextBlock->SetText(FText::FromString(TEXT("Do youwnat sleep?")));
+	}
+
 }
 
 void USleepWidget::YesChoice()
