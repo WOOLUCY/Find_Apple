@@ -146,7 +146,6 @@ void ABed::ShowWdiget()
 
 
 }
-//
 void ABed::HiddenWidget()
 {
 

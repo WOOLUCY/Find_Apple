@@ -16,7 +16,8 @@ public:
 	// Sets default values for this actor's properties
 	ALevelTransferVol();
 
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
+		TSubclassOf<class UDoorWidget> DoorWidgetClass;
 
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
@@ -26,14 +27,26 @@ private:
 	UBoxComponent* TransferVol;
 
 
+	UPROPERTY()
+		class UDoorWidget* DoorWdiget;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason)override;
-
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void ShowWdiget();
+	void HiddenWidget();
+
+	void YesChoice();
+	void NoChoice();
+
 
 };
