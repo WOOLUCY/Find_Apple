@@ -2,9 +2,16 @@
 
 
 #include "Bed.h"
-#include "LevelSequencePlayer.h"
-#include "LevelSequence.h"
+
+#include "Kismet/GameplayStatics.h"
+
+#include "FindAppleGameMode.h"
+#include "FindApplePlayerController.h"
 #include "FindAppleCharacter.h"
+
+
+#include "KaonWidget/SleepWidget.h"
+
 
 
 
@@ -47,6 +54,18 @@ ABed::ABed()
 
 	Box->SetCollisionProfileName("OverlapAll");
 
+
+	//위젯
+	static ConstructorHelpers::FClassFinder<USleepWidget> SLEEP_WIDGET
+	(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/kaon/UI/BedOverlap.BedOverlap_C'"));
+
+	if (SLEEP_WIDGET.Succeeded()) {
+		SleepWidgetClass = SLEEP_WIDGET.Class;
+		UE_LOG(LogTemp, Warning, TEXT("sleep widget bind success"));
+	}
+
+
+
 	Box->OnComponentBeginOverlap.AddDynamic(this, &ABed::OnOverlapBegin);
 	Box->OnComponentEndOverlap.AddDynamic(this, &ABed::OnOverlapEnd);
 
@@ -58,73 +77,109 @@ void ABed::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Box->SetRelativeLocation(Bed->GetRelativeLocation());
 
-	
+
 }
 
 
-//
-//void AMyActor::PlayMyCinematic()
-//{
-//	// Load a level sequence asset
-//	ULevelSequence* Cinematic = LoadObject<ULevelSequence>(nullptr, TEXT("/Game/MyCinematic"));
-//
-//	// Create a level sequence player
-//	ULevelSequencePlayer* Player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), Cinematic, FMovieSceneSequencePlaybackSettings(), OnCinematicFinished);
-//
-//	// Set the position to start playing from
-//	Player->SetPlaybackPosition(0.0f);
-//
-//	// Play the level sequence
-//	Player->Play();
-//}
-//
-//void AMyActor::OnCinematicFinished()
-//{
-//	// Handle any cleanup or post-cinematic logic here
-//}
+
 
 void ABed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//여기서 시네마틱 일단 해보자
-
-
-
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
+
+
 	if (hero != nullptr) {
-		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("Overlap with Character"));
-
-		if (Bedding->GetStaticMesh() == NotLaying) {
-			Bedding->SetStaticMesh(Laying);
-		}
-			// Load a level sequence asset
-	ULevelSequence* Cinematic = LoadObject<ULevelSequence>(nullptr, TEXT("/Script/LevelSequence.LevelSequence'/Game/kaon/Sequence/Sleep.Sleep'"));
-
-	// Create a level sequence player
-	//ULevelSequencePlayer* Player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), Cinematic, FMovieSceneSequencePlaybackSettings(), OnCinematicFinished);
-
-	// Set the position to start playing from
-	//Player->SetPlaybackPosition(0.0f);
-
-	// Play the level sequence
-//	Player->Play();
-
+		UE_LOG(LogTemp, Warning, TEXT("OverlapBegin Comple pereofjdskfjksdlfjsdklfjsdklfj"));
+		ShowWdiget();
 	}
 	else {
 		return;
 	}
-
 }
 
 void ABed::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	auto hero = Cast<AFindAppleCharacter>(OtherActor);
+	if (hero != nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("OverlapEnd"));
+
+		HiddenWidget();
+	}
+	else {
+		return;
+	}
 }
 
 // Called every frame
 void ABed::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+                                    
+void ABed::ShowWdiget()
+{
+	UWorld* TheWorld = GetWorld();
+
+	if (TheWorld != nullptr) {
+
+		auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
+		if (MyContorller != nullptr) {
+
+			UE_LOG(LogTemp, Warning, TEXT("ShowWidet"));
+			SleepWdiget = CreateWidget<USleepWidget>(MyContorller, SleepWidgetClass);
+			MyContorller->SetInputMode(FInputModeGameAndUI());
+			MyContorller->bShowMouseCursor = true;
+
+			SleepWdiget->AddToViewport();
+
+			SleepWdiget->YesDelegate.BindUObject(this, &ABed::YesChoice);
+			SleepWdiget->NoDelegate.BindUObject(this, &ABed::NoChoice);
+
+
+		}
+	}
+
+
+
+
+}
+void ABed::HiddenWidget()
+{
+
+	UWorld* TheWorld = GetWorld();
+
+	if (TheWorld != nullptr) {
+
+		auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
+		if (MyContorller != nullptr) {
+			SleepWdiget->RemoveFromParent();
+			MyContorller->SetInputMode(FInputModeGameOnly());
+			MyContorller->bShowMouseCursor = false;
+
+			SleepWdiget->YesDelegate.Unbind();
+			SleepWdiget->NoDelegate.Unbind();
+
+		}
+	}
+
+}
+
+void ABed::YesChoice()
+{
+	UE_LOG(LogTemp, Warning, TEXT("ABED YESCHOICE"));
+	FString Name = "SleepLevel";
+	UGameplayStatics::OpenLevel(this, *Name);
+
+}
+
+void ABed::NoChoice()
+{
+	UE_LOG(LogTemp, Warning, TEXT("ABED nOCHOICE"));
+	HiddenWidget();
 
 }
 
