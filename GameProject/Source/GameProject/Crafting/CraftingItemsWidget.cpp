@@ -26,7 +26,7 @@ UCraftingItemsWidget::UCraftingItemsWidget(const FObjectInitializer& objectIniti
 	}
 
 	/* Crafting Data Table */
-	static ConstructorHelpers::FObjectFinder<UDataTable> CraftingDataTableObject(TEXT("/Script/Engine.DataTable'/Game/Semin/UI/Crafting/CraftingData.CraftingData'"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> CraftingDataTableObject(TEXT("/Script/Engine.DataTable'/Game/Semin/UI/Crafting/CraftingDataNew.CraftingDataNew'"));
 	if (CraftingDataTableObject.Succeeded())
 	{
 		CraftingDataTable = CraftingDataTableObject.Object;
@@ -94,6 +94,78 @@ void UCraftingItemsWidget::SetCraftListWidget(FName CraftRowName)
 			if (InventoryElement.Key == FName(TEXT("trunk")))
 			{
 				HaveTrunkCnt = InventoryElement.Value;
+			}
+			/* 가지고 있는 금의 개수 */
+			if (InventoryElement.Key == FName(TEXT("gold")))
+			{
+				HaveGoldCnt = InventoryElement.Value;
+			}
+			/* 가지고 있는 철의 개수 */
+			if (InventoryElement.Key == FName(TEXT("iron")))
+			{
+				HaveIronCnt = InventoryElement.Value;
+			}
+			/* 가지고 있는 루비의 개수 */
+			if (InventoryElement.Key == FName(TEXT("rubby")))
+			{
+				HaveRubbyCnt = InventoryElement.Value;
+			}
+			/* 가지고 있는 사파이어의 개수 */
+			if (InventoryElement.Key == FName(TEXT("sapphire")))
+			{
+				HaveSapphireCnt = InventoryElement.Value;
+			}
+
+			// Pick
+			if (InventoryElement.Key == FName(TEXT("pick")))
+			{
+				HavePickCnt = InventoryElement.Value;
+			}
+			if (InventoryElement.Key == FName(TEXT("pick1")))
+			{
+				HavePick1Cnt = InventoryElement.Value;
+			}
+			if (InventoryElement.Key == FName(TEXT("pick2")))
+			{
+				HavePick2Cnt = InventoryElement.Value;
+			}
+			if (InventoryElement.Key == FName(TEXT("pick3")))
+			{
+				HavePick3Cnt = InventoryElement.Value;
+			}
+			// AX
+			if (InventoryElement.Key == FName(TEXT("AX")))
+			{
+				HaveAXCnt = InventoryElement.Value;
+			}
+			if (InventoryElement.Key == FName(TEXT("AX1")))
+			{
+				HaveAX1Cnt = InventoryElement.Value;
+			}
+			if (InventoryElement.Key == FName(TEXT("AX2")))
+			{
+				HaveAX2Cnt = InventoryElement.Value;
+			}
+			if (InventoryElement.Key == FName(TEXT("AX3")))
+			{
+				HaveAX3Cnt = InventoryElement.Value;
+			}
+			// Sword
+			if (InventoryElement.Key == FName(TEXT("sword")))
+			{
+				HaveSwordCnt = InventoryElement.Value;
+			}
+			if (InventoryElement.Key == FName(TEXT("sword1")))
+			{
+				HaveSword1Cnt = InventoryElement.Value;
+			}
+			if (InventoryElement.Key == FName(TEXT("sword2")))
+			{
+				HaveSword2Cnt = InventoryElement.Value;
+			}
+			if (InventoryElement.Key == FName(TEXT("sword3")))
+			{
+				HaveSword3Cnt = InventoryElement.Value;
 			}
 		}
 	}
@@ -175,6 +247,237 @@ void UCraftingItemsWidget::SetCraftListWidget(FName CraftRowName)
 					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
 
 					FText HaveCnt = FText::FromString(FString::FromInt(HaveTrunkCnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.gold != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("금"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.GoldTexture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.gold)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveGoldCnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.iron != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("철"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.IronTexture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.iron)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveIronCnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.rubby != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("루비"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.RubbyTexture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.rubby)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveRubbyCnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.sapphire != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("사파이어"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.SapphireTexture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.sapphire)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveSapphireCnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+
+				// Pick
+				if (Crafting.pick != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("나무 곡괭이"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.PickTexture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.pick)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HavePickCnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.pick1 != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("튼튼한 곡괭이"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.Pick1Texture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.pick1)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HavePick1Cnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.pick2 != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("금 곡괭이"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.Pick2Texture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.pick2)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HavePick2Cnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.pick3 != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("루비 곡괭이"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.Pick3Texture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.pick3)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HavePick3Cnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+
+				// AX
+				if (Crafting.AX != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("나무 도끼"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.AXTexture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.AX)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveAXCnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.AX1 != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("튼튼한 도끼"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.AX1Texture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.AX1)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveAX1Cnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.AX2 != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("금 도끼"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.AX2Texture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.AX2)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveAX2Cnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.AX3 != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("루비 도끼"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.AX3Texture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.AX3)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveAX3Cnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+
+
+				// Sword
+				if (Crafting.sword != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("나무 검"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.SwordTexture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.sword)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveSwordCnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.sword1 != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("튼튼한 검"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.Sword1Texture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.sword1)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveSword1Cnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.sword2 != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("금 검"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.Sword2Texture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.sword2)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveSword2Cnt)); /**/
+					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
+
+					CraftingList->AddChild(CraftingListUIObject);
+				}
+				if (Crafting.sword3 != 0 /**/) {
+					CraftingListUIObject = CreateWidget<UCraftingListWidget>(GetWorld(), CraftingListWidgetClass);
+					FText NameDisplay = FText::FromName(FName(TEXT("루비 검"))); /**/
+					CraftingListUIObject->ItemName->SetText(NameDisplay);
+
+					CraftingListUIObject->ItemImage->SetBrushFromTexture(Crafting.Sword3Texture); /**/
+					FText NeedCnt = FText::FromString(FString::FromInt(Crafting.sword3)); /**/
+					CraftingListUIObject->NeedCnt->SetText(NeedCnt);
+
+					FText HaveCnt = FText::FromString(FString::FromInt(HaveSword3Cnt)); /**/
 					CraftingListUIObject->HaveCnt->SetText(HaveCnt);
 
 					CraftingList->AddChild(CraftingListUIObject);

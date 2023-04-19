@@ -887,7 +887,7 @@
       "name": "Helm Unittest Test Suite",
       "description": "A Helm Unittest Test Suite file",
       "fileMatch": ["**/charts/*/tests/*.yaml"],
-      "url": "https://raw.githubusercontent.com/helm-unittest/helm-unittest/v0.3.0/schema/helm-testsuite.json"
+      "url": "https://raw.githubusercontent.com/helm-unittest/helm-unittest/v0.3.1/schema/helm-testsuite.json"
     },
     {
       "name": "CircleCI config.yml",
@@ -1170,7 +1170,7 @@
     {
       "name": "Crowdsec scenario Schema",
       "description": "A YAML schema for Crowdsec scenario configuration files",
-      "fileMatch": ["**/scenarioss/*/*.yaml"],
+      "fileMatch": ["**/scenarios/*/*.yaml"],
       "url": "https://raw.githubusercontent.com/crowdsecurity/crowdsec-yaml-schemas/main/scenario_schema.yaml"
     },
     {
@@ -1263,7 +1263,7 @@
     {
       "name": "dependabot-v2.json",
       "description": "A JSON schema for the GitHub Action's dependabot.yml files",
-      "fileMatch": ["**/.github/dependabot.yml"],
+      "fileMatch": ["**/.github/dependabot.yml", "**/.github/dependabot.yaml"],
       "url": "https://json.schemastore.org/dependabot-2.0.json"
     },
     {
@@ -2204,6 +2204,12 @@
       "url": "https://raw.githubusercontent.com/rocksdanister/lively/core-separation/schemas/livelyPropertiesSchema.json"
     },
     {
+      "name": "LOOBin",
+      "description": "JSON schema for LOOBins macOS binaries. More info at https://github.com/infosecB/LOOBins",
+      "fileMatch": ["**/LOOBins/*.yml"],
+      "url": "https://json.schemastore.org/loobin-1.0.json"
+    },
+    {
       "name": "local.settings.json",
       "description": "JSON schema for Azure Functions local.settings.json files",
       "fileMatch": ["local.settings.json"],
@@ -2952,7 +2958,7 @@
     {
       "name": "rtx",
       "description": "JSON schema for rtx config, a polyglot dev tool manager",
-      "fileMatch": [".rtx.toml", "**/rtx/config.toml"],
+      "fileMatch": [".rtx.toml", ".rtx.*.toml", "**/rtx/config.toml"],
       "url": "https://rtx.pub/schema/rtx.json"
     },
     {
@@ -3332,7 +3338,7 @@
     {
       "name": "task.json",
       "description": "VSCode Task file",
-      "fileMatch": ["task.json"],
+      "fileMatch": ["task.json", "tasks.json"],
       "url": "https://json.schemastore.org/task.json"
     },
     {
@@ -4070,13 +4076,14 @@
       "name": "Gradle Enterprise",
       "description": "Gradle Enterprise configuration schema",
       "fileMatch": ["*gradle-enterprise.yml", "*gradle-enterprise.yaml"],
-      "url": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-5.json",
+      "url": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-6.json",
       "versions": {
         "1.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-1.json",
         "2.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-2.json",
         "3.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-3.json",
         "4.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-4.json",
-        "5.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-5.json"
+        "5.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-5.json",
+        "6.0": "https://docs.gradle.com/enterprise/admin/schema/gradle-enterprise-config-schema-6.json"
       }
     },
     {
@@ -4301,6 +4308,12 @@
       "description": "Schema for markdown-lint-check",
       "fileMatch": [".markdown-lint-check.json"],
       "url": "https://json.schemastore.org/markdown-lint-check.json"
+    },
+    {
+      "name": "Mason Registry",
+      "description": "JSON schema for Mason, a package manager for Neovim.",
+      "fileMatch": ["**/packages/*/package.yaml"],
+      "url": "https://json.schemastore.org/mason-registry.json"
     },
     {
       "name": "SauceCTL Configuration",
@@ -4754,6 +4767,12 @@
       "fileMatch": [".all-contributorsrc"],
       "name": "All Contributors configuration file",
       "url": "https://json.schemastore.org/all-contributors.json"
+    },
+    {
+      "name": ".es6importsorterrc.json",
+      "description": "The configuration file used for ES6 Import Sorter - a vscode extention .",
+      "fileMatch": [".es6importsorterrc.json"],
+      "url": "https://json.schemastore.org/es6importsorterrc.json"
     }
   ],
   "version": 1
