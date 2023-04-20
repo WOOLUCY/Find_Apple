@@ -37,6 +37,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 	FVector MeshScale = FVector(1.f, 1.f, 1.f);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+	int BeginningHaveCount = 0;
+
 };
 
 

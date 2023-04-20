@@ -35,6 +35,17 @@ protected:
 		UFindAppleAnimInstance* Anim;
 
 
+
+	// semin
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
+
+	TArray<struct FInventoryTableRow*> InventoryData;
+
+	bool isOwn = false;
+	// 인벤토리 내에 존재할 때만 들 수 있도록 함
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -51,5 +62,5 @@ public:
 	void SetCollisionStart();
 	void SetCollisionEnd();
 
-
+	void SetMesh(UStaticMesh* Mesh);
 };

@@ -22,6 +22,7 @@
 #include "InputActionValue.h"
 #include "Inventory/InventoryUW.h"
 #include "Inventory/InventoryComponent.h"
+#include "Inventory/InventoryDataTable.h"
 #include "Dialogue/QuestListWidget.h"
 #include "Dialogue/TeleportPosition.h"
 #include "Teleport/WorldMapWidget.h"
@@ -241,6 +242,12 @@ AFindAppleCharacter::AFindAppleCharacter()
 	//InventoryComponent
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 
+	static ConstructorHelpers::FObjectFinder<UDataTable> InventoryDataTable(TEXT("/Script/Engine.DataTable'/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable'"));
+	if (InventoryDataTable.Succeeded())
+	{
+		ItemDataTable = InventoryDataTable.Object;
+	}
+
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
 
@@ -324,6 +331,23 @@ void AFindAppleCharacter::BeginPlay()
 
 
 	}
+
+
+	if (ItemDataTable != nullptr)
+	{
+		ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+		TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+		for (FName RowName : RowNames)
+		{
+			FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+			if (InventoryRow.BeginningHaveCount != 0) {
+				InventoryComponent->AddToInventory(RowName, InventoryRow.BeginningHaveCount);
+			}
+		}
+	}
+
 }
 
 void AFindAppleCharacter::PostInitializeComponents()
@@ -583,14 +607,37 @@ void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
 
 	if (CurEquipNum == 1) return;
 
-	if (CurEquipNum != 0 && CurEquipNum != 1) {
+	if (CurEquipNum != 0 && CurEquipNum != 1 && isEquipOwn) {
 		CurEquipActor->Destroy();
+		isEquipOwn = false;
 	}
 	if (CurEquipNum != 1) {
-
-		CurEquipActor = GetWorld()->SpawnActor<ASword>(FVector::ZeroVector, FRotator::ZeroRotator);
-		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
 		CurEquipNum = 1;
+
+		if (ItemDataTable != nullptr)
+		{
+			ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+			TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+			for (FName RowName : RowNames)
+			{
+				FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+				if (InventoryRow.ItemType == 12) {
+					//Sword 는 아이템 타입이 12
+					if (InventoryComponent->InventoryContent.Find(RowName))
+					{
+						ASword* ToolActor;
+						ToolActor = GetWorld()->SpawnActor<ASword>(ASword::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+						ToolActor->SetMesh(InventoryRow.Mesh3D);
+						CurEquipActor = ToolActor;
+						CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
+						isEquipOwn = true;
+					}
+				}
+			}
+		}
 
 	}
 
@@ -601,15 +648,41 @@ void AFindAppleCharacter::EquipAx(const FInputActionValue& Value)
 
 	if (CurEquipNum == 2) return;
 
-	if (CurEquipNum != 0 && CurEquipNum != 2) {
+	if (CurEquipNum != 0 && CurEquipNum != 2 && isEquipOwn) {
 		CurEquipActor->Destroy();
+		isEquipOwn = false;
 	}
 
+
 	if (CurEquipNum != 2) {
-		CurEquipActor = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
-		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
 		CurEquipNum = 2;
 
+		if (ItemDataTable != nullptr)
+		{
+			ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+			TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+			for (FName RowName : RowNames)
+			{
+				FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+				if (InventoryRow.ItemType == 10) {
+					//AX 는 아이템 타입이 10
+					if (InventoryComponent->InventoryContent.Find(RowName))
+					{
+						AAx* ToolActor;
+						ToolActor = GetWorld()->SpawnActor<AAx>(AAx::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+						ToolActor->SetMesh(InventoryRow.Mesh3D);
+						CurEquipActor = ToolActor;
+						CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
+						isEquipOwn = true;
+					}
+				}
+			}
+		}
+
+		//CurEquipActor = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
 	}
 
 
@@ -619,15 +692,38 @@ void AFindAppleCharacter::EquipPick(const FInputActionValue& Value)
 {
 	if (CurEquipNum == 3) return;
 
-	if (CurEquipNum != 0 && CurEquipNum != 3) {
+	if (CurEquipNum != 0 && CurEquipNum != 3 && isEquipOwn) {
 		CurEquipActor->Destroy();
+		isEquipOwn = false;
 	}
 
 	if (CurEquipNum != 3) {
-		CurEquipActor = GetWorld()->SpawnActor<APick>(FVector::ZeroVector, FRotator::ZeroRotator);
-		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("PickSocket"));
 		CurEquipNum = 3;
 
+		if (ItemDataTable != nullptr)
+		{
+			ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+			TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+			for (FName RowName : RowNames)
+			{
+				FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+				if (InventoryRow.ItemType == 11) {
+					//Pick 은 아이템 타입이 11
+					if (InventoryComponent->InventoryContent.Find(RowName))
+					{
+						APick* ToolActor;
+						ToolActor = GetWorld()->SpawnActor<APick>(APick::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+						ToolActor->SetMesh(InventoryRow.Mesh3D);
+						CurEquipActor = ToolActor;
+						CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("PickSocket"));
+						isEquipOwn = true;
+					}
+				}
+			}
+		}
 	}
 
 }
@@ -637,7 +733,6 @@ void AFindAppleCharacter::EquipReset(const FInputActionValue& Value)
 	if (CurEquipNum != 0) {
 		CurEquipActor->Destroy();
 		CurEquipNum = 0;
-
 	}
 
 
@@ -826,7 +921,7 @@ void AFindAppleCharacter::Action()
 		return;
 	}
 	else {
-		if (CurEquipNum != 0) {
+		if (CurEquipNum != 0 && isEquipOwn) {
 			Anim->PlayActionMontage();
 			IsAction = true;
 		}

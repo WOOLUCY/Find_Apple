@@ -150,6 +150,14 @@ public:
 	UPROPERTY()
 	bool HideToolTip = true;
 
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
+
+	TArray<struct FInventoryTableRow*> InventoryData;
+
+
 	/* Quest System */
 	//UPROPERTY()
 	//TSubclassOf<class UUserWidget> QuestListWidgetClass;
@@ -255,6 +263,8 @@ private:
 	UPROPERTY()
 	class UFindAppleAnimInstance* Anim;
 
+	//Semin
+	bool isEquipOwn = false;
 
 };
 

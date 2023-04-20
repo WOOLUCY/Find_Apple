@@ -1,6 +1,7 @@
 #include "Ax.h"
 #include "Kismet/GameplayStatics.h"
 #include "FindAppleCharacter.h"
+#include "Inventory/InventoryDataTable.h"
 
 AAx::AAx()
 {
@@ -21,8 +22,13 @@ AAx::AAx()
 		Ax->SetStaticMesh(SM_MESH.Object);
 	}
 
+
+
 	Ax->SetCollisionProfileName(TEXT("NoCollision"));
 	CollisionBox->SetCollisionProfileName(TEXT("NoCollision"));
+
+
+
 
 
 }
@@ -30,6 +36,8 @@ AAx::AAx()
 void AAx::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//Ax->SetStaticMesh(SM_MESH.Object);
 
 	UWorld* TheWorld = GetWorld();
 	if (TheWorld != nullptr) {
@@ -97,4 +105,10 @@ void AAx::SetCollisionEnd()
 	CollisionBox->SetCollisionProfileName(TEXT("NoCollision"));
 	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("AX - SetCollisionEnd"));
 
+}
+
+void AAx::SetMesh(UStaticMesh* Mesh)
+{
+	Ax->SetStaticMesh(Mesh);
+	UE_LOG(LogTemp, Warning, TEXT("Change Ax Model"));
 }

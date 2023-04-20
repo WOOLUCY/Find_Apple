@@ -68,108 +68,154 @@ void UCraftingItemsWidget::SetCraftListWidget(FName CraftRowName)
 
 	/* 아이템 추가할 때마다 고쳐야 함 */
 	if (MyCharacter->InventoryComponent) {
-		for (auto& InventoryElement : MyCharacter->InventoryComponent->InventoryContent)
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("apple")) {
+			HaveAppleCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("apple");
+		}
+		else
 		{
-			/* 가지고 있는 사과의 개수 */
-			if (InventoryElement.Key == FName(TEXT("apple")))
-			{
-				HaveAppleCnt = InventoryElement.Value;
-			}
-			/* 가지고 있는 오렌지의 개수 */
-			if (InventoryElement.Key == FName(TEXT("orange")))
-			{
-				HaveOrangeCnt = InventoryElement.Value;
-			}
-			/* 가지고 있는 나뭇가지의 개수 */
-			if (InventoryElement.Key == FName(TEXT("branch")))
-			{
-				HaveBranchCnt = InventoryElement.Value;
-			}
-			/* 가지고 있는 돌멩이의 개수 */
-			if (InventoryElement.Key == FName(TEXT("rock")))
-			{
-				HaveRockCnt = InventoryElement.Value;
-			}
-			/* 가지고 있는 통나무의 개수 */
-			if (InventoryElement.Key == FName(TEXT("trunk")))
-			{
-				HaveTrunkCnt = InventoryElement.Value;
-			}
-			/* 가지고 있는 금의 개수 */
-			if (InventoryElement.Key == FName(TEXT("gold")))
-			{
-				HaveGoldCnt = InventoryElement.Value;
-			}
-			/* 가지고 있는 철의 개수 */
-			if (InventoryElement.Key == FName(TEXT("iron")))
-			{
-				HaveIronCnt = InventoryElement.Value;
-			}
-			/* 가지고 있는 루비의 개수 */
-			if (InventoryElement.Key == FName(TEXT("rubby")))
-			{
-				HaveRubbyCnt = InventoryElement.Value;
-			}
-			/* 가지고 있는 사파이어의 개수 */
-			if (InventoryElement.Key == FName(TEXT("sapphire")))
-			{
-				HaveSapphireCnt = InventoryElement.Value;
-			}
-
-			// Pick
-			if (InventoryElement.Key == FName(TEXT("pick")))
-			{
-				HavePickCnt = InventoryElement.Value;
-			}
-			if (InventoryElement.Key == FName(TEXT("pick1")))
-			{
-				HavePick1Cnt = InventoryElement.Value;
-			}
-			if (InventoryElement.Key == FName(TEXT("pick2")))
-			{
-				HavePick2Cnt = InventoryElement.Value;
-			}
-			if (InventoryElement.Key == FName(TEXT("pick3")))
-			{
-				HavePick3Cnt = InventoryElement.Value;
-			}
-			// AX
-			if (InventoryElement.Key == FName(TEXT("AX")))
-			{
-				HaveAXCnt = InventoryElement.Value;
-			}
-			if (InventoryElement.Key == FName(TEXT("AX1")))
-			{
-				HaveAX1Cnt = InventoryElement.Value;
-			}
-			if (InventoryElement.Key == FName(TEXT("AX2")))
-			{
-				HaveAX2Cnt = InventoryElement.Value;
-			}
-			if (InventoryElement.Key == FName(TEXT("AX3")))
-			{
-				HaveAX3Cnt = InventoryElement.Value;
-			}
-			// Sword
-			if (InventoryElement.Key == FName(TEXT("sword")))
-			{
-				HaveSwordCnt = InventoryElement.Value;
-			}
-			if (InventoryElement.Key == FName(TEXT("sword1")))
-			{
-				HaveSword1Cnt = InventoryElement.Value;
-			}
-			if (InventoryElement.Key == FName(TEXT("sword2")))
-			{
-				HaveSword2Cnt = InventoryElement.Value;
-			}
-			if (InventoryElement.Key == FName(TEXT("sword3")))
-			{
-				HaveSword3Cnt = InventoryElement.Value;
-			}
+			HaveAppleCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("orange")) {
+			HaveOrangeCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("orange");
+		}
+		else
+		{
+			HaveOrangeCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("branch")) {
+			HaveBranchCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("branch");
+		}
+		else
+		{
+			HaveBranchCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("rock")) {
+			HaveRockCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("rock");
+		}
+		else
+		{
+			HaveRockCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("trunk")) {
+			HaveTrunkCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("trunk");
+		}
+		else
+		{
+			HaveTrunkCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("gold")) {
+			HaveGoldCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("gold");
+		}
+		else
+		{
+			HaveGoldCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("iron")) {
+			HaveIronCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("iron");
+		}
+		else
+		{
+			HaveIronCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("rubby")) {
+			HaveRubbyCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("rubby");
+		}
+		else
+		{
+			HaveRubbyCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("sapphire")) {
+			HaveSapphireCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("sapphire");
+		}
+		else
+		{
+			HaveSapphireCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("pick")) {
+			HavePickCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("pick");
+		}
+		else
+		{
+			HavePickCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("pick1")) {
+			HavePick1Cnt = *MyCharacter->InventoryComponent->InventoryContent.Find("pick1");
+		}
+		else
+		{
+			HavePick1Cnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("pick2")) {
+			HavePick2Cnt = *MyCharacter->InventoryComponent->InventoryContent.Find("pick2");
+		}
+		else
+		{
+			HavePick2Cnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("pick3")) {
+			HavePick3Cnt = *MyCharacter->InventoryComponent->InventoryContent.Find("pick3");
+		}
+		else
+		{
+			HavePick3Cnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("AX")) {
+			HaveAXCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("AX");
+		}
+		else
+		{
+			HaveAXCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("AX1")) {
+			HaveAX1Cnt = *MyCharacter->InventoryComponent->InventoryContent.Find("AX1");
+		}
+		else
+		{
+			HaveAX1Cnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("AX2")) {
+			HaveAX3Cnt = *MyCharacter->InventoryComponent->InventoryContent.Find("AX2");
+		}
+		else
+		{
+			HaveAX2Cnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("AX3")) {
+			HaveAX3Cnt = *MyCharacter->InventoryComponent->InventoryContent.Find("AX3");
+		}
+		else
+		{
+			HaveAX3Cnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("sword")) {
+			HaveSwordCnt = *MyCharacter->InventoryComponent->InventoryContent.Find("sword");
+		}
+		else
+		{
+			HaveSwordCnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("sword1")) {
+			HaveSword1Cnt = *MyCharacter->InventoryComponent->InventoryContent.Find("sword1");
+		}
+		else
+		{
+			HaveSword1Cnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("sword2")) {
+			HaveSword2Cnt = *MyCharacter->InventoryComponent->InventoryContent.Find("sword2");
+		}
+		else
+		{
+			HaveSword2Cnt = 0;
+		}
+		if (MyCharacter->InventoryComponent->InventoryContent.Find("sword3")) {
+			HaveSword3Cnt = *MyCharacter->InventoryComponent->InventoryContent.Find("sword3");
+		}
+		else
+		{
+			HaveSword3Cnt = 0;
 		}
 	}
-
 	CraftingList->ClearChildren();
 
 	if (CraftingDataTable != nullptr)
@@ -553,6 +599,63 @@ void UCraftingItemsWidget::ClickedCreateButton()
 					if (Crafting.trunk != 0) {
 						MyCharacter->InventoryComponent->RemoveFromInventory("trunk", Crafting.trunk);
 					}
+					if (Crafting.gold != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("gold", Crafting.gold);
+					}
+					if (Crafting.iron != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("iron", Crafting.iron);
+					}
+					if (Crafting.rubby != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("rubby", Crafting.rubby);
+					}
+					if (Crafting.sapphire != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("sapphire", Crafting.sapphire);
+					}
+					if (Crafting.pick != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("pick", Crafting.pick);
+					}
+					if (Crafting.pick1 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("pick1", Crafting.pick1);
+					}
+					if (Crafting.pick2 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("pick2", Crafting.pick2);
+					}
+					if (Crafting.pick3 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("pick3", Crafting.pick3);
+					}
+					if (Crafting.pick4 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("pick4", Crafting.pick4);
+					}
+					if (Crafting.AX != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("AX", Crafting.AX);
+					}
+					if (Crafting.AX1 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("AX1", Crafting.AX1);
+					}
+					if (Crafting.AX2 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("AX2", Crafting.AX2);
+					}
+					if (Crafting.AX3 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("AX3", Crafting.AX3);
+					}
+					if (Crafting.AX4 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("AX4", Crafting.AX4);
+					}
+					if (Crafting.sword != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("sword", Crafting.sword);
+					}
+					if (Crafting.sword1 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("sword1", Crafting.sword1);
+					}
+					if (Crafting.sword2 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("sword2", Crafting.sword2);
+					}
+					if (Crafting.sword3 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("sword3", Crafting.sword3);
+					}
+					if (Crafting.sword4 != 0) {
+						MyCharacter->InventoryComponent->RemoveFromInventory("sword4", Crafting.sword4);
+					}
 				}
 			}
 		}
@@ -602,6 +705,122 @@ void UCraftingItemsWidget::CreateButtonSet(FName CraftRowName)
 				}
 				if (Crafting.trunk != 0) {
 					if (HaveTrunkCnt < Crafting.trunk)
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.gold != 0) /**/ {
+					if (HaveGoldCnt < Crafting.gold) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.iron != 0) /**/ {
+					if (HaveIronCnt < Crafting.iron) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.rubby != 0) /**/ {
+					if (HaveRubbyCnt < Crafting.rubby) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.sapphire != 0) /**/ {
+					if (HaveSapphireCnt < Crafting.sapphire) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+
+
+				if (Crafting.pick != 0) /**/ {
+					if (HavePickCnt < Crafting.pick) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.pick1 != 0) /**/ {
+					if (HavePick1Cnt < Crafting.pick1) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.pick2 != 0) /**/ {
+					if (HavePick2Cnt < Crafting.pick2) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.pick3 != 0) /**/ {
+					if (HavePick3Cnt < Crafting.pick3) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+
+				if (Crafting.AX != 0) /**/ {
+					if (HaveAXCnt < Crafting.AX) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.AX1 != 0) /**/ {
+					if (HaveAX1Cnt < Crafting.AX1) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.AX2 != 0) /**/ {
+					if (HaveAX2Cnt < Crafting.AX2) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.AX3 != 0) /**/ {
+					if (HaveAX3Cnt < Crafting.AX3) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+
+				if (Crafting.sword != 0) /**/ {
+					if (HaveSwordCnt < Crafting.sword) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.sword1 != 0) /**/ {
+					if (HaveSword1Cnt < Crafting.sword1) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.sword2 != 0) /**/ {
+					if (HaveSword2Cnt < Crafting.sword2) /**/
+					{
+						CreateButton->SetIsEnabled(false);
+						return;
+					}
+				}
+				if (Crafting.sword3 != 0) /**/ {
+					if (HaveSword3Cnt < Crafting.sword3) /**/
 					{
 						CreateButton->SetIsEnabled(false);
 						return;

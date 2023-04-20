@@ -121,3 +121,8 @@ void ASword::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveCom
 
 }
 
+void ASword::SetMesh(UStaticMesh* Mesh)
+{
+	Sword->SetStaticMesh(Mesh);
+}
+

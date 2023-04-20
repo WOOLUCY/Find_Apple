@@ -89,3 +89,8 @@ void APick::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComp
 {
 }
 
+void APick::SetMesh(UStaticMesh* Mesh)
+{
+	Pick->SetStaticMesh(Mesh);
+}
+
