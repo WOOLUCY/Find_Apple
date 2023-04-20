@@ -48,6 +48,13 @@ void UCraftingAllWidget::NativeConstruct()
 	AX4Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedAX4Button);
 	Pick4Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedPick4Button);
 
+	// Sword Button Func bind
+	SwordButton->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedSwordButton);
+	Sword1Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedSword1Button);
+	Sword2Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedSword2Button);
+	Sword3Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedSword3Button);
+	Sword4Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedSword4Button);
+
 
 	CloseButton->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedCloseButton);
 
@@ -194,6 +201,66 @@ void UCraftingAllWidget::ClickedPick4Button()
 
 	/* Need change to name */
 	FName ButtonName = FName(TEXT("Pick4"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedSwordButton()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("Sword"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedSword1Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("Sword1"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedSword2Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("Sword2"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedSword3Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("Sword3"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedSword4Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("Sword4"));
 
 	CreateItemWidget(ButtonName);
 

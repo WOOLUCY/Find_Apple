@@ -39,6 +39,18 @@ public:
 		class UButton* AX4Button;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		class UButton* Pick4Button;
+	// Sword Button
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* SwordButton;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Sword1Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Sword2Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Sword3Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Sword4Button;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		class UButton* CloseButton;
@@ -80,6 +92,18 @@ public:
 		void ClickedAX4Button();
 	UFUNCTION()
 		void ClickedPick4Button();
+
+	// Sword Button Func
+	UFUNCTION()
+	void ClickedSwordButton();
+	UFUNCTION()
+	void ClickedSword1Button();
+	UFUNCTION()
+	void ClickedSword2Button();
+	UFUNCTION()
+	void ClickedSword3Button();
+	UFUNCTION()
+	void ClickedSword4Button();
 
 
 	/* Close */
