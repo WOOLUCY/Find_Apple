@@ -22,7 +22,7 @@ UCraftingAllWidget::UCraftingAllWidget(const FObjectInitializer& objectInitializ
 	}
 
 	/* Crafting Data Table */
-	static ConstructorHelpers::FObjectFinder<UDataTable> CraftingDataTableObject(TEXT("/Script/Engine.DataTable'/Game/Semin/UI/Crafting/CraftingData.CraftingData'"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> CraftingDataTableObject(TEXT("/Script/Engine.DataTable'/Game/Semin/UI/Crafting/CraftingDataNew.CraftingDataNew'"));
 	if (CraftingDataTableObject.Succeeded())
 	{
 		CraftingDataTable = CraftingDataTableObject.Object;
@@ -32,8 +32,23 @@ UCraftingAllWidget::UCraftingAllWidget(const FObjectInitializer& objectInitializ
 void UCraftingAllWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+	// AX & Pick
 	AXButton->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedAXButton);
 	PickButton->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedPickButton);
+
+	AX1Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedAX1Button);
+	Pick1Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedPick1Button);
+
+	AX2Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedAX2Button);
+	Pick2Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedPick2Button);
+
+	AX3Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedAX3Button);
+	Pick3Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedPick3Button);
+
+	AX4Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedAX4Button);
+	Pick4Button->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedPick4Button);
+
+
 	CloseButton->OnClicked.AddDynamic(this, &UCraftingAllWidget::ClickedCloseButton);
 
 	if (CraftingDataTable != nullptr)
@@ -60,9 +75,10 @@ void UCraftingAllWidget::CreateItemWidget(FName CraftingItemName)
 			}
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Create Item Widget"));
 }
 
-/* ���� ��ư */
+/* ���� ��ư */	 
 void UCraftingAllWidget::ClickedAXButton()
 {
 	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
@@ -78,11 +94,106 @@ void UCraftingAllWidget::ClickedAXButton()
 /* ��� ��ư */
 void UCraftingAllWidget::ClickedPickButton()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("ClickedAXButton"));
 	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
 
 	/* ��ư���� �ٲ��� �ϴ� �̸�, �����ͺ��̽��� �� �̸� */
 	FName ButtonName = FName(TEXT("Pick"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedAX1Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("AX1"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedPick1Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("Pick1"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedAX2Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("AX2"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedPick2Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("Pick2"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedAX3Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("AX3"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedPick3Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("Pick3"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedAX4Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("AX4"));
+
+	CreateItemWidget(ButtonName);
+
+	RemoveFromParent();
+}
+
+void UCraftingAllWidget::ClickedPick4Button()
+{
+	CraftingItemWidgetUIObject = CreateWidget<UCraftingItemsWidget>(GetWorld(), CraftingItemWidgetClass);
+
+	/* Need change to name */
+	FName ButtonName = FName(TEXT("Pick4"));
 
 	CreateItemWidget(ButtonName);
 

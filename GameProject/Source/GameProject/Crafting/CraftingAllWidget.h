@@ -18,11 +18,27 @@ public:
 	UCraftingAllWidget(const FObjectInitializer& objectInitializer);
 	virtual void NativeConstruct() override;
 
-	/* ���� �߰��� ������ �߰��ؾ� �� */
+	/* Crafte Item Button */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		class UButton* AXButton;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		class UButton* PickButton;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		class UButton* AX1Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		class UButton* Pick1Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		class UButton* AX2Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		class UButton* Pick2Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		class UButton* AX3Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		class UButton* Pick3Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		class UButton* AX4Button;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		class UButton* Pick4Button;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		class UButton* CloseButton;
@@ -43,11 +59,29 @@ public:
 		class UDataTable* ItemDataTable;
 	TArray<struct FInventoryTableRow*> InventoryData;
 
-	/* ���� �߰��� ������ �߰��ؾ� �� */
+	/* Button Click - Crafte Item Button */
 	UFUNCTION()
 		void ClickedAXButton();
 	UFUNCTION()
 		void ClickedPickButton();
+	UFUNCTION()
+		void ClickedAX1Button();
+	UFUNCTION()
+		void ClickedPick1Button();
+	UFUNCTION()
+		void ClickedAX2Button();
+	UFUNCTION()
+		void ClickedPick2Button();
+	UFUNCTION()
+		void ClickedAX3Button();
+	UFUNCTION()
+		void ClickedPick3Button();
+	UFUNCTION()
+		void ClickedAX4Button();
+	UFUNCTION()
+		void ClickedPick4Button();
+
+
 	/* Close */
 	UFUNCTION()
 		void ClickedCloseButton();

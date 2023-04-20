@@ -65,7 +65,7 @@ private:
 	UPROPERTY()
 	TArray<FName> ItemRowNames;
 
-	/* �÷��̾ ���� ������ ���� �̸� ���� (���� �ݺ��� ������ �Ʊ���� ) */
+	/* need Change when I add item list */
 	UPROPERTY()
 	int32 HaveAppleCnt;
 	UPROPERTY()
@@ -76,6 +76,43 @@ private:
 	int32 HaveRockCnt;
 	UPROPERTY()
 	int32 HaveTrunkCnt;
+	UPROPERTY()
+	int32 HaveGoldCnt;
+	UPROPERTY()
+	int32 HaveIronCnt;
+	UPROPERTY()
+	int32 HaveRubbyCnt;
+	UPROPERTY()
+	int32 HaveSapphireCnt;
+	
+	// Tool
+	UPROPERTY()
+	int32 HavePickCnt;
+	UPROPERTY()
+	int32 HavePick1Cnt;
+	UPROPERTY()
+	int32 HavePick2Cnt;
+	UPROPERTY()
+	int32 HavePick3Cnt;
+	// AX
+	UPROPERTY()
+	int32 HaveAXCnt;
+	UPROPERTY()
+	int32 HaveAX1Cnt;
+	UPROPERTY()
+	int32 HaveAX2Cnt;
+	UPROPERTY()
+	int32 HaveAX3Cnt;
+	// Sword
+	UPROPERTY()
+	int32 HaveSwordCnt;
+	UPROPERTY()
+	int32 HaveSword1Cnt;
+	UPROPERTY()
+	int32 HaveSword2Cnt;
+	UPROPERTY()
+	int32 HaveSword3Cnt;
+
 	//UPROPERTY()
 	//int32 HasAppleCnt;
 
