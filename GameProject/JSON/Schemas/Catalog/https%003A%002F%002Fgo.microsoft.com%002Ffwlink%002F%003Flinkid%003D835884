@@ -1570,15 +1570,33 @@
       "url": "https://json.schemastore.org/first-timers.json"
     },
     {
-      "name": "Foundry VTT - Manifest",
-      "description": "JSON schema for Foundry VTT system.json and module.json files.",
-      "fileMatch": ["system.json", "module.json"],
-      "url": "https://json.schemastore.org/foundryvtt-manifest.json"
+      "name": "Foundry VTT - Base package Manifest",
+      "description": "Base schema for Module/system/World manifest schemas to inherit from.",
+      "fileMatch": [],
+      "url": "https://json.schemastore.org/foundryvtt-base-package-manifest.json"
     },
     {
-      "name": "Foundry VTT - Template",
+      "name": "Foundry VTT - Module Manifest",
+      "description": "JSON schema for Foundry VTT module.json files.",
+      "fileMatch": ["**/modules/*/module.json"],
+      "url": "https://json.schemastore.org/foundryvtt-module-manifest.json"
+    },
+    {
+      "name": "Foundry VTT - System Manifest",
+      "description": "JSON schema for Foundry VTT system.json files.",
+      "fileMatch": ["**/systems/*/system.json"],
+      "url": "https://json.schemastore.org/foundryvtt-system-manifest.json"
+    },
+    {
+      "name": "Foundry VTT - World Manifest",
+      "description": "JSON schema for Foundry VTT world.json files.",
+      "fileMatch": ["**/worlds/*/world.json"],
+      "url": "https://json.schemastore.org/foundryvtt-world-manifest.json"
+    },
+    {
+      "name": "Foundry VTT - System Data Template",
       "description": "JSON schema for Foundry VTT template.json files.",
-      "fileMatch": ["template.json"],
+      "fileMatch": ["**/systems/*/template.json"],
       "url": "https://json.schemastore.org/foundryvtt-template.json"
     },
     {
@@ -2210,6 +2228,12 @@
       "url": "https://json.schemastore.org/loobin-1.0.json"
     },
     {
+      "name": "lotus.yaml",
+      "description": "The configuration file used for Lotus definitions",
+      "fileMatch": ["lotus.yaml"],
+      "url": "https://grnhse-vpc-assets.s3.amazonaws.com/jsonschemas/lotus.yaml.json"
+    },
+    {
       "name": "local.settings.json",
       "description": "JSON schema for Azure Functions local.settings.json files",
       "fileMatch": ["local.settings.json"],
@@ -2737,6 +2761,12 @@
         ".postcssrc.yml"
       ],
       "url": "https://json.schemastore.org/postcssrc.json"
+    },
+    {
+      "name": ".powerpages-web-template-manifest",
+      "description": "Custom manifest declaration for Web templates",
+      "fileMatch": [".powerpages-web-template-manifest"],
+      "url": "https://json.schemastore.org/powerpages-web-template-manifest.json"
     },
     {
       "name": ".pre-commit-config.yml",
@@ -3655,6 +3685,12 @@
       "description": "JSON Schema for Azure DevOps Extensions",
       "fileMatch": ["vss-extension.json"],
       "url": "https://json.schemastore.org/vss-extension.json"
+    },
+    {
+      "name": "vtesttree.yaml",
+      "description": "Test execution tree description for a Vector test unit created with VS Code",
+      "fileMatch": ["*.vtesttree.yaml", "*.vtesttree.yml", "*.vtesttree.json"],
+      "url": "https://json.schemastore.org/vtesttree-schema.json"
     },
     {
       "name": "v8r",
@@ -4773,6 +4809,24 @@
       "description": "The configuration file used for ES6 Import Sorter - a vscode extention .",
       "fileMatch": [".es6importsorterrc.json"],
       "url": "https://json.schemastore.org/es6importsorterrc.json"
+    },
+    {
+      "name": "bashly.yml",
+      "description": "Bashly CLI",
+      "fileMatch": ["bashly.yml", "bashly.yaml"],
+      "url": "https://raw.githubusercontent.com/DannyBen/bashly/master/schemas/bashly.json"
+    },
+    {
+      "name": "bashly-settings.yml",
+      "description": "Bashly settings",
+      "fileMatch": ["bashly-settings.yml", "bashly-settings.yaml"],
+      "url": "https://raw.githubusercontent.com/DannyBen/bashly/master/schemas/settings.json"
+    },
+    {
+      "name": "bashly-strings.yml",
+      "description": "Bashly strings",
+      "fileMatch": ["bashly-strings.yml", "bashly-strings.yaml"],
+      "url": "https://raw.githubusercontent.com/DannyBen/bashly/master/schemas/strings.json"
     }
   ],
   "version": 1

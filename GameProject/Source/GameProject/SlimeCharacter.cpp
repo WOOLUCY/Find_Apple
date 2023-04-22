@@ -5,7 +5,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Components/MeshComponent.h"
-#include "GameFramework/PawnMovementComponent.h"
+//#include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values
 ASlimeCharacter::ASlimeCharacter()
@@ -14,13 +14,13 @@ ASlimeCharacter::ASlimeCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	/* Animation */
-	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	static ConstructorHelpers::FClassFinder<UAnimInstance> SlimeAnimBP
-	(TEXT("/Script/Engine.AnimBlueprint'/Game/Monsters/Slime/SlimeAnimBP.SlimeAnimBP'"));
+	///*GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+	//static ConstructorHelpers::FClassFinder<UAnimInstance> SlimeAnimBP
+	//(TEXT("/Script/Engine.AnimBlueprint'/Game/Monsters/Slime/SlimeAnimBP.SlimeAnimBP'"));
 
-	if (SlimeAnimBP.Succeeded()) {
-		GetMesh()->SetAnimInstanceClass(SlimeAnimBP.Class);
-	}
+	//if (SlimeAnimBP.Succeeded()) {
+	//	GetMesh()->SetAnimInstanceClass(SlimeAnimBP.Class);
+	//}*/
 
 	/* Slime Material Load */
 	FString Material01Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Slime01.MI_Slime01'";
@@ -43,9 +43,9 @@ ASlimeCharacter::ASlimeCharacter()
 	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material05Asset(*Material05Name);
 	Material05 = Material05Asset.Object;
 
-	FString DissolveName = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Dissolve.MI_Dissolve'";
+	/*FString DissolveName = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Dissolve.MI_Dissolve'";
 	ConstructorHelpers::FObjectFinder<UMaterialInterface> DissolveMaterialAsset(*DissolveName);
-	DissolveMaterial = DissolveMaterialAsset.Object;
+	DissolveMaterial = DissolveMaterialAsset.Object;*/
 }
 
 // Called when the game starts or when spawned
@@ -89,20 +89,20 @@ void ASlimeCharacter::Tick(float DeltaTime)
 	// TODO: Destroy Slime
 	else if (Health <= 0.f)
 	{
-		for (int i = 0; i < 4; ++i)
-		{
-			GetMesh()->SetMaterial(i, DissolveMaterial);
-		}
+		//for (int i = 0; i < 4; ++i)
+		//{
+		//	GetMesh()->SetMaterial(i, DissolveMaterial);
+		//}
 
-		//GetMovementComponent()->StopMovementImmediately();
-		GetMesh()->Stop();
-		GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		////GetMovementComponent()->StopMovementImmediately();
+		//GetMesh()->Stop();
+		//GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
-			{
-				Destroy();
-			}, 0.8f, false);
+		//FTimerHandle TimerHandle;
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+		//	{
+		//		Destroy();
+		//	}, 0.8f, false);
 
 		//Destroy();
 	}
@@ -135,40 +135,40 @@ void ASlimeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
-	AController* EventInstigator, AActor* DamageCauser)
-{
-	if (Health <= 0.f)
-		return	0.f;
-
-	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	IsAttacked = true;
-
-	FTimerHandle TimerHandle;
-	if (Health <= 20.f)
-	{
-		Health -= 20.f;
-
-		UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
-		UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
-
-		IsAttacked = false;
-	}
-	else
-	{
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
-		   {
-			   Health -= 20.f;
-
-			   UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
-			   UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
-
-			   IsAttacked = false;
-		   }, 0.5f, false);
-	}
-
-	return Damage;
-}
-
-
+//float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+//	AController* EventInstigator, AActor* DamageCauser)
+//{
+//	if (Health <= 0.f)
+//		return	0.f;
+//
+//	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+//
+//	IsAttacked = true;
+//
+//	FTimerHandle TimerHandle;
+//	if (Health <= 20.f)
+//	{
+//		Health -= 20.f;
+//
+//		UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
+//		UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
+//
+//		IsAttacked = false;
+//	}
+//	else
+//	{
+//		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+//		   {
+//			   Health -= 20.f;
+//
+//			   UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
+//			   UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
+//
+//			   IsAttacked = false;
+//		   }, 0.5f, false);
+//	}
+//
+//	return Damage;
+//}
+//
+//
