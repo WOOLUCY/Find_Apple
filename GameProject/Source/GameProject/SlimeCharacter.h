@@ -50,8 +50,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Interaction")
 	UMaterialInterface* Material05 = nullptr;
 
-	//UPROPERTY(EditAnywhere, Category = "Interaction")
-	//UMaterialInterface* DissolveMaterial = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	UMaterialInterface* DissolveMaterial = nullptr;
 
-	//virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 };
