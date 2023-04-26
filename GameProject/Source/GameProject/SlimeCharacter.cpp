@@ -14,13 +14,13 @@ ASlimeCharacter::ASlimeCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	/* Animation */
-	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	static ConstructorHelpers::FClassFinder<UAnimInstance> SlimeAnimBP
-	(TEXT("/Script/Engine.AnimBlueprint'/Game/Monsters/Slime/SlimeAnimBP.SlimeAnimBP_C'"));
+	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+	//static ConstructorHelpers::FClassFinder<UAnimInstance> SlimeAnimBP
+	//(TEXT("/Script/Engine.AnimBlueprint'/Game/Monsters/Slime/SlimeAnimBP.SlimeAnimBP_C'"));
 
-	if (SlimeAnimBP.Succeeded()) {
-		GetMesh()->SetAnimInstanceClass(SlimeAnimBP.Class);
-	}
+	//if (SlimeAnimBP.Succeeded()) {
+	//	GetMesh()->SetAnimInstanceClass(SlimeAnimBP.Class);
+	//}
 
 
 	/* Slime Material Load */
@@ -149,6 +149,8 @@ float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 			   IsAttacked = false;
 		   }, 0.5f, false);
 	}
+
+	
 
 	return Damage;
 }
