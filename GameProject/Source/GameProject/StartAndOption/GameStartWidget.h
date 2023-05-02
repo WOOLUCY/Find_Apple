@@ -29,7 +29,7 @@ protected:
 	class UButton* StartButton;
 
 	UPROPERTY(EditAnywhere, category = "Setting", meta = (AllowPrivateAccess = "true"))
-    FName TransferLevelName = "MainMap1";
+    FName TransferLevelName = "EditMap";
 
 private:
 	/* Black Screen Pop (어두워지는 효과) */
