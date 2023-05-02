@@ -27,7 +27,7 @@
 ALightHouse::ALightHouse()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	DefaultRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultRoot"));
 	SetRootComponent(DefaultRoot);
@@ -155,9 +155,8 @@ void ALightHouse::TimelineFinished()
 void ALightHouse::OnActivate_Implementation()
 {
 	if (isPressed == false) {
-		isPressed = true;
 
-		PrimaryActorTick.bCanEverTick = true;
+		isPressed = true;
 
 		PressKeyUIObject->RemoveFromParent();
 
@@ -241,19 +240,25 @@ void ALightHouse::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
-		if (isPressed)
-		{
-			MapNameWidgetUIObject = CreateWidget<UShowMapNameWidget>(GetWorld(), MapNameWidgetClass);
-			MapNameWidgetUIObject->NameText->SetText(displayName);
-			MapNameWidgetUIObject->AddToViewport();
-			isKeyWidget = false;
+		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(OtherActor);
+
+		if (MyCharacter) {
+			if (isPressed)
+			{
+				MapNameWidgetUIObject = CreateWidget<UShowMapNameWidget>(GetWorld(), MapNameWidgetClass);
+				MapNameWidgetUIObject->NameText->SetText(displayName);
+				MapNameWidgetUIObject->AddToViewport();
+				isKeyWidget = false;
+			}
+			else
+			{
+				PressKeyUIObject = CreateWidget<UPressKeyWidget>(GetWorld(), PressKeyClass);
+				PressKeyUIObject->AddToViewport();
+				isKeyWidget = true;
+			}
+			PrimaryActorTick.bCanEverTick = true;
 		}
-		else
-		{
-			PressKeyUIObject = CreateWidget<UPressKeyWidget>(GetWorld(), PressKeyClass);
-			PressKeyUIObject->AddToViewport();
-			isKeyWidget = true;
-		}
+		
 	}
 }
 
@@ -261,23 +266,27 @@ void ALightHouse::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
-		if (isPressed && isKeyWidget == false) {
-			MapNameWidgetUIObject->PlayAnimation(MapNameWidgetUIObject->MoveBorderHidden);
+		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(OtherActor);
+		PrimaryActorTick.bCanEverTick = false;
 
-			FTimerHandle TimerHandle;
+		if (MyCharacter) {
+			if (isPressed && isKeyWidget == false) {
+				MapNameWidgetUIObject->PlayAnimation(MapNameWidgetUIObject->MoveBorderHidden);
 
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-				{
-					PrimaryActorTick.bCanEverTick = false;
+				FTimerHandle TimerHandle;
 
-					MapNameWidgetUIObject->RemoveFromParent();
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+					{
 
-					GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-				}), 1.f, false);
-		}
-		else if ( isPressed == false && isKeyWidget == true )
-		{
-			PressKeyUIObject->RemoveFromParent();
+						MapNameWidgetUIObject->RemoveFromParent();
+
+						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+					}), 1.f, false);
+			}
+			else if (isPressed == false && isKeyWidget == true)
+			{
+				PressKeyUIObject->RemoveFromParent();
+			}
 		}
 	}
 }
