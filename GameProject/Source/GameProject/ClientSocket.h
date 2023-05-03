@@ -20,6 +20,7 @@
 //프로토콜 추가하면 삭제해야함
 #define SERVER_ADDR  "127.0.0.1"
 #define SERVER_PORT  4000
+#define BUFSIZE		 1024
 
 
 /**
@@ -32,13 +33,19 @@ public:
 	~ClientSocket();
 
 	SOCKET Socket;
-	bool IsInit = false;
+	bool IsInit;
 
+	char buf[BUFSIZE];
+	int PrevRemain;
+
+
+
+
+	
+public:
 	bool InitSocket();
 	
-
 	
-
 
 
 };

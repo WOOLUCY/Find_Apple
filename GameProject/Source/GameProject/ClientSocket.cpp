@@ -5,6 +5,9 @@
 
 ClientSocket::ClientSocket()
 {
+	IsInit = false;
+	memset(buf, BUFSIZE, 0);
+	PrevRemain = 0;
 }
 
 ClientSocket::~ClientSocket()
@@ -20,6 +23,10 @@ bool ClientSocket::InitSocket()
 	}
 
 	Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+	u_long nonBlockingMode = 1;
+	ioctlsocket(Socket, FIONBIO, &nonBlockingMode);
+
 	if (Socket == INVALID_SOCKET) {
 		UE_LOG(LogTemp, Error, TEXT("Socket is Invalid"));
 		return false;
@@ -37,9 +44,15 @@ bool ClientSocket::InitSocket()
 		UE_LOG(LogTemp, Error, TEXT("Socket Connect Fail"));
 		return false;
 	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Socket Init and Connect Success"));
+		IsInit = true;
+		
+	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Socket Init and Connect Success"));
-	IsInit = true;
+
+	ret = recv(Socket, (char*)buf, BUFSIZE, 0);
+	UE_LOG(LogTemp, Warning, TEXT("%d"),buf[0]);
 
 
 	return true;
