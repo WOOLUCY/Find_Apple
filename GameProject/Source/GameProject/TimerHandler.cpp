@@ -27,7 +27,7 @@ void ATimerHandler::BeginPlay()
 			Day temp = GameInstance->Today;
 			
 			Today.SetTime(temp.GetDays(), temp.GetHours(), temp.GetMin(), temp.GetSec(), temp.GetTotal());
-			UE_LOG(LogTemp, Warning, TEXT("%d/!?!"), TotalGameTime);
+			UE_LOG(LogTemp, Warning, TEXT("%d !?!"), TotalGameTime);
 
 
 			TotalGameTime = Today.GetTotal();
@@ -91,7 +91,9 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 	}
 
 
-	if (Today.GetHours() == 2) {
+//	if (Today.GetHours() == 2) {
+	if (Today.GetHours() == 0) {
+
 		//GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==02"));
 		Today.SetDay(TimeFormatter.GetDays());
 

@@ -26,6 +26,19 @@
 /**
  * 
  */
+
+
+//일단 이러고 왓다갓다해보자,,ㅅㅂ
+constexpr char TESTPACKET = 10;
+
+struct SC_CS_TESTPACKET {
+	unsigned char size;
+	char	type;
+	char	test;
+
+};
+
+
 class GAMEPROJECT_API ClientSocket
 {
 public:
@@ -35,15 +48,21 @@ public:
 	SOCKET Socket;
 	bool IsInit;
 
-	char buf[BUFSIZE];
+	char RecvBuf[BUFSIZE];
 	int PrevRemain;
 
 
-
-
-	
 public:
 	bool InitSocket();
+
+	void SendLoginPacket();
+	void SendMovePacket();
+	void SendRegistOrPurchasePacket(bool Regist);
+
+	void SendTestPacket();
+
+	void PacketRecv();
+	void ProcessPacket(char* packet);
 	
 	
 
