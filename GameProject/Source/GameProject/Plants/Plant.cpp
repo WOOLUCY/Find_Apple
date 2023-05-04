@@ -54,20 +54,22 @@ void APlant::PutWater()
 		WaterCount = 0;
 		//2. Current메시 변경,레벨 올리기
 		if (NowLevel < MaxLevel) {
+		//	Meshs.
 			Current->SetStaticMesh(Meshs[NowLevel]);
 			++NowLevel;
 
-			if (!IsFruit) { 
-				CanHarvest = true;
-			}
-	
+			
 
 			
+		}
+		else {
+			CanHarvest = true;
+			UE_LOG(LogTemp, Warning, TEXT("PlantWater and CanHarvest"));
+
 		}
 		
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("PlantWater Put ++"));
 }
 
 void APlant::DayChange()
@@ -75,7 +77,7 @@ void APlant::DayChange()
 	++DeathCount;
 	if (DeathCount > MaxDeathDay) {
 		UE_LOG(LogTemp, Warning, TEXT("PlantWater PDeath,,,,"));
-		Destroy();
+		//Destroy();
 
 	}
 
@@ -84,15 +86,17 @@ void APlant::DayChange()
 
 void APlant::Harvest()
 {
+
+	
 	if (CanHarvest){
 		UE_LOG(LogTemp, Warning, TEXT("Call Harvest"));
+		Destroy();
 
 
 	}
 	else {
 
 	}
-	Destroy();
-
+	
 }
 

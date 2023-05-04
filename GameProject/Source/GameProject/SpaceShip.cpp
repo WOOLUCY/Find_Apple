@@ -23,7 +23,7 @@ ASpaceShip::ASpaceShip()
 	Mesh->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
 	Box->SetRelativeScale3D(FVector(5.f, 5.f, 8.f));
 
-	Mesh->SetCollisionProfileName("NoCollision");
+	Mesh->SetCollisionProfileName("BlockAll");
 	Box->SetCollisionProfileName("OverlapAll");
 
 	// Mesh
