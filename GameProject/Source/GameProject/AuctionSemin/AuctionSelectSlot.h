@@ -3,25 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
 #include "../Inventory/InventoryUW.h"
-#include "AuctionSlot.generated.h"
+#include "Blueprint/UserWidget.h"
+#include "AuctionSelectSlot.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GAMEPROJECT_API UAuctionSlot : public UUserWidget
+class GAMEPROJECT_API UAuctionSelectSlot : public UUserWidget
 {
 	GENERATED_BODY()
-
+	
+		
 protected:
-	UAuctionSlot(const FObjectInitializer& objectInitializer);
+	UAuctionSelectSlot(const FObjectInitializer& objectInitializer);
 
 	virtual void NativeConstruct() override;
 	virtual void NativePreConstruct() override;
-
-	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 public:
 	UPROPERTY(EditDefaultsOnly)
@@ -35,9 +34,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UBorder* SlotImage;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	UTexture2D* Thumbnail = UTexture2D::CreateTransient(128, 128, PF_R8G8B8A8);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UBorder* CountImage;

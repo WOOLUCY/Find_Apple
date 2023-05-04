@@ -22,17 +22,50 @@ public:
 	UAuctionEnterWidget(const FObjectInitializer& objectInitializer);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UInventoryMenuUW* InventoryAllItem;
-
+	class UAuctionMenuTab* InventoryAllItem;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UAuctionSlot* SelectItemSlot;
+	class UAuctionSelectSlot* SelectItemSlot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	FText ItemName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	FText DescriptText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* AllAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* SelectItemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UEditableTextBox* CountTextBox = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UEditableTextBox* AmountTextBox;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* CloseButton;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* EnterButton;
+
+	UPROPERTY(EditAnywhere)
+	int32 ItemCount = 0;
+
+	UPROPERTY(EditAnywhere)
+	int32 ItemAmount = 0;
+
+	UPROPERTY(EditAnywhere)
+	int32 iAllAmount = 0;
+
+	UFUNCTION()
+	void ClickedCloseButton();
+	UFUNCTION()
+	void ClickedEnterButton();
+	UFUNCTION()
+	void ChangedAmountTextBox(const FText& Text);
+	UFUNCTION()
+	void ChangedCountTextBox(const FText& Text);
 };
