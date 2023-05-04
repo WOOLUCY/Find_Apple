@@ -35,7 +35,8 @@ void UInventoryMenuUW::Refresh()
 	InventoryContentsWrap->ClearChildren();
 	if (InventoryComponent) {
 		for (auto& InventoryElement : InventoryComponent->InventoryContent)
-		{
+		{	
+			UE_LOG(LogTemp, Warning, TEXT("Refresh in Inventory"))
 			if (ItemDataTable != nullptr)
 			{
 				ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
