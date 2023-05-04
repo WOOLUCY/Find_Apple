@@ -18,7 +18,7 @@ public:
 	UCraftingAllWidget(const FObjectInitializer& objectInitializer);
 	virtual void NativeConstruct() override;
 
-	/* Crafte Item Button */
+	/* Craft Item Button */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		class UButton* AXButton;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
