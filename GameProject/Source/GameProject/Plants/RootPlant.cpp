@@ -32,6 +32,9 @@ ARootPlant::ARootPlant()
 	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/rootplatn3.rootplatn3'"));
 	if (SM_ROOT1.Succeeded()) {
 		Roots.Add(SM_ROOT1.Object);
+		//일단 무로 해놔
+		Meshs.Add(SM_ROOT1.Object);
+
 	}
 	//당근
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_ROOT2
@@ -51,6 +54,7 @@ void ARootPlant::BeginPlay()
 	Super::BeginPlay();
 
 	//랜덤하게 설정해주기 - 그럼 인벤토리 들어갓을때 우짜??
+	
 
 
 }
