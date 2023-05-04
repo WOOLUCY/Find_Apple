@@ -54,15 +54,20 @@ void APlant::PutWater()
 		WaterCount = 0;
 		//2. Current메시 변경,레벨 올리기
 		if (NowLevel < MaxLevel) {
+			UE_LOG(LogTemp, Warning, TEXT("[NowLevel] : %d"), NowLevel);
+
 			Current->SetStaticMesh(Meshs[NowLevel]);
 			++NowLevel;
-
-			if (!IsFruit) { 
-				CanHarvest = true;
-			}
 	
 
 			
+		}
+		else {
+
+			if (!IsFruit) {
+				CanHarvest = true;
+			}
+
 		}
 		
 	}

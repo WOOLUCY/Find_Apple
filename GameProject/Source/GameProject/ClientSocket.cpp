@@ -155,7 +155,7 @@ void ClientSocket::ProcessPacket(char* packet)
 		//testpacket 왓다갓다할거임
 		SC_CS_TESTPACKET* p = reinterpret_cast<SC_CS_TESTPACKET*>(packet);
 
-		printf("[SC_CS_TESTPACKET 받음] %d %d %d \n", p->size, p->type, p->test);
+		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET 받음] %d %d %d "), p->size, p->type, p->test);
 
 
 	}

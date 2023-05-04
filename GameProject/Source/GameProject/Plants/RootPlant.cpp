@@ -8,6 +8,7 @@ ARootPlant::ARootPlant()
 	LiveDay = 0;
 	MaxDeathDay = 1;
 	DeathCount = 0;
+	MaxLevel = 3;
 	IsFruit = false;
 
 	Current = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CurrentMesh"));

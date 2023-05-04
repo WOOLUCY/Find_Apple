@@ -92,7 +92,7 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 
 
 //	if (Today.GetHours() == 2) {
-	if (Today.GetHours() == 0) {
+	if (Today.GetHours() == 1) {
 
 		//GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, TEXT("TotalTime==02"));
 		Today.SetDay(TimeFormatter.GetDays());
