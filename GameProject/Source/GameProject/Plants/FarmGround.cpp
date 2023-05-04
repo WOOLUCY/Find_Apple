@@ -215,7 +215,14 @@ void AFarmGround::PutSeed()
 
 void AFarmGround::Harvest()
 {
-	Planted->Harvest();
+	if (Planted->Harvest()) {
+		UE_LOG(LogTemp, Warning, TEXT("AFarmGround Call Harvest"));
+		IsWet = false;
+		IsEmpty = true;
+		Planted = nullptr;
+	}
+	
+
 	//Planted->CanHarvest
 }
 

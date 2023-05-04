@@ -2,6 +2,10 @@
 
 
 #include "RootPlant.h"
+#include "Kismet/GameplayStatics.h"
+#include "../Inventory/InventoryComponent.h"
+
+#include "../FindAppleCharacter.h"
 
 ARootPlant::ARootPlant()
 {
@@ -55,6 +59,22 @@ void ARootPlant::BeginPlay()
 
 	//랜덤하게 설정해주기 - 그럼 인벤토리 들어갓을때 우짜??
 	
+
+
+}
+
+void ARootPlant::AddInventory()
+{
+	UE_LOG(LogTemp, Warning, TEXT("RootPlant Int AddInvetory Function"));
+	//여기서 인벤에 넣어주면된다.
+	auto* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+	if(MyCharacter!=nullptr){
+		FName ItemName = "Radish";
+		//MyCharacter->InventoryComponent
+		MyCharacter->InventoryComponent->AddToInventory(ItemName, 1);
+
+	}
 
 
 }

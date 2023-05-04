@@ -46,8 +46,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void PutWater();
-	virtual void Harvest();
+	virtual bool Harvest();
 	virtual void DayChange();
+
+	virtual void AddInventory();
 	
 
 };

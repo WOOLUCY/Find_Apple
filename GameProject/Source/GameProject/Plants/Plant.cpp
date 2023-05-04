@@ -12,6 +12,7 @@ APlant::APlant()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	CanHarvest = false;
 
 }
 
@@ -19,7 +20,7 @@ APlant::APlant()
 void APlant::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("Plant sPAnw!!"));
+	UE_LOG(LogTemp, Warning, TEXT("Plant Spawn!!"));
 
 	float RandYaw = FMath::RandRange(-90.f, 90.f);
 
@@ -59,13 +60,11 @@ void APlant::PutWater()
 			++NowLevel;
 
 			
+			if (NowLevel == MaxLevel) {
+				CanHarvest = true;
+				UE_LOG(LogTemp, Warning, TEXT("PlantWater and CanHarvest"));
 
-			
-		}
-		else {
-			CanHarvest = true;
-			UE_LOG(LogTemp, Warning, TEXT("PlantWater and CanHarvest"));
-
+			}
 		}
 		
 	}
@@ -84,18 +83,26 @@ void APlant::DayChange()
 
 }
 
-void APlant::Harvest()
+void APlant::AddInventory()
+{
+}
+
+bool APlant::Harvest()
 {
 
 	
 	if (CanHarvest){
 		UE_LOG(LogTemp, Warning, TEXT("Call Harvest"));
+		//인벤은 각자 그 cpp파일에서 넣는게 좋을듯??
+		AddInventory();
+
 		Destroy();
+		return true;
 
 
 	}
 	else {
-
+		return false;
 	}
 	
 }
