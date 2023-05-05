@@ -279,7 +279,7 @@ void AFarmGround::HiddenPlantWidget()
 
 void AFarmGround::DayChange()
 {
-	UE_LOG(LogTemp, Warning, TEXT("FarmDaychange"));
+	//UE_LOG(LogTemp, Warning, TEXT("FarmDaychange"));
 
 	if (IsWet) {
 	Mesh->SetMaterial(0, NotWet);

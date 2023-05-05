@@ -38,8 +38,13 @@ void AOverlapSendTest::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 
 	//UE_LOG(LogTemp, Warning, TEXT("NotifyActorBeginOverlap"));
+	int ItemCount = rand();
+	int ItemPrice = rand();
+	UE_LOG(LogTemp, Warning, TEXT("AOverlapSendTest, [%d, %d]"), ItemCount, ItemPrice);
 
-	MyInstance->MySocket.SendTestPacket();
+	//MyInstance->MySocket.SendTestSalePacket(ItemCount, ItemPrice);
+
+	//MyInstance->MySocket.SendTestPacket();
 }
 
 void AOverlapSendTest::NotifyActorEndOverlap(AActor* OtherActor)

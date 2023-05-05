@@ -10,6 +10,10 @@
 /**
  * 
  */
+ //PROTOCOL
+enum ITEM_TYPE { APPLE, ORANGE, TRUNK, PICK, AX, ROCK, BRAHCN, SEED, GOLD, IRON, SWORD, RADISH };
+
+
 UCLASS()
 class GAMEPROJECT_API UAuctionSlot : public UUserWidget
 {
@@ -57,6 +61,8 @@ public:
 	UPROPERTY()
 	FText Name;
 
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInventoryUW* Widget;
 
@@ -64,4 +70,5 @@ public:
 	class UDataTable* ItemDataTable;
 
 	TArray<struct FInventoryTableRow*> InventoryData;
+
 };

@@ -9,6 +9,9 @@
 /**
  * 
  */
+//PROTOCOL
+//enum ITEM_TYPE { APPLE, ORANGE, FIREWOOD, PICK, AX, ROCK, BRAHCN, SEED, GOLD, STEEL, SWORD, RADISH };
+
 UCLASS()
 class GAMEPROJECT_API UAuctionEnterWidget : public UUserWidget
 {
@@ -17,6 +20,7 @@ class GAMEPROJECT_API UAuctionEnterWidget : public UUserWidget
 protected:
 	virtual void NativePreConstruct() override;
 	virtual void NativeConstruct() override;
+	
 
 public:
 	UAuctionEnterWidget(const FObjectInitializer& objectInitializer);
@@ -52,13 +56,15 @@ public:
 	class UButton* EnterButton;
 
 	UPROPERTY(EditAnywhere)
-	int32 ItemCount = 0;
+	int ItemCount = 0;
 
 	UPROPERTY(EditAnywhere)
-	int32 ItemAmount = 0;
+	int ItemPrice = 0;
 
 	UPROPERTY(EditAnywhere)
-	int32 iAllAmount = 0;
+	int TotalPrice = 0;
+
+	int ItmeType = -1;
 
 	UFUNCTION()
 	void ClickedCloseButton();

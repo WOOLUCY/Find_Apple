@@ -1,7 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
 
 #include "Windows/AllowWindowsPlatformTypes.h"
 #include "Windows/prewindowsapi.h"
@@ -12,6 +10,7 @@
 
 #include "Windows/PostWindowsApi.h"
 #include "Windows/HideWindowsPlatformTypes.h"
+
 
 #include "Runtime/Core/Public/HAL/Runnable.h"
 
@@ -28,14 +27,26 @@
  */
 
 
-//일단 이러고 왓다갓다해보자,,ㅅㅂ
+//PROTOCL
 constexpr char TESTPACKET = 10;
+//enum ITEM_TYPE { APPLE, ORANGE, FIREWOOD, PICK, AX, ROCK, BRAHCN, SEED, GOLD, STEEL, SWORD, RADISH };
+
+#pragma pack (push, 1)
 
 struct SC_CS_TESTPACKET {
 	unsigned char size;
 	char	type;
-	char	test;
+	int		item;
+	int		testNum;
+	int		testPrice;
 
+};
+#pragma pack (pop)
+
+struct SalesItem {
+	int Item;
+	int Num;
+	int Price;
 };
 
 
@@ -47,6 +58,7 @@ public:
 
 	SOCKET Socket;
 	bool IsInit;
+	TArray<SalesItem> Items;
 
 	char RecvBuf[BUFSIZE];
 	int PrevRemain;
@@ -59,7 +71,10 @@ public:
 	void SendMovePacket();
 	void SendRegistOrPurchasePacket(bool Regist);
 
+	//이거 삭제해야하는 함수들 테스트 함수임
 	void SendTestPacket();
+	void SendTestSalePacket(int item,int num, int price);
+	void RecvDataTest();
 
 	void PacketRecv();
 	void ProcessPacket(char* packet);

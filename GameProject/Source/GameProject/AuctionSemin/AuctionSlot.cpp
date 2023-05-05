@@ -81,8 +81,57 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 			AuctionEnterWidgetClass->SelectItemSlot->SlotImage->SetBrushFromTexture(Thumbnail);
 			AuctionEnterWidgetClass->SelectItemName->SetText(Name);
 			AuctionEnterWidgetClass->ItemName = Name;
+
+			FString StringName = *ItemName.ToString();
+			if (StringName.Equals(FString(TEXT("apple")))) {
+				UE_LOG(LogTemp, Warning, TEXT("success compare apple"));
+				AuctionEnterWidgetClass->ItmeType = APPLE;
+
+			}
+			else if (StringName.Equals(FString(TEXT("orange")))) {
+				AuctionEnterWidgetClass->ItmeType = ORANGE;
+
+			}
+			else if (StringName.Equals(FString(TEXT("trunk")))) {
+				AuctionEnterWidgetClass->ItmeType = TRUNK;
+
+			}
+			else if (StringName.Equals(FString(TEXT("pick")))) {
+				AuctionEnterWidgetClass->ItmeType = PICK;
+
+			}
+			else if (StringName.Equals(FString(TEXT("ax")))) {
+				AuctionEnterWidgetClass->ItmeType = AX;
+
+			}
+			else if (StringName.Equals(FString(TEXT("rock")))) {
+				AuctionEnterWidgetClass->ItmeType = ROCK;
+
+			}
+			else if (StringName.Equals(FString(TEXT("branch")))) {
+				AuctionEnterWidgetClass->ItmeType = BRAHCN;
+
+			}
+			else if (StringName.Equals(FString(TEXT("Seed")))) {
+				AuctionEnterWidgetClass->ItmeType = SEED;
+
+			}
+			else if (StringName.Equals(FString(TEXT("Iron")))) {
+				AuctionEnterWidgetClass->ItmeType = IRON;
+
+			}
+			else if (StringName.Equals(FString(TEXT("Radish")))) {
+				AuctionEnterWidgetClass->ItmeType = RADISH;
+
+			}
+			else if (StringName.Equals(FString(TEXT("Gold")))) {
+				AuctionEnterWidgetClass->ItmeType = GOLD;
+
+			}
+
 		}
 	}
 
 	return Reply;
 }
+
