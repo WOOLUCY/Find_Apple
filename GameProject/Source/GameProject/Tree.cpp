@@ -14,6 +14,7 @@ ATree::ATree()
 	MaxDamage = 50.f;
 	TotalDamage = 0.f;
 	RespawnTime = 20.f;
+	
 
 	Lower = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LOWER"));
 	Pivot = CreateDefaultSubobject<USceneComponent>(TEXT("PIVOT"));
@@ -33,6 +34,7 @@ ATree::ATree()
 	Upper->GetAttachParent();
 	Leaf->GetAttachParent();
 	Leaf->SetCollisionProfileName(TEXT("NoCollision"));
+
 	//lower
 	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_LOWER
 	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeLower0.TreeLower0'"));
@@ -149,6 +151,38 @@ ATree::ATree()
 
 
 
+	//semin Material
+	static FString Material01Name = "/Script/Engine.MaterialInstanceConstant'/Game/Semin/Material/M_Occlusion_TreeStump.M_Occlusion_TreeStump'";
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> Material01Asset(*Material01Name);
+	StumpMaterial = Material01Asset.Object;
+
+	static FString Material02Name = "/Script/Engine.MaterialInstanceConstant'/Game/Semin/Material/M_Occlusion_TreeHead1.M_Occlusion_TreeHead1'";
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> Material02Asset(*Material02Name);
+	FirstTreeMaterial1 = Material02Asset.Object;
+
+	static FString Material03Name = "/Script/Engine.MaterialInstanceConstant'/Game/Semin/Material/M_Occlusion_TreeHead2.M_Occlusion_TreeHead2'";
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> Material03Asset(*Material03Name);
+	FirstTreeMaterial2 = Material03Asset.Object;
+
+	static FString Material04Name = "/Script/Engine.MaterialInstanceConstant'/Game/Semin/Material/M_Occlusion_TreeHead3.M_Occlusion_TreeHead3'";
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> Material04Asset(*Material04Name);
+	FirstTreeMaterial3 = Material04Asset.Object;
+
+	static FString Material05Name = "/Script/Engine.MaterialInstanceConstant'/Game/Semin/Material/M_Occlusion_TreeLongHead1.M_Occlusion_TreeLongHead1'";
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> Material05Asset(*Material05Name);
+	SecondTreeMaterial1 = Material05Asset.Object;
+
+	static FString Material06Name = "/Script/Engine.MaterialInstanceConstant'/Game/Semin/Material/M_Occlusion_TreeLongHead2.M_Occlusion_TreeLongHead2'";
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> Material06Asset(*Material06Name);
+	SecondTreeMaterial2 = Material06Asset.Object;
+
+	static FString Material07Name = "/Script/Engine.MaterialInstanceConstant'/Game/Semin/Material/M_Occlusion_TreeLongHead3.M_Occlusion_TreeLongHead3'";
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> Material07Asset(*Material07Name);
+	SecondTreeMaterial3 = Material07Asset.Object;
+
+	static FString Material08Name = "/Script/Engine.MaterialInstanceConstant'/Game/Semin/Material/M_Occlusion_TreePinkHead.M_Occlusion_TreePinkHead'";
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> Material08Asset(*Material08Name);
+	ThirdTreeMaterial1 = Material08Asset.Object;
 }
 
 // Called when the game starts or when spawned
@@ -160,6 +194,33 @@ void ATree::BeginPlay()
 	SetActorRelativeRotation(FRotator(0.f, RandYaw,0.f));
 
 	int RandonNumber = FMath::RandRange(0, 2);
+
+	Lower->SetMaterial(0, StumpMaterial);
+	Upper->SetMaterial(0, StumpMaterial);
+	//semin
+	Lower->SetCollisionProfileName(TEXT("Tree"));
+	Upper->SetCollisionProfileName(TEXT("Tree"));
+
+	if (RandonNumber == 0) 
+	{
+		Leaf->SetMaterial(0, StumpMaterial);
+		Leaf->SetMaterial(1, FirstTreeMaterial1);
+		Leaf->SetMaterial(2, FirstTreeMaterial2);
+		Leaf->SetMaterial(3, FirstTreeMaterial3);
+	}
+
+	else if (RandonNumber == 1) 
+	{
+		Leaf->SetMaterial(0, SecondTreeMaterial1);
+		Leaf->SetMaterial(1, SecondTreeMaterial2);
+		Leaf->SetMaterial(2, SecondTreeMaterial3);
+	}
+
+	else 
+	{
+		Leaf->SetMaterial(0, ThirdTreeMaterial1);
+	}
+
 	Leaf->SetStaticMesh(Leafs[RandonNumber]);
 
 	RandonNumber = FMath::RandRange(0, 2);
