@@ -60,6 +60,9 @@ AFindAppleCharacter::AFindAppleCharacter()
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->TargetArmLength = 500.f;
 	SpringArmComponent->bUsePawnControlRotation = true;
+	SpringArmComponent->bEnableCameraLag = true;
+	SpringArmComponent->bEnableCameraRotationLag = true;
+	SpringArmComponent->CameraLagSpeed = 20.f;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
@@ -264,6 +267,17 @@ AFindAppleCharacter::AFindAppleCharacter()
 	/* Combat */
 	SetIsAttacked(false);
 	SetIsAttacking(false);
+
+	// semin, edit pitch min & max
+	if (GetWorld())
+	{
+		APlayerCameraManager* CameraManager = Cast<APlayerCameraManager>(UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0));
+		if (CameraManager)
+		{
+			CameraManager->ViewPitchMin = -50.0;
+			CameraManager->ViewPitchMax = 0.0;
+		}
+	}
 }
 
 

@@ -51,6 +51,32 @@ public:
 
 	void RespawnTree();
 
+	// Semin Material
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	UMaterialInterface* StumpMaterial = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	UMaterialInterface* FirstTreeMaterial1 = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	UMaterialInterface* FirstTreeMaterial2 = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	UMaterialInterface* FirstTreeMaterial3 = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	UMaterialInterface* SecondTreeMaterial1 = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	UMaterialInterface* SecondTreeMaterial2 = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	UMaterialInterface* SecondTreeMaterial3 = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	UMaterialInterface* ThirdTreeMaterial1 = nullptr;
+
+
 private:
 	
 	float RespawnTime;
