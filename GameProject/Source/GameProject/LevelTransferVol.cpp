@@ -140,7 +140,7 @@ void ALevelTransferVol::YesChoice()
 
 	if (GameInstance != nullptr) {
 		FString LevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
-		FString Name = "MainMap1";
+		FString Name = "EditMap";
 		if (LevelName.Equals(Name)) {
 
 			UE_LOG(LogTemp, Warning, TEXT("LevelTransfer cpp eqaul"));
@@ -148,6 +148,8 @@ void ALevelTransferVol::YesChoice()
 			FVector ForwardVector = TransferVol->GetForwardVector();
 			FVector MoveDirection = ForwardVector * 200;
 			FVector NewLocation = temp + MoveDirection;
+			UE_LOG(LogTemp, Warning, TEXT("%d %d %d"),NewLocation.X, NewLocation.Y, NewLocation.Z);
+
 			GameInstance->SetCharLoc(NewLocation);
 
 		}

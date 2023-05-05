@@ -60,7 +60,7 @@ void ATomato::PutWater()
 		//소켓에다가 달자 걍 레벨필요없이 달아버려
 
 		
-		Fruit->AttachToComponent(Current, FAttachmentTransformRules::KeepRelativeTransform, TEXT("Socket0"));
+		//Fruit->AttachToComponent(Current, FAttachmentTransformRules::KeepRelativeTransform, TEXT("Socket0"));
 
 
 		CanHarvest = true;
