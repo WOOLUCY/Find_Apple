@@ -148,6 +148,8 @@ void ALevelTransferVol::YesChoice()
 			FVector ForwardVector = TransferVol->GetForwardVector();
 			FVector MoveDirection = ForwardVector * 200;
 			FVector NewLocation = temp + MoveDirection;
+			UE_LOG(LogTemp, Warning, TEXT("%d %d %d"),NewLocation.X, NewLocation.Y, NewLocation.Z);
+
 			GameInstance->SetCharLoc(NewLocation);
 
 		}

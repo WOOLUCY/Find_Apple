@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "ClientSocket.h"
+
 #include "MyGameInstance.generated.h"
 
 /**
@@ -44,6 +46,8 @@ class GAMEPROJECT_API UMyGameInstance : public UGameInstance
 public:
 	UMyGameInstance();
 	Day Today;
+
+	ClientSocket MySocket;
 
 	FRotator Sun{ 0,180.f,180.f };
 	void SetCharLoc(FVector Loc);
