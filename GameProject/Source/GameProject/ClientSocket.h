@@ -1,7 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
 
 #include "Windows/AllowWindowsPlatformTypes.h"
 #include "Windows/prewindowsapi.h"
@@ -30,13 +28,17 @@
 
 //일단 이러고 왓다갓다해보자,,ㅅㅂ
 constexpr char TESTPACKET = 10;
+#pragma pack (push, 1)
 
 struct SC_CS_TESTPACKET {
 	unsigned char size;
 	char	type;
-	char	test;
+	int		testNum;
+	int		testPrice;
 
 };
+#pragma pack (pop)
+
 
 
 class GAMEPROJECT_API ClientSocket
@@ -59,7 +61,9 @@ public:
 	void SendMovePacket();
 	void SendRegistOrPurchasePacket(bool Regist);
 
+	//이거 삭제해야하는 함수들 테스트 함수임
 	void SendTestPacket();
+	void SendTestSalePacket(int num, int price);
 
 	void PacketRecv();
 	void ProcessPacket(char* packet);

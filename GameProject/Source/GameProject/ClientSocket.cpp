@@ -80,11 +80,30 @@ void ClientSocket::SendTestPacket()
 	SC_CS_TESTPACKET temp;
 	temp.size = sizeof(SC_CS_TESTPACKET);
 	temp.type = TESTPACKET;
-	temp.test = rand();
+	temp.testNum = rand();
 
 	int retval = send(Socket, (const char*)&temp, temp.size,0);
 	if (retval != 0) {
-		UE_LOG(LogTemp, Warning, TEXT("Client To Server Send Success, [%d]"),temp.test);
+		UE_LOG(LogTemp, Warning, TEXT("Client To Server Send Success, [%d]"),temp.testNum);
+
+	}
+
+}
+
+void ClientSocket::SendTestSalePacket(int num, int price)
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("[SendTestSalePacket] %d %d"), num,price);
+
+	SC_CS_TESTPACKET temp;
+	temp.size = sizeof(SC_CS_TESTPACKET);
+	temp.type = TESTPACKET;
+	temp.testNum = num;
+	temp.testPrice = price;
+
+	int retval = send(Socket, (const char*)&temp, temp.size, 0);
+	if (retval != 0) {
+		UE_LOG(LogTemp, Warning, TEXT("Client To Server Send Success, [%d, %d]"), temp.testNum,temp.testPrice);
 
 	}
 
@@ -99,7 +118,7 @@ void ClientSocket::PacketRecv()
 		int remain_data = retval + PrevRemain;
 
 		UE_LOG(LogTemp, Warning, TEXT("PacketRecv recv Byte : %d"), retval);
-		UE_LOG(LogTemp, Warning, TEXT("recv packet %d %d %d %d"), RecvBuf[0], RecvBuf[1], RecvBuf[2],remain_data);
+		UE_LOG(LogTemp, Warning, TEXT("recv packet [size:%d] [type: %d] [remaindata: %d]"), RecvBuf[0], RecvBuf[1],remain_data);
 
 		char* p = RecvBuf;
 
@@ -141,21 +160,21 @@ void ClientSocket::PacketRecv()
 
 void ClientSocket::ProcessPacket(char* packet)
 {
-	UE_LOG(LogTemp, Warning, TEXT("ProcessPacket??? %d %d "), packet[0], packet[1]);
+//	UE_LOG(LogTemp, Warning, TEXT("ProcessPacket??? %d %d "), packet[0], packet[1]);
 	//packet type에따라 처리해주는거임 
 	int PacketSize = packet[0];
-	int PacketType = packet[1];
+	//int PacketType = ;
 
 	//받은 패킷 처리하는거임 
-	switch (PacketType)
+	switch (packet[1])
 	{ //패킷 type을 본다.
 
-	case 10: 
+	case TESTPACKET:
 	{
 		//testpacket 왓다갓다할거임
 		SC_CS_TESTPACKET* p = reinterpret_cast<SC_CS_TESTPACKET*>(packet);
 
-		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET 받음] %d %d %d "), p->size, p->type, p->test);
+		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET] %d %d %d %d"), p->size, p->type, p->testNum,p->testPrice);
 
 
 	}

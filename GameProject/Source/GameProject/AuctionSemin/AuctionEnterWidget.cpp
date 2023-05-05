@@ -8,6 +8,9 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Components/EditableTextBox.h"
+
+#include "../MyGameInstance.h"
+
 #include "../FindAppleCharacter.h"
 
 UAuctionEnterWidget::UAuctionEnterWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
@@ -24,11 +27,23 @@ UAuctionEnterWidget::UAuctionEnterWidget(const FObjectInitializer& objectInitial
 
 void UAuctionEnterWidget::ClickedCloseButton()
 {
+
+
+
+
 	RemoveFromParent();
+
+
 }
 
 void UAuctionEnterWidget::ClickedEnterButton()
 {
+	//여기서 서버로 보내줘야함
+	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	MyInstance->MySocket.SendTestSalePacket(ItemCount,ItemPrice);
+
+
 }
 
 void UAuctionEnterWidget::ChangedAmountTextBox(const FText& Text)
@@ -39,10 +54,10 @@ void UAuctionEnterWidget::ChangedAmountTextBox(const FText& Text)
 	}
 	else 
 	{
-		ItemAmount = FCString::Atoi(*Text.ToString());
-		iAllAmount = ItemAmount * ItemCount;
+		ItemPrice = FCString::Atoi(*Text.ToString());
+		TotalPrice = ItemPrice * ItemCount;
 
-		AllAmount->SetText(FText::FromString(FString::FromInt(iAllAmount)));
+		AllAmount->SetText(FText::FromString(FString::FromInt(TotalPrice)));
 	}
 }
 
@@ -55,9 +70,9 @@ void UAuctionEnterWidget::ChangedCountTextBox(const FText& Text)
 	else
 	{
 		ItemCount = FCString::Atoi(*Text.ToString());
-		iAllAmount = ItemAmount * ItemCount;
+		TotalPrice = ItemPrice * ItemCount;
 		
-		AllAmount->SetText(FText::FromString(FString::FromInt(iAllAmount)));
+		AllAmount->SetText(FText::FromString(FString::FromInt(TotalPrice)));
 	}
 
 }
@@ -79,4 +94,6 @@ void UAuctionEnterWidget::NativeConstruct()
 
 	InventoryAllItem->AuctionEnterWidgetObject = this;
 	InventoryAllItem->Refresh();
+
 }
+

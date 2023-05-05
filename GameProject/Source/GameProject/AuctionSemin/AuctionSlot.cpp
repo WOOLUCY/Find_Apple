@@ -64,6 +64,7 @@ void UAuctionSlot::NativePreConstruct()
 					SlotImage->SetBrushColor(FColor::White);
 					Descript = InventoryRow.Descript;
 					Name = InventoryRow.DisplayName;
+
 				}
 			}
 		}
@@ -80,6 +81,7 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 			AuctionEnterWidgetClass->SelectItemSlot->QuantityText->SetText(TextQuantity);
 			AuctionEnterWidgetClass->SelectItemSlot->SlotImage->SetBrushFromTexture(Thumbnail);
 			AuctionEnterWidgetClass->SelectItemName->SetText(Name);
+
 		}
 	}
 
