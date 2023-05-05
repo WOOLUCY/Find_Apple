@@ -30,8 +30,6 @@
 #include "Components/PostProcessComponent.h"
 #include "PauseWidget.h"
 
-#include "Teleport/BlackScreenBegin.h"
-
 // Sets default values
 AFindAppleCharacter::AFindAppleCharacter()
 {
@@ -280,12 +278,6 @@ AFindAppleCharacter::AFindAppleCharacter()
 			CameraManager->ViewPitchMax = 0.0;
 		}
 	}
-
-	ConstructorHelpers::FClassFinder<UBlackScreenBegin>  UBlackScreenBeginWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Map/WBP_BlackScreenBegin.WBP_BlackScreenBegin_C'"));
-	if (UBlackScreenBeginWidget.Succeeded())
-	{
-		BlackScreenBeginClass = UBlackScreenBeginWidget.Class;
-	}
 }
 
 
@@ -294,9 +286,6 @@ AFindAppleCharacter::AFindAppleCharacter()
 void AFindAppleCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	BlackScreenBeginUIObject = CreateWidget<UBlackScreenBegin>(GetWorld(), BlackScreenBeginClass);
-	BlackScreenBeginUIObject->AddToViewport();
 
 	CurHealth = MaxHealth;
 	CurHunger = MaxHunger;
@@ -591,10 +580,10 @@ void AFindAppleCharacter::Teleport(const FInputActionValue& Value)
 			if (Position != nullptr)
 			{
 				FVector Location = Position->GetActorLocation();
-				FVector MoveLocationLocal = Location + FVector(0.f, 0.f, 50.f);
+				FVector MoveLocation = Location + FVector(0.f, 0.f, 50.f);
 
 				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-				CharacterActor->SetActorRelativeLocation(MoveLocationLocal);
+				CharacterActor->SetActorRelativeLocation(MoveLocation);
 			}
 		}
 	}
@@ -613,10 +602,10 @@ void AFindAppleCharacter::TeleportAtQuestNPCAction(const FInputActionValue& Valu
 			if (Position != nullptr)
 			{
 				FVector Location = Position->GetActorLocation();
-				FVector MoveLocationLocal = Location + FVector(0.f, 0.f, 50.f);
+				FVector MoveLocation = Location + FVector(0.f, 0.f, 50.f);
 
 				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-				CharacterActor->SetActorRelativeLocation(MoveLocationLocal);
+				CharacterActor->SetActorRelativeLocation(MoveLocation);
 			}
 		}
 	}
@@ -781,14 +770,11 @@ void AFindAppleCharacter::ChangeSpeed(const FInputActionValue& Value)
 
 	// 일정 시간 이후 속도를 다시 줄임
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 		{
 			GetCharacterMovement()->MaxWalkSpeed = 600.f;
 			SetIsRunning(false);
-
-			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		}), 5.f, false);
-
+		}, 5.f, false);
 
 }
 
@@ -871,38 +857,6 @@ void AFindAppleCharacter::ChangeEquipment(int in)
 		if (CurEquipActor)
 			CurEquipActor->Destroy();
 	}
-}
-
-void AFindAppleCharacter::BlackScreenPopStart()
-{
-	BlackScreenBeginUIObject->BeginAnimation();
-
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
-	PlayerController->SetShowMouseCursor(false);
-
-	UE_LOG(LogTemp, Warning, TEXT("MoveLocation: %d %d %d"), MoveLocation.X, MoveLocation.Y, MoveLocation.Z);
-
-
-	FTimerHandle TimerHandle;
-	float BlackScreenBeginTime = 0.8;
-
-	/* 타이머 진행, 위젯이 흐려지는 동안은 이동하지 않도록 잠시 Delay 효과 */
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-		{
-			this->SetActorRelativeLocation(MoveLocation);
-
-			BlackScreenPopEnd();
-
-			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		}), BlackScreenBeginTime, false);
-
-
-}
-
-void AFindAppleCharacter::BlackScreenPopEnd()
-{
-	BlackScreenBeginUIObject->EndAnimation();
 }
 
 void AFindAppleCharacter::UpEquip(const FInputActionValue& Value)

@@ -26,12 +26,9 @@ private:
 	UPROPERTY()
 	UBoxComponent* TransferVol;
 
-	UPROPERTY()
-	FName TeleportPointName;
-
 
 	UPROPERTY()
-	class UDoorWidget* DoorWdiget;
+		class UDoorWidget* DoorWdiget;
 
 
 protected:
@@ -51,8 +48,5 @@ public:
 	void YesChoice();
 	void NoChoice();
 
-	void MovePointAtTeleport();
-	void BlackScreenEndAnim();
 
-	bool IsVisibleWidget = false;
 };

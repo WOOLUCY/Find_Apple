@@ -218,21 +218,6 @@ public:
 	bool GetIsRunning() { return bIsRunning; }
 	void SetIsRunning(bool _in) { bIsRunning = _in; }
 	
-	
-public:
-	UFUNCTION()
-	void BlackScreenPopStart();
-	UFUNCTION()
-	void BlackScreenPopEnd();
-	/* Black Screen Pop (어두워지는 효과) */
-	/* Begin */
-	UPROPERTY()
-	TSubclassOf<class UUserWidget> BlackScreenBeginClass;
-	UPROPERTY()
-	class UBlackScreenBegin* BlackScreenBeginUIObject;
-	UPROPERTY()
-	FVector MoveLocation;
-
 
 private:
 	UPROPERTY(VisibleAnywhere)

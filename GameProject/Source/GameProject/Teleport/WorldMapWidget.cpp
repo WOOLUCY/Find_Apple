@@ -305,16 +305,4 @@ void UWorldMapWidget::BlackScreenPopEnd()
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	//PlayerController->SetInputMode(FInputModeUIOnly());
 	PlayerController->SetShowMouseCursor(false);
-
-	FTimerHandle TimerHandle;
-	float BlackScreenEndTime = 0.8;
-
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-		{
-			BlackScreenEndUIObject->RemoveFromParent();
-
-			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		}), BlackScreenEndTime, false);
-
-
 }
