@@ -80,6 +80,7 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 			AuctionEnterWidgetClass->SelectItemSlot->QuantityText->SetText(TextQuantity);
 			AuctionEnterWidgetClass->SelectItemSlot->SlotImage->SetBrushFromTexture(Thumbnail);
 			AuctionEnterWidgetClass->SelectItemName->SetText(Name);
+			AuctionEnterWidgetClass->ItemName = Name;
 		}
 	}
 

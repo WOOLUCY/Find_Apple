@@ -84,16 +84,9 @@ void ABed::BeginPlay()
 	TArray<AActor*> MatrixSequencs;
 	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ALevelSequenceActor::StaticClass(), FName("Bed"), MatrixSequencs);
 
-	TArray<AActor*> MatrixCamera;
-	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ACameraActor::StaticClass(), FName("Bed"), MatrixCamera);
-
 	for (AActor* Actor : MatrixSequencs)
 	{
 		SequenceCinematic = Cast<ALevelSequenceActor>(Actor);
-	}
-	for (AActor* Actor : MatrixCamera)
-	{
-		BedCamera = Cast<ACameraActor>(Actor);
 	}
 }
 
