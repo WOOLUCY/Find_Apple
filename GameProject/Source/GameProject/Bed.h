@@ -24,7 +24,15 @@ public:
 	UBoxComponent* Box;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
-		TSubclassOf<class USleepWidget> SleepWidgetClass;
+	TSubclassOf<class USleepWidget> SleepWidgetClass;
+
+	UPROPERTY(VisibleAnywhere)
+	class ALevelSequenceActor* SequenceCinematic;
+	UPROPERTY(VisibleAnywhere)
+	class ACameraActor* BedCamera;
+
+	bool IsVisibleWidget = false;
+
 
 
 private:

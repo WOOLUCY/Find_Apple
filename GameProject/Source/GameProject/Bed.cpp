@@ -12,7 +12,11 @@
 
 #include "KaonWidget/SleepWidget.h"
 
-
+#include <Engine/World.h>
+#include <LevelSequenceActor.h>
+#include <LevelSequencePlayer.h>
+#include <MovieSceneSequencePlayer.h>
+#include "Camera/CameraActor.h"
 
 
 // Sets default values
@@ -77,8 +81,20 @@ void ABed::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TArray<AActor*> MatrixSequencs;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ALevelSequenceActor::StaticClass(), FName("Bed"), MatrixSequencs);
 
+	TArray<AActor*> MatrixCamera;
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ACameraActor::StaticClass(), FName("Bed"), MatrixCamera);
 
+	for (AActor* Actor : MatrixSequencs)
+	{
+		SequenceCinematic = Cast<ALevelSequenceActor>(Actor);
+	}
+	for (AActor* Actor : MatrixCamera)
+	{
+		BedCamera = Cast<ACameraActor>(Actor);
+	}
 }
 
 
@@ -90,7 +106,6 @@ void ABed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActo
 
 
 	if (hero != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("OverlapBegin Comple pereofjdskfjksdlfjsdklfjsdklfj"));
 		ShowWdiget();
 	}
 	else {
@@ -102,8 +117,6 @@ void ABed::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 {
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
 	if (hero != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("OverlapEnd"));
-
 		HiddenWidget();
 	}
 	else {
@@ -127,13 +140,15 @@ void ABed::ShowWdiget()
 		auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
 		if (MyContorller != nullptr) {
-
-			UE_LOG(LogTemp, Warning, TEXT("ShowWidet"));
-			SleepWdiget = CreateWidget<USleepWidget>(MyContorller, SleepWidgetClass);
+			if (IsVisibleWidget == false)
+			{
+				SleepWdiget = CreateWidget<USleepWidget>(MyContorller, SleepWidgetClass);
+				SleepWdiget->AddToViewport();
+				IsVisibleWidget = true;
+			}
 			MyContorller->SetInputMode(FInputModeGameAndUI());
 			MyContorller->bShowMouseCursor = true;
 
-			SleepWdiget->AddToViewport();
 
 			SleepWdiget->YesDelegate.BindUObject(this, &ABed::YesChoice);
 			SleepWdiget->NoDelegate.BindUObject(this, &ABed::NoChoice);
@@ -156,7 +171,11 @@ void ABed::HiddenWidget()
 		auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
 		if (MyContorller != nullptr) {
-			SleepWdiget->RemoveFromParent();
+			if (IsVisibleWidget == true)
+			{
+				SleepWdiget->RemoveFromParent();
+				IsVisibleWidget = false;
+			}
 			MyContorller->SetInputMode(FInputModeGameOnly());
 			MyContorller->bShowMouseCursor = false;
 
@@ -170,16 +189,15 @@ void ABed::HiddenWidget()
 
 void ABed::YesChoice()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ABED YESCHOICE"));
 	FString Name = "SleepLevel";
-	UGameplayStatics::OpenLevel(this, *Name);
+	//UGameplayStatics::OpenLevel(this, *Name);
+	SequenceCinematic->SequencePlayer->Play();
 
+	HiddenWidget();
 }
 
 void ABed::NoChoice()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ABED nOCHOICE"));
 	HiddenWidget();
-
 }
 
