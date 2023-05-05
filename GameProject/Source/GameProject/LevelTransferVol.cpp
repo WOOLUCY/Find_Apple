@@ -140,7 +140,7 @@ void ALevelTransferVol::YesChoice()
 
 	if (GameInstance != nullptr) {
 		FString LevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
-		FString Name = "MainMap1";
+		FString Name = "EditMap";
 		if (LevelName.Equals(Name)) {
 
 			UE_LOG(LogTemp, Warning, TEXT("LevelTransfer cpp eqaul"));
