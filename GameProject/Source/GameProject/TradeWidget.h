@@ -42,6 +42,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		class UImage* Item04;
 
+	// Semin 
+	UPROPERTY()
+	class UAuctionEnterWidget* AuctionWidgetUIObject;
+
 public:
 	/* Click Action */
 	UFUNCTION()

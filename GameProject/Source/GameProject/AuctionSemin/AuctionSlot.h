@@ -37,7 +37,7 @@ public:
 	class UBorder* SlotImage;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	UTexture2D* Thumbnail = UTexture2D::CreateTransient(128, 128, PF_R8G8B8A8);
+	UTexture2D* Thumbnail;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UBorder* CountImage;

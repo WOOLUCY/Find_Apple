@@ -2,16 +2,17 @@
 
 
 #include "TradeWidget.h"
+#include "AuctionSemin/AuctionEnterWidget.h"
+#include "AuctionSemin/AuctionMenuTab.h"
+#include "AuctionSemin/AuctionSelectSlot.h"
+#include "AuctionSemin/AuctionSlot.h"
 #include "Components/Button.h"
 
 void UTradeWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	TradeButton = Cast<UButton>(GetWidgetFromName(TEXT("Trade")));
-	if (TradeButton != nullptr) {
-		TradeButton->OnClicked.AddDynamic(this, &UTradeWidget::TradeButtonClick);
-	}
+	TradeButton->OnClicked.AddDynamic(this, &UTradeWidget::TradeButtonClick);
 
 	BuyButton01 = Cast<UButton>(GetWidgetFromName(TEXT("Buy01")));
 	if (BuyButton01 != nullptr) {
@@ -33,7 +34,9 @@ void UTradeWidget::NativeConstruct()
 
 void UTradeWidget::TradeButtonClick()
 {
-
+	if (AuctionWidgetUIObject != NULL) {
+		AuctionWidgetUIObject->AddToViewport();
+	}
 }
 
 void UTradeWidget::BuyButton01Click()

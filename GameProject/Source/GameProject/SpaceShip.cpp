@@ -5,6 +5,7 @@
 
 #include "FindAppleCharacter.h"
 #include "FindApplePlayerController.h"
+#include "AuctionSemin/AuctionEnterWidget.h"
 #include "Plants/FarmGround.h"
 
 // Sets default values
@@ -40,6 +41,13 @@ ASpaceShip::ASpaceShip()
 		TradeWidgetClass = TRADE_WIDGET.Class;
 	}
 
+	// Semin
+	ConstructorHelpers::FClassFinder<UAuctionEnterWidget> AuctionEnterWidgetFinder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Auction/WBP_AuctionAll.WBP_AuctionAll_C'"));
+	if (AuctionEnterWidgetFinder.Succeeded())
+	{
+		AuctionWidgetClass = AuctionEnterWidgetFinder.Class;
+	}
+
 	Mesh->SetVisibility(true);
 
 	Box->OnComponentBeginOverlap.AddDynamic(this, &ASpaceShip::OnOverlapBegin);
@@ -59,8 +67,7 @@ void ASpaceShip::PostInitializeComponents()
 	Super::PostInitializeComponents();
 }
 
-void ASpaceShip::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ASpaceShip::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
 	if (hero != nullptr) {
@@ -71,8 +78,7 @@ void ASpaceShip::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 	}
 }
 
-void ASpaceShip::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex)
+void ASpaceShip::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
 	if (hero != nullptr) {
@@ -92,19 +98,17 @@ void ASpaceShip::Tick(float DeltaTime)
 
 void ASpaceShip::ShowTradeWidget()
 {
-	UWorld* TheWorld = GetWorld();
+	auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
 
-	if (TheWorld != nullptr) {
+	TradeWidget = CreateWidget<UTradeWidget>(GetWorld(), TradeWidgetClass);
+	AuctionWidgetUIObject = CreateWidget<UAuctionEnterWidget>(GetWorld(), AuctionWidgetClass);
+	TradeWidget->AuctionWidgetUIObject = AuctionWidgetUIObject;
+	//AuctionWidgetUIObject->SetVisibility()
+	TradeWidget->AddToViewport();
 
-		auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
-		if (MyContorller != nullptr) {
-			TradeWidget = CreateWidget<UTradeWidget>(MyContorller, TradeWidgetClass);
-			TradeWidget->AddToViewport();
-			MyContorller->SetInputMode(FInputModeGameAndUI());
-			MyContorller->bShowMouseCursor = true;
-		}
-	}
+	MyContorller->SetInputMode(FInputModeGameAndUI());
+	MyContorller->bShowMouseCursor = true;
 }
 
 void ASpaceShip::HideTradeWidget()
@@ -116,6 +120,7 @@ void ASpaceShip::HideTradeWidget()
 		auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
 		if (MyContorller != nullptr) {
+			TradeWidget->AuctionWidgetUIObject->RemoveFromParent();
 			TradeWidget->RemoveFromParent();
 			MyContorller->SetInputMode(FInputModeGameOnly());
 			MyContorller->bShowMouseCursor = false;

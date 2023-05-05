@@ -26,6 +26,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
 		TSubclassOf<class UTradeWidget> TradeWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
+	TSubclassOf<class UUserWidget> AuctionWidgetClass;
+	UPROPERTY()
+	class UAuctionEnterWidget* AuctionWidgetUIObject;
+
 private:
 	UPROPERTY()
 		class UTradeWidget* TradeWidget;
