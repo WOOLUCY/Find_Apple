@@ -90,7 +90,7 @@ void ClientSocket::SendTestPacket()
 
 }
 
-void ClientSocket::SendTestSalePacket(int num, int price)
+void ClientSocket::SendTestSalePacket(int item, int num, int price)
 {
 
 	UE_LOG(LogTemp, Warning, TEXT("[SendTestSalePacket] %d %d"), num,price);
@@ -98,15 +98,24 @@ void ClientSocket::SendTestSalePacket(int num, int price)
 	SC_CS_TESTPACKET temp;
 	temp.size = sizeof(SC_CS_TESTPACKET);
 	temp.type = TESTPACKET;
+	temp.item = item;
 	temp.testNum = num;
 	temp.testPrice = price;
 
 	int retval = send(Socket, (const char*)&temp, temp.size, 0);
 	if (retval != 0) {
-		UE_LOG(LogTemp, Warning, TEXT("Client To Server Send Success, [%d, %d]"), temp.testNum,temp.testPrice);
+		UE_LOG(LogTemp, Warning, TEXT("Client To Server Send Success,  [%d %d, %d]"),temp.item ,temp.testNum,temp.testPrice);
 
 	}
 
+}
+
+void ClientSocket::RecvDataTest()
+{
+	for (int i{ 0 }; i < Items.Num(); ++i) {
+		UE_LOG(LogTemp, Warning, TEXT("%d %d %d"), Items[i].Item, Items[i].Num, Items[i].Price);
+
+	}
 }
 
 void ClientSocket::PacketRecv()
@@ -155,7 +164,7 @@ void ClientSocket::PacketRecv()
 
 
 	//종류에따라 받는거 처리하기 - 함수를 따로처리하자~~~~
-
+	RecvDataTest();
 }
 
 void ClientSocket::ProcessPacket(char* packet)
@@ -174,8 +183,9 @@ void ClientSocket::ProcessPacket(char* packet)
 		//testpacket 왓다갓다할거임
 		SC_CS_TESTPACKET* p = reinterpret_cast<SC_CS_TESTPACKET*>(packet);
 
-		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET] %d %d %d %d"), p->size, p->type, p->testNum,p->testPrice);
-
+		SalesItem temp1{ p->item,p->testNum,p->testPrice };
+		Items.Add(temp1);
+		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET] %d %d %d %d"), p->size, p->type, p->testNum, p->testPrice);
 
 	}
 

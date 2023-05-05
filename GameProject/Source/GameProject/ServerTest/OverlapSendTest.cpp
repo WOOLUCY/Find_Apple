@@ -42,7 +42,7 @@ void AOverlapSendTest::NotifyActorBeginOverlap(AActor* OtherActor)
 	int ItemPrice = rand();
 	UE_LOG(LogTemp, Warning, TEXT("AOverlapSendTest, [%d, %d]"), ItemCount, ItemPrice);
 
-	MyInstance->MySocket.SendTestSalePacket(ItemCount, ItemPrice);
+	//MyInstance->MySocket.SendTestSalePacket(ItemCount, ItemPrice);
 
 	//MyInstance->MySocket.SendTestPacket();
 }

@@ -9,6 +9,9 @@
 /**
  * 
  */
+//PROTOCOL
+//enum ITEM_TYPE { APPLE, ORANGE, FIREWOOD, PICK, AX, ROCK, BRAHCN, SEED, GOLD, STEEL, SWORD, RADISH };
+
 UCLASS()
 class GAMEPROJECT_API UAuctionEnterWidget : public UUserWidget
 {
@@ -60,6 +63,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	int TotalPrice = 0;
+
+	int ItmeType = -1;
 
 	UFUNCTION()
 	void ClickedCloseButton();
