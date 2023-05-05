@@ -20,5 +20,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Animation", meta = (BindWidgetAnim))
 	class UWidgetAnimation* BlackScreenBegin;
 
+	UPROPERTY(BlueprintReadOnly, Transient, Category = "Animation", meta = (BindWidgetAnim))
+	class UWidgetAnimation* BlackScreenEnd;
+
 	virtual void NativeConstruct() override;
+
+	void EndAnimation();
+	void BeginAnimation();
 };
