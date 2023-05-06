@@ -8,6 +8,7 @@
 #include "Sword.h"
 #include "Pick.h"
 #include "Ax.h"
+#include "DoOnce.h"
 
 
 #include "FindAppleCharacter.generated.h"
@@ -201,6 +202,9 @@ public:
 	//UPROPERTY(EditAnywhere, Category = "Combat")
 	//bool IsAttacking = false;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	void DamageReaction(float DamageAmount);
+	FDoOnce DoOnce;
+
 
 	/* Gettor & Settor */
 	float GetCurHealth() { return CurHealth; }
