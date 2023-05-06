@@ -50,5 +50,4 @@ void AFindApplePlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 	MyInstance->MySocket.PacketRecv();
-	//UE_LOG(LogTemp, Warning,TEXT("PlayerTiekc!~!"));
 }

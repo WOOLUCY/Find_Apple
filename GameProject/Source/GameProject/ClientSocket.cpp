@@ -10,16 +10,23 @@ ClientSocket::ClientSocket()
 	PrevRemain = 0;
 
 
-	SalesItem a = { 1, 2, 3 };
-	SalesItem b = { 2, 2, 3 };
-	SalesItem c = { 3, 2, 3 };
-	Items.Add(a);
-	Items.Add(b);
-	Items.Add(c);
+	//SalesItem a = { 1, 2, 3 };
+	//SalesItem b = { 2, 2, 3 };
+	//SalesItem c = { 3, 2, 3 };
+	//Items.Add(a);
+	//Items.Add(b);
+	//Items.Add(c);
 }
 
 ClientSocket::~ClientSocket()
 {
+	UE_LOG(LogTemp, Warning, TEXT("CloseSocket????"));
+	Items.Reset();
+	memset(RecvBuf, 0, sizeof(BUFSIZE));
+
+	closesocket(Socket);
+	WSACleanup();
+	
 }
 
 bool ClientSocket::InitSocket()
@@ -121,7 +128,7 @@ void ClientSocket::SendTestSalePacket(int item, int num, int price)
 void ClientSocket::RecvDataTest()
 {
 	for (int i{ 0 }; i < Items.Num(); ++i) {
-		UE_LOG(LogTemp, Warning, TEXT("%d %d %d"), Items[i].Item, Items[i].Num, Items[i].Price);
+		UE_LOG(LogTemp, Warning, TEXT("[RecvDataTest] : %d %d %d"), Items[i].Item, Items[i].Num, Items[i].Price);
 
 	}
 }
