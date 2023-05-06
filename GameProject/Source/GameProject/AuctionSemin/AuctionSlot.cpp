@@ -81,6 +81,7 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 			AuctionEnterWidgetClass->SelectItemSlot->SlotImage->SetBrushFromTexture(Thumbnail);
 			AuctionEnterWidgetClass->SelectItemName->SetText(Name);
 			AuctionEnterWidgetClass->ItemName = Name;
+			AuctionEnterWidgetClass->NonDisplayName = ItemName;
 
 			FString StringName = *ItemName.ToString();
 			if (StringName.Equals(FString(TEXT("apple")))) {

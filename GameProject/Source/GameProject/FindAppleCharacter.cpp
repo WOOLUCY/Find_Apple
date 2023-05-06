@@ -891,6 +891,7 @@ void AFindAppleCharacter::BlackScreenPopStart()
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
 			this->SetActorRelativeLocation(MoveLocation);
+			this->SetActorRelativeRotation(MoveRotation);
 
 			BlackScreenPopEnd();
 

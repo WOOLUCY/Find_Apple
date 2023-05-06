@@ -20,7 +20,7 @@ ATeleportPosition::ATeleportPosition()
 	if (MeshObject.Succeeded())
 	{
 		Mesh->SetStaticMesh(MeshObject.Object);
-		Mesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
+		//Mesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 		Mesh->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
 		Mesh->SetHiddenInGame(true);
 		Mesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);

@@ -13,6 +13,9 @@
 #include "Internationalization/Text.h"
 
 #include "../FindAppleCharacter.h"
+#include "../Trade/TradeWidget.h"
+#include "../Inventory/InventoryComponent.h"
+#include "../Inventory/InventoryDataTable.h"
 
 UAuctionEnterWidget::UAuctionEnterWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -22,8 +25,13 @@ UAuctionEnterWidget::UAuctionEnterWidget(const FObjectInitializer& objectInitial
 		SelectItemSlot = AuctionSlotWidgetFind.Class;
 	}*/
 
-
 	//InventoryAllItem->AuctionEnterWidgetObject = this;
+
+	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
+	if (DataTable.Succeeded())
+	{
+		ItemDataTable = DataTable.Object;
+	}
 }
 
 void UAuctionEnterWidget::ClickedCloseButton()
@@ -38,12 +46,36 @@ void UAuctionEnterWidget::ClickedCloseButton()
 void UAuctionEnterWidget::ClickedEnterButton()
 {
 	//여기서 서버로 보내줘야함
-	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-
-	MyInstance->MySocket.SendTestSalePacket(ItmeType,ItemCount,ItemPrice);
 
 	//인벤가지고 있는것도 줄여야함
+	if (ItemDataTable != nullptr)
+	{
+		ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+		TArray<FName> RowNames = ItemDataTable->GetRowNames();
 
+		for (FName RowName : RowNames)
+		{
+			FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+			if (RowName == NonDisplayName)	/* Non-DisplayName = 표시용 이름이 아니라 행 이름 */
+			{
+				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+				AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+				
+				// 인벤토리 내의 개수가 ItemCount보다 더 많거나 같을 때만 
+				if (*MyCharacter->InventoryComponent->InventoryContent.Find(RowName) >= ItemCount)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Out"));
+					MyCharacter->InventoryComponent->RemoveFromInventory(RowName, ItemCount);
+					
+					// 보낼 수 있는 개수일 때만 서버한테 보냄
+					static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+					MyInstance->MySocket.SendTestSalePacket(ItmeType, ItemCount, ItemPrice);
+				}
+			}
+		}
+	}
 
 }
 

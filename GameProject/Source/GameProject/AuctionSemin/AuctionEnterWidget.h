@@ -20,9 +20,10 @@ class GAMEPROJECT_API UAuctionEnterWidget : public UUserWidget
 protected:
 	virtual void NativePreConstruct() override;
 	virtual void NativeConstruct() override;
-	
 
 public:
+	enum ITEM_TYPE { APPLE, ORANGE, FIREWOOD, PICK, AX, ROCK, BRAHCN, SEED, GOLD, STEEL, SWORD, RADISH };
+
 	UAuctionEnterWidget(const FObjectInitializer& objectInitializer);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -57,6 +58,17 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	int ItemCount = 0;
+
+	UPROPERTY()
+	class UTradeWidget* TradeWidgetUIObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
+
+	TArray<struct FInventoryTableRow*> InventoryData;
+
+	UPROPERTY()
+	FName NonDisplayName;
 
 	UPROPERTY(EditAnywhere)
 	int ItemPrice = 0;

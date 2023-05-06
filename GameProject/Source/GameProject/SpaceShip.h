@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 
-#include "TradeWidget.h"
+#include "Trade/TradeWidget.h"
 
 #include "SpaceShip.generated.h"
 

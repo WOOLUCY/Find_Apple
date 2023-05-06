@@ -236,6 +236,8 @@ public:
 	class UBlackScreenBegin* BlackScreenBeginUIObject;
 	UPROPERTY()
 	FVector MoveLocation;
+	UPROPERTY()
+	FRotator MoveRotation;
 
 
 private:
