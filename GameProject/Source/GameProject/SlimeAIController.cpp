@@ -16,7 +16,6 @@ void ASlimeAIController::BeginPlay()
 
 		APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 
-
 		GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation());
 	}
 }
@@ -37,5 +36,6 @@ void ASlimeAIController::Tick(float DeltaSeconds)
 	{
 		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
 	}
+
 
 }

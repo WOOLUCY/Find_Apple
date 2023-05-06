@@ -1010,6 +1010,53 @@ float AFindAppleCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	if (Damage == 25.f && DoOnce.Execute())	// Damage Causer: Chest
+	{
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+			{
+				UE_LOG(LogClass, Warning, TEXT("Chest Is Attacking"));
+				DamageReaction(Damage);
+				DoOnce.Reset();
+			}), 5.f, false);
+	}
+
+	else
+		DamageReaction(Damage);
+
+	//// 피격 불가 상태로 변경
+	//SetIsAttacked(true);
+
+	//// 체력 변경
+	//SetCurHealth((GetCurHealth() - Damage));
+
+	//// 카메라 쉐이크
+	//if (HitCameraShakeClass)
+	//{
+	//	// Camera Shake
+	//	GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShakeClass);
+	//}
+
+	//// Log
+	//UE_LOG(LogClass, Warning, TEXT("Player Is Attacked"));
+	//UE_LOG(LogClass, Warning, TEXT("Player Current HP: %f"), GetCurHealth());
+
+	//// 딜레이 후 피격 가능 상태로 변경
+	//FTimerHandle TimerHandle;
+	//GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+	//	{
+	//		SetIsAttacked(false);
+	//	}, 3.f, false);	// 무적 시간
+
+	return Damage;
+
+	//return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+}
+
+void AFindAppleCharacter::DamageReaction(float DamageAmount)
+{
+	float Damage = DamageAmount;
+
 	// 피격 불가 상태로 변경
 	SetIsAttacked(true);
 
@@ -1033,9 +1080,5 @@ float AFindAppleCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		{
 			SetIsAttacked(false);
 		}, 3.f, false);	// 무적 시간
-
-	return Damage;
-
-	//return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
