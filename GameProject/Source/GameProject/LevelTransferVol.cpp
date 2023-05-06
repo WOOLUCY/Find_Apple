@@ -199,6 +199,20 @@ void ALevelTransferVol::YesChoice()
 		return;
 	}
 
+	else if (TransferLevelName == FString("CaveIn"))
+	{
+		TeleportPointName = FName("CaveIn");
+		MovePointAtTeleport();
+		return;
+	}
+
+	else if (TransferLevelName == FString("CaveOut"))
+	{
+		TeleportPointName = FName("CaveOut");
+		MovePointAtTeleport();
+		return;
+	}
+
 
 	else {
 		if (GameInstance != nullptr) {
@@ -256,7 +270,10 @@ void ALevelTransferVol::MovePointAtTeleport()
 				FVector Location = Position->GetActorLocation();
 				FVector MoveLocation = Location + FVector(0.f, 0.f, 50.f);
 
+				FRotator MoveRotate = Position->GetActorRotation();
+
 				MyCharacter->MoveLocation = MoveLocation;
+				MyCharacter->MoveRotation = MoveRotate;
 				MyCharacter->BlackScreenPopStart();
 
 				HiddenWidget();
