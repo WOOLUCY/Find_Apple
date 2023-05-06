@@ -10,6 +10,11 @@
 #include "../ClientSocket.h"
 #include "../MyGameInstance.h"
 #include "TradeListWidget.h"
+#include "Kismet/GameplayStatics.h"
+#include "../Inventory/InventoryComponent.h"
+#include "../Inventory/InventoryDataTable.h"
+#include "UObject/ConstructorHelpers.h"
+#include "../FindAppleCharacter.h"
 
 UTradeWidget::UTradeWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -18,6 +23,12 @@ UTradeWidget::UTradeWidget(const FObjectInitializer& objectInitializer) : Super(
 	if (TradeListWidgetFind.Succeeded())
 	{
 		TradeListWidgetClass = TradeListWidgetFind.Class;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
+	if (DataTable.Succeeded())
+	{
+		ItemDataTable = DataTable.Object;
 	}
 }
 
@@ -33,6 +44,45 @@ void UTradeWidget::NativeConstruct()
 
 	for (auto& item : MyInstance->MySocket.Items ) {
 		UE_LOG(LogTemp, Warning, TEXT("%d %d %d"), item.Item, item.Num, item.Price);
+	}
+
+
+	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+
+	InventoryComponent = MyCharacter->InventoryComponent;
+
+
+	if (InventoryComponent) {
+		for (auto& InventoryElement : InventoryComponent->InventoryContent)
+		{
+			if (ItemDataTable != nullptr)
+			{
+				ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+				TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+				for (FName RowName : RowNames)
+				{
+					FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+					if (InventoryElement.Key == RowName)
+					{
+						if (InventoryRow.ItemType != 2) {
+							TradeListWidgetUIObject = CreateWidget<UTradeListWidget>(GetWorld(), TradeListWidgetClass);
+							TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushFromTexture(InventoryRow.Thumbnail);
+							TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushColor(FColor::White);
+							TradeListWidgetUIObject->PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(InventoryElement.Value)));
+							// InventoryElement.Value 는 그냥 개수(int) 변수 넣으면 되는 자리임
+
+							// 밑의 코드는 price 받아서 넘겨야 함
+							//TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushColor(nullptr);
+
+							TradeList->AddChild(TradeListWidgetUIObject);
+						}
+					}
+				}
+			}
+		}
 	}
 }
 

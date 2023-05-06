@@ -19,11 +19,17 @@ public:
 	UTradeListWidget(const FObjectInitializer& objectInitializer);
 	virtual void NativeConstruct() override;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	//class UTradeSlot* ItemName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTradePriceSlot* PriceSlot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* Price;
+
+	UPROPERTY()
+	int32 Quantity;
+
+	UPROPERTY()
+	int32 ItemPrice;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* BuyButton;

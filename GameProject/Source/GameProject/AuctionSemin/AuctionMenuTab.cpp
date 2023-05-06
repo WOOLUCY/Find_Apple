@@ -39,7 +39,6 @@ void UAuctionMenuTab::Refresh()
 	InventoryContentsWrap->ClearChildren();
 
 	if (InventoryComponent) {
-		UE_LOG(LogTemp, Warning, TEXT("AuctionEnterWidget Refresh Inventory Component"));
 		
 		for (auto& InventoryElement : InventoryComponent->InventoryContent)
 		{

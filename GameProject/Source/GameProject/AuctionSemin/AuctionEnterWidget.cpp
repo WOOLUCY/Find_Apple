@@ -65,7 +65,7 @@ void UAuctionEnterWidget::ClickedEnterButton()
 				// 인벤토리 내의 개수가 ItemCount보다 더 많거나 같을 때만 
 				if (*MyCharacter->InventoryComponent->InventoryContent.Find(RowName) >= ItemCount)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Out"));
+					//UE_LOG(LogTemp, Warning, TEXT("Out"));
 					MyCharacter->InventoryComponent->RemoveFromInventory(RowName, ItemCount);
 					
 					// 보낼 수 있는 개수일 때만 서버한테 보냄
