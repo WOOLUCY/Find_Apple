@@ -18,12 +18,6 @@ UWorldMapWidget::UWorldMapWidget(const FObjectInitializer& objectInitializer) : 
 	{
 		BlackScreenBeginClass = UBlackScreenBeginWidget.Class;
 	}
-
-	ConstructorHelpers::FClassFinder<UBlackScreenEnd>  UBlackScreenEndWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Map/WBP_BlackScreenEnd.WBP_BlackScreenEnd_C'"));
-	if (UBlackScreenEndWidget.Succeeded())
-	{
-		BlackScreenEndClass = UBlackScreenEndWidget.Class;
-	}
 }
 
 void UWorldMapWidget::NativeConstruct()
@@ -99,6 +93,9 @@ void UWorldMapWidget::NativeConstruct()
 
 	/* Click (Teleport) */
 	Home->OnClicked.AddDynamic(this, &UWorldMapWidget::HomeButtonClick);
+
+	BlackScreenBeginUIObject = CreateWidget<UBlackScreenBegin>(GetWorld(), BlackScreenBeginClass);
+	BlackScreenBeginUIObject->AddToViewport();
 }
 
 void UWorldMapWidget::NPCHouseButtonHovered()
@@ -146,15 +143,13 @@ void UWorldMapWidget::NPCHouseButtonClick()
 	/* 어두워지는 위젯 애니메이션 추가 */
 	BlackScreenPopStart();
 	FTimerHandle TimerHandle;
-	float BlackScreenBeginTime = 0.8;
+	float BlackScreenBeginTime = 1.5;
 
 	/* 타이머 진행, 위젯이 흐려지는 동안은 이동하지 않도록 잠시 Delay 효과 */
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
 			/* (FName) 위치로 플레이어 이동 */
 			TeleportPlayer("NPChouse");
-
-			BlackScreenBeginUIObject->RemoveFromParent();
 
 			/* 점점 밝아지는 위젯 애니메이션 추가 */
 			BlackScreenPopEnd();
@@ -173,13 +168,11 @@ void UWorldMapWidget::FrontDungeonButtonClick()
 {
 	BlackScreenPopStart();
 	FTimerHandle TimerHandle;
-	float BlackScreenBeginTime = 0.8;
+	float BlackScreenBeginTime = 1.5;
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
 			TeleportPlayer("FrontDungeon");
-
-			BlackScreenBeginUIObject->RemoveFromParent();
 
 			BlackScreenPopEnd();
 
@@ -197,13 +190,11 @@ void UWorldMapWidget::HomeButtonClick()
 {
 	BlackScreenPopStart();
 	FTimerHandle TimerHandle;
-	float BlackScreenBeginTime = 0.8;
+	float BlackScreenBeginTime = 1.5;
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
 			TeleportPlayer("Home");
-
-			BlackScreenBeginUIObject->RemoveFromParent();
 
 			BlackScreenPopEnd();
 
@@ -221,13 +212,11 @@ void UWorldMapWidget::BridgeButtonClick()
 {
 	BlackScreenPopStart();
 	FTimerHandle TimerHandle;
-	float BlackScreenBeginTime = 0.8;
+	float BlackScreenBeginTime = 1.5;
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
 			TeleportPlayer("Bridge");
-
-			BlackScreenBeginUIObject->RemoveFromParent();
 
 			BlackScreenPopEnd();
 
@@ -280,7 +269,6 @@ void UWorldMapWidget::TeleportPlayer(FName Place)
 
 				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 				CharacterActor->SetActorRelativeLocation(MoveLocation);
-				//UE_LOG(LogTemp, Warning, TEXT("Light house teleport, %s"), *Place.ToString());
 			}
 		}
 	}
@@ -289,8 +277,7 @@ void UWorldMapWidget::TeleportPlayer(FName Place)
 
 void UWorldMapWidget::BlackScreenPopStart()
 {
-	BlackScreenBeginUIObject = CreateWidget<UBlackScreenBegin>(GetWorld(), BlackScreenBeginClass);
-	BlackScreenBeginUIObject->AddToViewport();
+	BlackScreenBeginUIObject->BeginAnimation();
 
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
@@ -299,8 +286,7 @@ void UWorldMapWidget::BlackScreenPopStart()
 
 void UWorldMapWidget::BlackScreenPopEnd()
 {
-	BlackScreenEndUIObject = CreateWidget<UBlackScreenEnd>(GetWorld(), BlackScreenEndClass);
-	BlackScreenEndUIObject->AddToViewport();
+	BlackScreenBeginUIObject->EndAnimation();
 
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	//PlayerController->SetInputMode(FInputModeUIOnly());
@@ -311,8 +297,6 @@ void UWorldMapWidget::BlackScreenPopEnd()
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
-			BlackScreenEndUIObject->RemoveFromParent();
-
 			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 		}), BlackScreenEndTime, false);
 

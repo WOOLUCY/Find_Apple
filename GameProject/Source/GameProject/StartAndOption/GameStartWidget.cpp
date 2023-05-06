@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Teleport/BlackScreenBegin.h"
 #include "../Teleport/BlackScreenEnd.h"
+#include "GameOptionWidget.h"
 
 UGameStartWidget::UGameStartWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -20,6 +21,12 @@ UGameStartWidget::UGameStartWidget(const FObjectInitializer& objectInitializer) 
 	{
 		BlackScreenEndClass = UBlackScreenEndWidget.Class;
 	}
+
+	ConstructorHelpers::FClassFinder<UGameOptionWidget>  OptionWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/GameStart/WBP_OptionWidget.WBP_OptionWidget_C'"));
+	if (OptionWidget.Succeeded())
+	{
+		OptionWidgetClass = OptionWidget.Class;
+	}
 }
 
 void UGameStartWidget::NativeConstruct()
@@ -27,6 +34,7 @@ void UGameStartWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	StartButton->OnClicked.AddDynamic(this, &UGameStartWidget::GameStart);
+	OptionButton->OnClicked.AddDynamic(this, &UGameStartWidget::CreateOptionWidget);
 }
 
 void UGameStartWidget::GameStart()
@@ -51,6 +59,8 @@ void UGameStartWidget::GameStart()
 
 void UGameStartWidget::CreateOptionWidget()
 {
+	OptionUIObject = CreateWidget<UGameOptionWidget>(GetWorld(), OptionWidgetClass);
+	OptionUIObject->AddToViewport();
 }
 
 void UGameStartWidget::BlackScreenPopStart()

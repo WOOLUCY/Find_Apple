@@ -74,13 +74,19 @@ private:
 	UPROPERTY()
 	class UBoxComponent* CollisionMesh = nullptr;
 
+	UPROPERTY()
 	TSubclassOf<class UUserWidget> MapNameWidgetClass;
+	UPROPERTY()
 	class UShowMapNameWidget* MapNameWidgetUIObject;
 
+	UPROPERTY()
 	TSubclassOf<class UUserWidget> PressKeyClass;
+	UPROPERTY()
 	class UPressKeyWidget* PressKeyUIObject;
 
+	UPROPERTY()
 	TSubclassOf<class UUserWidget> AddToMapWidgetClass;
+	UPROPERTY()
 	class UAddMapWidget* AddToMapWidgetUIObject;
 
 	UPROPERTY()
