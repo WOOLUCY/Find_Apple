@@ -2,6 +2,7 @@
 
 
 #include "TradeListWidget.h"
+#include "TradePriceSlot.h"
 
 UTradeListWidget::UTradeListWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
