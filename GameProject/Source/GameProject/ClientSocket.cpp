@@ -172,7 +172,6 @@ void ClientSocket::PacketRecv()
 
 
 	//종류에따라 받는거 처리하기 - 함수를 따로처리하자~~~~
-	RecvDataTest();
 }
 
 void ClientSocket::ProcessPacket(char* packet)

@@ -37,7 +37,8 @@ UAuctionEnterWidget::UAuctionEnterWidget(const FObjectInitializer& objectInitial
 void UAuctionEnterWidget::ClickedCloseButton()
 {
 	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	MyInstance->MySocket.PacketRecv();
+	MyInstance->MySocket.RecvDataTest();
+
 
 	RemoveFromParent();
 
@@ -70,7 +71,7 @@ void UAuctionEnterWidget::ClickedEnterButton()
 					
 					// 보낼 수 있는 개수일 때만 서버한테 보냄
 					static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-					//MyInstance->MySocket.SendTestSalePacket(ItmeType, ItemCount, ItemPrice);
+					MyInstance->MySocket.SendTestSalePacket(ItmeType, ItemCount, ItemPrice);
 				}
 			}
 		}
