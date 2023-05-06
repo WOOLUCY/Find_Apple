@@ -31,11 +31,26 @@ public:
 	UPROPERTY()
 	int32 ItemPrice;
 
+	UPROPERTY()
+	FName ItemName = "apple";
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* BuyButton;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UInventoryComponent* InventoryComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
+
+	TArray<struct FInventoryTableRow*> InventoryData;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//class UInventoryComponent* InventoryComponent;
 	//UFUNCTION()
 	//void SetCraftListWidget(FName CraftRowName);
+
+	
+	UFUNCTION()
+	void BuyButtonClick();
 };

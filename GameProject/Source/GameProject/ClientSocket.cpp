@@ -8,6 +8,14 @@ ClientSocket::ClientSocket()
 	IsInit = false;
 	memset(RecvBuf, BUFSIZE, 0);
 	PrevRemain = 0;
+
+
+	SalesItem a = { 1, 2, 3 };
+	SalesItem b = { 2, 2, 3 };
+	SalesItem c = { 3, 2, 3 };
+	Items.Add(a);
+	Items.Add(b);
+	Items.Add(c);
 }
 
 ClientSocket::~ClientSocket()

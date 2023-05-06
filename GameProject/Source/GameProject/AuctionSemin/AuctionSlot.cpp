@@ -97,14 +97,6 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 				AuctionEnterWidgetClass->ItmeType = TRUNK;
 
 			}
-			else if (StringName.Equals(FString(TEXT("pick")))) {
-				AuctionEnterWidgetClass->ItmeType = PICK;
-
-			}
-			else if (StringName.Equals(FString(TEXT("ax")))) {
-				AuctionEnterWidgetClass->ItmeType = AX;
-
-			}
 			else if (StringName.Equals(FString(TEXT("rock")))) {
 				AuctionEnterWidgetClass->ItmeType = ROCK;
 

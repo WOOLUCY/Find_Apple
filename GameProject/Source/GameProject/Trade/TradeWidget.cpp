@@ -44,45 +44,63 @@ void UTradeWidget::NativeConstruct()
 
 	for (auto& item : MyInstance->MySocket.Items ) {
 		UE_LOG(LogTemp, Warning, TEXT("%d %d %d"), item.Item, item.Num, item.Price);
-	}
 
+		if (item.Item == 0) {
+			SelectItemName = FName("apple");
+		}
+		else if (item.Item == 1) {
+			SelectItemName = FName("orange");
+		}
+		else if (item.Item == 2) {
+			SelectItemName = FName("trunk");
+		}
+		else if (item.Item == 3) {
+			SelectItemName = FName("rock");
+		}
+		else if (item.Item == 4) {
+			SelectItemName = FName("branch");
+		}
+		else if (item.Item == 5) {
+			SelectItemName = FName("seed");
+		}
+		else if (item.Item == 6) {
+			SelectItemName = FName("gold");
+		}
+		else if (item.Item == 7) {
+			SelectItemName = FName("steel");
+		}
+		else if (item.Item == 8) {
+			SelectItemName = FName("radish");
+		}
 
-	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
-
-	InventoryComponent = MyCharacter->InventoryComponent;
-
-
-	if (InventoryComponent) {
-		for (auto& InventoryElement : InventoryComponent->InventoryContent)
+		if (ItemDataTable != nullptr)
 		{
-			if (ItemDataTable != nullptr)
+			ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+			TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+			for (FName RowName : RowNames)
 			{
-				ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
-				TArray<FName> RowNames = ItemDataTable->GetRowNames();
+				FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
 
-				for (FName RowName : RowNames)
+				if (SelectItemName == RowName)
 				{
-					FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+					if (InventoryRow.ItemType != 2) {
+						TradeListWidgetUIObject = CreateWidget<UTradeListWidget>(GetWorld(), TradeListWidgetClass);
+						TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushFromTexture(InventoryRow.Thumbnail);
+						TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushColor(FColor::White);
+						TradeListWidgetUIObject->PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(item.Num)));
+						TradeListWidgetUIObject->Price->SetText(FText::FromString(FString::FromInt(item.Price)));
 
-					if (InventoryElement.Key == RowName)
-					{
-						if (InventoryRow.ItemType != 2) {
-							TradeListWidgetUIObject = CreateWidget<UTradeListWidget>(GetWorld(), TradeListWidgetClass);
-							TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushFromTexture(InventoryRow.Thumbnail);
-							TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushColor(FColor::White);
-							TradeListWidgetUIObject->PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(InventoryElement.Value)));
-							// InventoryElement.Value 는 그냥 개수(int) 변수 넣으면 되는 자리임
+						TradeListWidgetUIObject->Quantity = item.Num;
+						TradeListWidgetUIObject->ItemPrice = item.Price;
+						TradeListWidgetUIObject->ItemName = RowName;
 
-							// 밑의 코드는 price 받아서 넘겨야 함
-							//TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushColor(nullptr);
-
-							TradeList->AddChild(TradeListWidgetUIObject);
-						}
+						TradeList->AddChild(TradeListWidgetUIObject);
 					}
 				}
 			}
 		}
+
 	}
 }
 
