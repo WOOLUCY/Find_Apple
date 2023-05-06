@@ -1,13 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ChestCharacter.h"
-
-#include "Components/CapsuleComponent.h"
-#include "Components/MeshComponent.h"
+#include "NepenthesCharacter.h"
 
 // Sets default values
-AChestCharacter::AChestCharacter()
+ANepenthesCharacter::ANepenthesCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -18,14 +15,14 @@ AChestCharacter::AChestCharacter()
 }
 
 // Called when the game starts or when spawned
-void AChestCharacter::BeginPlay()
+void ANepenthesCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AChestCharacter::Tick(float DeltaTime)
+void ANepenthesCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -45,16 +42,17 @@ void AChestCharacter::Tick(float DeltaTime)
 
 		//Destroy();
 	}
+
 }
 
 // Called to bind functionality to input
-void AChestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ANepenthesCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
 
-float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+float ANepenthesCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
 	if (Health <= 0.f)
@@ -69,8 +67,8 @@ float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	{
 		Health -= 20.f;
 
-		UE_LOG(LogClass, Warning, TEXT("Chest Is Attacked"));
-		UE_LOG(LogClass, Warning, TEXT("Chest Current HP: %f"), Health);
+		UE_LOG(LogClass, Warning, TEXT("Nep Is Attacked"));
+		UE_LOG(LogClass, Warning, TEXT("Nep Current HP: %f"), Health);
 
 		IsAttacked = false;
 	}
@@ -80,8 +78,8 @@ float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 			{
 				Health -= 20.f;
 
-				UE_LOG(LogClass, Warning, TEXT("Chest Is Attacked"));
-				UE_LOG(LogClass, Warning, TEXT("Chest Current HP: %f"), Health);
+				UE_LOG(LogClass, Warning, TEXT("Nep Is Attacked"));
+				UE_LOG(LogClass, Warning, TEXT("Nep Current HP: %f"), Health);
 
 				IsAttacked = false;
 			}, 0.5f, false);
