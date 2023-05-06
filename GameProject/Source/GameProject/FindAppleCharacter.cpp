@@ -297,6 +297,7 @@ void AFindAppleCharacter::BeginPlay()
 
 	BlackScreenBeginUIObject = CreateWidget<UBlackScreenBegin>(GetWorld(), BlackScreenBeginClass);
 	BlackScreenBeginUIObject->AddToViewport();
+	BlackScreenBeginUIObject->BeginAnimation();
 
 	CurHealth = MaxHealth;
 	CurHunger = MaxHunger;
@@ -344,9 +345,6 @@ void AFindAppleCharacter::BeginPlay()
 			}
 			else {
 				// 현재 월드 객체의 GetMapName 함수를 호출하여 현재 레벨 이름 가져오기
-				UE_LOG(LogTemp, Warning, TEXT("Begin Zero Play~~"));
-
-
 			}
 		}
 		if (MyMode != nullptr) {
@@ -881,9 +879,6 @@ void AFindAppleCharacter::BlackScreenPopStart()
 
 	PlayerController->SetShowMouseCursor(false);
 
-	UE_LOG(LogTemp, Warning, TEXT("MoveLocation: %d %d %d"), MoveLocation.X, MoveLocation.Y, MoveLocation.Z);
-
-
 	FTimerHandle TimerHandle;
 	float BlackScreenBeginTime = 0.8;
 
@@ -919,8 +914,6 @@ void AFindAppleCharacter::UpEquip(const FInputActionValue& Value)
 		SetEquipNum(++temp);
 
 	ChangeEquipment(GetEquipNum());
-
-	UE_LOG(LogClass, Warning, TEXT("CurEquipNum:%d"), GetEquipNum());
 }
 
 void AFindAppleCharacter::DownEquip(const FInputActionValue& Value)
@@ -935,8 +928,6 @@ void AFindAppleCharacter::DownEquip(const FInputActionValue& Value)
 		SetEquipNum(--temp);
 
 	ChangeEquipment(GetEquipNum());
-
-	UE_LOG(LogClass, Warning, TEXT("CurEquipNum:%d"), GetEquipNum());
 }
 
 // Called to bind functionality to input
@@ -1015,7 +1006,6 @@ float AFindAppleCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 			{
-				UE_LOG(LogClass, Warning, TEXT("Chest Is Attacking"));
 				DamageReaction(Damage);
 				DoOnce.Reset();
 			}), 5.f, false);
@@ -1070,9 +1060,9 @@ void AFindAppleCharacter::DamageReaction(float DamageAmount)
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShakeClass);
 	}
 
-	// Log
-	UE_LOG(LogClass, Warning, TEXT("Player Is Attacked"));
-	UE_LOG(LogClass, Warning, TEXT("Player Current HP: %f"), GetCurHealth());
+	//// Log
+	//UE_LOG(LogClass, Warning, TEXT("Player Is Attacked"));
+	//UE_LOG(LogClass, Warning, TEXT("Player Current HP: %f"), GetCurHealth());
 
 	// 딜레이 후 피격 가능 상태로 변경
 	FTimerHandle TimerHandle;
