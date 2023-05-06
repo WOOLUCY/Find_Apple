@@ -34,6 +34,13 @@ public:
 	UPROPERTY()
 	class UTradeListWidget* TradeListWidgetUIObject;
 
+	struct SalesItem {
+		int Item;
+		int Num;
+		int Price;
+	};
+
+	TArray<SalesItem> Items;
 
 public:
 	/* Click Action */

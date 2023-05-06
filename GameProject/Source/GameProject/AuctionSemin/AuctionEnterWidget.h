@@ -20,9 +20,10 @@ class GAMEPROJECT_API UAuctionEnterWidget : public UUserWidget
 protected:
 	virtual void NativePreConstruct() override;
 	virtual void NativeConstruct() override;
-	
 
 public:
+	enum ITEM_TYPE { APPLE, ORANGE, FIREWOOD, PICK, AX, ROCK, BRAHCN, SEED, GOLD, STEEL, SWORD, RADISH };
+
 	UAuctionEnterWidget(const FObjectInitializer& objectInitializer);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))

@@ -7,7 +7,9 @@
 #include "../AuctionSemin/AuctionSelectSlot.h"
 #include "../AuctionSemin/AuctionSlot.h"
 #include "Components/Button.h"
-//#include "TradeListWidget.h"
+#include "../ClientSocket.h"
+#include "../MyGameInstance.h"
+#include "TradeListWidget.h"
 
 UTradeWidget::UTradeWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -17,7 +19,6 @@ UTradeWidget::UTradeWidget(const FObjectInitializer& objectInitializer) : Super(
 	{
 		TradeListWidgetClass = TradeListWidgetFind.Class;
 	}
-
 }
 
 void UTradeWidget::NativeConstruct()
@@ -25,6 +26,14 @@ void UTradeWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	TradeButton->OnClicked.AddDynamic(this, &UTradeWidget::TradeButtonClick);
+
+	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	//Items = MyInstance->MySocket->items;
+	//Items = MyInstance->MySocket.Items;
+
+	for (auto& item : MyInstance->MySocket.Items ) {
+		UE_LOG(LogTemp, Warning, TEXT("%d %d %d"), item.Item, item.Num, item.Price);
+	}
 }
 
 void UTradeWidget::TradeButtonClick()
