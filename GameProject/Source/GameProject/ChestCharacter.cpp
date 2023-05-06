@@ -29,27 +29,22 @@ void AChestCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// »ç¸Á Ã³¸®
-	//if (Health <= 0.f)
-	//{
-	//	for (int i = 0; i < 4; ++i)
-	//	{
-	//		GetMesh()->SetMaterial(i, DissolveMaterial);
-	//	}
+	// TODO: Destroy Slime
+	if (Health <= 0.f)
+	{
 
-	//	//GetMovementComponent()->StopMovementImmediately();
-	//	GetMesh()->Stop();
-	//	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		//GetMovementComponent()->StopMovementImmediately();
+		GetMesh()->Stop();
+		GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	//	FTimerHandle TimerHandle;
-	//	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
-	//		{
-	//			Destroy();
-	//		}, 0.8f, false);
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+			{
+				Destroy();
+			}, 0.8f, false);
 
-	//	//Destroy();
-	//}
-
+		//Destroy();
+	}
 }
 
 // Called to bind functionality to input
@@ -62,6 +57,36 @@ void AChestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	if (Health <= 0.f)
+		return	0.f;
+
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	IsAttacked = true;
+
+	FTimerHandle TimerHandle;
+	if (Health <= 20.f)
+	{
+		Health -= 20.f;
+
+		UE_LOG(LogClass, Warning, TEXT("Chest Is Attacked"));
+		UE_LOG(LogClass, Warning, TEXT("Chest Current HP: %f"), Health);
+
+		IsAttacked = false;
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+			{
+				Health -= 20.f;
+
+				UE_LOG(LogClass, Warning, TEXT("Chest Is Attacked"));
+				UE_LOG(LogClass, Warning, TEXT("Chest Current HP: %f"), Health);
+
+				IsAttacked = false;
+			}, 0.5f, false);
+	}
+
+	return Damage;
 }
 
