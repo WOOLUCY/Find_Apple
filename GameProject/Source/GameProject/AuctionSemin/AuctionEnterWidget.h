@@ -58,6 +58,17 @@ public:
 	UPROPERTY(EditAnywhere)
 	int ItemCount = 0;
 
+	UPROPERTY()
+	class UTradeWidget* TradeWidgetUIObject;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
+
+	TArray<struct FInventoryTableRow*> InventoryData;
+
+	UPROPERTY()
+	FName NonDisplayName;
+
 	UPROPERTY(EditAnywhere)
 	int ItemPrice = 0;
 
