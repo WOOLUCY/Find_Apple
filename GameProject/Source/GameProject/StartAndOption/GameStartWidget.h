@@ -29,7 +29,7 @@ protected:
 	class UButton* StartButton;
 
 	UPROPERTY(EditAnywhere, category = "Setting", meta = (AllowPrivateAccess = "true"))
-    FName TransferLevelName = "EditMap";
+    FName TransferLevelName = "CopyEditMap1";
 
 private:
 	/* Black Screen Pop (어두워지는 효과) */
@@ -43,6 +43,11 @@ private:
 	TSubclassOf<class UUserWidget> BlackScreenEndClass;
 	UPROPERTY()
 	class UBlackScreenEnd* BlackScreenEndUIObject;
+
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> OptionWidgetClass;
+	UPROPERTY()
+	class UGameOptionWidget* OptionUIObject;
 	
 public:
 	UFUNCTION()

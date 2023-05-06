@@ -10,7 +10,7 @@ UBlackScreenBegin::UBlackScreenBegin(const FObjectInitializer& objectInitializer
 void UBlackScreenBegin::NativeConstruct()
 {
 	Super::NativeConstruct();
-	PlayAnimation(BlackScreenEnd);
+	//PlayAnimation(BlackScreenEnd);
 }
 
 void UBlackScreenBegin::EndAnimation()

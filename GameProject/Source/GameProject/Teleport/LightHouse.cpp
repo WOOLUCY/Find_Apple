@@ -208,6 +208,12 @@ void ALightHouse::OnActivate_Implementation()
 			{
 				if (CurveFloat)
 				{
+					StartLoc = FirstCameraComponent->GetComponentLocation();
+					EndLoc = SecondCameraComponent->GetComponentLocation();
+
+					StartRot = FirstCameraComponent->GetComponentRotation();
+					EndRot = SecondCameraComponent->GetComponentRotation();
+
 					FVector Forward = GetActorForwardVector();
 
 					FOnTimelineFloat TimelineProgress;
@@ -215,13 +221,9 @@ void ALightHouse::OnActivate_Implementation()
 					TimelineProgress.BindUFunction(this, FName("TimelineProgress"));
 					LerpTimelineFinishedCallback.BindUFunction(this, FName("TimelineFinished"));
 
+					CurveFTimeline.SetLooping(false);
 					CurveFTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
 					CurveFTimeline.SetTimelineFinishedFunc(LerpTimelineFinishedCallback);
-					StartLoc = FirstCameraComponent->GetComponentLocation();
-					EndLoc = SecondCameraComponent->GetComponentLocation();
-
-					StartRot = FirstCameraComponent->GetComponentRotation();
-					EndRot = SecondCameraComponent->GetComponentRotation();
 
 					CurveFTimeline.SetTimelineLength(1.f);
 
@@ -256,7 +258,6 @@ void ALightHouse::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 				PressKeyUIObject->AddToViewport();
 				isKeyWidget = true;
 			}
-			PrimaryActorTick.bCanEverTick = true;
 		}
 		
 	}
@@ -267,7 +268,6 @@ void ALightHouse::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
 		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(OtherActor);
-		PrimaryActorTick.bCanEverTick = false;
 
 		if (MyCharacter) {
 			if (isPressed && isKeyWidget == false) {

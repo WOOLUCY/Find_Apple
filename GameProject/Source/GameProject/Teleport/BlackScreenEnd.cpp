@@ -11,5 +11,5 @@ void UBlackScreenEnd::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	PlayAnimation(BlackScreenEnd);
+	//PlayAnimation(BlackScreenEnd);
 }

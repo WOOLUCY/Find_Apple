@@ -36,11 +36,6 @@ public:
 	TSubclassOf<class UUserWidget> BlackScreenBeginClass;
 	UPROPERTY()
 	class UBlackScreenBegin* BlackScreenBeginUIObject;
-	/* End */
-	UPROPERTY()
-	TSubclassOf<class UUserWidget> BlackScreenEndClass;
-	UPROPERTY()
-	class UBlackScreenEnd* BlackScreenEndUIObject;
 
 	/* Hover Action */
 	UFUNCTION()

@@ -405,10 +405,12 @@ void UGameOptionWidget::WidgetClose()
 	AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(GetOwningPlayerPawn());
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
-	MyChar->bPauseWidget = false;
-	PlayerController->SetPause(MyChar->bPauseWidget);
-	PlayerController->SetShowMouseCursor(false);
-	PlayerController->SetInputMode(FInputModeGameOnly());
+	if (MyChar && PlayerController) {
+		MyChar->bPauseWidget = false;
+		PlayerController->SetPause(MyChar->bPauseWidget);
+		PlayerController->SetShowMouseCursor(false);
+		PlayerController->SetInputMode(FInputModeGameOnly());
+	}
 
 	RemoveFromParent();
 }
