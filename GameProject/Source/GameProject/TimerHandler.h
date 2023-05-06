@@ -18,8 +18,9 @@ class GAMEPROJECT_API ATimerHandler : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATimerHandler();
-
-	const float speed = 2000.f;
+	
+	//데모때라 4000으로 바꿔놓음
+	const float speed = 10000.f;
 	
 	UPROPERTY()
 		double TotalGameTime;

@@ -30,7 +30,7 @@ void UDoorWidget::NativeConstruct()
 	TextBlock = Cast<UTextBlock>(GetWidgetFromName(TEXT("Explanation")));
 
 	if (TextBlock != nullptr) {
-		TextBlock->SetText(FText::FromString(TEXT("intothesjfkd~~~~")));
+		TextBlock->SetText(FText::FromString(TEXT("Would you like to enter?")));
 	}
 
 
