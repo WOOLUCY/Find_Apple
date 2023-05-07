@@ -13,6 +13,9 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Components/EditableTextBox.h"
 
+
+#include "../ClientSocket.h"
+
 UAuctionSlot::UAuctionSlot(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
 	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
@@ -88,8 +91,8 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 				AuctionEnterWidgetClass->ItmeType = APPLE;
 
 			}
-			else if (StringName.Equals(FString(TEXT("orange")))) {
-				AuctionEnterWidgetClass->ItmeType = ORANGE;
+			else if (StringName.Equals(FString(TEXT("Rubby")))) {
+				AuctionEnterWidgetClass->ItmeType = RUBBY;
 
 			}
 			else if (StringName.Equals(FString(TEXT("trunk")))) {
@@ -120,7 +123,18 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 				AuctionEnterWidgetClass->ItmeType = GOLD;
 
 			}
+			else if (StringName.Equals(FString(TEXT("Sapphire")))) {
+				AuctionEnterWidgetClass->ItmeType = SAPPHIRE;
 
+			}
+
+			else {
+				AuctionEnterWidgetClass->ItmeType = -1;
+
+			}
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
+				FString::Printf(TEXT("ItmeType %d"), AuctionEnterWidgetClass->ItmeType));
 		}
 	}
 

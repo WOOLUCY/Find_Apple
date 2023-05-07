@@ -23,7 +23,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* TradeButton;
 
-	enum ITEM_TYPE { APPLE, ORANGE, FIREWOOD, ROCK, BRAHCN, SEED, GOLD, STEEL, RADISH };
 	// Semin =
 	UPROPERTY()
 	TSubclassOf<class UUserWidget> AuctionWidgetClass;
