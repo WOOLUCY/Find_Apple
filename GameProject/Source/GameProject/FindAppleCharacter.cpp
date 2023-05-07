@@ -188,6 +188,13 @@ AFindAppleCharacter::AFindAppleCharacter()
 		TeleportCaveAction = Input_TeleportCave.Object;
 	}
 
+	/* 5번 누르면 체력과 허기 모두 참 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Cheat(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_Cheat.IA_Cheat'"));
+	if (Input_Cheat.Succeeded())
+	{
+		CheatAction = Input_Cheat.Object;
+	}
+
 	/* 도구 휠 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_WheelUp(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_ToolUp.IA_ToolUp'"));
 	if (Input_WheelUp.Succeeded())
@@ -675,7 +682,13 @@ void AFindAppleCharacter::TeleportCave(const FInputActionValue& Value)
 	TeleportPointName = FName("CaveOut");
 	MovePointAtTeleport();
 }
- 
+
+void AFindAppleCharacter::Cheat(const FInputActionValue& Value)
+{
+	SetCurHealth(GetMaxHealth());
+	SetCurHunger(GetMaxHunger());
+}
+
 
 void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
 {
@@ -1031,6 +1044,8 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(TeleportHouseAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportHouse);
 		EnhancedInputComponent->BindAction(TeleportTreeAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportTree);
 		EnhancedInputComponent->BindAction(TeleportCaveAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportCave);
+		EnhancedInputComponent->BindAction(CheatAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Cheat);
+
 
 		//kaon - dash, equipment
 		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);
