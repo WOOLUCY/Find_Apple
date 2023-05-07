@@ -7,6 +7,8 @@
 #include "../FindAppleGameMode.h"
 #include "../FindApplePlayerController.h"
 #include "../FindAppleCharacter.h"
+#include "../Inventory/InventoryDataTable.h"
+#include "../Inventory/InventoryComponent.h"
 
 #include "Plant.h"
 #include "Tomato.h"
@@ -65,8 +67,12 @@ AFarmGround::AFarmGround()
 		PlantWidgetClass = PLANT_WIDGET.Class;
 	}
 
-
-
+	// ItemDataTable
+	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
+	if (DataTable.Succeeded())
+	{
+		ItemDataTable = DataTable.Object;
+	}
 
 	//머터리얼불러오기
 	static ConstructorHelpers::FObjectFinder<UMaterial>Mat_Blue
@@ -237,6 +243,7 @@ void AFarmGround::ShowPlantWidget()
 		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
 		if (MyContorller != nullptr) {
 			PlantWdiget = CreateWidget<UPlantWidget>(MyContorller, PlantWidgetClass);
+			PlantWdiget->ItemDataTable = ItemDataTable;
 			PlantWdiget->AddToViewport();
 			MyContorller->SetInputMode(FInputModeGameAndUI());
 			MyContorller->bShowMouseCursor = true;
@@ -244,7 +251,6 @@ void AFarmGround::ShowPlantWidget()
 			PlantWdiget->SeedDelegate.BindUObject(this, &AFarmGround::PutSeed);
 			PlantWdiget->WaterDelegate.BindUObject(this, &AFarmGround::PutWater);
 			PlantWdiget->HarvestDelegate.BindUObject(this, &AFarmGround::Harvest);
-
 		}
 
 

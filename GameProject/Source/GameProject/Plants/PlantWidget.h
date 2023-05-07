@@ -19,7 +19,11 @@ public:
 	AboutPlantDelegate SeedDelegate;
 	AboutPlantDelegate WaterDelegate;
 	AboutPlantDelegate HarvestDelegate;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
 
+	TArray<struct FInventoryTableRow*> InventoryData;
 
 protected:
 	virtual void NativeConstruct() override;
