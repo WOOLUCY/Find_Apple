@@ -223,6 +223,7 @@ public:
 	/* Combat */
 	//UPROPERTY(EditAnywhere, Category = "Combat")
 	//bool IsAttacking = false;
+	UFUNCTION()
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void DamageReaction(float DamageAmount);
 	FDoOnce DoOnce;

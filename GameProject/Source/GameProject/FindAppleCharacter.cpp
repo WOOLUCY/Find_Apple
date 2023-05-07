@@ -241,7 +241,7 @@ AFindAppleCharacter::AFindAppleCharacter()
 	}
 
 	/* CameraShake */
-	ConstructorHelpers::FClassFinder<UCameraShakeBase>  CameraShake(TEXT("/Script/Engine.Blueprint'/Game/Woo/Camera/BP_HitCS.BP_HitCS_C'"));
+	ConstructorHelpers::FClassFinder<UCameraShakeBase>  CameraShake(TEXT("/Script/Engine.Blueprint'/Game/Woo/Camera/BP_DeathCS.BP_DeathCS_C'"));
 	if (CameraShake.Succeeded())
 	{
 		HitCameraShakeClass = CameraShake.Class;
@@ -1097,18 +1097,18 @@ float AFindAppleCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (Damage == 25.f && DoOnce.Execute())	// Damage Causer: Chest
-	{
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-			{
-				DamageReaction(Damage);
-				DoOnce.Reset();
-			}), 5.f, false);
-	}
+	//if (Damage == 25.f && DoOnce.Execute())	// Damage Causer: Chest
+	//{
+	//	FTimerHandle TimerHandle;
+	//	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+	//		{
+	//			DamageReaction(Damage);
+	//			DoOnce.Reset();
+	//		}), 5.f, false);
+	//}
 
-	else
-		DamageReaction(Damage);
+	//else
+	DamageReaction(Damage);
 
 	//// 피격 불가 상태로 변경
 	//SetIsAttacked(true);
