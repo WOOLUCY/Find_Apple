@@ -105,12 +105,16 @@ void ASlimeCharacter::Tick(float DeltaTime)
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 			{
 				ADropedItem* DropedActor;
-				FActorSpawnParameters SpawnParams;
 
-				DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), GetActorLocation(), GetActorRotation(), SpawnParams);
-				DropedActor->CollisionMesh->SetBoxExtent(FVector(30.f, 30.f, 30.f));
-				DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
-				DropedActor->ItemFresh(FName("Seed"));
+				if (IsDead == false) 
+				{
+					DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), GetActorLocation(), GetActorRotation());
+					DropedActor->CollisionMesh->SetBoxExtent(FVector(30.f, 30.f, 30.f));
+					DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
+					DropedActor->ItemFresh(FName("Seed"));
+					IsDead = true;
+				}
+
 
 				Destroy();
 			}, 0.8f, false);

@@ -5,9 +5,13 @@
 #include "Kismet/GamePlayStatics.h"
 #include "../FindAppleGameMode.h"
 #include "Components/Button.h"
+#include "../Inventory/InventoryDataTable.h"
+#include "../Inventory/InventoryComponent.h"
+#include "../FindAppleCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 
-void UPlantWidget::NativeConstruct() 
+void UPlantWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
@@ -26,13 +30,31 @@ void UPlantWidget::NativeConstruct()
 		HarvestButton->OnClicked.AddDynamic(this, &UPlantWidget::GetHarvest);
 	}
 
-
-
 }
 
 void UPlantWidget::PutSeed()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("PutSeed "));
+
+	if (ItemDataTable != nullptr)
+	{
+		ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+		TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+		for (FName RowName : RowNames)
+		{
+			FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+			if (RowName == FName("Seed"))
+			{
+				/* 캐릭터 체력 증가하도록 구현하기 */
+				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+				AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+				MyCharacter->InventoryComponent->RemoveFromInventory(RowName, 1);
+			}
+		}
+	}
+
 	SeedDelegate.ExecuteIfBound();
 	//SeedDelegate.Broadcast();
 }

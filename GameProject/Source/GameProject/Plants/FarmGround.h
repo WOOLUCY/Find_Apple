@@ -43,7 +43,9 @@ public:
 		TSubclassOf<class UPlantWidget> PlantWidgetClass;
 
 	FDelegateHandle MyDelegateHandle;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UDataTable* ItemDataTable;
 
 private:
 	UPROPERTY()
