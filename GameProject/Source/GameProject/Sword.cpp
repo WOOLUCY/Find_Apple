@@ -103,7 +103,7 @@ void ASword::NotifyActorBeginOverlap(AActor* OtherActor)
 		//	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("TakeDamage"));
 		}
 		else {
-			GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OverlapSelf"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OverlapSelf"));
 		}
 	}
 
