@@ -120,7 +120,9 @@ void ASpaceShip::HideTradeWidget()
 		auto hero = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
 		if (MyContorller != nullptr) {
-			TradeWidget->AuctionWidgetUIObject->RemoveFromParent();
+			if (TradeWidget->AuctionWidgetUIObject) {
+				TradeWidget->AuctionWidgetUIObject->RemoveFromParent();
+			}
 			TradeWidget->RemoveFromParent();
 			MyContorller->SetInputMode(FInputModeGameOnly());
 			MyContorller->bShowMouseCursor = false;

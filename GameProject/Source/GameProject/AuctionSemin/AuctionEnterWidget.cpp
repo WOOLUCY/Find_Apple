@@ -16,6 +16,7 @@
 #include "../Trade/TradeWidget.h"
 #include "../Inventory/InventoryComponent.h"
 #include "../Inventory/InventoryDataTable.h"
+#include "../SpaceShip.h"
 
 UAuctionEnterWidget::UAuctionEnterWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -72,6 +73,8 @@ void UAuctionEnterWidget::ClickedEnterButton()
 
 					if (ItmeType >= 0) {
 						MyInstance->MySocket.SendTestSalePacket(ItmeType, ItemCount, ItemPrice);
+
+						TradeWidgetUIObject->Refrest();
 						RemoveFromParent();
 					}
 				}

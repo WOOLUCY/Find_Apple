@@ -18,6 +18,7 @@ public:
 	UTradeWidget(const FObjectInitializer& objectInitializer);
 	virtual void NativeConstruct() override;
 
+
 	/* 판매하기 버튼 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* TradeButton;
@@ -59,4 +60,8 @@ public:
 	/* Click Action */
 	UFUNCTION()
 	void TradeButtonClick();
+
+	UFUNCTION()
+	void Refrest();
+
 };
