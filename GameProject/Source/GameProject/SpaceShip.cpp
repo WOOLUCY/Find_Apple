@@ -102,8 +102,8 @@ void ASpaceShip::ShowTradeWidget()
 	AFindApplePlayerController* MyContorller = Cast<AFindApplePlayerController>(hero);
 
 	TradeWidget = CreateWidget<UTradeWidget>(GetWorld(), TradeWidgetClass);
-	AuctionWidgetUIObject = CreateWidget<UAuctionEnterWidget>(GetWorld(), AuctionWidgetClass);
-	TradeWidget->AuctionWidgetUIObject = AuctionWidgetUIObject;
+	//AuctionWidgetUIObject = CreateWidget<UAuctionEnterWidget>(GetWorld(), AuctionWidgetClass);
+	//TradeWidget->AuctionWidgetUIObject = AuctionWidgetUIObject;
 	//AuctionWidgetUIObject->SetVisibility()
 	TradeWidget->AddToViewport();
 

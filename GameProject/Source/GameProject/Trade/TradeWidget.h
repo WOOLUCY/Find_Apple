@@ -23,7 +23,9 @@ public:
 	class UButton* TradeButton;
 
 	enum ITEM_TYPE { APPLE, ORANGE, FIREWOOD, ROCK, BRAHCN, SEED, GOLD, STEEL, RADISH };
-	// Semin 
+	// Semin =
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> AuctionWidgetClass;
 	UPROPERTY()
 	class UAuctionEnterWidget* AuctionWidgetUIObject;
 
@@ -40,7 +42,6 @@ public:
 	FName SelectItemName;
 
 	TArray<struct FInventoryTableRow*> InventoryData;
-
 	UPROPERTY()
 	TSubclassOf<class UUserWidget> TradeListWidgetClass;
 	UPROPERTY()
