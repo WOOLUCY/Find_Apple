@@ -63,6 +63,14 @@ protected:
 	UInputAction* TeleportAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* QuestTeleportAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* TeleportQuestNPCAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* TeleportTreeAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* TeleportDungeonAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* TeleportHouseAction;
 
 	// W: Pause Menu
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
@@ -101,6 +109,10 @@ protected:
 	void SkipQuest(const FInputActionValue& Value);
 	void Teleport(const FInputActionValue& Value);
 	void TeleportAtQuestNPCAction(const FInputActionValue& Value);
+	void TeleportQuestNPC(const FInputActionValue& Value);
+	void TeleportTree(const FInputActionValue& Value);
+	void TeleportDungeon(const FInputActionValue& Value);
+	void TeleportHouse(const FInputActionValue& Value);
 
 	void EquipSword(const FInputActionValue& Value);
 	void EquipAx(const FInputActionValue& Value);
@@ -241,6 +253,11 @@ public:
 
 
 private:
+	UPROPERTY()
+	FName TeleportPointName;
+	UFUNCTION()
+	void MovePointAtTeleport();
+
 	UPROPERTY(VisibleAnywhere)
 		bool bIsRunning;
 

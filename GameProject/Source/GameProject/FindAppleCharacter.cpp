@@ -157,6 +157,30 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		QuestTeleportAction = Input_TeleportQuestNPC.Object;
 	}
+	/* 0 번 누르면 퀘스트 npc 집 앞으로 감 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_TeleportQuest(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_TeleportQuest.IA_TeleportQuest'"));
+	if (Input_TeleportQuest.Succeeded())
+	{
+		TeleportQuestNPCAction = Input_TeleportQuest.Object;
+	}
+	/* 1 번 누르면 tree 앞으로 감 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_TeleportTree(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_TeleportTree.IA_TeleportTree'"));
+	if (Input_TeleportTree.Succeeded())
+	{
+		TeleportTreeAction = Input_TeleportTree.Object;
+	}
+	/* 2 번 누르면 던전 입구 앞으로 감 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_TeleportDungeon(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_TeleportDungeon.IA_TeleportDungeon'"));
+	if (Input_TeleportDungeon.Succeeded())
+	{
+		TeleportDungeonAction = Input_TeleportDungeon.Object;
+	}
+	/* 3 번 누르면 퀘스트 npc 집 앞으로 감 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_TeleportHouse(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_TeleportHouse.IA_TeleportHouse'"));
+	if (Input_TeleportHouse.Succeeded())
+	{
+		TeleportHouseAction= Input_TeleportHouse.Object;
+	}
 
 	/* 도구 휠 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_WheelUp(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_ToolUp.IA_ToolUp'"));
@@ -297,7 +321,7 @@ void AFindAppleCharacter::BeginPlay()
 
 	BlackScreenBeginUIObject = CreateWidget<UBlackScreenBegin>(GetWorld(), BlackScreenBeginClass);
 	BlackScreenBeginUIObject->AddToViewport();
-	BlackScreenBeginUIObject->BeginAnimation();
+	BlackScreenBeginUIObject->EndAnimation();
 
 	CurHealth = MaxHealth;
 	CurHunger = MaxHunger;
@@ -618,6 +642,30 @@ void AFindAppleCharacter::TeleportAtQuestNPCAction(const FInputActionValue& Valu
 			}
 		}
 	}
+}
+
+void AFindAppleCharacter::TeleportQuestNPC(const FInputActionValue& Value)
+{
+	TeleportPointName = FName("RainHouse");
+	MovePointAtTeleport();
+}
+
+void AFindAppleCharacter::TeleportTree(const FInputActionValue& Value)
+{
+	TeleportPointName = FName("Tree");
+	MovePointAtTeleport();
+}
+
+void AFindAppleCharacter::TeleportDungeon(const FInputActionValue& Value)
+{
+	TeleportPointName = FName("DungeonMapOut");
+	MovePointAtTeleport();
+}
+
+void AFindAppleCharacter::TeleportHouse(const FInputActionValue& Value)
+{
+	TeleportPointName = FName("HEROHouseOut");
+	MovePointAtTeleport();
 }
  
 
@@ -950,6 +998,10 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(SkipAction, ETriggerEvent::Started, this, &AFindAppleCharacter::SkipQuest);
 		EnhancedInputComponent->BindAction(TeleportAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Teleport);
 		EnhancedInputComponent->BindAction(QuestTeleportAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportAtQuestNPCAction);
+		EnhancedInputComponent->BindAction(TeleportQuestNPCAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportQuestNPC);
+		EnhancedInputComponent->BindAction(TeleportDungeonAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportDungeon);
+		EnhancedInputComponent->BindAction(TeleportHouseAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportHouse);
+		EnhancedInputComponent->BindAction(TeleportTreeAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportTree);
 
 		//kaon - dash, equipment
 		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);
@@ -1072,3 +1124,32 @@ void AFindAppleCharacter::DamageReaction(float DamageAmount)
 		}, 3.f, false);	// 무적 시간
 }
 
+
+void AFindAppleCharacter::MovePointAtTeleport()
+{
+	TArray<AActor*> TeleportActors;
+
+	UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ATeleportPosition::StaticClass(), TeleportPointName, TeleportActors);
+
+	{
+		for (AActor* Actor : TeleportActors)
+		{
+			ATeleportPosition* Position = Cast<ATeleportPosition>(Actor);
+
+			if (Position != nullptr)
+			{
+				FTimerHandle TimerHandle;
+				float BlackScreenBeginTime = 0.8;
+
+				FVector Location = Position->GetActorLocation();
+				FVector MoveLocationLocal = Location + FVector(0.f, 0.f, 50.f);
+
+				FRotator MoveRotate = Position->GetActorRotation();
+
+				MoveLocation = MoveLocationLocal;
+				MoveRotation = MoveRotate;
+				BlackScreenPopStart();
+			}
+		}
+	}
+}
