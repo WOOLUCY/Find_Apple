@@ -1083,7 +1083,7 @@ void AFindAppleCharacter::Action()
 void AFindAppleCharacter::DayChange()
 {
 	//여기서 하루 지나가면 초기화되는 정보들 저장하면된다.
-	CurHealth = MaxHealth;
+	//CurHealth = MaxHealth;
 }
 
 

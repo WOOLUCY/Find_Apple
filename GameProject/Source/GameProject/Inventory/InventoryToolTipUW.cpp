@@ -64,6 +64,9 @@ void UInventoryToolTipUW::EattingItem()
 				MyCharacter->InventoryComponent->RemoveFromInventory(RowName, 1);
 				MenuWidget->Refresh();
 				this->SetVisibility(ESlateVisibility::Hidden);
+
+				MyCharacter->SetCurHunger(MyCharacter->GetMaxHunger());
+				MyCharacter->SetCurHealth(MyCharacter->GetCurHealth() + 20.f);
 			}
 		}
 	}
