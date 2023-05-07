@@ -15,6 +15,7 @@ constexpr char CS_TEST = 8;
 
 
 
+
 constexpr char SC_LOGIN_INFO = 4;
 constexpr char SC_ADD_PLAYER = 5;
 constexpr char SC_REMOVE_PLAYER = 6;
@@ -22,10 +23,8 @@ constexpr char SC_MOVE_PLAYER = 7;
 constexpr char SC_TEST = 9;
 
 constexpr char TESTPACKET = 10;
+constexpr char CS_LOGIN_TEST = 11;
 
-
-//enum ITEM_TYPE{BRANCH, BUNDLE,ROCK, SEED};
-//enum ITEM_TYPE{APPLE, ORANGE, TRUNK, ROCK, BRAHCN, SEED, IRON, RADISH, GOLD };
 constexpr int APPLE = 0;
 constexpr int ORANGE = 1;
 constexpr int TRUNK = 2;
@@ -60,6 +59,12 @@ struct CS_TEST_PACKET {
 	unsigned char size;
 	char	type;
 	char	test;
+
+};
+struct CS_INGAME_TEST_PACKET {
+	unsigned char size;
+	char	type;
+	bool	isIn;
 
 };
 

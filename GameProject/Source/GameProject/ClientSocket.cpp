@@ -10,12 +10,6 @@ ClientSocket::ClientSocket()
 	PrevRemain = 0;
 
 
-	//SalesItem a = { 1, 2, 3 };
-	//SalesItem b = { 2, 2, 3 };
-	//SalesItem c = { 3, 2, 3 };
-	//Items.Add(a);
-	//Items.Add(b);
-	//Items.Add(c);
 }
 
 ClientSocket::~ClientSocket()
@@ -67,7 +61,6 @@ bool ClientSocket::InitSocket()
 	ioctlsocket(Socket, FIONBIO, &nonBlockingMode);
 
 
-
 	return true;
 
 }
@@ -104,6 +97,26 @@ void ClientSocket::SendTestPacket()
 	}
 
 }
+
+bool ClientSocket::SendIngamePacket()
+{
+	CS_INGAME_TEST_PACKET temp;
+	temp.size = sizeof(CS_INGAME_TEST_PACKET);
+	temp.type = CS_LOGIN_TEST;
+	temp.isIn = true;
+
+	int retval = send(Socket, (const char*)&temp, temp.size, 0);
+	if (retval != 0) {
+		UE_LOG(LogTemp, Warning, TEXT("Client To Server Send IsIngamePacket Success, [%d]"), temp.isIn);
+		PacketRecv();
+		return true;
+	}
+
+	return false;
+
+
+}
+
 
 void ClientSocket::SendTestSalePacket(int item, int num, int price)
 {
@@ -144,9 +157,10 @@ void ClientSocket::PacketRecv()
 		UE_LOG(LogTemp, Warning, TEXT("PacketRecv recv Byte : %d"), retval);
 		UE_LOG(LogTemp, Warning, TEXT("recv packet [size:%d] [type: %d] [remaindata: %d]"), RecvBuf[0], RecvBuf[1],remain_data);
 
-		char* p = RecvBuf;
+
 
 		while (remain_data > 0) {
+			char* p = RecvBuf;
 
 			int packet_size = p[0];
 			UE_LOG(LogTemp, Warning, TEXT("%d  %d"), RecvBuf[0],p[0]);
@@ -167,18 +181,6 @@ void ClientSocket::PacketRecv()
 
 
 	}
-	//패킷재조립하고
-	
-	//if (retval > 0) {
-	//	UE_LOG(LogTemp, Warning, TEXT("noblocing socket get PACKET"));
-	//}
-	//else {
-	//	UE_LOG(LogTemp, Warning, TEXT("noblocing socket doesnt get PACKET"));
-
-	//}
-
-
-	//종류에따라 받는거 처리하기 - 함수를 따로처리하자~~~~
 }
 
 void ClientSocket::ProcessPacket(char* packet)
@@ -199,7 +201,7 @@ void ClientSocket::ProcessPacket(char* packet)
 
 		SalesItem temp1{ p->item,p->testNum,p->testPrice };
 		Items.Add(temp1);
-		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET] %d %d %d %d"), p->size, p->type, p->testNum, p->testPrice);
+		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET] %d %d %d %d"), p->type, p->item, p->testNum, p->testPrice);
 
 	}
 

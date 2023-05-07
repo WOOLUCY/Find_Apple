@@ -15,6 +15,7 @@ struct TestStruc {
 	int recvNum;
 };
 vector<TestStruc> TestVector;
+vector<SC_CS_TESTPACKET> ItemVector;
 
 void process_packet(int c_id, char* packet);
 int PlayerCount = 0;
@@ -194,6 +195,16 @@ void process_packet(int c_id, char* packet)
 
 		break;
 	}
+	case CS_LOGIN_TEST: 
+	{
+		printf("CS_LOGIN_TEST 패킷 도착함%d \n",ItemVector.size());
+		for (int i{ 0 }; i < ItemVector.size(); ++i) {
+			clients[c_id].send(&ItemVector[i]);
+			printf("[%d] %d %d %d\n", c_id, ItemVector[i].item, ItemVector[i].testNum, ItemVector[i].testPrice);
+
+
+		}
+	}
 	case CS_MOVE: {
 		CS_MOVE_PACKET* p = reinterpret_cast<CS_MOVE_PACKET*>(packet);
 		clients[c_id].x = p->direction;
@@ -230,13 +241,14 @@ void process_packet(int c_id, char* packet)
 	case TESTPACKET: {
 		//testpacket 왓다갓다할거임
 
-		printf("어라ㅣ너라ㅣ어라닝eeㄹ");
+		//printf("어라ㅣ너라ㅣ어라닝eeㄹ");
 		SC_CS_TESTPACKET* p = reinterpret_cast<SC_CS_TESTPACKET*>(packet);
 
 		SC_CS_TESTPACKET temp;
 		memcpy(&temp, p, sizeof(SC_CS_TESTPACKET));
 		printf("[TEMP SC_CS_TESTPACKET 받음] %d %d %d %d %d\n", 
 			temp.size, temp.type,temp.item, temp.testNum,temp.testPrice);
+		ItemVector.push_back(temp);
 
 		//모든클라이언트에게 보내보자.
 		for (auto& pl : clients) {

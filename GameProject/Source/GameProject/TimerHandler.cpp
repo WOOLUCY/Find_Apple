@@ -76,8 +76,8 @@ void ATimerHandler::SetGameTime(float DeltaTime)
 
 	static bool flag = true;
 	if ((Today.GetDays() != TimeFormatter.GetDays()) && flag) {
-		UE_LOG(LogTemp, Warning, TEXT("DayChange :%d %d %d %d"),
-			Today.GetDays(), TimeFormatter.GetHours(), TimeFormatter.GetMinutes(), TimeFormatter.GetSeconds());
+		//UE_LOG(LogTemp, Warning, TEXT("DayChange :%d %d %d %d"),
+			//Today.GetDays(), TimeFormatter.GetHours(), TimeFormatter.GetMinutes(), TimeFormatter.GetSeconds());
 
 		UWorld* TheWorld = GetWorld();
 		if (TheWorld != nullptr) {

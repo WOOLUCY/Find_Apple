@@ -20,6 +20,7 @@ public:
 	AFindApplePlayerController();
 
 	UMyGameInstance* MyInstance;
+	bool IsTick;
 
 	virtual void PostInitializeComponents() override;
 	virtual void OnPossess(APawn* pawn) override;
