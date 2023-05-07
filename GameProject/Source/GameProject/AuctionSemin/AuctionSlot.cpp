@@ -85,7 +85,6 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 
 			FString StringName = *ItemName.ToString();
 			if (StringName.Equals(FString(TEXT("apple")))) {
-				UE_LOG(LogTemp, Warning, TEXT("success compare apple"));
 				AuctionEnterWidgetClass->ItmeType = APPLE;
 
 			}

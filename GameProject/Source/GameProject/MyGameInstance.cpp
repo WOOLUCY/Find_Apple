@@ -24,6 +24,15 @@ UMyGameInstance::UMyGameInstance()
 	Sun = FRotator(0, 180, 180);
 
 	//UE_LOG(LogTemp, Warning, TEXT("UMyInstance init??"));
+
+	//if (!MySocket.IsInit) {
+	//	if (MySocket.InitSocket()) {
+	//		MySocket.IsInit = true;
+	//		UE_LOG(LogTemp, Warning, TEXT("UMyGameInstance() init socket sucees"));
+
+	//	}
+	//}
+
 }
 
 void UMyGameInstance::SetCharLoc(FVector Loc)

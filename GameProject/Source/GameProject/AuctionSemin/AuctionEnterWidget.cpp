@@ -37,7 +37,7 @@ UAuctionEnterWidget::UAuctionEnterWidget(const FObjectInitializer& objectInitial
 void UAuctionEnterWidget::ClickedCloseButton()
 {
 	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	MyInstance->MySocket.PacketRecv();
+
 
 	RemoveFromParent();
 
@@ -45,7 +45,7 @@ void UAuctionEnterWidget::ClickedCloseButton()
 
 void UAuctionEnterWidget::ClickedEnterButton()
 {
-	//여기서 서버로 보내줘야함
+	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 	//인벤가지고 있는것도 줄여야함
 	if (ItemDataTable != nullptr)
@@ -69,8 +69,11 @@ void UAuctionEnterWidget::ClickedEnterButton()
 					MyCharacter->InventoryComponent->RemoveFromInventory(RowName, ItemCount);
 					
 					// 보낼 수 있는 개수일 때만 서버한테 보냄
-					static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-					//MyInstance->MySocket.SendTestSalePacket(ItmeType, ItemCount, ItemPrice);
+
+					if (ItmeType >= 0) {
+						MyInstance->MySocket.SendTestSalePacket(ItmeType, ItemCount, ItemPrice);
+						RemoveFromParent();
+					}
 				}
 			}
 		}

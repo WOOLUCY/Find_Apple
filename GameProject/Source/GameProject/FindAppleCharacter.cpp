@@ -188,6 +188,13 @@ AFindAppleCharacter::AFindAppleCharacter()
 		TeleportCaveAction = Input_TeleportCave.Object;
 	}
 
+	/* 5번 누르면 체력과 허기 모두 참 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Cheat(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_Cheat.IA_Cheat'"));
+	if (Input_Cheat.Succeeded())
+	{
+		CheatAction = Input_Cheat.Object;
+	}
+
 	/* 도구 휠 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_WheelUp(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_ToolUp.IA_ToolUp'"));
 	if (Input_WheelUp.Succeeded())
@@ -269,6 +276,12 @@ AFindAppleCharacter::AFindAppleCharacter()
 	}
 
 
+	ConstructorHelpers::FObjectFinder<UTexture>  DirtMaskTexture(TEXT("/Script/Engine.Texture2D'/Game/Woo/Material/T_ScreenDirt02_w.T_ScreenDirt02_w'"));
+	if (DirtMaskTexture.Succeeded())
+	{
+		DirtMask = DirtMaskTexture.Object;
+	}
+
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -285,16 +298,6 @@ AFindAppleCharacter::AFindAppleCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
-
-	/* Post Process Material */
-	PostProcessComp = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcessComponent"));
-	PostProcessComp->SetupAttachment(CameraComponent);
-
-	/* Post Process Effect */
-	FPostProcessSettings settings;
-	settings.BloomIntensity = 5.f;
-	PostProcessComp->Settings = settings;
-
 
 	/* Combat */
 	SetIsAttacked(false);
@@ -679,7 +682,13 @@ void AFindAppleCharacter::TeleportCave(const FInputActionValue& Value)
 	TeleportPointName = FName("CaveOut");
 	MovePointAtTeleport();
 }
- 
+
+void AFindAppleCharacter::Cheat(const FInputActionValue& Value)
+{
+	SetCurHealth(GetMaxHealth());
+	SetCurHunger(GetMaxHunger());
+}
+
 
 void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
 {
@@ -887,8 +896,28 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 	//CurHealth -= 0.5f;
 	//if (CurHealth < 100) {
 	//	UE_LOG(LogTemp, Warning, TEXT("CurHealth<100!!"));
-
 	//}
+
+	/* Post Process Material */
+	// Vigentte
+	float VigentteIntensity = 1.f - (GetCurHealth() / GetMaxHealth());
+	CameraComponent->PostProcessSettings.bOverride_VignetteIntensity = true;
+	CameraComponent->PostProcessSettings.VignetteIntensity = VigentteIntensity;
+
+	// Chromatic
+	float ChromaticIntensity = (1.f - (GetCurHealth() / GetMaxHealth())) * 5.f;
+	CameraComponent->PostProcessSettings.bOverride_SceneFringeIntensity = true;
+	CameraComponent->PostProcessSettings.SceneFringeIntensity = ChromaticIntensity;
+
+	float DirtMaskIntensity = (1.f - 1.f * (GetCurHealth() / GetMaxHealth())) * 8.f;
+	CameraComponent->PostProcessSettings.bOverride_BloomDirtMask = true;
+	CameraComponent->PostProcessSettings.bOverride_BloomDirtMaskIntensity = true;
+	CameraComponent->PostProcessSettings.BloomDirtMask = DirtMask;
+	CameraComponent->PostProcessSettings.BloomDirtMaskIntensity = DirtMaskIntensity;
+
+	// Grain
+	CameraComponent->PostProcessSettings.bOverride_FilmGrainIntensity = true;
+	CameraComponent->PostProcessSettings.FilmGrainIntensity = VigentteIntensity;
 
 	// TODO: 실시간으로 허기가 줄어들게
 
@@ -1015,6 +1044,8 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(TeleportHouseAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportHouse);
 		EnhancedInputComponent->BindAction(TeleportTreeAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportTree);
 		EnhancedInputComponent->BindAction(TeleportCaveAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportCave);
+		EnhancedInputComponent->BindAction(CheatAction, ETriggerEvent::Started, this, &AFindAppleCharacter::Cheat);
+
 
 		//kaon - dash, equipment
 		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);
