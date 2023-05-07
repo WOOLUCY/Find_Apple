@@ -10,6 +10,8 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Components/ScrollBox.h"
+#include "Components/Border.h"
+
 
 #include "../ClientSocket.h"
 #include "../MyGameInstance.h"
@@ -50,33 +52,37 @@ void UTradeWidget::NativeConstruct()
 	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	for (auto& item : MyInstance->MySocket.Items) {
 
-		if (item.Item == 0) {
+		if (item.Item == APPLE) {
 			SelectItemName = FName("apple");
 		}
-		else if (item.Item == 1) {
-			SelectItemName = FName("orange");
+		else if (item.Item == RUBBY) {
+			SelectItemName = FName("Rubby");
 		}
-		else if (item.Item == 2) {
+		else if (item.Item ==TRUNK) {
 			SelectItemName = FName("trunk");
 		}
-		else if (item.Item == 3) {
+		else if (item.Item == ROCK) {
 			SelectItemName = FName("rock");
 		}
-		else if (item.Item == 4) {
+		else if (item.Item == BRAHCN) {
 			SelectItemName = FName("branch");
 		}
-		else if (item.Item == 5) {
+		else if (item.Item == SEED) {
 			SelectItemName = FName("seed");
 		}
-		else if (item.Item == 6) {
-			SelectItemName = FName("gold");
+		else if (item.Item == GOLD) {
+			SelectItemName = FName("Gold");
 		}
-		else if (item.Item == 7) {
-			SelectItemName = FName("steel");
+		else if (item.Item == IRON) {
+			SelectItemName = FName("Iron");
 		}
-		else if (item.Item == 8) {
-			SelectItemName = FName("radish");
+		else if (item.Item == RADISH) {
+			SelectItemName = FName("Radish");
 		}
+		else if (item.Item == SAPPHIRE) {
+			SelectItemName = FName("Sapphire");
+		}
+
 
 		if (ItemDataTable != nullptr)
 		{

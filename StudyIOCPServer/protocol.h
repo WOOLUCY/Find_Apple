@@ -15,6 +15,7 @@ constexpr char CS_TEST = 8;
 
 
 
+
 constexpr char SC_LOGIN_INFO = 4;
 constexpr char SC_ADD_PLAYER = 5;
 constexpr char SC_REMOVE_PLAYER = 6;
@@ -22,12 +23,10 @@ constexpr char SC_MOVE_PLAYER = 7;
 constexpr char SC_TEST = 9;
 
 constexpr char TESTPACKET = 10;
+constexpr char CS_LOGIN_TEST = 11;
 
-
-//enum ITEM_TYPE{BRANCH, BUNDLE,ROCK, SEED};
-//enum ITEM_TYPE{APPLE, ORANGE, TRUNK, ROCK, BRAHCN, SEED, IRON, RADISH, GOLD };
 constexpr int APPLE = 0;
-constexpr int ORANGE = 1;
+constexpr int RUBBY = 1;
 constexpr int TRUNK = 2;
 constexpr int ROCK = 3;
 constexpr int BRAHCN = 4;
@@ -35,6 +34,7 @@ constexpr int SEED = 5;
 constexpr int IRON = 6;
 constexpr int RADISH = 7;
 constexpr int GOLD = 8;
+constexpr int SAPPHIRE = 9;
 
 #pragma pack (push, 1)
 //Client To Server Packets
@@ -60,6 +60,12 @@ struct CS_TEST_PACKET {
 	unsigned char size;
 	char	type;
 	char	test;
+
+};
+struct CS_INGAME_TEST_PACKET {
+	unsigned char size;
+	char	type;
+	bool	isIn;
 
 };
 

@@ -10,7 +10,7 @@
 
 AFindApplePlayerController::AFindApplePlayerController()
 {
-
+	IsTick = false;
 }
 
 void AFindApplePlayerController::PostInitializeComponents()
@@ -33,6 +33,9 @@ void AFindApplePlayerController::BeginPlay()
 		if (!MyInstance->MySocket.IsInit) {
 			if (MyInstance->MySocket.InitSocket()) {
 				MyInstance->MySocket.IsInit = true;
+				if (MyInstance->MySocket.SendIngamePacket()) {
+					IsTick = true;
+				}
 			}
 		}
 	}
@@ -49,5 +52,7 @@ void AFindApplePlayerController::SetupInputComponent()
 void AFindApplePlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
-	MyInstance->MySocket.PacketRecv();
+	if (IsTick) {
+		MyInstance->MySocket.PacketRecv();
+	}
 }
