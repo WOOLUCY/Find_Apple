@@ -42,7 +42,9 @@ public:
 	FDoOnce DoOnce;
 
 	int AttackNum = 0;
-
+	
+	UPROPERTY()
+	bool IsDead = false;
 
 	UPROPERTY(EditAnywhere, Category = "Interaction")
 		UMaterialInterface* Material01 = nullptr;

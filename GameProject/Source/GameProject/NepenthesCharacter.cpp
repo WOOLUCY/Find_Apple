@@ -2,6 +2,8 @@
 
 
 #include "NepenthesCharacter.h"
+#include "Inventory/DropedItem.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 ANepenthesCharacter::ANepenthesCharacter()
@@ -39,6 +41,17 @@ void ANepenthesCharacter::Tick(float DeltaTime)
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 			{
+				if (IsDead == false)
+				{
+					ADropedItem* DropedActor;
+
+					DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), GetActorLocation(), GetActorRotation());
+					DropedActor->CollisionMesh->SetBoxExtent(FVector(30.f, 30.f, 30.f));
+					DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
+					DropedActor->ItemFresh(FName("Seed"));
+					IsDead = true;
+				}
+
 				Destroy();
 			}, 0.8f, false);
 
