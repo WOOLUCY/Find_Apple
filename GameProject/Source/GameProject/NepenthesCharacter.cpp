@@ -9,7 +9,27 @@ ANepenthesCharacter::ANepenthesCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	FString DissolveName = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Dissolve.MI_Dissolve'";
+	FString Material01Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Nepenthes/MI_Nep01.MI_Nep01'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material01Asset(*Material01Name);
+	Material01 = Material01Asset.Object;
+
+	FString Material02Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Nepenthes/MI_Nep02.MI_Nep02'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material02Asset(*Material02Name);
+	Material02 = Material02Asset.Object;
+
+	FString Material03Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Nepenthes/MI_Nep03.MI_Nep03'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material03Asset(*Material03Name);
+	Material03 = Material03Asset.Object;
+
+	FString Material04Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Nepenthes/MI_Nep04.MI_Nep04'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material04Asset(*Material04Name);
+	Material04 = Material04Asset.Object;
+
+	FString Material05Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Nepenthes/MI_Nep05.MI_Nep05'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material05Asset(*Material05Name);
+	Material05 = Material05Asset.Object;
+
+	FString DissolveName = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Nepenthes/MI_Dissolve.MI_Dissolve'";
 	ConstructorHelpers::FObjectFinder<UMaterialInterface> DissolveMaterialAsset(*DissolveName);
 	DissolveMaterial = DissolveMaterialAsset.Object;
 }
@@ -25,10 +45,38 @@ void ANepenthesCharacter::BeginPlay()
 void ANepenthesCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (Health == 100.f)
+	{
+		GetMesh()->SetMaterial(0, Material01);
+	}
+
+	else if (Health == 80.f)
+	{
+		GetMesh()->SetMaterial(0, Material02);
+	}
+
+	else if (Health == 60.f)
+	{
+		GetMesh()->SetMaterial(0, Material03);
+	}
+
+	else if (Health == 40.f)
+	{
+		GetMesh()->SetMaterial(0, Material04);
+	}
+
+	else if (Health == 20.f)
+	{
+		GetMesh()->SetMaterial(0, Material05);
+	}
 
 	// TODO: Destroy Slime
-	if (Health <= 0.f)
+	else if (Health <= 0.f)
 	{
+		for (int i = 0; i < 4; ++i)
+		{
+			GetMesh()->SetMaterial(i, DissolveMaterial);
+		}
 
 		//GetMovementComponent()->StopMovementImmediately();
 		GetMesh()->Stop();
@@ -67,8 +115,8 @@ float ANepenthesCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	{
 		Health -= 20.f;
 
-		UE_LOG(LogClass, Warning, TEXT("Nep Is Attacked"));
-		UE_LOG(LogClass, Warning, TEXT("Nep Current HP: %f"), Health);
+		UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
+		UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
 
 		IsAttacked = false;
 	}
@@ -78,12 +126,14 @@ float ANepenthesCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Da
 			{
 				Health -= 20.f;
 
-				UE_LOG(LogClass, Warning, TEXT("Nep Is Attacked"));
-				UE_LOG(LogClass, Warning, TEXT("Nep Current HP: %f"), Health);
+				UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
+				UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
 
 				IsAttacked = false;
 			}, 0.5f, false);
 	}
+
+
 
 	return Damage;
 }

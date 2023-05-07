@@ -3,14 +3,46 @@
 
 #include "ChestCharacter.h"
 
+#include "FindAppleCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/MeshComponent.h"
 
 // Sets default values
 AChestCharacter::AChestCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	/* Animation */
+	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+	//static ConstructorHelpers::FClassFinder<UAnimInstance> SlimeAnimBP
+	//(TEXT("/Script/Engine.AnimBlueprint'/Game/Monsters/Slime/SlimeAnimBP.SlimeAnimBP_C'"));
+
+	//if (SlimeAnimBP.Succeeded()) {
+	//	GetMesh()->SetAnimInstanceClass(SlimeAnimBP.Class);
+	//}
+
+
+	/* Slime Material Load */
+	FString Material01Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Slime01.MI_Slime01'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material01Asset(*Material01Name);
+	Material01 = Material01Asset.Object;
+
+	FString Material02Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Slime02.MI_Slime02'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material02Asset(*Material02Name);
+	Material02 = Material02Asset.Object;
+
+	FString Material03Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Slime03.MI_Slime03'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material03Asset(*Material03Name);
+	Material03 = Material03Asset.Object;
+
+	FString Material04Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Slime04.MI_Slime04'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material04Asset(*Material04Name);
+	Material04 = Material04Asset.Object;
+
+	FString Material05Name = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Slime05.MI_Slime05'";
+	ConstructorHelpers::FObjectFinder<UMaterialInterface> Material05Asset(*Material05Name);
+	Material05 = Material05Asset.Object;
 
 	FString DissolveName = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Dissolve.MI_Dissolve'";
 	ConstructorHelpers::FObjectFinder<UMaterialInterface> DissolveMaterialAsset(*DissolveName);
@@ -29,9 +61,52 @@ void AChestCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// TODO: Destroy Slime
-	if (Health <= 0.f)
+	if(IsAttacked != true && IsOpen == true)
 	{
+		//IsAttacking = true;
+		//AFindAppleCharacter* MyChar = Cast<AFindAppleCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		//UWorld* TheWorld = GetWorld();
+		//FDamageEvent DamageEvent;
+		//MyChar->TakeDamage(20.f, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), nullptr);
+
+		//IsAttacking = false;
+	}
+
+	if (IsAttacked)
+		IsAttacking = false;
+
+	if (Health == 100.f)
+	{
+		GetMesh()->SetMaterial(0, Material01);
+	}
+
+	else if (Health == 80.f)
+	{
+		GetMesh()->SetMaterial(0, Material02);
+	}
+
+	else if (Health == 60.f)
+	{
+		GetMesh()->SetMaterial(0, Material03);
+	}
+
+	else if (Health == 40.f)
+	{
+		GetMesh()->SetMaterial(0, Material04);
+	}
+
+	else if (Health == 20.f)
+	{
+		GetMesh()->SetMaterial(0, Material05);
+	}
+
+	// TODO: Destroy Slime
+	else if (Health <= 0.f)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			GetMesh()->SetMaterial(i, DissolveMaterial);
+		}
 
 		//GetMovementComponent()->StopMovementImmediately();
 		GetMesh()->Stop();
@@ -45,6 +120,8 @@ void AChestCharacter::Tick(float DeltaTime)
 
 		//Destroy();
 	}
+
+
 }
 
 // Called to bind functionality to input
@@ -69,7 +146,6 @@ float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	{
 		Health -= 20.f;
 
-		UE_LOG(LogClass, Warning, TEXT("Chest Is Attacked"));
 		UE_LOG(LogClass, Warning, TEXT("Chest Current HP: %f"), Health);
 
 		IsAttacked = false;
@@ -78,14 +154,15 @@ float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	{
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 			{
-				Health -= 20.f;
+				Health -= 10.f;
 
-				UE_LOG(LogClass, Warning, TEXT("Chest Is Attacked"));
 				UE_LOG(LogClass, Warning, TEXT("Chest Current HP: %f"), Health);
 
 				IsAttacked = false;
 			}, 0.5f, false);
 	}
+
+
 
 	return Damage;
 }

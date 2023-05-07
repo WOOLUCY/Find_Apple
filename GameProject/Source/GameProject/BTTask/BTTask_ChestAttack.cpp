@@ -28,7 +28,7 @@ EBTNodeResult::Type UBTTask_ChestAttack::ExecuteTask(UBehaviorTreeComponent& Own
 		UWorld* TheWorld = GetWorld();
 		FDamageEvent DamageEvent;
 
-		MyChar->TakeDamage(25.f, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), nullptr);
+		MyChar->TakeDamage(20.f, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), nullptr);
 	}
 
 
