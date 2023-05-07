@@ -36,21 +36,6 @@ public:
 		bool IsAttacking = false;
 
 	UPROPERTY(EditAnywhere, Category = "Interaction")
-		UMaterialInterface* Material01 = nullptr;
-
-	UPROPERTY(EditAnywhere, Category = "Interaction")
-		UMaterialInterface* Material02 = nullptr;
-
-	UPROPERTY(EditAnywhere, Category = "Interaction")
-		UMaterialInterface* Material03 = nullptr;
-
-	UPROPERTY(EditAnywhere, Category = "Interaction")
-		UMaterialInterface* Material04 = nullptr;
-
-	UPROPERTY(EditAnywhere, Category = "Interaction")
-		UMaterialInterface* Material05 = nullptr;
-
-	UPROPERTY(EditAnywhere, Category = "Interaction")
 		UMaterialInterface* DissolveMaterial = nullptr;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
