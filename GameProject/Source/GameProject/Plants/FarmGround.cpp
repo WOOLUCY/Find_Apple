@@ -67,7 +67,7 @@ AFarmGround::AFarmGround()
 		PlantWidgetClass = PLANT_WIDGET.Class;
 	}
 
-
+	// ItemDataTable
 	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
 	if (DataTable.Succeeded())
 	{

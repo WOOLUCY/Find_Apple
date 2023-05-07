@@ -47,7 +47,6 @@ void UPlantWidget::PutSeed()
 
 			if (RowName == FName("Seed"))
 			{
-				/* 캐릭터 체력 증가하도록 구현하기 */
 				AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 				AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 				MyCharacter->InventoryComponent->RemoveFromInventory(RowName, 1);
