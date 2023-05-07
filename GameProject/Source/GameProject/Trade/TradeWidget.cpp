@@ -2,11 +2,15 @@
 
 
 #include "TradeWidget.h"
+#include "TradePriceSlot.h"
 #include "../AuctionSemin/AuctionEnterWidget.h"
 #include "../AuctionSemin/AuctionMenuTab.h"
 #include "../AuctionSemin/AuctionSelectSlot.h"
 #include "../AuctionSemin/AuctionSlot.h"
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
+#include "Components/ScrollBox.h"
+
 #include "../ClientSocket.h"
 #include "../MyGameInstance.h"
 #include "TradeListWidget.h"
@@ -29,6 +33,12 @@ UTradeWidget::UTradeWidget(const FObjectInitializer& objectInitializer) : Super(
 	if (DataTable.Succeeded())
 	{
 		ItemDataTable = DataTable.Object;
+	}
+
+	ConstructorHelpers::FClassFinder<UAuctionEnterWidget> EnterWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Auction/WBP_AuctionAll.WBP_AuctionAll_C'"));
+	if (EnterWidget.Succeeded())
+	{
+		AuctionWidgetClass = EnterWidget.Class;
 	}
 }
 
@@ -106,8 +116,7 @@ void UTradeWidget::NativeConstruct()
 
 void UTradeWidget::TradeButtonClick()
 {
-	if (AuctionWidgetUIObject != NULL) {
-		AuctionWidgetUIObject->AddToViewport();
-		AuctionWidgetUIObject->TradeWidgetUIObject = this;
-	}
+	AuctionWidgetUIObject = CreateWidget<UAuctionEnterWidget>(GetWorld(), AuctionWidgetClass);
+	AuctionWidgetUIObject->AddToViewport();
+	AuctionWidgetUIObject->TradeWidgetUIObject = this;
 }
