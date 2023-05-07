@@ -201,8 +201,11 @@ public:
 	bool bPauseWidget = false;
 
 	/* Post Process Effect */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PostProcessMaterial")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PostProcess")
 	class UPostProcessComponent* PostProcessComp;
+
+	UPROPERTY(EditAnywhere, Category = "PostProcess")
+	class UTexture* DirtMask;
 
 	/* Camera Shake */
 	UPROPERTY(EditAnywhere, Category = "Combat")

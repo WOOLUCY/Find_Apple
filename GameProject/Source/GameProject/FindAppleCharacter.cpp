@@ -269,6 +269,12 @@ AFindAppleCharacter::AFindAppleCharacter()
 	}
 
 
+	ConstructorHelpers::FObjectFinder<UTexture>  DirtMaskTexture(TEXT("/Script/Engine.Texture2D'/Game/Woo/Material/T_ScreenDirt02_w.T_ScreenDirt02_w'"));
+	if (DirtMaskTexture.Succeeded())
+	{
+		DirtMask = DirtMaskTexture.Object;
+	}
+
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -285,16 +291,6 @@ AFindAppleCharacter::AFindAppleCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 360.f, 0.f);
-
-	/* Post Process Material */
-	PostProcessComp = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcessComponent"));
-	PostProcessComp->SetupAttachment(CameraComponent);
-
-	/* Post Process Effect */
-	FPostProcessSettings settings;
-	settings.BloomIntensity = 5.f;
-	PostProcessComp->Settings = settings;
-
 
 	/* Combat */
 	SetIsAttacked(false);
@@ -887,8 +883,28 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 	//CurHealth -= 0.5f;
 	//if (CurHealth < 100) {
 	//	UE_LOG(LogTemp, Warning, TEXT("CurHealth<100!!"));
-
 	//}
+
+	/* Post Process Material */
+	// Vigentte
+	float VigentteIntensity = 1.f - (GetCurHealth() / GetMaxHealth());
+	CameraComponent->PostProcessSettings.bOverride_VignetteIntensity = true;
+	CameraComponent->PostProcessSettings.VignetteIntensity = VigentteIntensity;
+
+	// Chromatic
+	float ChromaticIntensity = (1.f - (GetCurHealth() / GetMaxHealth())) * 5.f;
+	CameraComponent->PostProcessSettings.bOverride_SceneFringeIntensity = true;
+	CameraComponent->PostProcessSettings.SceneFringeIntensity = ChromaticIntensity;
+
+	float DirtMaskIntensity = (1.f - 1.f * (GetCurHealth() / GetMaxHealth())) * 8.f;
+	CameraComponent->PostProcessSettings.bOverride_BloomDirtMask = true;
+	CameraComponent->PostProcessSettings.bOverride_BloomDirtMaskIntensity = true;
+	CameraComponent->PostProcessSettings.BloomDirtMask = DirtMask;
+	CameraComponent->PostProcessSettings.BloomDirtMaskIntensity = DirtMaskIntensity;
+
+	// Grain
+	CameraComponent->PostProcessSettings.bOverride_FilmGrainIntensity = true;
+	CameraComponent->PostProcessSettings.FilmGrainIntensity = VigentteIntensity;
 
 	// TODO: 실시간으로 허기가 줄어들게
 
