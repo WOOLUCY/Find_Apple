@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "MyGameInstance.h"
 
 #include "FindApplePlayerController.generated.h"
 
@@ -18,10 +19,13 @@ public:
 
 	AFindApplePlayerController();
 
+	UMyGameInstance* MyInstance;
 
 	virtual void PostInitializeComponents() override;
 	virtual void OnPossess(APawn* pawn) override;
 	virtual void BeginPlay() override;
+
+	virtual void PlayerTick(float DeltaTime) override;
 
 
 protected:
