@@ -26,7 +26,7 @@ constexpr char TESTPACKET = 10;
 constexpr char CS_LOGIN_TEST = 11;
 
 constexpr int APPLE = 0;
-constexpr int ORANGE = 1;
+constexpr int RUBBY = 1;
 constexpr int TRUNK = 2;
 constexpr int ROCK = 3;
 constexpr int BRAHCN = 4;
@@ -34,6 +34,7 @@ constexpr int SEED = 5;
 constexpr int IRON = 6;
 constexpr int RADISH = 7;
 constexpr int GOLD = 8;
+constexpr int SAPPHIRE = 9;
 
 #pragma pack (push, 1)
 //Client To Server Packets

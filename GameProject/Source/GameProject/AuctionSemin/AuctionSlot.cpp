@@ -127,6 +127,10 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 				AuctionEnterWidgetClass->ItmeType = SAPPHIRE;
 
 			}
+			else if (StringName.Equals(FString(TEXT("apple")))) {
+				AuctionEnterWidgetClass->ItmeType = APPLE;
+
+			}
 
 			else {
 				AuctionEnterWidgetClass->ItmeType = -1;
