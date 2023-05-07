@@ -18,12 +18,15 @@ public:
 	UTradeWidget(const FObjectInitializer& objectInitializer);
 	virtual void NativeConstruct() override;
 
+
 	/* 판매하기 버튼 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* TradeButton;
 
 	enum ITEM_TYPE { APPLE, ORANGE, FIREWOOD, ROCK, BRAHCN, SEED, GOLD, STEEL, RADISH };
-	// Semin 
+	// Semin =
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> AuctionWidgetClass;
 	UPROPERTY()
 	class UAuctionEnterWidget* AuctionWidgetUIObject;
 
@@ -40,7 +43,6 @@ public:
 	FName SelectItemName;
 
 	TArray<struct FInventoryTableRow*> InventoryData;
-
 	UPROPERTY()
 	TSubclassOf<class UUserWidget> TradeListWidgetClass;
 	UPROPERTY()
@@ -58,4 +60,8 @@ public:
 	/* Click Action */
 	UFUNCTION()
 	void TradeButtonClick();
+
+	UFUNCTION()
+	void Refrest();
+
 };

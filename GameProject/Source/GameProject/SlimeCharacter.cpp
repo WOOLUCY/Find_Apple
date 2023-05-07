@@ -5,6 +5,8 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Components/MeshComponent.h"
+#include "Inventory/DropedItem.h"
+#include "Components/BoxComponent.h"
 //#include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values
@@ -102,6 +104,14 @@ void ASlimeCharacter::Tick(float DeltaTime)
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 			{
+				ADropedItem* DropedActor;
+				FActorSpawnParameters SpawnParams;
+
+				DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), GetActorLocation(), GetActorRotation(), SpawnParams);
+				DropedActor->CollisionMesh->SetBoxExtent(FVector(30.f, 30.f, 30.f));
+				DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
+				DropedActor->ItemFresh(FName("Seed"));
+
 				Destroy();
 			}, 0.8f, false);
 

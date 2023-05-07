@@ -3,7 +3,6 @@
 
 #include "FindApplePlayerController.h"
 #include "Kismet/GameplayStatics.h"
-#include "MyGameInstance.h"
 
 
 #include "Blueprint/UserWidget.h"
@@ -29,11 +28,11 @@ void AFindApplePlayerController::OnPossess(APawn* pawn)
 void AFindApplePlayerController::BeginPlay()
 {
 
-	auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (GameInstance != nullptr) {
-		if (!GameInstance->MySocket.IsInit) {
-			if (GameInstance->MySocket.InitSocket()) {
-				GameInstance->MySocket.IsInit = true;
+	MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (MyInstance != nullptr) {
+		if (!MyInstance->MySocket.IsInit) {
+			if (MyInstance->MySocket.InitSocket()) {
+				MyInstance->MySocket.IsInit = true;
 			}
 		}
 	}
@@ -46,4 +45,9 @@ void AFindApplePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
+}
+void AFindApplePlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	MyInstance->MySocket.PacketRecv();
 }

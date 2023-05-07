@@ -17,6 +17,28 @@ struct TestStruc {
 vector<TestStruc> TestVector;
 
 void process_packet(int c_id, char* packet);
+int PlayerCount = 0;
+
+
+
+void disconnect(int c_id)
+{
+	//for (auto& pl : clients) {
+	//	{
+	//		lock_guard<mutex> ll(pl._s_lock);
+	//		if (ST_INGAME != pl._state) continue;
+	//	}
+	//	if (pl._id == c_id) continue;
+	//	pl.send_remove_player_packet(c_id);
+	//}
+
+	printf("Disconnect Call\n");
+	PlayerCount -= 1;
+	closesocket(clients[c_id].socket);
+
+//	lock_guard<mutex> ll(clients[c_id]._s_lock);
+//	clients[c_id]._state = ST_FREE;
+}
 
 
 //using namespace std;
@@ -67,13 +89,31 @@ int main()
 		BOOL ret = GetQueuedCompletionStatus(h_iocp, &num_bytes, &key, &over, INFINITE);
 		EXP_OVER* ex_over = reinterpret_cast<EXP_OVER*>(over);
 
-		static int count = 0;
+		if (FALSE == ret) {
+			if (ex_over->comeType == OP_ACCEPT) cout << "Accept Error";
+			else {
+				
+				cout << "GQCS Error on client[" << key << "]\n";
+				disconnect(static_cast<int>(key));
+				if (ex_over->comeType == OP_SEND) delete ex_over;
+				continue;
+			}
+		}
+
+
+		if ((0 == num_bytes) && ((ex_over->comeType == OP_RECV) || (ex_over->comeType == OP_SEND))) {
+			disconnect(static_cast<int>(key));
+			if (ex_over->comeType == OP_SEND) delete ex_over;
+			continue;
+		}
+
+
 
 		switch (ex_over->comeType) {
 		case OP_ACCEPT: {
 			printf("OP_ACCETP함수 호출\n");
 
-			int client_id = count++;
+			int client_id = PlayerCount++;
 			if (client_id != -1) {
 				//	clients[client_id].in_use = true;
 				clients[client_id].x = 0;
@@ -94,7 +134,7 @@ int main()
 			}
 			ZeroMemory(&a_over.Over, sizeof(a_over.Over));
 			AcceptEx(listenSock, ClientSock, a_over.sendBuf, 0, addr_size + 16, addr_size + 16, 0, &a_over.Over);
-			cout << "접속인원 총 : " << count << endl;
+			cout << "접속인원 총 : " << PlayerCount << endl;
 
 			break;
 		}
@@ -201,6 +241,7 @@ void process_packet(int c_id, char* packet)
 		//모든클라이언트에게 보내보자.
 		for (auto& pl : clients) {
 			if (pl.id >= 0) {
+			//	if (pl.id == c_id) continue;
 				pl.send(&temp);
 				printf("[%d] - [SC_CS_TESTPACKET 보냄] %d %d %d %d %d\n", 
 					pl.id, temp.size,temp.type, temp.item, temp.testNum,temp.testPrice);
