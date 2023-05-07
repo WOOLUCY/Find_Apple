@@ -27,9 +27,21 @@
  */
 
 
-//PROTOCL
+//PROTOCL START
+
+
 constexpr char TESTPACKET = 10;
-//enum ITEM_TYPE { APPLE, ORANGE, FIREWOOD, ROCK, BRAHCN, SEED, GOLD, STEEL, RADISH };
+constexpr char CS_LOGIN = 0;
+
+constexpr int APPLE = 0;
+constexpr int ORANGE = 1;
+constexpr int TRUNK = 2;
+constexpr int ROCK = 3;
+constexpr int BRAHCN = 4;
+constexpr int SEED = 5;
+constexpr int IRON = 6;
+constexpr int RADISH = 7;
+constexpr int GOLD = 8;
 
 #pragma pack (push, 1)
 
@@ -41,6 +53,12 @@ struct SC_CS_TESTPACKET {
 	int		testPrice;
 
 };
+struct CS_LOGIN_PACKET {
+	unsigned char size;
+	char	type;
+	char	name[20];
+};
+
 #pragma pack (pop)
 
 struct SalesItem {
@@ -48,6 +66,9 @@ struct SalesItem {
 	int Num;
 	int Price;
 };
+
+
+//PROTOCOL END 
 
 
 class GAMEPROJECT_API ClientSocket

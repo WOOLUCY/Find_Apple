@@ -218,6 +218,8 @@ void AFarmGround::Harvest()
 	if (Planted->Harvest()) {
 		UE_LOG(LogTemp, Warning, TEXT("AFarmGround Call Harvest"));
 		IsWet = false;
+		Mesh->SetMaterial(0, NotWet);
+
 		IsEmpty = true;
 		Planted = nullptr;
 	}

@@ -16,6 +16,10 @@ struct TestStruc {
 };
 vector<TestStruc> TestVector;
 
+//테스트
+vector<SC_CS_TESTPACKET> ItemList;
+
+
 void process_packet(int c_id, char* packet);
 int PlayerCount = 0;
 
@@ -177,20 +181,17 @@ void process_packet(int c_id, char* packet)
 	//받은 패킷 처리하는거임 
 	switch (packet[1]) { //패킷 type을 본다.
 	case CS_LOGIN: {
+		printf("CS_LOGIN 함수 호출함\n");
+
 		CS_LOGIN_PACKET* p = reinterpret_cast<CS_LOGIN_PACKET*>(packet);
 		strcpy(clients[c_id].name, p->name);
-		clients[c_id].send_login_info_packet();
+		//clients[c_id].send_login_info_packet();
 
-		//로그인정보 모두에게 보내준다.ㄱ느데 우리는 필요없을듯??
+		for (SC_CS_TESTPACKET& item : ItemList) {
+			clients[c_id].send(&item);
+			printf("[LOGIN] send itemlist : %d %d  %d\n", item.item, item.testNum, item.testPrice);
+		}
 
-		SC_ADD_PLAYER_PACKET add_packet;
-		add_packet.id = c_id;
-		strcpy_s(add_packet.name, p->name);
-		add_packet.size = sizeof(add_packet);
-		add_packet.type = SC_ADD_PLAYER;
-		add_packet.x = clients[c_id].x;
-		add_packet.y = clients[c_id].y;
-		printf("CS_LOGIN 함수 호출함\n");
 
 		break;
 	}
@@ -230,13 +231,14 @@ void process_packet(int c_id, char* packet)
 	case TESTPACKET: {
 		//testpacket 왓다갓다할거임
 
-		printf("어라ㅣ너라ㅣ어라닝eeㄹ");
 		SC_CS_TESTPACKET* p = reinterpret_cast<SC_CS_TESTPACKET*>(packet);
-
 		SC_CS_TESTPACKET temp;
 		memcpy(&temp, p, sizeof(SC_CS_TESTPACKET));
 		printf("[TEMP SC_CS_TESTPACKET 받음] %d %d %d %d %d\n", 
 			temp.size, temp.type,temp.item, temp.testNum,temp.testPrice);
+
+
+		ItemList.push_back(temp);
 
 		//모든클라이언트에게 보내보자.
 		for (auto& pl : clients) {

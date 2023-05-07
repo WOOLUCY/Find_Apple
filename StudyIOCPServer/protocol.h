@@ -13,8 +13,6 @@ constexpr char CS_GETITEM = 2;
 constexpr char CS_THROWITEM = 3;
 constexpr char CS_TEST = 8;
 
-
-
 constexpr char SC_LOGIN_INFO = 4;
 constexpr char SC_ADD_PLAYER = 5;
 constexpr char SC_REMOVE_PLAYER = 6;
@@ -62,6 +60,7 @@ struct CS_TEST_PACKET {
 	char	test;
 
 };
+
 
 
 //Server To Client Packets

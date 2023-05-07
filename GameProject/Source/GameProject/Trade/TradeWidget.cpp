@@ -10,6 +10,8 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Components/ScrollBox.h"
+#include "Components/Border.h"
+
 
 #include "../ClientSocket.h"
 #include "../MyGameInstance.h"
@@ -49,8 +51,6 @@ void UTradeWidget::NativeConstruct()
 	TradeButton->OnClicked.AddDynamic(this, &UTradeWidget::TradeButtonClick);
 
 	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	//Items = MyInstance->MySocket->items;
-	//Items = MyInstance->MySocket.Items;
 
 	for (auto& item : MyInstance->MySocket.Items ) {
 		UE_LOG(LogTemp, Warning, TEXT("%d %d %d"), item.Item, item.Num, item.Price);
@@ -77,7 +77,7 @@ void UTradeWidget::NativeConstruct()
 			SelectItemName = FName("gold");
 		}
 		else if (item.Item == 7) {
-			SelectItemName = FName("steel");
+			SelectItemName = FName("Iron");
 		}
 		else if (item.Item == 8) {
 			SelectItemName = FName("radish");

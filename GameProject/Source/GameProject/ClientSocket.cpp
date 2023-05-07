@@ -9,18 +9,11 @@ ClientSocket::ClientSocket()
 	memset(RecvBuf, BUFSIZE, 0);
 	PrevRemain = 0;
 
-
-	//SalesItem a = { 1, 2, 3 };
-	//SalesItem b = { 2, 2, 3 };
-	//SalesItem c = { 3, 2, 3 };
-	//Items.Add(a);
-	//Items.Add(b);
-	//Items.Add(c);
 }
 
 ClientSocket::~ClientSocket()
 {
-	UE_LOG(LogTemp, Warning, TEXT("CloseSocket????"));
+	UE_LOG(LogTemp, Warning, TEXT("CloseSocket"));
 	Items.Reset();
 	memset(RecvBuf, 0, sizeof(BUFSIZE));
 
@@ -74,6 +67,19 @@ bool ClientSocket::InitSocket()
 
 void ClientSocket::SendLoginPacket()
 {
+	CS_LOGIN_PACKET login;
+	login.size = sizeof(CS_LOGIN_PACKET);
+	login.type = CS_LOGIN;
+	const char* str = "helloword";
+	strcpy(login.name, str);
+
+	int retval = send(Socket, (const char*)&login, login.size, 0);
+	if (retval != 0) {
+		UE_LOG(LogTemp, Warning,TEXT("Client To Server LoginPacekt Send Success [%d %d]"), login.size, login.type);
+
+	}
+
+
 }
 
 void ClientSocket::SendMovePacket()
@@ -167,30 +173,18 @@ void ClientSocket::PacketRecv()
 
 
 	}
-	//패킷재조립하고
-	
-	//if (retval > 0) {
-	//	UE_LOG(LogTemp, Warning, TEXT("noblocing socket get PACKET"));
-	//}
-	//else {
-	//	UE_LOG(LogTemp, Warning, TEXT("noblocing socket doesnt get PACKET"));
 
-	//}
-
-
-	//종류에따라 받는거 처리하기 - 함수를 따로처리하자~~~~
 }
 
 void ClientSocket::ProcessPacket(char* packet)
 {
-//	UE_LOG(LogTemp, Warning, TEXT("ProcessPacket??? %d %d "), packet[0], packet[1]);
 	//packet type에따라 처리해주는거임 
 	int PacketSize = packet[0];
 	//int PacketType = ;
 
-	//받은 패킷 처리하는거임 
+	//받은 패킷 type에 따라 처리하는거임 
 	switch (packet[1])
-	{ //패킷 type을 본다.
+	{ 
 
 	case TESTPACKET:
 	{

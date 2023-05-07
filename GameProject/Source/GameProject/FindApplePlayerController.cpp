@@ -33,6 +33,10 @@ void AFindApplePlayerController::BeginPlay()
 		if (!MyInstance->MySocket.IsInit) {
 			if (MyInstance->MySocket.InitSocket()) {
 				MyInstance->MySocket.IsInit = true;
+
+
+				MyInstance->MySocket.SendLoginPacket();
+				
 			}
 		}
 	}
