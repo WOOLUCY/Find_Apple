@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "DoorWidget.h"
@@ -30,7 +30,7 @@ void UDoorWidget::NativeConstruct()
 	TextBlock = Cast<UTextBlock>(GetWidgetFromName(TEXT("Explanation")));
 
 	if (TextBlock != nullptr) {
-		TextBlock->SetText(FText::FromString(TEXT("Would you like to enter?")));
+		TextBlock->SetText(FText::FromString(TEXT("들어가시겠습니까?")));
 	}
 
 

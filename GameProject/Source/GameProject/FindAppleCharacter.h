@@ -71,6 +71,8 @@ protected:
 	UInputAction* TeleportDungeonAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* TeleportHouseAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* TeleportCaveAction;
 
 	// W: Pause Menu
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
@@ -113,6 +115,7 @@ protected:
 	void TeleportTree(const FInputActionValue& Value);
 	void TeleportDungeon(const FInputActionValue& Value);
 	void TeleportHouse(const FInputActionValue& Value);
+	void TeleportCave(const FInputActionValue& Value);
 
 	void EquipSword(const FInputActionValue& Value);
 	void EquipAx(const FInputActionValue& Value);

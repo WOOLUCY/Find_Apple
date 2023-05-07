@@ -181,6 +181,12 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		TeleportHouseAction= Input_TeleportHouse.Object;
 	}
+	/* 4 번 누르면 퀘스트 npc 집 앞으로 감 */
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_TeleportCave(TEXT("/Script/EnhancedInput.InputAction'/Game/Semin/KeyInput/IA_TeleportCave.IA_TeleportCave'"));
+	if (Input_TeleportCave.Succeeded())
+	{
+		TeleportCaveAction = Input_TeleportCave.Object;
+	}
 
 	/* 도구 휠 */
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input_WheelUp(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_ToolUp.IA_ToolUp'"));
@@ -667,6 +673,12 @@ void AFindAppleCharacter::TeleportHouse(const FInputActionValue& Value)
 	TeleportPointName = FName("HEROHouseOut");
 	MovePointAtTeleport();
 }
+
+void AFindAppleCharacter::TeleportCave(const FInputActionValue& Value)
+{
+	TeleportPointName = FName("CaveOut");
+	MovePointAtTeleport();
+}
  
 
 void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
@@ -1002,6 +1014,7 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(TeleportDungeonAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportDungeon);
 		EnhancedInputComponent->BindAction(TeleportHouseAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportHouse);
 		EnhancedInputComponent->BindAction(TeleportTreeAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportTree);
+		EnhancedInputComponent->BindAction(TeleportCaveAction, ETriggerEvent::Started, this, &AFindAppleCharacter::TeleportCave);
 
 		//kaon - dash, equipment
 		EnhancedInputComponent->BindAction(DashMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::ChangeSpeed);
