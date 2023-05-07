@@ -1,3 +1,4 @@
+#pragma once
 constexpr int PORT_NUM = 4000;
 constexpr int BUF_SIZE = 200;
 constexpr int NAME_LEN = 20;
@@ -24,7 +25,16 @@ constexpr char TESTPACKET = 10;
 
 
 //enum ITEM_TYPE{BRANCH, BUNDLE,ROCK, SEED};
-enum ITEM_TYPE{APPLE=0, ORANGE,BRANCH, ROCK, BRAHCN, SEED,GOLD, STEEL, RADISH };
+//enum ITEM_TYPE{APPLE, ORANGE, TRUNK, ROCK, BRAHCN, SEED, IRON, RADISH, GOLD };
+constexpr int APPLE = 0;
+constexpr int ORANGE = 1;
+constexpr int TRUNK = 2;
+constexpr int ROCK = 3;
+constexpr int BRAHCN = 4;
+constexpr int SEED = 5;
+constexpr int IRON = 6;
+constexpr int RADISH = 7;
+constexpr int GOLD = 8;
 
 #pragma pack (push, 1)
 //Client To Server Packets
