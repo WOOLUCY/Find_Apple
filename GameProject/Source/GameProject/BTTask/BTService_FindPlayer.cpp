@@ -2,7 +2,7 @@
 
 
 #include "BTService_FindPlayer.h"
-#include "../EnemyAIController.h"
+#include "../AIController/EnemyAIController.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 
 UBTService_FindPlayer::UBTService_FindPlayer()
