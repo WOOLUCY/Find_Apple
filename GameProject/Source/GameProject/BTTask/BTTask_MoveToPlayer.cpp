@@ -2,7 +2,7 @@
 
 
 #include "BTTask_MoveToPlayer.h"
-#include "../EnemyAIController.h"
+#include "../AIController/EnemyAIController.h"
 #include "GameFramework/Character.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 
