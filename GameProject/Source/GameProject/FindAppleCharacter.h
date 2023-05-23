@@ -205,9 +205,6 @@ public:
 	bool bPauseWidget = false;
 
 	/* Post Process Effect */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PostProcess")
-	class UPostProcessComponent* PostProcessComp;
-
 	UPROPERTY(EditAnywhere, Category = "PostProcess")
 	class UTexture* DirtMask;
 
@@ -221,8 +218,6 @@ public:
 	float GetMaxHunger() { return MaxHunger; }
 
 	/* Combat */
-	//UPROPERTY(EditAnywhere, Category = "Combat")
-	//bool IsAttacking = false;
 	UFUNCTION()
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void DamageReaction(float DamageAmount);
