@@ -25,6 +25,7 @@ public:
 	//¸ùÅ¸ÁÖ 
 	void PlayActionMontage();
 	void PlayPlantMontage();
+	void PlayRodMontage();
 
 
 private:
@@ -37,6 +38,8 @@ private:
 		UAnimMontage* ActionMontage;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* PlantMontage;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* RodMontage;
 
 	FTimerHandle TimerHandle;
 

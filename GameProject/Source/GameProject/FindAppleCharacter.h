@@ -8,6 +8,7 @@
 #include "Sword.h"
 #include "Pick.h"
 #include "Ax.h"
+#include "FishingRod.h"
 #include "DoOnce.h"
 
 
@@ -99,6 +100,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 		UInputAction* ResetEquipMapping;
 
+	// W: ≥¨ΩÀ¥Î º±≈√
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* RodMapping;
 
 
 	void MoveForward(const FInputActionValue& Value);
@@ -124,11 +128,13 @@ protected:
 	void EquipSword(const FInputActionValue& Value);
 	void EquipAx(const FInputActionValue& Value);
 	void EquipPick(const FInputActionValue& Value);
+	void EquipRod(const FInputActionValue& Value);
 	void EquipReset(const FInputActionValue& Value);
 	void ChangeSpeed(const FInputActionValue& Value);
 
 	void UpEquip(const FInputActionValue& Value);
 	void DownEquip(const FInputActionValue& Value);
+	void ApplyEquip(const FInputActionValue& Value);
 
 
 public:	
@@ -311,4 +317,3 @@ private:
 	bool isEquipOwn = false;
 
 };
-

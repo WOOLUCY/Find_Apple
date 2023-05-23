@@ -26,8 +26,11 @@ UFindAppleAnimInstance::UFindAppleAnimInstance()
 		PlantMontage = PLANT_MON.Object;
 	}
 
-
-
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ROD_MON
+	(TEXT("/Script/Engine.AnimMontage'/Game/Characters/Hero/FishingMontage.FishingMontage'"));
+	if (ROD_MON.Succeeded()) {
+		RodMontage = ROD_MON.Object;
+	}
 
 }
 
@@ -88,6 +91,25 @@ void UFindAppleAnimInstance::PlayPlantMontage()
 	}
 
 
+}
+
+void UFindAppleAnimInstance::PlayRodMontage()
+{
+	static float PlayLength = PlantMontage->GetPlayLength() / (PlaySpeed * 1.f);
+
+	if (OffInput()) {
+		Montage_Play(RodMontage, PlaySpeed);
+		UWorld* World = GetWorld();
+		if (World) {
+			UE_LOG(LogTemp, Warning, TEXT("Fishing Rod Casting"));
+
+			FTimerManager& TimerManager = World->GetTimerManager();
+
+			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 0.2f, false);
+		}
+
+	}
+	// 애니메이션이 끝나면 입력 활성화
 }
 
 bool UFindAppleAnimInstance::OffInput()

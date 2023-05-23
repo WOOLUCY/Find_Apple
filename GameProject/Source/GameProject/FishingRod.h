@@ -35,4 +35,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void SetRodVisibility(bool _in);
+	void SetMesh(UStaticMesh* Mesh);
 };

@@ -40,3 +40,9 @@ void AFishingRod::SetRodVisibility(bool _in)
 	Rod->SetVisibility(_in);
 }
 
+void AFishingRod::SetMesh(UStaticMesh* Mesh)
+{
+	Rod->SetStaticMesh(Mesh);
+	UE_LOG(LogTemp, Warning, TEXT("Set Rod Model"));
+}
+
