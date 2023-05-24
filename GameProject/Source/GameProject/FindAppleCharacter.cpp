@@ -1167,8 +1167,11 @@ void AFindAppleCharacter::Action()
 	else {
 		if (CurEquipNum == 4 && isEquipOwn)
 		{
-			Anim->PlayRodMontage();
-			IsAction = true;
+			if (GetIsFishing())
+			{
+				Anim->PlayRodMontage();
+				IsAction = true;
+			}
 		}
 		else if (CurEquipNum != 0 && isEquipOwn) {
 			Anim->PlayActionMontage();

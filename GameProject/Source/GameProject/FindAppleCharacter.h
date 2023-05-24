@@ -183,7 +183,6 @@ public:
 
 	TArray<struct FInventoryTableRow*> InventoryData;
 
-
 	/* Quest System */
 	//UPROPERTY()
 	//TSubclassOf<class UUserWidget> QuestListWidgetClass;
@@ -245,6 +244,9 @@ public:
 
 	bool GetIsRunning() { return bIsRunning; }
 	void SetIsRunning(bool _in) { bIsRunning = _in; }
+
+	bool GetIsFishing() const { return bIsFishing; }
+	void SetIsFishing(bool _in) { bIsFishing = _in; }
 	
 	
 public:
@@ -305,6 +307,10 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float CurHunger;
+
+	// Fishing
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsFishing;
 
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))

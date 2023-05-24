@@ -95,17 +95,17 @@ void UFindAppleAnimInstance::PlayPlantMontage()
 
 void UFindAppleAnimInstance::PlayRodMontage()
 {
-	static float PlayLength = PlantMontage->GetPlayLength() / (PlaySpeed * 1.f);
+	static float PlayLength = RodMontage->GetPlayLength() / (PlaySpeed * 1.5f);
 
 	if (OffInput()) {
-		Montage_Play(RodMontage, PlaySpeed);
+		Montage_Play(RodMontage, 1.f);
 		UWorld* World = GetWorld();
 		if (World) {
 			UE_LOG(LogTemp, Warning, TEXT("Fishing Rod Casting"));
 
 			FTimerManager& TimerManager = World->GetTimerManager();
 
-			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 0.2f, false);
+			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 3.f, false);
 		}
 
 	}

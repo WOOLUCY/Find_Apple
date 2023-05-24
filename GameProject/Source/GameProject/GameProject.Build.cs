@@ -8,12 +8,12 @@ public class GameProject : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "UMG", "AIModule", "GameplayTasks", "SlateCore", "EnhancedInput", "Niagara", "LevelSequence", "MovieScene" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "UMG", "AIModule", "GameplayTasks", "SlateCore", "EnhancedInput", "Niagara", "LevelSequence", "MovieScene", "CableComponent" });
 
 		PrivateDependencyModuleNames.AddRange(
 			new string[] {
-				"EnhancedInput"
-			}
+				"EnhancedInput", "CableComponent"
+            }
 		);
 
 	}
