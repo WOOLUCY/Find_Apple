@@ -17,9 +17,20 @@ class GAMEPROJECT_API AStartLevelScriptActor : public ALevelScriptActor
 public:
 	AStartLevelScriptActor();
 
+	virtual void PostInitializeComponents() override;
+
 	virtual void BeginPlay() override;
 
+public:
+	// sound 
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* backgoundMusicAudioCue;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* backgoundMusicAudioComponent;
+
 private:
+	
 	/* Start Widget Class */
 	UPROPERTY()
 	TSubclassOf<class UUserWidget> GameStartWidgetClass;
