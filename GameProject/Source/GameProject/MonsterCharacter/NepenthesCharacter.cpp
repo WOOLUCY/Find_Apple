@@ -3,6 +3,8 @@
 
 #include "NepenthesCharacter.h"
 #include "../Inventory/DropedItem.h"
+#include "Kismet/GameplayStatics.h"
+#include "../FindAppleCharacter.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -50,6 +52,11 @@ void ANepenthesCharacter::Tick(float DeltaTime)
 					DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
 					DropedActor->ItemFresh(FName("Seed"));
 					IsDead = true;
+
+					APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+					AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(PlayerPawn);
+
+					MyCharacter->countOfMonstersAggro -= 1;
 				}
 
 				Destroy();

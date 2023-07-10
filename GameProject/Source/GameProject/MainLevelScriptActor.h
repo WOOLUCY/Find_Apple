@@ -16,5 +16,16 @@ class GAMEPROJECT_API AMainLevelScriptActor : public ALevelScriptActor
 	
 protected:
 	AMainLevelScriptActor();
+
+	virtual void PostInitializeComponents() override;
+
 	virtual void BeginPlay() override;
+
+public:
+	// sound 
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* backgoundMusicAudioCue;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* backgoundMusicAudioComponent;
 };

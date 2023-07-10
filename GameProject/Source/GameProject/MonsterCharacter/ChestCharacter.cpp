@@ -147,6 +147,8 @@ void AChestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
+
+
 	if (Health <= 0.f)
 		return	0.f;
 

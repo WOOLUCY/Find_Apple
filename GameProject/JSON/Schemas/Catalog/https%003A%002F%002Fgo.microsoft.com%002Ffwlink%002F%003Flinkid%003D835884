@@ -2491,6 +2491,12 @@
       "url": "https://json.schemastore.org/minecraft-trim-material.json"
     },
     {
+      "name": "Minecraft Data Pack Trim Pattern",
+      "description": "Configuration file defining a trim pattern for a data pack for Minecraft.",
+      "fileMatch": ["**/data/*/trim_pattern/*.json"],
+      "url": "https://json.schemastore.org/minecraft-trim-pattern.json"
+    },
+    {
       "name": "MkDocs Configuration 1.0",
       "description": "JSON schema for MkDocs configuration file",
       "fileMatch": ["mkdocs.yml"],
@@ -4891,6 +4897,12 @@
       "url": "https://json.schemastore.org/jfrog-pipelines.json"
     },
     {
+      "name": "Safebox Config Schema",
+      "description": "Schema for https://github.com/monebag/safebox",
+      "fileMatch": ["*safebox*.yaml"],
+      "url": "https://json.schemastore.org/safebox-schema-v1.0.0.json"
+    },
+    {
       "name": "StrmPrivacy batch job configuration file",
       "description": "StrmPrivacy batch job\nhttps://docs.strmprivacy.io/docs/latest/concepts/data-processing/batch-jobs/",
       "fileMatch": ["*batch-job-config*.json", "*batch-job-config*.yaml"],
@@ -4970,6 +4982,12 @@
       "versions": {
         "1.0": "https://json.schemastore.org/qfconfig.json"
       }
+    },
+    {
+      "name": "UET BuildConfig.json",
+      "description": "UET is an unofficial tool for Unreal Engine. The BuildConfig.json file allows you to specify how UET should build an Unreal Engine plugin, project or the engine itself.",
+      "fileMatch": ["BuildConfig.json"],
+      "url": "https://raw.githubusercontent.com/RedpointGames/uet-schema/main/root.json"
     },
     {
       "name": "Unreal Engine Uplugin",
@@ -5053,6 +5071,12 @@
       "description": "auto api case schema",
       "fileMatch": ["**/test_data/*.yml"],
       "url": "https://json.schemastore.org/case_schema.json"
+    },
+    {
+      "name": "secrethub.yml",
+      "description": "secrethub",
+      "fileMatch": ["secrethub.yml", "secrethub.yaml"],
+      "url": "https://raw.githubusercontent.com/DannyBen/secret_hub/master/schemas/secrethub.json"
     }
   ],
   "version": 1

@@ -26,6 +26,11 @@ private:
 	UPROPERTY(EditAnywhere)
 		//float AcceptanceRadius = 200;
 		class UBehaviorTree* AIBehavior;
+	UPROPERTY()
+	bool firstSeeing = true;
 
-
+	UFUNCTION()
+	void SetBattleMusicPlay();
+	UFUNCTION()
+	void SetBattleMusicStop();
 };

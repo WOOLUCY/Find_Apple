@@ -244,6 +244,8 @@ public:
 
 	bool GetIsRunning() { return bIsRunning; }
 	void SetIsRunning(bool _in) { bIsRunning = _in; }
+
+	void SetPlayBattleMusic(int MonsterNum);
 	
 	
 public:
@@ -261,6 +263,20 @@ public:
 	FVector MoveLocation;
 	UPROPERTY()
 	FRotator MoveRotation;
+
+	//battle sound
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* battleAudioCue;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* battleAudioComponent;
+
+	UPROPERTY()
+	bool isPlayingBattleMusic;
+
+	// 플레이어에게 집중하는 몬스터가 1 이상이라면 배틀 뮤직 재생
+	UPROPERTY()
+	int countOfMonstersAggro;
 
 
 private:

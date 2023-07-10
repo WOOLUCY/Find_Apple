@@ -66,6 +66,10 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	
+	//sound
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* HitAudioCue;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* HitAudioComponent;
 };

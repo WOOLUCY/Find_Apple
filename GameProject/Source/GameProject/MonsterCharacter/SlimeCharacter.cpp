@@ -7,6 +7,8 @@
 #include "Components/MeshComponent.h"
 #include "../Inventory/DropedItem.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "../FindAppleCharacter.h"
 //#include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values
@@ -113,6 +115,11 @@ void ASlimeCharacter::Tick(float DeltaTime)
 					DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
 					DropedActor->ItemFresh(FName("Seed"));
 					IsDead = true;
+
+					APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+					AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(PlayerPawn);
+
+					MyCharacter->countOfMonstersAggro -= 1;
 				}
 
 

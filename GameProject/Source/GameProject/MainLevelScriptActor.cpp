@@ -6,10 +6,26 @@
 #include "Teleport/BlackScreenEnd.h"
 #include "FindAppleCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundWave.h"
+#include "Components/AudioComponent.h"
 
 AMainLevelScriptActor::AMainLevelScriptActor()
 {
+	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/BirdSound.BirdSound'"));
+	backgoundMusicAudioCue = propellerCue.Object;
 
+	backgoundMusicAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	backgoundMusicAudioComponent->bAutoActivate = false;
+
+}
+
+void AMainLevelScriptActor::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (backgoundMusicAudioCue->IsValidLowLevelFast()) {
+		backgoundMusicAudioComponent->SetSound(backgoundMusicAudioCue);
+	}
 }
 
 void AMainLevelScriptActor::BeginPlay()
@@ -20,4 +36,11 @@ void AMainLevelScriptActor::BeginPlay()
 	// 마우스는 감추고 GameOn 로 바꿈
 	PlayerController->SetShowMouseCursor(false);
 	PlayerController->SetInputMode(FInputModeGameOnly());
+
+	float startTime = 9.f;
+	float volume = 1.0f;
+	float fadeTime = 1.0f;
+	backgoundMusicAudioComponent->FadeIn(fadeTime, volume, startTime);
+
+	backgoundMusicAudioComponent->Play();
 }

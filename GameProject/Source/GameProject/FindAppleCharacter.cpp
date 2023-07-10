@@ -31,6 +31,8 @@
 #include "PauseWidget.h"
 
 #include "Teleport/BlackScreenBegin.h"
+#include "Sound/SoundWave.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 AFindAppleCharacter::AFindAppleCharacter()
@@ -319,6 +321,13 @@ AFindAppleCharacter::AFindAppleCharacter()
 	{
 		BlackScreenBeginClass = UBlackScreenBeginWidget.Class;
 	}
+
+	//battle Music Sound
+	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Battle.Battle'"));
+	battleAudioCue = propellerCue.Object;
+
+	battleAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	battleAudioComponent->bAutoActivate = false;
 }
 
 
@@ -413,9 +422,11 @@ void AFindAppleCharacter::PostInitializeComponents()
 	Anim = Cast<UFindAppleAnimInstance>(GetMesh()->GetAnimInstance());
 	Anim->OnMontageEnded.AddDynamic(this, &AFindAppleCharacter::OnActionMontageEnded);
 
-	
 
-	
+
+	if (battleAudioCue->IsValidLowLevelFast()) {
+		battleAudioComponent->SetSound(battleAudioCue);
+	}
 
 }
 
@@ -446,13 +457,8 @@ void AFindAppleCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	//		if (LevelName.Equals(Name)) {
 	//			SetActorRotation(FRotator(0, 90.f, 0.f));
 	//			GameInstance->SetCharLoc(GetActorLocation()+FVector(0,100.f,0));
-
 	//		}
-
-
 	//	}
-
-
 	//}
 
 
@@ -921,6 +927,8 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 
 	// TODO: 실시간으로 허기가 줄어들게
 
+	SetPlayBattleMusic(countOfMonstersAggro);
+
 }
 
 
@@ -958,6 +966,30 @@ void AFindAppleCharacter::ChangeEquipment(int in)
 		if (CurEquipActor)
 			CurEquipActor->Destroy();
 	}
+}
+
+void AFindAppleCharacter::SetPlayBattleMusic(int MonsterNum)
+{
+	if (MonsterNum >= 1) 
+	{
+		if (isPlayingBattleMusic == false)
+		{
+			float startTime = 9.f;
+			float volume = 0.3f;
+			float fadeTime = 15.f;
+			battleAudioComponent->FadeIn(fadeTime, volume, startTime);
+
+			battleAudioComponent->Play();
+
+			isPlayingBattleMusic = true;
+		}		
+	}
+
+	else {
+		battleAudioComponent->Stop();
+		isPlayingBattleMusic = false;
+	}
+
 }
 
 void AFindAppleCharacter::BlackScreenPopStart()
