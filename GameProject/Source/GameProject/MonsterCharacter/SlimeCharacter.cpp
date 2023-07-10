@@ -11,6 +11,8 @@
 #include "../FindAppleCharacter.h"
 #include "Sound/SoundWave.h"
 #include "Components/AudioComponent.h"
+#include "HealthBarWidget.h"
+#include "Components/WidgetComponent.h"
 //#include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values
@@ -62,6 +64,23 @@ ASlimeCharacter::ASlimeCharacter()
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue2(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/MonsterDeath.MonsterDeath'"));
 	DeadAudioCue = propellerCue2.Object;
+
+
+	//set health bar widget
+	HealthBarWidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
+
+	ConstructorHelpers::FClassFinder<UHealthBarWidget>  HealthBarWidgetObject(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/AI/WBP_HealthBar.WBP_HealthBar_C'"));
+	if (HealthBarWidgetObject.Succeeded())
+	{
+		HealthBarWidgetClass = HealthBarWidgetObject.Class;
+		HealthBarWidgetComp->SetWidgetClass(HealthBarWidgetClass);
+	}
+
+	HealthBarWidgetComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	HealthBarWidgetComp->SetRelativeLocation(FVector(0.f, 0.f, 20.f));
+	HealthBarWidgetComp->SetWidgetSpace(EWidgetSpace::Screen);
+	HealthBarWidgetComp->SetHiddenInGame(true);
+	HealthBarWidgetComp->SetDrawSize(FVector2D(100, 8));
 }
 
 void ASlimeCharacter::PostInitializeComponents()
@@ -85,6 +104,18 @@ void ASlimeCharacter::BeginPlay()
 void ASlimeCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(PlayerPawn);
+	// 플레이어와 거리가 1000 이하일 때만 체력바 표시
+	if (GetDistanceTo(MyCharacter) <= 1000) 
+	{
+		HealthBarWidgetComp->SetHiddenInGame(false);
+	}
+	else
+	{
+		HealthBarWidgetComp->SetHiddenInGame(true);
+	}
 	
 	if (Health == 100.f)
 	{
@@ -181,6 +212,9 @@ float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	{
 		Health -= 20.f;
 
+		UHealthBarWidget* HealthWidgetUI = Cast<UHealthBarWidget>(HealthBarWidgetComp->GetUserWidgetObject());
+		HealthWidgetUI->SetHealthBarProgress(MaxHealth, Health);
+
 		UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
 		UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
 
@@ -188,9 +222,13 @@ float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	}
 	else
 	{
+		Health -= 20.f;
+
+		UHealthBarWidget* HealthWidgetUI = Cast<UHealthBarWidget>(HealthBarWidgetComp->GetUserWidgetObject());
+		HealthWidgetUI->SetHealthBarProgress(MaxHealth, Health);
+
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 		   {
-			   Health -= 20.f;
 
 			   UE_LOG(LogClass, Warning, TEXT("Slime Is Attacked"));
 			   UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
@@ -198,8 +236,6 @@ float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 			   IsAttacked = false;
 		   }, 0.5f, false);
 	}
-
-	
 
 	return Damage;
 }

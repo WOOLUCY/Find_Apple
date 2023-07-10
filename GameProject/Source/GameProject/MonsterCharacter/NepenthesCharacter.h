@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 		float Health = 100.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+		float MaxHealth = 100.f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 		bool IsAttacked = false;
 
@@ -56,4 +59,13 @@ public:
 
 	UPROPERTY()
 	bool deadSound = false;
+	
+
+protected:
+	/* Health Widget Class */
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetComponent* HealthBarWidgetComp;
+	
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> HealthBarWidgetClass;
 };

@@ -10,6 +10,8 @@
 #include "Components/BoxComponent.h"
 #include "Sound/SoundWave.h"
 #include "Components/AudioComponent.h"
+#include "HealthBarWidget.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 AChestCharacter::AChestCharacter()
@@ -60,6 +62,23 @@ AChestCharacter::AChestCharacter()
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue2(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/MonsterDeath.MonsterDeath'"));
 	DeadAudioCue = propellerCue2.Object;
+
+
+	//set health bar widget
+	HealthBarWidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
+
+	ConstructorHelpers::FClassFinder<UHealthBarWidget>  HealthBarWidgetObject(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/AI/WBP_HealthBar.WBP_HealthBar_C'"));
+	if (HealthBarWidgetObject.Succeeded())
+	{
+		HealthBarWidgetClass = HealthBarWidgetObject.Class;
+		HealthBarWidgetComp->SetWidgetClass(HealthBarWidgetClass);
+	}
+
+	HealthBarWidgetComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	HealthBarWidgetComp->SetRelativeLocation(FVector(0.f, 0.f, 20.f));
+	HealthBarWidgetComp->SetWidgetSpace(EWidgetSpace::Screen);
+	HealthBarWidgetComp->SetHiddenInGame(true);
+	HealthBarWidgetComp->SetDrawSize(FVector2D(100, 8));
 }
 
 void AChestCharacter::PostInitializeComponents()
@@ -181,11 +200,16 @@ float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	IsAttacked = true;
+	// 맞았을 때만 프로그레스 바 표시
+	HealthBarWidgetComp->SetHiddenInGame(false);
 
 	FTimerHandle TimerHandle;
 	if (Health <= 20.f)
 	{
 		Health -= 20.f;
+
+		UHealthBarWidget* HealthWidgetUI = Cast<UHealthBarWidget>(HealthBarWidgetComp->GetUserWidgetObject());
+		HealthWidgetUI->SetHealthBarProgress(MaxHealth, Health);
 
 		UE_LOG(LogClass, Warning, TEXT("Chest Current HP: %f"), Health);
 
@@ -193,16 +217,18 @@ float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	}
 	else
 	{
+		Health -= 10.f;
+
+		UHealthBarWidget* HealthWidgetUI = Cast<UHealthBarWidget>(HealthBarWidgetComp->GetUserWidgetObject());
+		HealthWidgetUI->SetHealthBarProgress(MaxHealth, Health);
+
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 			{
-				Health -= 10.f;
-
 				UE_LOG(LogClass, Warning, TEXT("Chest Current HP: %f"), Health);
 
 				IsAttacked = false;
 			}, 0.5f, false);
 	}
-
 
 
 	return Damage;
