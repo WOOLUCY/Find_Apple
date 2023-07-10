@@ -23,6 +23,7 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void PostInitializeComponents() override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -72,4 +73,10 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Audio")
 	class UAudioComponent* HitAudioComponent;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* DeadAudioCue;
+	
+	UPROPERTY()
+	bool deadSound = false;
 };

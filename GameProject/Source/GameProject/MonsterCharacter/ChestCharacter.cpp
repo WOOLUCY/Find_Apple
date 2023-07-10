@@ -8,6 +8,8 @@
 #include "Components/MeshComponent.h"
 #include "../Inventory/DropedItem.h"
 #include "Components/BoxComponent.h"
+#include "Sound/SoundWave.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 AChestCharacter::AChestCharacter()
@@ -49,6 +51,24 @@ AChestCharacter::AChestCharacter()
 	FString DissolveName = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Dissolve.MI_Dissolve'";
 	ConstructorHelpers::FObjectFinder<UMaterialInterface> DissolveMaterialAsset(*DissolveName);
 	DissolveMaterial = DissolveMaterialAsset.Object;
+
+	//sound
+	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/ChestHit.ChestHit'"));
+	HitAudioCue = propellerCue.Object;
+	HitAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	HitAudioComponent->bAutoActivate = false;
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue2(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/MonsterDeath.MonsterDeath'"));
+	DeadAudioCue = propellerCue2.Object;
+}
+
+void AChestCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (HitAudioCue->IsValidLowLevelFast()) {
+		HitAudioComponent->SetSound(HitAudioCue);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -105,6 +125,12 @@ void AChestCharacter::Tick(float DeltaTime)
 	// TODO: Destroy Slime
 	else if (Health <= 0.f)
 	{
+		if (deadSound == false)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, DeadAudioCue, GetActorLocation());
+			deadSound = true;
+		}
+
 		for (int i = 0; i < 4; ++i)
 		{
 			GetMesh()->SetMaterial(i, DissolveMaterial);
@@ -129,7 +155,7 @@ void AChestCharacter::Tick(float DeltaTime)
 				}
 
 				Destroy();
-			}, 0.8f, false);
+			}, 1.2f, false);
 
 		//Destroy();
 	}
@@ -147,10 +173,10 @@ void AChestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-
-
 	if (Health <= 0.f)
 		return	0.f;
+
+	HitAudioComponent->Play();
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 

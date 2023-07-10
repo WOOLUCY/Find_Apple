@@ -974,9 +974,9 @@ void AFindAppleCharacter::SetPlayBattleMusic(int MonsterNum)
 	{
 		if (isPlayingBattleMusic == false)
 		{
-			float startTime = 9.f;
+			float startTime = 0.f;
 			float volume = 0.3f;
-			float fadeTime = 15.f;
+			float fadeTime = 1.5f;
 			battleAudioComponent->FadeIn(fadeTime, volume, startTime);
 
 			battleAudioComponent->Play();
@@ -986,6 +986,9 @@ void AFindAppleCharacter::SetPlayBattleMusic(int MonsterNum)
 	}
 
 	else {
+		float volume = 0.3f;
+		float fadeTime = 1.5f;
+		battleAudioComponent->FadeOut(fadeTime, volume);
 		battleAudioComponent->Stop();
 		isPlayingBattleMusic = false;
 	}

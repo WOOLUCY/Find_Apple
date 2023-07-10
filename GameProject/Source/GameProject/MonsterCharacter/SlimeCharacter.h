@@ -22,6 +22,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void PostInitializeComponents() override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -57,5 +58,17 @@ public:
 	bool IsDead = false;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	
+	//sound
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* HitAudioCue;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* HitAudioComponent;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* DeadAudioCue;
+	
+	UPROPERTY()
+	bool deadSound = false;
 };

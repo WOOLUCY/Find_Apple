@@ -9,6 +9,8 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "../FindAppleCharacter.h"
+#include "Sound/SoundWave.h"
+#include "Components/AudioComponent.h"
 //#include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values
@@ -51,6 +53,24 @@ ASlimeCharacter::ASlimeCharacter()
 	FString DissolveName = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Slime/MI_Dissolve.MI_Dissolve'";
 	ConstructorHelpers::FObjectFinder<UMaterialInterface> DissolveMaterialAsset(*DissolveName);
 	DissolveMaterial = DissolveMaterialAsset.Object;
+
+	//sound
+	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/SlimeHit.SlimeHit'"));
+	HitAudioCue = propellerCue.Object;
+	HitAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	HitAudioComponent->bAutoActivate = false;
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue2(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/MonsterDeath.MonsterDeath'"));
+	DeadAudioCue = propellerCue2.Object;
+}
+
+void ASlimeCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (HitAudioCue->IsValidLowLevelFast()) {
+		HitAudioComponent->SetSound(HitAudioCue);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -94,6 +114,12 @@ void ASlimeCharacter::Tick(float DeltaTime)
 	// TODO: Destroy Slime
 	else if (Health <= 0.f)
 	{
+		if (deadSound == false) 
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, DeadAudioCue, GetActorLocation());
+			deadSound = true;
+		}
+
 		for (int i = 0; i < 4; ++i)
 		{
 			GetMesh()->SetMaterial(i, DissolveMaterial);
@@ -124,7 +150,7 @@ void ASlimeCharacter::Tick(float DeltaTime)
 
 
 				Destroy();
-			}, 0.8f, false);
+			}, 1.2f, false);
 
 		//Destroy();
 	}
@@ -143,6 +169,8 @@ float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	if (Health <= 0.f)
 		return	0.f;
+
+	HitAudioComponent->Play();
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 

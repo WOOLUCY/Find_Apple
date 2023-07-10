@@ -6,6 +6,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "../FindAppleCharacter.h"
 #include "Components/BoxComponent.h"
+#include "Sound/SoundWave.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 ANepenthesCharacter::ANepenthesCharacter()
@@ -16,6 +18,24 @@ ANepenthesCharacter::ANepenthesCharacter()
 	FString DissolveName = "/Script/Engine.MaterialInstanceConstant'/Game/Woo/Monster/Nepenthes/MI_Dissolve.MI_Dissolve'";
 	ConstructorHelpers::FObjectFinder<UMaterialInterface> DissolveMaterialAsset(*DissolveName);
 	DissolveMaterial = DissolveMaterialAsset.Object;
+
+	//sound
+	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Monster_attack.Monster_attack'"));
+	HitAudioCue = propellerCue.Object;
+	HitAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	HitAudioComponent->bAutoActivate = false;
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue2(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/MonsterDeath.MonsterDeath'"));
+	DeadAudioCue = propellerCue2.Object;
+}
+
+void ANepenthesCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (HitAudioCue->IsValidLowLevelFast()) {
+		HitAudioComponent->SetSound(HitAudioCue);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +52,11 @@ void ANepenthesCharacter::Tick(float DeltaTime)
 	// TODO: Destroy Slime
 	if (Health <= 0.f)
 	{
+		if (deadSound == false)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, DeadAudioCue, GetActorLocation());
+			deadSound = true;
+		}
 
 		GetMesh()->SetMaterial(0, DissolveMaterial);
 		
@@ -60,7 +85,7 @@ void ANepenthesCharacter::Tick(float DeltaTime)
 				}
 
 				Destroy();
-			}, 0.8f, false);
+			}, 1.2f, false);
 
 		//Destroy();
 	}
@@ -79,6 +104,8 @@ float ANepenthesCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	if (Health <= 0.f)
 		return	0.f;
+
+	HitAudioComponent->Play();
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
