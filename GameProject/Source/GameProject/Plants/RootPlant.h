@@ -9,18 +9,25 @@
 /**
  * 
  */
+
+enum ROOTTYPE { Radish=0, Carrot, Kohlrabi, Watermelon,TOTAL };
+
 UCLASS()
 class GAMEPROJECT_API ARootPlant : public APlant
 {
 	GENERATED_BODY()
 public:
 	ARootPlant();
-	TArray<UStaticMesh*> Roots;
 
+
+
+
+	static int DemoCount;
 
 protected:
 	virtual void BeginPlay() override;
-
-	virtual void AddInventory();
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 };
+
+int ARootPlant::DemoCount = Radish;

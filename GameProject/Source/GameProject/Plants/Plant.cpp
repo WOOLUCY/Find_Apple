@@ -4,6 +4,8 @@
 #include "Plant.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "../Inventory/InventoryComponent.h"
+#include "../FindAppleCharacter.h"
 #include "../FindAppleGameMode.h"
 
 // Sets default values
@@ -83,19 +85,25 @@ void APlant::DayChange()
 
 }
 
-void APlant::AddInventory()
-{
-}
+
 
 bool APlant::Harvest()
 {
 
-	
-	if (CanHarvest){
-		UE_LOG(LogTemp, Warning, TEXT("Call Harvest"));
-		//인벤은 각자 그 cpp파일에서 넣는게 좋을듯??
-		AddInventory();
 
+	if (CanHarvest) {
+		UE_LOG(LogTemp, Warning, TEXT("Call Harvest"));
+	
+		UE_LOG(LogTemp, Warning, TEXT("Plant In AddInvetory Function"));
+		
+		auto* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+		if (MyCharacter != nullptr) {
+
+			//MyCharacter->InventoryComponent
+			MyCharacter->InventoryComponent->AddToInventory(ItemName, 1);
+
+		}
 		Destroy();
 		return true;
 
@@ -104,6 +112,6 @@ bool APlant::Harvest()
 	else {
 		return false;
 	}
-	
+
 }
 
