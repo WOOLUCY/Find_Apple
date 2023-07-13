@@ -16,7 +16,8 @@ class GAMEPROJECT_API ATomato : public APlant
 public:
 	ATomato();
 
-	
+	UStaticMesh* Fruit = nullptr;
+
 	//int LiveDay = 0l;
 	//int MaxDeathDay;
 	//int DeathCount = 0;
@@ -31,8 +32,8 @@ protected:
 	
 
 private:
-	UPROPERTY(VisibleAnywhere, Category = Fruit)
-	UStaticMeshComponent* Fruit;
+	//UPROPERTY(VisibleAnywhere, Category = Fruit)
+	//UStaticMeshComponent* Fruit;
 
 
 	

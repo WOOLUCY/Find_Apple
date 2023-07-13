@@ -212,8 +212,9 @@ void AFarmGround::PutSeed()
 		UWorld* TheWorld = GetWorld();
 		if (TheWorld) {
 			//여기서 랜덤으로 나타나게 변경해야한다.
-			Planted = TheWorld->SpawnActor<APlant>(ARootPlant::StaticClass(), GetActorLocation(), FRotator());
-				
+			//Planted = TheWorld->SpawnActor<APlant>(ARootPlant::StaticClass(), GetActorLocation(), FRotator());
+			Planted = TheWorld->SpawnActor<APlant>(ATomato::StaticClass(), GetActorLocation(), FRotator());
+
 		}
 
 	}
