@@ -13,6 +13,7 @@
 #include "Plant.h"
 #include "Tomato.h"
 #include "RootPlant.h"
+#include "VegPlant.h"
 
 
 // Sets default values
@@ -211,9 +212,9 @@ void AFarmGround::PutSeed()
 
 		UWorld* TheWorld = GetWorld();
 		if (TheWorld) {
-			//여기서 랜덤으로 나타나게 변경해야한다.
+
 			//Planted = TheWorld->SpawnActor<APlant>(ARootPlant::StaticClass(), GetActorLocation(), FRotator());
-			Planted = TheWorld->SpawnActor<APlant>(ATomato::StaticClass(), GetActorLocation(), FRotator());
+			Planted = TheWorld->SpawnActor<APlant>(AVegPlant::StaticClass(), GetActorLocation(), FRotator());
 
 		}
 
@@ -232,7 +233,6 @@ void AFarmGround::Harvest()
 	}
 	
 
-	//Planted->CanHarvest
 }
 
 

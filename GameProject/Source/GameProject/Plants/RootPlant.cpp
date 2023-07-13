@@ -3,7 +3,7 @@
 
 #include "RootPlant.h"
 #include "Kismet/GameplayStatics.h"
-#include "../Inventory/InventoryComponent.h"
+
 
 #include "../FindAppleCharacter.h"
 
@@ -32,23 +32,66 @@ ARootPlant::ARootPlant()
 	}
 
 
-	//무
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_ROOT1
-	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/rootplatn3.rootplatn3'"));
-	if (SM_ROOT1.Succeeded()) {
-		Roots.Add(SM_ROOT1.Object);
-		//일단 무로 해놔
-		Meshs.Add(SM_ROOT1.Object);
+
+
+	switch (DemoCount)
+	{
+	case 0: {
+		ItemName = "Radish";
+		//무
+		static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_ROOT1
+		(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/rootplatn3.rootplatn3'"));
+		if (SM_ROOT1.Succeeded()) {
+			Meshs.Add(SM_ROOT1.Object);
+
+		}
+		break;
 
 	}
-	//당근
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_ROOT2
-	(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/Carrot.Carrot'"));
-	if (SM_ROOT2.Succeeded()) {
-		Roots.Add(SM_ROOT2.Object);
+	case 1: {
+		ItemName = "Carrot";
+
+		//당근
+		static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_ROOT2
+		(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/Carrot.Carrot'"));
+		if (SM_ROOT2.Succeeded()) {
+			Meshs.Add(SM_ROOT2.Object);
+
+
+		}
+		break;
+	}
+	case 2: {
+		ItemName = "Kohlrabi";
+		//콜라비
+		static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_ROOT3
+		(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/kohlrabi.kohlrabi'"));
+		if (SM_ROOT3.Succeeded()) {
+			Meshs.Add(SM_ROOT3.Object);
+
+		}
+		break;
+	}
+	case 3: {
+		ItemName = "Watermelon";
+		//수박
+		static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_ROOT4
+		(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/Watermelon1.Watermelon1'"));
+		if (SM_ROOT4.Succeeded()) {
+			Meshs.Add(SM_ROOT4.Object);
+
+		}
+		break;
 	}
 
+	default:
+		break;
+	}
 
+	//데모때 다 보여주기위해서 일단 순서대로 나오게 설정하겠슴
+	++DemoCount;
+	if (DemoCount == TOTAL) DemoCount = 0;
+	
 
 	Current->SetCollisionProfileName("NoCollision");
 
@@ -58,24 +101,15 @@ void ARootPlant::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//랜덤하게 설정해주기 - 그럼 인벤토리 들어갓을때 우짜??
-	
 
 
 }
 
-void ARootPlant::AddInventory()
+void ARootPlant::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	UE_LOG(LogTemp, Warning, TEXT("RootPlant Int AddInvetory Function"));
-	//여기서 인벤에 넣어주면된다.
-	auto* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
-	if(MyCharacter!=nullptr){
-		FName ItemName = "Radish";
-		//MyCharacter->InventoryComponent
-		MyCharacter->InventoryComponent->AddToInventory(ItemName, 1);
+	Super::EndPlay(EndPlayReason);
 
-	}
-
+	DemoCount = 0;
 
 }
+

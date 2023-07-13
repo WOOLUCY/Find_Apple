@@ -31,6 +31,10 @@ protected:
 	bool IsFruit = false;//열매있는지없는지
 	bool CanHarvest = false; //수확시킬수있는지 없는지를 확인
 
+
+	FName ItemName;
+
+
 	TArray<UStaticMesh*> Meshs;
 
 	UStaticMeshComponent* Current;
@@ -49,7 +53,6 @@ public:
 	virtual bool Harvest();
 	virtual void DayChange();
 
-	virtual void AddInventory();
 	
 
 };

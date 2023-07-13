@@ -16,15 +16,6 @@ class GAMEPROJECT_API ATomato : public APlant
 public:
 	ATomato();
 
-	UStaticMesh* Fruit = nullptr;
-
-	//int LiveDay = 0l;
-	//int MaxDeathDay;
-	//int DeathCount = 0;
-	//int LevelUp = 1;
-	//bool IsFruit = false;
-	//TArray<UStaticMesh> Meshs;
-
 	
 protected:
 	virtual void BeginPlay() override;
@@ -32,9 +23,5 @@ protected:
 	
 
 private:
-	//UPROPERTY(VisibleAnywhere, Category = Fruit)
-	//UStaticMeshComponent* Fruit;
 
-
-	
 };
