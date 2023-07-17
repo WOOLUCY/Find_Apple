@@ -29,11 +29,12 @@
 
 
 //얘도 손봐야함
-struct SalesItem {
-	char* name;
+struct RegisterItems {
 	int Item;
 	int Num;
 	int Price;
+	unsigned int RegisterId;		
+
 };
 
 
@@ -45,7 +46,7 @@ public:
 
 	SOCKET Socket;
 	bool IsInit;
-	TArray<SalesItem> Items;
+	TArray<RegisterItems> Items;
 
 	char RecvBuf[BUFSIZE];
 	int PrevRemain;
@@ -64,7 +65,6 @@ public:
 
 	//이거 삭제해야하는 함수들 테스트 함수임
 	bool SendIngamePacket();
-	void SendTestSalePacket(int item,int num, int price);
 	void RecvDataTest();
 
 	void PacketRecv();

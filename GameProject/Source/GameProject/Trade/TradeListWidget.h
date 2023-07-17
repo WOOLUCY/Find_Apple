@@ -34,6 +34,9 @@ public:
 	UPROPERTY()
 	FName ItemName = "apple";
 
+	//아이템고유번호 - 구매버튼눌렀을때 서버에 어떤애인지 보내주기위함
+	int ItemId;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* BuyButton;
 	

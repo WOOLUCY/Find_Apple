@@ -83,7 +83,7 @@ void ClientSocket::SendRegistOrPurchasePacket(bool Regist,void* packet)
 
 		temp.size = sizeof(CS_SC_ITEM_PACKET);
 		temp.type = SC_CS_ITEM_REGISTER;
-		temp.id = 10;//일단 10  ** 클라소켓마다 고유값 줘야할것같다.
+		
 
 		packet = (CS_SC_ITEM_PACKET*)packet;
 
@@ -102,6 +102,19 @@ void ClientSocket::SendRegistOrPurchasePacket(bool Regist,void* packet)
 	}
 	else {
 		//구매했을때 패킷보내기
+		CS_BUY_PACKET temp;
+		temp.size = sizeof(CS_BUY_PACKET);
+		temp.type = CS_CLICKED_BUY;
+		temp.rId = *(int*)packet;
+
+
+		int retval = send(Socket, (const char*)&temp, temp.size, 0);
+		if (retval != 0) {
+			UE_LOG(LogTemp, Warning, TEXT("[CS_BUY_PACKET] send Success, [rId:%d]"),temp.rId);
+
+		}
+
+
 	}
 }
 
@@ -126,29 +139,6 @@ bool ClientSocket::SendIngamePacket()
 }
 
 
-
-/*
-* void ClientSocket::SendTestSalePacket(int item, int num, int price)
-{
-
-	UE_LOG(LogTemp, Warning, TEXT("[SendTestSalePacket] %d %d"), num,price);
-
-	SC_CS_TESTPACKET temp;
-	temp.size = sizeof(SC_CS_TESTPACKET);
-	temp.type = TESTPACKET;
-	temp.item = item;
-	temp.testNum = num;
-	temp.testPrice = price;
-
-	int retval = send(Socket, (const char*)&temp, temp.size, 0);
-	if (retval != 0) {
-		UE_LOG(LogTemp, Warning, TEXT("Client To Server Send Success,  [%d %d, %d]"),temp.item ,temp.testNum,temp.testPrice);
-
-	}
-
-}
-
-*/
 
 void ClientSocket::RecvDataTest()
 {
@@ -211,19 +201,18 @@ void ClientSocket::ProcessPacket(char* packet)
 		//testpacket 왓다갓다할거임
 		CS_SC_ITEM_PACKET* p = reinterpret_cast<CS_SC_ITEM_PACKET*>(packet);
 
-		SalesItem temp1{nullptr, p->item,p->total,p->price };
-	/*	switch (p->item)
-		{
-		case APPLE:
-			break;
-			
-		default:
-			break;
-		}*/
+		RegisterItems temp1{p->item,p->total,p->price,p->registerId};
 
 		Items.Add(temp1);
-		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET] %d %d %d %d"), p->type, p->item, p->total, p->price);
+		UE_LOG(LogTemp, Warning, TEXT("[CS_SC_ITEM_PACKET] %d %d %d %d"), p->type, p->item, p->total, p->price);
 
+		break;
+	}
+	case SC_RECEIVE_GOLD:
+	{
+
+
+		break;
 	}
 
 	}

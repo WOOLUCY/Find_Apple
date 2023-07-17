@@ -169,6 +169,7 @@ int main()
 
 }
 
+
 void process_packet(int c_id, char* packet)
 {
 	//받은 패킷 처리하는거임 
@@ -208,34 +209,7 @@ void process_packet(int c_id, char* packet)
 		printf("[%d] x:%d\n", c_id, clients[c_id].x);
 		break;
 	}
-	/*
-	case CS_TEST: {
 
-		CS_TEST_PACKET* p = reinterpret_cast<CS_TEST_PACKET*>(packet);
-
-		SC_TEST_PACKET temp;
-		temp.size = sizeof(SC_TEST_PACKET);
-		temp.type = SC_TEST;
-		temp.test = p->test;
-		temp.id = c_id;
-
-		TestStruc testTemp{ c_id,temp.test };
-		TestVector.push_back(testTemp);
-
-		for (TestStruc a : TestVector) {
-			printf("[%d] - %d\n", a.key, a.recvNum);
-		}
-		printf("[CS_TEST패킷 받음] %d %d %d %d\n", temp.size, temp.type, temp.test, temp.id);
-
-		//이제 클라이언트 모두에게 보내줘야함.
-		for (auto& pl : clients) {
-			//if (false == pl.in_use) continue;
-			//if (pl._id == c_id) continue;
-			pl.send(&temp);
-			printf("[%d] SC_TEST패킷 전송\n", pl.id);
-			//pl.do_send(&add_packet);
-		}
-	}*/
 	case SC_CS_ITEM_REGISTER: {
 		printf("[SC_CS_ITEM_REGISTER] 처리\n");
 		
@@ -243,22 +217,51 @@ void process_packet(int c_id, char* packet)
 
 		CS_SC_ITEM_PACKET temp;
 		memcpy(&temp, p, sizeof(CS_SC_ITEM_PACKET));
-		temp.num = ItemList.size();
-		printf("[TEMP CS_SC_ITEM_PACKET 받음] [size:%d] [num:%d] [id:%d] [item:%d] [total:%d] [price:%d]\n",
-			temp.size, temp.num, temp.item, temp.total , temp.price,temp.price);
+		
+		static unsigned int rCount = 0;
+		temp.registerId = rCount++;
+		temp.playerId = c_id; //일단 c_id로줬는데 
+
+		printf("[TEMP CS_SC_ITEM_PACKET 받음] [size:%d] [registerId:%d] [item:%d] [total:%d] [playerId:%d] [price:%d]\n",
+			temp.size, temp.registerId, temp.item, temp.total , temp.playerId,temp.price);
 
 		ItemList.push_back(temp);
 
-		//모든클라이언트에게 보내보자.
+		//모든클라이언트에게 업데이트된 아이템리스트를 보내보자.
 		for (auto& pl : clients) {
 			if (pl.id >= 0) {
-			//	if (pl.id == c_id) continue;
 				pl.send(&temp);
-				printf("[TEMP CS_SC_ITEM_PACKET 보냄] [size:%d] [num:%d] [id:%d] [item:%d] [total:%d] [price:%d]\n",
-					temp.size, temp.num, temp.item, temp.total, temp.price, temp.price);
+				printf("[TEMP CS_SC_ITEM_PACKET 보냄] [size:%d] [registerId:%d] [item:%d] [total:%d] [playerId:%d] [price:%d]\n",
+					temp.size, temp.registerId, temp.item, temp.total, temp.playerId, temp.price);
 			}
 		}
 
+	}
+	case CS_CLICKED_BUY: {
+		printf("[CS_CLICKED_BUY] 처리\n");
+		CS_BUY_PACKET* p = reinterpret_cast<CS_BUY_PACKET*>(packet);
+
+		for (auto& item : ItemList) {
+			if (item.registerId == p->rId) {
+				//빼자
+				printf("[CS_BUY_PACKET] [rID:%d] &&[CS_SC_ITEM_PACKET] [rId:%d] [pId:%d] [item:%d]\n"
+				,p->rId,item.registerId,item.playerId,item.item);
+
+				//해당 id가진애한테 돈넣어주기 ㅅㅂ 걔한테만 어케보내주지 ㅅㅂ
+
+				for (auto& pl : clients) {
+					if (pl.id == item.playerId) {
+						printf("[player : %d] 에게 [price:%d]를 준다.\n", item.playerId, item.price);
+						//맞으면 돈만큼 보내줘야한다.해당클라에게
+
+					}
+				}
+
+				break;
+			}
+		}
+
+		//모든클라에게 
 	}
 
 	}

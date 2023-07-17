@@ -19,7 +19,10 @@ constexpr char SC_MOVE_PLAYER = 7;
 
 //정말 필요한거를 밑에다가 적오보자
 
-constexpr char SC_CS_ITEM_REGISTER = 10; //원래 testpacket그거임
+constexpr char SC_CS_ITEM_REGISTER = 10;	//원래 testpacket그거임
+constexpr char CS_CLICKED_BUY = 12;			//클라이언트에서 물건샀을때
+constexpr char SC_RECEIVE_GOLD = 13;
+
 
 constexpr char CS_LOGIN_TEST = 11;
 
@@ -78,6 +81,14 @@ struct CS_INGAME_TEST_PACKET {
 
 };
 
+//구매하기 눌렀을때 클라가 서버에 보낼패킷
+struct CS_BUY_PACKET {
+	unsigned char size;
+	char	type;
+	unsigned int rId; //registerId
+
+};
+
 
 //Server To Client Packets
 struct SC_LOGIN_INFO_PACKET {
@@ -119,8 +130,8 @@ struct SC_TEST_PACKET {
 struct CS_SC_ITEM_PACKET {
 	unsigned char size;
 	char			type = SC_CS_ITEM_REGISTER;
-	unsigned int	num;	//index??num??
-	short			id;		//등록한쪽 아이디 저장
+	unsigned int	registerId;	//판매하는것마다 고유번호임
+	short			playerId;		//등록한쪽 아이디 저장
 	short			item;		
 	short			total;
 	short			price;
@@ -128,6 +139,13 @@ struct CS_SC_ITEM_PACKET {
 
 };
 
+
+struct SC_BUY_PACKET { //등록한애한테 보내야 한다. 그래야 돈받는다. 
+	unsigned char size;
+	char	type;
+	short	price;
+
+};
 
 
 

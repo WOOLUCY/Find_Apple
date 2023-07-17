@@ -10,6 +10,11 @@
 #include "../Inventory/InventoryComponent.h"
 #include "../Inventory/InventoryDatatable.h"
 
+#include "../MyGameInstance.h"
+
+#include "../ClientSocket.h"
+
+
 UTradeListWidget::UTradeListWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
 	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Game/Semin/UI/Inventory/InventoryDataTable.InventoryDataTable"));
@@ -32,6 +37,11 @@ void UTradeListWidget::NativeConstruct()
 
 void UTradeListWidget::BuyButtonClick()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Clicked Buy Button!!!"));
+
+	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+
 	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 
@@ -57,6 +67,9 @@ void UTradeListWidget::BuyButtonClick()
 						if (Quantity <= 0) {
 							this->RemoveFromParent();
 						}
+						
+						MyInstance->MySocket.SendRegistOrPurchasePacket(false, &ItemId);
+
 					}
 					else
 					{
@@ -66,7 +79,7 @@ void UTradeListWidget::BuyButtonClick()
 			}
 		}
 
-		// 한개식 인벤토리에 증가
+		// 한개씩 인벤토리에 증가
 		MyCharacter->InventoryComponent->AddToInventory(ItemName, 1);
 		// 가격만큼 인벤토리의 골드 감소
 		MyCharacter->InventoryComponent->RemoveFromInventory(FName("Gold"), ItemPrice);

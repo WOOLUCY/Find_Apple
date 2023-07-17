@@ -105,7 +105,7 @@ void UTradeWidget::NativeConstruct()
 						TradeListWidgetUIObject->Quantity = item.Num;
 						TradeListWidgetUIObject->ItemPrice = item.Price;
 						TradeListWidgetUIObject->ItemName = RowName;
-
+						TradeListWidgetUIObject->ItemId = item.RegisterId;
 						TradeList->AddChild(TradeListWidgetUIObject);
 					}
 				}
