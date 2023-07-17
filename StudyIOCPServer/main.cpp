@@ -1,17 +1,16 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "stdafx.h"
 #include "SESSION.h"
-//#include "protocol.h"
 
 #define SERVER_ADDR "127.0.0.1"
 #define SERVER_PORT 4000
 #define BUFSIZE 256
 #define MAX_USER 100
 
-array<SESSION, MAX_USER> clients;
-//테스트 벡터
 
-vector<CS_SC_ITEM_PACKET> ItemList;
+array<SESSION, MAX_USER> clients;
+
+unordered_map<int, CS_SC_ITEM_PACKET> ItemList;
 
 void process_packet(int c_id, char* packet);
 int PlayerCount = 0;
@@ -196,12 +195,13 @@ void process_packet(int c_id, char* packet)
 	{
 		printf("[CS_LOGIN_TEST 패킷 도착함] %d \n",ItemList.size());
 
-		for (int i{ 0 }; i < ItemList.size(); ++i) {
-			clients[c_id].send(&ItemList[i]);
-		//	printf("[%d] %d %d %d\n", c_id, ItemList[i].item, ItemList[i].testNum, ItemList[i].testPrice);
-
+		for (auto& item : ItemList) {
+			clients[c_id].send(&item.second);
+			printf("[%d] item:%d pId:%d\n", c_id, item.second.item,item.second.playerId);
 
 		}
+
+	
 	}
 	case CS_MOVE: {
 		CS_MOVE_PACKET* p = reinterpret_cast<CS_MOVE_PACKET*>(packet);
@@ -225,7 +225,7 @@ void process_packet(int c_id, char* packet)
 		printf("[TEMP CS_SC_ITEM_PACKET 받음] [size:%d] [registerId:%d] [item:%d] [total:%d] [playerId:%d] [price:%d]\n",
 			temp.size, temp.registerId, temp.item, temp.total , temp.playerId,temp.price);
 
-		ItemList.push_back(temp);
+		ItemList.insert({ rCount,temp });
 
 		//모든클라이언트에게 업데이트된 아이템리스트를 보내보자.
 		for (auto& pl : clients) {
@@ -235,33 +235,58 @@ void process_packet(int c_id, char* packet)
 					temp.size, temp.registerId, temp.item, temp.total, temp.playerId, temp.price);
 			}
 		}
-
+		break;
 	}
 	case CS_CLICKED_BUY: {
 		printf("[CS_CLICKED_BUY] 처리\n");
 		CS_BUY_PACKET* p = reinterpret_cast<CS_BUY_PACKET*>(packet);
 
-		for (auto& item : ItemList) {
-			if (item.registerId == p->rId) {
-				//빼자
-				printf("[CS_BUY_PACKET] [rID:%d] &&[CS_SC_ITEM_PACKET] [rId:%d] [pId:%d] [item:%d]\n"
-				,p->rId,item.registerId,item.playerId,item.item);
+		//키값이용해서 playerid 저장하고
+		int pId = ItemList[p->rId].playerId;
+	
+		//그리고 돈보내줘 SC_BUY_PACKET->여기해야함
+		for (auto& pl : clients) {
+			if (pl.id == pId) {
+				SC_RECEIVE_GOLD_PACKET temp;
+				temp.size = sizeof(SC_RECEIVE_GOLD_PACKET);
+				temp.type = SC_RECEIVE_GOLD;
+				temp.price = ItemList[p->rId].price;
+				//send해줘야하는데 일단 ㄱㄷ
 
-				//해당 id가진애한테 돈넣어주기 ㅅㅂ 걔한테만 어케보내주지 ㅅㅂ
-
-				for (auto& pl : clients) {
-					if (pl.id == item.playerId) {
-						printf("[player : %d] 에게 [price:%d]를 준다.\n", item.playerId, item.price);
-						//맞으면 돈만큼 보내줘야한다.해당클라에게
-
-					}
-				}
-
-				break;
+				printf("[player : %d] 에게 [price:%d]를 준다.\n", ItemList[p->rId].playerId, ItemList[p->rId].price);
+				break; 
 			}
 		}
 
-		//모든클라에게 
+
+
+		//모든 클라에게 삭제정보 다 알려줘야함 ->얘를 어케알려줄지 고민좀해봐라...
+		//클라도 unordered_map으로 바꾸고 id를 알려주는 방향으로 가는게 나을지도
+		
+		printf("[SC_DELETE_ITEM_PAKCET 보내기더더더전] [registerId:%d] [total:%d]\n", p->rId, ItemList[p->rId].total - 1);
+
+		SC_DELETE_ITEM_PAKCET temp;
+		temp.size = sizeof(SC_DELETE_ITEM_PAKCET);
+		temp.type = SC_DELETE_ITEM;
+		temp.rId = p->rId;
+		temp.total = ItemList[p->rId].total-1;
+		printf("[SC_DELETE_ITEM_PAKCET 보내기전] [registerId:%d] [total:%d]\n", temp.rId, temp.total);
+
+		for (auto& pl : clients) {
+			if (pl.id >= 0) {
+				pl.send(&temp);
+				printf("[SC_DELETE_ITEM_PAKCET 보냄] [registerId:%d] [total:%d]\n", temp.rId,temp.total);
+			}
+		}
+
+		//리스트에서 1.count 여러개면 한개만 줄이고 2.한개만 남아있으면 삭제한다.
+		if (ItemList[p->rId].total > 1) {
+			ItemList[p->rId].total -= 1;
+		}
+		else {
+			ItemList.erase(p->rId);
+		}
+		break;
 	}
 
 	}

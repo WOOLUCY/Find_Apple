@@ -7,6 +7,7 @@
 #pragma comment(lib, "ws2_32.lib")
 #include <WinSock2.h>
 #include <WS2tcpip.h>
+#include <unordered_map>
 
 #include "Windows/PostWindowsApi.h"
 #include "Windows/HideWindowsPlatformTypes.h"
@@ -46,7 +47,9 @@ public:
 
 	SOCKET Socket;
 	bool IsInit;
-	TArray<RegisterItems> Items;
+	TMap<unsigned int,RegisterItems> Items;
+	//unordered_map<int, RegisterItems> Items;
+
 
 	char RecvBuf[BUFSIZE];
 	int PrevRemain;

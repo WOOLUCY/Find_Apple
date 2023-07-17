@@ -52,36 +52,61 @@ void UTradeWidget::NativeConstruct()
 	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	for (auto& item : MyInstance->MySocket.Items) {
 
-		if (item.Item == APPLE) {
-			SelectItemName = FName("apple");
-		}
-		else if (item.Item == RUBBY) {
-			SelectItemName = FName("Rubby");
-		}
-		else if (item.Item ==TRUNK) {
-			SelectItemName = FName("trunk");
-		}
-		else if (item.Item == ROCK) {
-			SelectItemName = FName("rock");
-		}
-		else if (item.Item == BRANCH) {
-			SelectItemName = FName("branch");
-		}
-		else if (item.Item == SEED) {
-			SelectItemName = FName("seed");
-		}
-		else if (item.Item == GOLD) {
-			SelectItemName = FName("Gold");
-		}
-		else if (item.Item == IRON) {
-			SelectItemName = FName("Iron");
-		}
-		else if (item.Item == RADISH) {
+		switch (item.Value.Item)
+		{
+		case RADISH:
 			SelectItemName = FName("Radish");
+			break;
+		case CARROT:
+			SelectItemName = FName("Carrot");
+			break;
+		case KOHLRABI:
+			SelectItemName = FName("Kohlrabi");
+			break;
+		case TOMATO:
+			SelectItemName = FName("tomato");
+			break;
+		case CUCUMBER:
+			SelectItemName = FName("cucumber");
+			break;
+		case YELLOMELON:
+			SelectItemName = FName("yellomelon");
+			break;
+		case CACTUS:
+			SelectItemName = FName("cactus");
+			break;
+		case APPLE:
+			SelectItemName = FName("apple");
+			break;
+		case GOLD:
+			SelectItemName = FName("gold");
+			break;
+		case IRON:
+			SelectItemName = FName("iron");
+			break;
+		case RUBBY:
+			SelectItemName = FName("rubby");
+			break;
+		case SAPPHIRE:
+			SelectItemName = FName("sapphire");
+			break;
+		case ROCK:
+			SelectItemName = FName("rock");
+			break;
+		case TRUNK:
+			SelectItemName = FName("trunk");
+			break;
+		case BRANCH:
+			SelectItemName = FName("branch");
+			break;
+		case SEED:
+			SelectItemName = FName("seed");
+			break;
+
+		default:
+			break;
 		}
-		else if (item.Item == SAPPHIRE) {
-			SelectItemName = FName("Sapphire");
-		}
+
 
 
 		if (ItemDataTable != nullptr)
@@ -99,13 +124,14 @@ void UTradeWidget::NativeConstruct()
 						TradeListWidgetUIObject = CreateWidget<UTradeListWidget>(GetWorld(), TradeListWidgetClass);
 						TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushFromTexture(InventoryRow.Thumbnail);
 						TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushColor(FColor::White);
-						TradeListWidgetUIObject->PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(item.Num)));
-						TradeListWidgetUIObject->Price->SetText(FText::FromString(FString::FromInt(item.Price)));
+						TradeListWidgetUIObject->PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(item.Value.Num)));
+						TradeListWidgetUIObject->Price->SetText(FText::FromString(FString::FromInt(item.Value.Price)));
 
-						TradeListWidgetUIObject->Quantity = item.Num;
-						TradeListWidgetUIObject->ItemPrice = item.Price;
+						TradeListWidgetUIObject->Quantity = item.Value.Item;
+						TradeListWidgetUIObject->ItemPrice = item.Value.Price;
+						TradeListWidgetUIObject->ItemId = item.Value.RegisterId;
 						TradeListWidgetUIObject->ItemName = RowName;
-						TradeListWidgetUIObject->ItemId = item.RegisterId;
+
 						TradeList->AddChild(TradeListWidgetUIObject);
 					}
 				}
@@ -133,33 +159,63 @@ void UTradeWidget::Refrest()
 			static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 			for (auto& item : MyInstance->MySocket.Items) {
 
-				if (item.Item == 0) {
+
+
+				switch (item.Value.Item)
+				{
+				case RADISH:
+					SelectItemName = FName("Radish");
+					break;
+				case CARROT:
+					SelectItemName = FName("Carrot");
+					break;
+				case KOHLRABI:
+					SelectItemName = FName("Kohlrabi");
+					break;
+				case TOMATO:
+					SelectItemName = FName("tomato");
+					break;
+				case CUCUMBER:
+					SelectItemName = FName("cucumber");
+					break;
+				case YELLOMELON:
+					SelectItemName = FName("yellomelon");
+					break;
+				case CACTUS:
+					SelectItemName = FName("cactus");
+					break;
+				case APPLE:
 					SelectItemName = FName("apple");
-				}
-				else if (item.Item == 1) {
-					SelectItemName = FName("orange");
-				}
-				else if (item.Item == 2) {
-					SelectItemName = FName("trunk");
-				}
-				else if (item.Item == 3) {
-					SelectItemName = FName("rock");
-				}
-				else if (item.Item == 4) {
-					SelectItemName = FName("branch");
-				}
-				else if (item.Item == 5) {
-					SelectItemName = FName("seed");
-				}
-				else if (item.Item == 6) {
+					break;
+				case GOLD:
 					SelectItemName = FName("gold");
+					break;
+				case IRON:
+					SelectItemName = FName("iron");
+					break;
+				case RUBBY:
+					SelectItemName = FName("rubby");
+					break;
+				case SAPPHIRE:
+					SelectItemName = FName("sapphire");
+					break;
+				case ROCK:
+					SelectItemName = FName("rock");
+					break;
+				case TRUNK:
+					SelectItemName = FName("trunk");
+					break;
+				case BRANCH:
+					SelectItemName = FName("branch");
+					break;
+				case SEED:
+					SelectItemName = FName("seed");
+					break;
+
+				default:
+					break;
 				}
-				else if (item.Item == 7) {
-					SelectItemName = FName("steel");
-				}
-				else if (item.Item == 8) {
-					SelectItemName = FName("radish");
-				}
+		
 
 				if (ItemDataTable != nullptr)
 				{
@@ -176,12 +232,12 @@ void UTradeWidget::Refrest()
 								TradeListWidgetUIObject = CreateWidget<UTradeListWidget>(GetWorld(), TradeListWidgetClass);
 								TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushFromTexture(InventoryRow.Thumbnail);
 								TradeListWidgetUIObject->PriceSlot->SlotImage->SetBrushColor(FColor::White);
-								TradeListWidgetUIObject->PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(item.Num)));
-								TradeListWidgetUIObject->Price->SetText(FText::FromString(FString::FromInt(item.Price)));
+								TradeListWidgetUIObject->PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(item.Value.Num)));
+								TradeListWidgetUIObject->Price->SetText(FText::FromString(FString::FromInt(item.Value.Price)));
 
-								TradeListWidgetUIObject->Quantity = item.Num;
-								TradeListWidgetUIObject->ItemPrice = item.Price;
-								TradeListWidgetUIObject->ItemName = RowName;
+								TradeListWidgetUIObject->Quantity = item.Value.Item;
+								TradeListWidgetUIObject->ItemPrice = item.Value.Price;
+								TradeListWidgetUIObject->ItemId = item.Value.RegisterId;
 
 								TradeList->AddChild(TradeListWidgetUIObject);
 							}

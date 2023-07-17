@@ -22,7 +22,7 @@ constexpr char SC_MOVE_PLAYER = 7;
 constexpr char SC_CS_ITEM_REGISTER = 10;	//원래 testpacket그거임
 constexpr char CS_CLICKED_BUY = 12;			//클라이언트에서 물건샀을때
 constexpr char SC_RECEIVE_GOLD = 13;
-
+constexpr char SC_DELETE_ITEM = 14;
 
 constexpr char CS_LOGIN_TEST = 11;
 
@@ -140,7 +140,7 @@ struct CS_SC_ITEM_PACKET {
 };
 
 
-struct SC_BUY_PACKET { //등록한애한테 보내야 한다. 그래야 돈받는다. 
+struct SC_RECEIVE_GOLD_PACKET { //등록한애한테 보내야 한다. 그래야 돈받는다. 
 	unsigned char size;
 	char	type;
 	short	price;
@@ -148,5 +148,11 @@ struct SC_BUY_PACKET { //등록한애한테 보내야 한다. 그래야 돈받는다.
 };
 
 
+struct SC_DELETE_ITEM_PAKCET { //등록한애한테 보내야 한다. 그래야 돈받는다. 
+	unsigned char size;
+	char	type;
+	unsigned int	rId;
+	unsigned int	total;
 
+};
 #pragma pack (pop)

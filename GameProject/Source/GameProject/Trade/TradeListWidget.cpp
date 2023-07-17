@@ -62,7 +62,7 @@ void UTradeListWidget::BuyButtonClick()
 					if (InventoryElement.Value > ItemPrice)
 					{
 						// 수량 개수 줄이는 곳 (Quantity = 구매할 때마다 감소하는 개수)
-						Quantity -= 1;
+						//Quantity -= 1;
 						PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(Quantity)));
 						if (Quantity <= 0) {
 							this->RemoveFromParent();

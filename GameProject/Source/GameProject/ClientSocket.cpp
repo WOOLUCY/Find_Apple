@@ -95,10 +95,6 @@ void ClientSocket::SendRegistOrPurchasePacket(bool Regist,void* packet)
 		}
 
 		//UE_LOG(LogTemp, Warning, TEXT("[CS_SC_ITEM_PACKET] %d %d"), num, price);
-
-
-	
-
 	}
 	else {
 		//구매했을때 패킷보내기
@@ -198,19 +194,31 @@ void ClientSocket::ProcessPacket(char* packet)
 
 	case SC_CS_ITEM_REGISTER:
 	{
-		//testpacket 왓다갓다할거임
 		CS_SC_ITEM_PACKET* p = reinterpret_cast<CS_SC_ITEM_PACKET*>(packet);
 
-		RegisterItems temp1{p->item,p->total,p->price,p->registerId};
+		RegisterItems temp{p->item,p->total,p->price,p->registerId};
 
-		Items.Add(temp1);
+		Items.Add(temp.RegisterId, temp);
 		UE_LOG(LogTemp, Warning, TEXT("[CS_SC_ITEM_PACKET] %d %d %d %d"), p->type, p->item, p->total, p->price);
 
 		break;
 	}
+	case SC_DELETE_ITEM:
+	{
+		SC_DELETE_ITEM_PAKCET* p = reinterpret_cast<SC_DELETE_ITEM_PAKCET*>(packet);
+		//지운다.
+		if (p->total <= 0) {
+			Items.FindAndRemoveChecked(p->rId);
+		}
+		else {
+			Items[p->rId].Num = p->total;
+		}
+		
+		break;
+	}
 	case SC_RECEIVE_GOLD:
 	{
-
+		//골드 받았을때 
 
 		break;
 	}
