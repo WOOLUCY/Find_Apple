@@ -64,7 +64,7 @@ void UTradeWidget::NativeConstruct()
 		else if (item.Item == ROCK) {
 			SelectItemName = FName("rock");
 		}
-		else if (item.Item == BRAHCN) {
+		else if (item.Item == BRANCH) {
 			SelectItemName = FName("branch");
 		}
 		else if (item.Item == SEED) {

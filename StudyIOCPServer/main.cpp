@@ -10,12 +10,8 @@
 
 array<SESSION, MAX_USER> clients;
 //테스트 벡터
-struct TestStruc {
-	int key;
-	int recvNum;
-};
-vector<TestStruc> TestVector;
-vector<SC_CS_TESTPACKET> ItemVector;
+
+vector<CS_SC_ITEM_PACKET> ItemList;
 
 void process_packet(int c_id, char* packet);
 int PlayerCount = 0;
@@ -197,10 +193,11 @@ void process_packet(int c_id, char* packet)
 	}
 	case CS_LOGIN_TEST: 
 	{
-		printf("CS_LOGIN_TEST 패킷 도착함%d \n",ItemVector.size());
-		for (int i{ 0 }; i < ItemVector.size(); ++i) {
-			clients[c_id].send(&ItemVector[i]);
-			printf("[%d] %d %d %d\n", c_id, ItemVector[i].item, ItemVector[i].testNum, ItemVector[i].testPrice);
+		printf("[CS_LOGIN_TEST 패킷 도착함] %d \n",ItemList.size());
+
+		for (int i{ 0 }; i < ItemList.size(); ++i) {
+			clients[c_id].send(&ItemList[i]);
+		//	printf("[%d] %d %d %d\n", c_id, ItemList[i].item, ItemList[i].testNum, ItemList[i].testPrice);
 
 
 		}
@@ -211,6 +208,7 @@ void process_packet(int c_id, char* packet)
 		printf("[%d] x:%d\n", c_id, clients[c_id].x);
 		break;
 	}
+	/*
 	case CS_TEST: {
 
 		CS_TEST_PACKET* p = reinterpret_cast<CS_TEST_PACKET*>(packet);
@@ -237,32 +235,29 @@ void process_packet(int c_id, char* packet)
 			printf("[%d] SC_TEST패킷 전송\n", pl.id);
 			//pl.do_send(&add_packet);
 		}
-	}
-	case TESTPACKET: {
-		//testpacket 왓다갓다할거임
+	}*/
+	case SC_CS_ITEM_REGISTER: {
+		printf("[SC_CS_ITEM_REGISTER] 처리\n");
+		
+		CS_SC_ITEM_PACKET* p = reinterpret_cast<CS_SC_ITEM_PACKET*>(packet);
 
-		//printf("어라ㅣ너라ㅣ어라닝eeㄹ");
-		SC_CS_TESTPACKET* p = reinterpret_cast<SC_CS_TESTPACKET*>(packet);
+		CS_SC_ITEM_PACKET temp;
+		memcpy(&temp, p, sizeof(CS_SC_ITEM_PACKET));
+		temp.num = ItemList.size();
+		printf("[TEMP CS_SC_ITEM_PACKET 받음] [size:%d] [num:%d] [id:%d] [item:%d] [total:%d] [price:%d]\n",
+			temp.size, temp.num, temp.item, temp.total , temp.price,temp.price);
 
-		SC_CS_TESTPACKET temp;
-		memcpy(&temp, p, sizeof(SC_CS_TESTPACKET));
-		printf("[TEMP SC_CS_TESTPACKET 받음] %d %d %d %d %d\n", 
-			temp.size, temp.type,temp.item, temp.testNum,temp.testPrice);
-		ItemVector.push_back(temp);
+		ItemList.push_back(temp);
 
 		//모든클라이언트에게 보내보자.
 		for (auto& pl : clients) {
 			if (pl.id >= 0) {
 			//	if (pl.id == c_id) continue;
 				pl.send(&temp);
-				printf("[%d] - [SC_CS_TESTPACKET 보냄] %d %d %d %d %d\n", 
-					pl.id, temp.size,temp.type, temp.item, temp.testNum,temp.testPrice);
+				printf("[TEMP CS_SC_ITEM_PACKET 보냄] [size:%d] [num:%d] [id:%d] [item:%d] [total:%d] [price:%d]\n",
+					temp.size, temp.num, temp.item, temp.total, temp.price, temp.price);
 			}
 		}
-
-
-
-		//clients[c_id].send(&temp);
 
 	}
 

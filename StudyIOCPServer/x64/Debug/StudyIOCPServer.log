@@ -1,8 +1,11 @@
 ﻿  main.cpp
-C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(165,11): warning C4477: 'printf' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'ULONG_PTR'입니다.
-C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(165,11): message : 서식 문자열에서 '%lld'을(를) 사용하는 것이 좋습니다.
-C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(165,11): message : 서식 문자열에서 '%Id'을(를) 사용하는 것이 좋습니다.
-C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(165,11): message : 서식 문자열에서 '%I64d'을(를) 사용하는 것이 좋습니다.
-C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(200,10): warning C4477: 'printf' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'unsigned __int64'입니다.
-C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(200,10): message : 서식 문자열에서 '%zd'을(를) 사용하는 것이 좋습니다.
+C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(161,11): warning C4477: 'printf' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'ULONG_PTR'입니다.
+C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(161,11): message : 서식 문자열에서 '%lld'을(를) 사용하는 것이 좋습니다.
+C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(161,11): message : 서식 문자열에서 '%Id'을(를) 사용하는 것이 좋습니다.
+C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(161,11): message : 서식 문자열에서 '%I64d'을(를) 사용하는 것이 좋습니다.
+C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(196,10): warning C4477: 'printf' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'unsigned __int64'입니다.
+C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(196,10): message : 서식 문자열에서 '%zd'을(를) 사용하는 것이 좋습니다.
+C:\Users\gaon7\Find_Apple\StudyIOCPServer\main.cpp(246,29): warning C4267: '=': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  stdafx.h
+  코드를 생성하고 있습니다...
   StudyIOCPServer.vcxproj -> C:\Users\gaon7\Find_Apple\StudyIOCPServer\x64\Debug\StudyIOCPServer.exe

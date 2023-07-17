@@ -1,10 +1,8 @@
 #pragma once
 constexpr int PORT_NUM = 4000;
-constexpr int BUF_SIZE = 200;
+constexpr int BUF_SIZE = 256;
 constexpr int NAME_LEN = 20;
-//
-//constexpr int W_WIDTH = 8;
-//constexpr int W_HEIGHT = 8;
+
 
 // Packet ID, type
 constexpr char CS_LOGIN = 0;
@@ -14,27 +12,38 @@ constexpr char CS_THROWITEM = 3;
 constexpr char CS_TEST = 8;
 
 
-
-
 constexpr char SC_LOGIN_INFO = 4;
 constexpr char SC_ADD_PLAYER = 5;
 constexpr char SC_REMOVE_PLAYER = 6;
 constexpr char SC_MOVE_PLAYER = 7;
-constexpr char SC_TEST = 9;
 
-constexpr char TESTPACKET = 10;
+//정말 필요한거를 밑에다가 적오보자
+
+constexpr char SC_CS_ITEM_REGISTER = 10; //원래 testpacket그거임
+
 constexpr char CS_LOGIN_TEST = 11;
 
-constexpr int APPLE = 0;
-constexpr int RUBBY = 1;
-constexpr int TRUNK = 2;
-constexpr int ROCK = 3;
-constexpr int BRAHCN = 4;
-constexpr int SEED = 5;
-constexpr int IRON = 6;
-constexpr int RADISH = 7;
-constexpr int GOLD = 8;
-constexpr int SAPPHIRE = 9;
+//Kind Of Item
+constexpr int RADISH = 0;
+constexpr int CARROT = 1;
+constexpr int KOHLRABI = 2;
+constexpr int WARTERMELON = 4;
+constexpr int TOMATO = 5;
+constexpr int CUCUMBER = 6;
+constexpr int YELLOMELON = 7;
+constexpr int CACTUS = 8;
+constexpr int ORANGE = 9;
+constexpr int APPLE = 100;
+
+constexpr int GOLD = 11;
+constexpr int IRON = 12;
+constexpr int RUBBY = 13;
+constexpr int SAPPHIRE = 14;
+constexpr int ROCK = 15;
+constexpr int TRUNK = 16;
+constexpr int BRANCH = 17;
+constexpr int  SEED = 18;
+
 
 #pragma pack (push, 1)
 //Client To Server Packets
@@ -107,16 +116,19 @@ struct SC_TEST_PACKET {
 
 };
 
-struct SC_CS_TESTPACKET {
+struct CS_SC_ITEM_PACKET {
 	unsigned char size;
-	char	type = TESTPACKET;
-	int		item;
-	int		testNum;
-	int		testPrice;
+	char			type = SC_CS_ITEM_REGISTER;
+	unsigned int	num;	//index??num??
+	short			id;		//등록한쪽 아이디 저장
+	short			item;		
+	short			total;
+	short			price;
+
 
 };
 
-//
+
 
 
 #pragma pack (pop)

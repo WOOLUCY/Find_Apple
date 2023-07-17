@@ -75,7 +75,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	int TotalPrice = 0;
 
-	int ItmeType = -1;
+	int ItemType = -1;
 
 	UFUNCTION()
 	void ClickedCloseButton();

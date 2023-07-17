@@ -72,9 +72,16 @@ void UAuctionEnterWidget::ClickedEnterButton()
 					MyCharacter->InventoryComponent->RemoveFromInventory(RowName, ItemCount);
 					
 					// 보낼 수 있는 개수일 때만 서버한테 보냄
-
-					if (ItmeType >= 0) {
-						MyInstance->MySocket.SendTestSalePacket(ItmeType, ItemCount, ItemPrice);
+					
+					if (ItemType >= 0) {
+						//여기 수정해야함**
+						//MyInstance->MySocket.SendTestSalePacket(ItemType, ItemCount, ItemPrice);
+						CS_SC_ITEM_PACKET send;
+						send.item = ItemType;
+						send.total = ItemCount;
+						send.price = ItemPrice;
+	
+						MyInstance->MySocket.SendRegistOrPurchasePacket(true, &send);
 
 						TradeWidgetUIObject->Refrest();
 						RemoveFromParent();

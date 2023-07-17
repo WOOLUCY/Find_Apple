@@ -88,57 +88,57 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 
 			FString StringName = *ItemName.ToString();
 			if (StringName.Equals(FString(TEXT("apple")))) {
-				AuctionEnterWidgetClass->ItmeType = APPLE;
+				AuctionEnterWidgetClass->ItemType = APPLE;
 
 			}
 			else if (StringName.Equals(FString(TEXT("Rubby")))) {
-				AuctionEnterWidgetClass->ItmeType = RUBBY;
+				AuctionEnterWidgetClass->ItemType = RUBBY;
 
 			}
 			else if (StringName.Equals(FString(TEXT("trunk")))) {
-				AuctionEnterWidgetClass->ItmeType = TRUNK;
+				AuctionEnterWidgetClass->ItemType = TRUNK;
 
 			}
 			else if (StringName.Equals(FString(TEXT("rock")))) {
-				AuctionEnterWidgetClass->ItmeType = ROCK;
+				AuctionEnterWidgetClass->ItemType = ROCK;
 
 			}
 			else if (StringName.Equals(FString(TEXT("branch")))) {
-				AuctionEnterWidgetClass->ItmeType = BRAHCN;
+				AuctionEnterWidgetClass->ItemType = BRANCH;
 
 			}
 			else if (StringName.Equals(FString(TEXT("Seed")))) {
-				AuctionEnterWidgetClass->ItmeType = SEED;
+				AuctionEnterWidgetClass->ItemType = SEED;
 
 			}
 			else if (StringName.Equals(FString(TEXT("Iron")))) {
-				AuctionEnterWidgetClass->ItmeType = IRON;
+				AuctionEnterWidgetClass->ItemType = IRON;
 
 			}
 			else if (StringName.Equals(FString(TEXT("Radish")))) {
-				AuctionEnterWidgetClass->ItmeType = RADISH;
+				AuctionEnterWidgetClass->ItemType = RADISH;
 
 			}
 			else if (StringName.Equals(FString(TEXT("Gold")))) {
-				AuctionEnterWidgetClass->ItmeType = GOLD;
+				AuctionEnterWidgetClass->ItemType = GOLD;
 
 			}
 			else if (StringName.Equals(FString(TEXT("Sapphire")))) {
-				AuctionEnterWidgetClass->ItmeType = SAPPHIRE;
+				AuctionEnterWidgetClass->ItemType = SAPPHIRE;
 
 			}
 			else if (StringName.Equals(FString(TEXT("apple")))) {
-				AuctionEnterWidgetClass->ItmeType = APPLE;
+				AuctionEnterWidgetClass->ItemType = APPLE;
 
 			}
 
 			else {
-				AuctionEnterWidgetClass->ItmeType = -1;
+				AuctionEnterWidgetClass->ItemType = -1;
 
 			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-				FString::Printf(TEXT("ItmeType %d"), AuctionEnterWidgetClass->ItmeType));
+				FString::Printf(TEXT("ItmeType %d"), AuctionEnterWidgetClass->ItemType));
 		}
 	}
 

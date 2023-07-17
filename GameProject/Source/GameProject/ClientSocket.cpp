@@ -67,36 +67,44 @@ bool ClientSocket::InitSocket()
 
 void ClientSocket::SendLoginPacket()
 {
+	//흠...
 }
 
 void ClientSocket::SendMovePacket()
 {
 }
 
-void ClientSocket::SendRegistOrPurchasePacket(bool Regist)
+void ClientSocket::SendRegistOrPurchasePacket(bool Regist,void* packet)
 {
 	if (Regist) {
 		//등록했을때 패킷보내기
+
+		CS_SC_ITEM_PACKET temp = *(CS_SC_ITEM_PACKET*)packet;
+
+		temp.size = sizeof(CS_SC_ITEM_PACKET);
+		temp.type = SC_CS_ITEM_REGISTER;
+		temp.id = 10;//일단 10  ** 클라소켓마다 고유값 줘야할것같다.
+
+		packet = (CS_SC_ITEM_PACKET*)packet;
+
+		int retval = send(Socket, (const char*)&temp, temp.size, 0);
+		if (retval != 0) {
+			UE_LOG(LogTemp, Warning, TEXT("Client To Server Send Success,  [item:%d] [total:%d] [price:%d]"),
+				temp.item, temp.total, temp.price);
+
+		}
+
+		//UE_LOG(LogTemp, Warning, TEXT("[CS_SC_ITEM_PACKET] %d %d"), num, price);
+
+
+	
+
 	}
 	else {
 		//구매했을때 패킷보내기
 	}
 }
 
-void ClientSocket::SendTestPacket()
-{
-	SC_CS_TESTPACKET temp;
-	temp.size = sizeof(SC_CS_TESTPACKET);
-	temp.type = TESTPACKET;
-	temp.testNum = rand();
-
-	int retval = send(Socket, (const char*)&temp, temp.size,0);
-	if (retval != 0) {
-		UE_LOG(LogTemp, Warning, TEXT("Client To Server Send Success, [%d]"),temp.testNum);
-
-	}
-
-}
 
 bool ClientSocket::SendIngamePacket()
 {
@@ -118,7 +126,9 @@ bool ClientSocket::SendIngamePacket()
 }
 
 
-void ClientSocket::SendTestSalePacket(int item, int num, int price)
+
+/*
+* void ClientSocket::SendTestSalePacket(int item, int num, int price)
 {
 
 	UE_LOG(LogTemp, Warning, TEXT("[SendTestSalePacket] %d %d"), num,price);
@@ -137,6 +147,8 @@ void ClientSocket::SendTestSalePacket(int item, int num, int price)
 	}
 
 }
+
+*/
 
 void ClientSocket::RecvDataTest()
 {
@@ -194,14 +206,23 @@ void ClientSocket::ProcessPacket(char* packet)
 	switch (packet[1])
 	{ //패킷 type을 본다.
 
-	case TESTPACKET:
+	case SC_CS_ITEM_REGISTER:
 	{
 		//testpacket 왓다갓다할거임
-		SC_CS_TESTPACKET* p = reinterpret_cast<SC_CS_TESTPACKET*>(packet);
+		CS_SC_ITEM_PACKET* p = reinterpret_cast<CS_SC_ITEM_PACKET*>(packet);
 
-		SalesItem temp1{ p->item,p->testNum,p->testPrice };
+		SalesItem temp1{nullptr, p->item,p->total,p->price };
+	/*	switch (p->item)
+		{
+		case APPLE:
+			break;
+			
+		default:
+			break;
+		}*/
+
 		Items.Add(temp1);
-		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET] %d %d %d %d"), p->type, p->item, p->testNum, p->testPrice);
+		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET] %d %d %d %d"), p->type, p->item, p->total, p->price);
 
 	}
 
