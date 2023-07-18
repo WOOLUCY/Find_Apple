@@ -187,7 +187,7 @@ void process_packet(int c_id, char* packet)
 		add_packet.type = SC_ADD_PLAYER;
 		add_packet.x = clients[c_id].x;
 		add_packet.y = clients[c_id].y;
-		printf("CS_LOGIN 함수 호출함\n");
+		printf("[CS_LOGIN] 함수 호출함\n");
 
 		break;
 	}
@@ -200,7 +200,7 @@ void process_packet(int c_id, char* packet)
 			printf("[%d] item:%d pId:%d\n", c_id, item.second.item,item.second.playerId);
 
 		}
-
+		break;
 	
 	}
 	case CS_MOVE: {
@@ -219,13 +219,13 @@ void process_packet(int c_id, char* packet)
 		memcpy(&temp, p, sizeof(CS_SC_ITEM_PACKET));
 		
 		static unsigned int rCount = 0;
-		temp.registerId = rCount++;
+		temp.registerId = rCount;
 		temp.playerId = c_id; //일단 c_id로줬는데 
 
 		printf("[TEMP CS_SC_ITEM_PACKET 받음] [size:%d] [registerId:%d] [item:%d] [total:%d] [playerId:%d] [price:%d]\n",
 			temp.size, temp.registerId, temp.item, temp.total , temp.playerId,temp.price);
 
-		ItemList.insert({ rCount,temp });
+		ItemList.insert({ rCount++,temp });
 
 		//모든클라이언트에게 업데이트된 아이템리스트를 보내보자.
 		for (auto& pl : clients) {
@@ -260,16 +260,16 @@ void process_packet(int c_id, char* packet)
 
 
 
-		//모든 클라에게 삭제정보 다 알려줘야함 ->얘를 어케알려줄지 고민좀해봐라...
+		//모든 클라에게 삭제정보 다 알려줘
 		//클라도 unordered_map으로 바꾸고 id를 알려주는 방향으로 가는게 나을지도
 		
-		printf("[SC_DELETE_ITEM_PAKCET 보내기더더더전] [registerId:%d] [total:%d]\n", p->rId, ItemList[p->rId].total - 1);
+		printf("[SC_DELETE_ITEM_PAKCET 보내기더더 빼기 더전] [registerId:%d] [total:%d]\n", p->rId, ItemList[p->rId].total );
 
 		SC_DELETE_ITEM_PAKCET temp;
 		temp.size = sizeof(SC_DELETE_ITEM_PAKCET);
 		temp.type = SC_DELETE_ITEM;
 		temp.rId = p->rId;
-		temp.total = ItemList[p->rId].total-1;
+		temp.total = --ItemList[p->rId].total;
 		printf("[SC_DELETE_ITEM_PAKCET 보내기전] [registerId:%d] [total:%d]\n", temp.rId, temp.total);
 
 		for (auto& pl : clients) {
@@ -278,14 +278,11 @@ void process_packet(int c_id, char* packet)
 				printf("[SC_DELETE_ITEM_PAKCET 보냄] [registerId:%d] [total:%d]\n", temp.rId,temp.total);
 			}
 		}
-
-		//리스트에서 1.count 여러개면 한개만 줄이고 2.한개만 남아있으면 삭제한다.
-		if (ItemList[p->rId].total > 1) {
-			ItemList[p->rId].total -= 1;
-		}
-		else {
+		if (ItemList[p->rId].total == 0) {
 			ItemList.erase(p->rId);
+
 		}
+	
 		break;
 	}
 

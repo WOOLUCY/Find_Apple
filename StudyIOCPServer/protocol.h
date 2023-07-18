@@ -130,7 +130,7 @@ struct SC_TEST_PACKET {
 struct CS_SC_ITEM_PACKET {
 	unsigned char size;
 	char			type = SC_CS_ITEM_REGISTER;
-	unsigned int	registerId;	//판매하는것마다 고유번호임
+	int	registerId;	//판매하는것마다 고유번호임
 	short			playerId;		//등록한쪽 아이디 저장
 	short			item;		
 	short			total;
@@ -151,8 +151,8 @@ struct SC_RECEIVE_GOLD_PACKET { //등록한애한테 보내야 한다. 그래야 돈받는다.
 struct SC_DELETE_ITEM_PAKCET { //등록한애한테 보내야 한다. 그래야 돈받는다. 
 	unsigned char size;
 	char	type;
-	unsigned int	rId;
-	unsigned int	total;
+	int	rId;
+	int	total;
 
 };
 #pragma pack (pop)

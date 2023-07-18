@@ -34,7 +34,7 @@ struct RegisterItems {
 	int Item;
 	int Num;
 	int Price;
-	unsigned int RegisterId;		
+	int RegisterId;		
 
 };
 
@@ -47,7 +47,7 @@ public:
 
 	SOCKET Socket;
 	bool IsInit;
-	TMap<unsigned int,RegisterItems> Items;
+	TMap<int,RegisterItems> Items;
 	//unordered_map<int, RegisterItems> Items;
 
 
