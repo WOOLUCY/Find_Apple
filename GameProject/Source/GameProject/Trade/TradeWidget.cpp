@@ -127,7 +127,7 @@ void UTradeWidget::NativeConstruct()
 						TradeListWidgetUIObject->PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(item.Value.Num)));
 						TradeListWidgetUIObject->Price->SetText(FText::FromString(FString::FromInt(item.Value.Price)));
 
-						TradeListWidgetUIObject->Quantity = item.Value.Item;
+						TradeListWidgetUIObject->Quantity = item.Value.Num;
 						TradeListWidgetUIObject->ItemPrice = item.Value.Price;
 						TradeListWidgetUIObject->ItemId = item.Value.RegisterId;
 						TradeListWidgetUIObject->ItemName = RowName;
@@ -235,7 +235,7 @@ void UTradeWidget::Refrest()
 								TradeListWidgetUIObject->PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(item.Value.Num)));
 								TradeListWidgetUIObject->Price->SetText(FText::FromString(FString::FromInt(item.Value.Price)));
 
-								TradeListWidgetUIObject->Quantity = item.Value.Item;
+								TradeListWidgetUIObject->Quantity = item.Value.Num;
 								TradeListWidgetUIObject->ItemPrice = item.Value.Price;
 								TradeListWidgetUIObject->ItemId = item.Value.RegisterId;
 

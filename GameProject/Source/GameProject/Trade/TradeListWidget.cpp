@@ -43,8 +43,8 @@ void UTradeListWidget::BuyButtonClick()
 	static auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 
-	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+	static AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	static AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 
 	if (InventoryComponent) {
 
@@ -63,13 +63,12 @@ void UTradeListWidget::BuyButtonClick()
 					if (InventoryElement.Value > ItemPrice)
 					{
 						// 수량 개수 줄이는 곳 (Quantity = 구매할 때마다 감소하는 개수)
-						//Quantity -= 1;
+						Quantity -= 1;
 						PriceSlot->QuantityText->SetText(FText::FromString(FString::FromInt(Quantity)));
 						if (Quantity <= 0) {
 							this->RemoveFromParent();
 						}
 						
-						MyInstance->MySocket.SendRegistOrPurchasePacket(false, &ItemId);
 
 					}
 					else
@@ -85,4 +84,7 @@ void UTradeListWidget::BuyButtonClick()
 		// 가격만큼 인벤토리의 골드 감소
 		MyCharacter->InventoryComponent->RemoveFromInventory(FName("Gold"), ItemPrice);
 	}
+
+	MyInstance->MySocket.SendRegistOrPurchasePacket(false, &ItemId);
+
 }
