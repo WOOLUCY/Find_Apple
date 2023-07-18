@@ -3,11 +3,17 @@
 
 #include "ClientSocket.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "FindAppleCharacter.h"
+#include "Inventory/InventoryComponent.h"
+#include "Inventory/InventoryDatatable.h"
+
 ClientSocket::ClientSocket()
 {
 	IsInit = false;
 	memset(RecvBuf, BUFSIZE, 0);
 	PrevRemain = 0;
+	AddGold = 0;
 
 
 }
@@ -136,13 +142,6 @@ bool ClientSocket::SendIngamePacket()
 
 
 
-void ClientSocket::RecvDataTest()
-{
-	for (int i{ 0 }; i < Items.Num(); ++i) {
-		UE_LOG(LogTemp, Warning, TEXT("[RecvDataTest] : %d %d %d"), Items[i].Item, Items[i].Num, Items[i].Price);
-
-	}
-}
 
 void ClientSocket::PacketRecv()
 {
@@ -206,7 +205,7 @@ void ClientSocket::ProcessPacket(char* packet)
 	case SC_DELETE_ITEM:
 	{
 		SC_DELETE_ITEM_PAKCET* p = reinterpret_cast<SC_DELETE_ITEM_PAKCET*>(packet);
-		//지운다.
+		
 		if (p->total <= 0) {
 			Items.FindAndRemoveChecked(p->rId);
 		}
@@ -218,8 +217,12 @@ void ClientSocket::ProcessPacket(char* packet)
 	}
 	case SC_RECEIVE_GOLD:
 	{
-		//골드 받았을때 
+		//누가 내거 샀을때 
+		SC_RECEIVE_GOLD_PACKET* p = reinterpret_cast<SC_RECEIVE_GOLD_PACKET*>(packet);
+		AddGold = p->price;
+		UE_LOG(LogTemp, Warning, TEXT("SC_RECEIVE_GOLD Success!!!!!!! [Addglod : %d]"), AddGold);
 
+		//인벤에 넣어야함 어케 ㅅㅂ 
 		break;
 	}
 

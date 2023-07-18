@@ -19,21 +19,12 @@ int PlayerCount = 0;
 
 void disconnect(int c_id)
 {
-	//for (auto& pl : clients) {
-	//	{
-	//		lock_guard<mutex> ll(pl._s_lock);
-	//		if (ST_INGAME != pl._state) continue;
-	//	}
-	//	if (pl._id == c_id) continue;
-	//	pl.send_remove_player_packet(c_id);
-	//}
 
-	printf("Disconnect Call\n");
-	PlayerCount -= 1;
+
+	printf("[%d] Disconnect Call\n",c_id);
+	clients[c_id].ingame = false;
 	closesocket(clients[c_id].socket);
 
-//	lock_guard<mutex> ll(clients[c_id]._s_lock);
-//	clients[c_id]._state = ST_FREE;
 }
 
 
@@ -115,6 +106,7 @@ int main()
 				clients[client_id].x = 0;
 				clients[client_id].y = 0;
 				clients[client_id].z = 0;
+				clients[client_id].ingame = true;
 
 				clients[client_id].id = client_id;
 				clients[client_id].name[0] = 0;
@@ -174,6 +166,9 @@ void process_packet(int c_id, char* packet)
 	//받은 패킷 처리하는거임 
 	switch (packet[1]) { //패킷 type을 본다.
 	case CS_LOGIN: {
+
+		printf("[CS_LOGIN] 함수 호출함\n");
+
 		CS_LOGIN_PACKET* p = reinterpret_cast<CS_LOGIN_PACKET*>(packet);
 		strcpy(clients[c_id].name, p->name);
 		clients[c_id].send_login_info_packet();
@@ -187,7 +182,6 @@ void process_packet(int c_id, char* packet)
 		add_packet.type = SC_ADD_PLAYER;
 		add_packet.x = clients[c_id].x;
 		add_packet.y = clients[c_id].y;
-		printf("[CS_LOGIN] 함수 호출함\n");
 
 		break;
 	}
@@ -229,7 +223,7 @@ void process_packet(int c_id, char* packet)
 
 		//모든클라이언트에게 업데이트된 아이템리스트를 보내보자.
 		for (auto& pl : clients) {
-			if (pl.id >= 0) {
+			if (pl.ingame) {
 				pl.send(&temp);
 				printf("[TEMP CS_SC_ITEM_PACKET 보냄] [size:%d] [registerId:%d] [item:%d] [total:%d] [playerId:%d] [price:%d]\n",
 					temp.size, temp.registerId, temp.item, temp.total, temp.playerId, temp.price);
@@ -252,7 +246,7 @@ void process_packet(int c_id, char* packet)
 				temp.type = SC_RECEIVE_GOLD;
 				temp.price = ItemList[p->rId].price;
 				//send해줘야하는데 일단 ㄱㄷ
-
+				pl.send(&temp);
 				printf("[player : %d] 에게 [price:%d]를 준다.\n", ItemList[p->rId].playerId, ItemList[p->rId].price);
 				break; 
 			}
@@ -273,7 +267,7 @@ void process_packet(int c_id, char* packet)
 		printf("[SC_DELETE_ITEM_PAKCET 보내기전] [registerId:%d] [total:%d]\n", temp.rId, temp.total);
 
 		for (auto& pl : clients) {
-			if (pl.id >= 0) {
+			if (pl.ingame) {
 				pl.send(&temp);
 				printf("[SC_DELETE_ITEM_PAKCET 보냄] [registerId:%d] [total:%d]\n", temp.rId,temp.total);
 			}

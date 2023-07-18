@@ -40,6 +40,7 @@ class SESSION
 	EXP_OVER recvOver;
 public:
 	int id;
+	bool ingame;
 	SOCKET socket;
 	short x, y, z;
 	char name[NAMESIZE];

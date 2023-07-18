@@ -130,7 +130,7 @@ struct SC_TEST_PACKET {
 struct CS_SC_ITEM_PACKET {
 	unsigned char size;
 	char			type = SC_CS_ITEM_REGISTER;
-	int	registerId;	//판매하는것마다 고유번호임
+	int				registerId;	//판매하는것마다 고유번호임
 	short			playerId;		//등록한쪽 아이디 저장
 	short			item;		
 	short			total;

@@ -21,6 +21,7 @@ UTradeListWidget::UTradeListWidget(const FObjectInitializer& objectInitializer) 
 	if (DataTable.Succeeded())
 	{
 		ItemDataTable = DataTable.Object;
+		
 	}
 }
 

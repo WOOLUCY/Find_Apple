@@ -13,9 +13,6 @@
 #include "Windows/HideWindowsPlatformTypes.h"
 
 
-
-#include "Runtime/Core/Public/HAL/Runnable.h"
-
 #include "CoreMinimal.h"
 
 #include "../../../StudyIOCPServer/protocol.h"
@@ -48,7 +45,8 @@ public:
 	SOCKET Socket;
 	bool IsInit;
 	TMap<int,RegisterItems> Items;
-	//unordered_map<int, RegisterItems> Items;
+	
+	int AddGold;
 
 
 	char RecvBuf[BUFSIZE];
@@ -58,22 +56,21 @@ public:
 public:
 	bool InitSocket();
 
-	void SendLoginPacket();
-	void SendMovePacket();
 
 	void SendRegistOrPurchasePacket(bool Regist,void * packet); //true면 Resigter, false면 purchase??아님쪼개????
+
+	void PacketRecv();
+	void ProcessPacket(char* packet);
 
 
 
 
 	//이거 삭제해야하는 함수들 테스트 함수임
 	bool SendIngamePacket();
-	void RecvDataTest();
 
-	void PacketRecv();
-	void ProcessPacket(char* packet);
-	
-	
+	void SendLoginPacket();
+	void SendMovePacket();
+
 
 
 };

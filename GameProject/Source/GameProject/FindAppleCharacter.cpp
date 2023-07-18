@@ -927,6 +927,19 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 
 	// TODO: 실시간으로 허기가 줄어들게
 
+	//판매되었을때 인벤에 추가
+
+	static UWorld* TheWorld = GetWorld();
+	if (TheWorld != nullptr) {
+
+		static auto GameInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		if (GameInstance->MySocket.AddGold != 0) {
+			InventoryComponent->AddToInventory(FName("gold"), GameInstance->MySocket.AddGold);
+			GameInstance->MySocket.AddGold = 0;
+
+		}
+	}
+
 	SetPlayBattleMusic(countOfMonstersAggro);
 
 }
