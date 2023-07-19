@@ -3,6 +3,7 @@
 
 #include "GameStartWidget.h"
 #include "Components/Button.h"
+#include "Components/EditableTextBox.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Teleport/BlackScreenBegin.h"
 #include "../Teleport/BlackScreenEnd.h"
@@ -35,6 +36,7 @@ void UGameStartWidget::NativeConstruct()
 
 	StartButton->OnClicked.AddDynamic(this, &UGameStartWidget::GameStart);
 	OptionButton->OnClicked.AddDynamic(this, &UGameStartWidget::CreateOptionWidget);
+	IDTextBox->OnTextChanged.AddDynamic(this, &UGameStartWidget::ChangedIDTextBox);
 }
 
 void UGameStartWidget::GameStart()
@@ -85,4 +87,11 @@ void UGameStartWidget::BlackScreenPopEnd()
 
 void UGameStartWidget::ChangeLevelAndDestroy()
 {
+}
+
+void UGameStartWidget::ChangedIDTextBox(const FText& Text)
+{
+	ID = Text;
+
+	UE_LOG(LogTemp, Warning, TEXT("SomeString: %s"), *ID.ToString());
 }
