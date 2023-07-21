@@ -1,17 +1,16 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "stdafx.h"
 #include "SESSION.h"
-//#include "protocol.h"
 
 #define SERVER_ADDR "127.0.0.1"
 #define SERVER_PORT 4000
 #define BUFSIZE 256
 #define MAX_USER 100
 
-array<SESSION, MAX_USER> clients;
-//테스트 벡터
 
-vector<CS_SC_ITEM_PACKET> ItemList;
+array<SESSION, MAX_USER> clients;
+
+unordered_map<int, CS_SC_ITEM_PACKET> ItemList;
 
 void process_packet(int c_id, char* packet);
 int PlayerCount = 0;
@@ -20,21 +19,12 @@ int PlayerCount = 0;
 
 void disconnect(int c_id)
 {
-	//for (auto& pl : clients) {
-	//	{
-	//		lock_guard<mutex> ll(pl._s_lock);
-	//		if (ST_INGAME != pl._state) continue;
-	//	}
-	//	if (pl._id == c_id) continue;
-	//	pl.send_remove_player_packet(c_id);
-	//}
 
-	printf("Disconnect Call\n");
-	PlayerCount -= 1;
+
+	printf("[%d] Disconnect Call\n",c_id);
+	clients[c_id].ingame = false;
 	closesocket(clients[c_id].socket);
 
-//	lock_guard<mutex> ll(clients[c_id]._s_lock);
-//	clients[c_id]._state = ST_FREE;
 }
 
 
@@ -116,6 +106,7 @@ int main()
 				clients[client_id].x = 0;
 				clients[client_id].y = 0;
 				clients[client_id].z = 0;
+				clients[client_id].ingame = true;
 
 				clients[client_id].id = client_id;
 				clients[client_id].name[0] = 0;
@@ -169,11 +160,15 @@ int main()
 
 }
 
+
 void process_packet(int c_id, char* packet)
 {
 	//받은 패킷 처리하는거임 
 	switch (packet[1]) { //패킷 type을 본다.
 	case CS_LOGIN: {
+
+		printf("[CS_LOGIN] 함수 호출함\n");
+
 		CS_LOGIN_PACKET* p = reinterpret_cast<CS_LOGIN_PACKET*>(packet);
 		strcpy(clients[c_id].name, p->name);
 		clients[c_id].send_login_info_packet();
@@ -187,20 +182,26 @@ void process_packet(int c_id, char* packet)
 		add_packet.type = SC_ADD_PLAYER;
 		add_packet.x = clients[c_id].x;
 		add_packet.y = clients[c_id].y;
-		printf("CS_LOGIN 함수 호출함\n");
 
 		break;
 	}
 	case CS_LOGIN_TEST: 
 	{
-		printf("[CS_LOGIN_TEST 패킷 도착함] %d \n",ItemList.size());
 
-		for (int i{ 0 }; i < ItemList.size(); ++i) {
-			clients[c_id].send(&ItemList[i]);
-		//	printf("[%d] %d %d %d\n", c_id, ItemList[i].item, ItemList[i].testNum, ItemList[i].testPrice);
+		CS_INGAME_PACKET* p = reinterpret_cast<CS_INGAME_PACKET*>(packet);
+		
 
+		memcpy(&clients[c_id].name, p->name, NAME_LEN);
+
+		printf("[CS_LOGIN_TEST 패킷 도착함] %s \n", clients[c_id].name);
+
+		for (auto& item : ItemList) {
+			clients[c_id].send(&item.second);
+			printf("[%d] item:%d pId:%d\n", c_id, item.second.item,item.second.playerId);
 
 		}
+		break;
+	
 	}
 	case CS_MOVE: {
 		CS_MOVE_PACKET* p = reinterpret_cast<CS_MOVE_PACKET*>(packet);
@@ -208,34 +209,7 @@ void process_packet(int c_id, char* packet)
 		printf("[%d] x:%d\n", c_id, clients[c_id].x);
 		break;
 	}
-	/*
-	case CS_TEST: {
 
-		CS_TEST_PACKET* p = reinterpret_cast<CS_TEST_PACKET*>(packet);
-
-		SC_TEST_PACKET temp;
-		temp.size = sizeof(SC_TEST_PACKET);
-		temp.type = SC_TEST;
-		temp.test = p->test;
-		temp.id = c_id;
-
-		TestStruc testTemp{ c_id,temp.test };
-		TestVector.push_back(testTemp);
-
-		for (TestStruc a : TestVector) {
-			printf("[%d] - %d\n", a.key, a.recvNum);
-		}
-		printf("[CS_TEST패킷 받음] %d %d %d %d\n", temp.size, temp.type, temp.test, temp.id);
-
-		//이제 클라이언트 모두에게 보내줘야함.
-		for (auto& pl : clients) {
-			//if (false == pl.in_use) continue;
-			//if (pl._id == c_id) continue;
-			pl.send(&temp);
-			printf("[%d] SC_TEST패킷 전송\n", pl.id);
-			//pl.do_send(&add_packet);
-		}
-	}*/
 	case SC_CS_ITEM_REGISTER: {
 		printf("[SC_CS_ITEM_REGISTER] 처리\n");
 		
@@ -243,22 +217,73 @@ void process_packet(int c_id, char* packet)
 
 		CS_SC_ITEM_PACKET temp;
 		memcpy(&temp, p, sizeof(CS_SC_ITEM_PACKET));
-		temp.num = ItemList.size();
-		printf("[TEMP CS_SC_ITEM_PACKET 받음] [size:%d] [num:%d] [id:%d] [item:%d] [total:%d] [price:%d]\n",
-			temp.size, temp.num, temp.item, temp.total , temp.price,temp.price);
+		
+		static unsigned int rCount = 0;
+		temp.registerId = rCount;
+		temp.playerId = c_id; //일단 c_id로줬는데 
 
-		ItemList.push_back(temp);
+		printf("[TEMP CS_SC_ITEM_PACKET 받음] [size:%d] [registerId:%d] [item:%d] [total:%d] [playerId:%d] [price:%d]\n",
+			temp.size, temp.registerId, temp.item, temp.total , temp.playerId,temp.price);
 
-		//모든클라이언트에게 보내보자.
+		ItemList.insert({ rCount++,temp });
+
+		//모든클라이언트에게 업데이트된 아이템리스트를 보내보자.
 		for (auto& pl : clients) {
-			if (pl.id >= 0) {
-			//	if (pl.id == c_id) continue;
+			if (pl.ingame) {
 				pl.send(&temp);
-				printf("[TEMP CS_SC_ITEM_PACKET 보냄] [size:%d] [num:%d] [id:%d] [item:%d] [total:%d] [price:%d]\n",
-					temp.size, temp.num, temp.item, temp.total, temp.price, temp.price);
+				printf("[TEMP CS_SC_ITEM_PACKET 보냄] [size:%d] [registerId:%d] [item:%d] [total:%d] [playerId:%d] [price:%d]\n",
+					temp.size, temp.registerId, temp.item, temp.total, temp.playerId, temp.price);
+			}
+		}
+		break;
+	}
+	case CS_CLICKED_BUY: {
+		printf("[CS_CLICKED_BUY] 처리\n");
+		CS_BUY_PACKET* p = reinterpret_cast<CS_BUY_PACKET*>(packet);
+
+		//키값이용해서 playerid 저장하고
+		int pId = ItemList[p->rId].playerId;
+	
+		//그리고 돈보내줘 SC_BUY_PACKET->여기해야함
+		for (auto& pl : clients) {
+			if (pl.id == pId) {
+				SC_RECEIVE_GOLD_PACKET temp;
+				temp.size = sizeof(SC_RECEIVE_GOLD_PACKET);
+				temp.type = SC_RECEIVE_GOLD;
+				temp.price = ItemList[p->rId].price;
+				//send해줘야하는데 일단 ㄱㄷ
+				pl.send(&temp);
+				printf("[player : %d] 에게 [price:%d]를 준다.\n", ItemList[p->rId].playerId, ItemList[p->rId].price);
+				break; 
 			}
 		}
 
+
+
+		//모든 클라에게 삭제정보 다 알려줘
+		//클라도 unordered_map으로 바꾸고 id를 알려주는 방향으로 가는게 나을지도
+		
+		printf("[SC_DELETE_ITEM_PAKCET 보내기더더 빼기 더전] [registerId:%d] [total:%d]\n", p->rId, ItemList[p->rId].total );
+
+		SC_DELETE_ITEM_PAKCET temp;
+		temp.size = sizeof(SC_DELETE_ITEM_PAKCET);
+		temp.type = SC_DELETE_ITEM;
+		temp.rId = p->rId;
+		temp.total = --ItemList[p->rId].total;
+		printf("[SC_DELETE_ITEM_PAKCET 보내기전] [registerId:%d] [total:%d]\n", temp.rId, temp.total);
+
+		for (auto& pl : clients) {
+			if (pl.ingame) {
+				pl.send(&temp);
+				printf("[SC_DELETE_ITEM_PAKCET 보냄] [registerId:%d] [total:%d]\n", temp.rId,temp.total);
+			}
+		}
+		if (ItemList[p->rId].total == 0) {
+			ItemList.erase(p->rId);
+
+		}
+	
+		break;
 	}
 
 	}

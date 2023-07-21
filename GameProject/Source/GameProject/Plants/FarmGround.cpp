@@ -14,7 +14,7 @@
 #include "Tomato.h"
 #include "RootPlant.h"
 #include "VegPlant.h"
-
+#include "AppleTree.h"
 
 // Sets default values
 AFarmGround::AFarmGround()
@@ -214,7 +214,8 @@ void AFarmGround::PutSeed()
 		if (TheWorld) {
 
 			//Planted = TheWorld->SpawnActor<APlant>(ARootPlant::StaticClass(), GetActorLocation(), FRotator());
-			Planted = TheWorld->SpawnActor<APlant>(AVegPlant::StaticClass(), GetActorLocation(), FRotator());
+			//Planted = TheWorld->SpawnActor<APlant>(AVegPlant::StaticClass(), GetActorLocation(), FRotator());
+			Planted = TheWorld->SpawnActor<APlant>(AAppleTree::StaticClass(), GetActorLocation(), FRotator());
 
 		}
 

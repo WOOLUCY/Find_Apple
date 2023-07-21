@@ -3,11 +3,17 @@
 
 #include "ClientSocket.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "FindAppleCharacter.h"
+#include "Inventory/InventoryComponent.h"
+#include "Inventory/InventoryDatatable.h"
+
 ClientSocket::ClientSocket()
 {
 	IsInit = false;
 	memset(RecvBuf, BUFSIZE, 0);
 	PrevRemain = 0;
+	AddGold = 0;
 
 
 }
@@ -83,7 +89,7 @@ void ClientSocket::SendRegistOrPurchasePacket(bool Regist,void* packet)
 
 		temp.size = sizeof(CS_SC_ITEM_PACKET);
 		temp.type = SC_CS_ITEM_REGISTER;
-		temp.id = 10;//일단 10  ** 클라소켓마다 고유값 줘야할것같다.
+		
 
 		packet = (CS_SC_ITEM_PACKET*)packet;
 
@@ -95,23 +101,34 @@ void ClientSocket::SendRegistOrPurchasePacket(bool Regist,void* packet)
 		}
 
 		//UE_LOG(LogTemp, Warning, TEXT("[CS_SC_ITEM_PACKET] %d %d"), num, price);
-
-
-	
-
 	}
 	else {
 		//구매했을때 패킷보내기
+		CS_BUY_PACKET temp;
+		temp.size = sizeof(CS_BUY_PACKET);
+		temp.type = CS_CLICKED_BUY;
+		temp.rId = *(int*)packet;
+
+
+		int retval = send(Socket, (const char*)&temp, temp.size, 0);
+		if (retval != 0) {
+			UE_LOG(LogTemp, Warning, TEXT("[CS_BUY_PACKET] send Success, [rId:%d]"),temp.rId);
+
+		}
+
+
 	}
 }
 
 
-bool ClientSocket::SendIngamePacket()
+bool ClientSocket::SendIngamePacket(char* res)
 {
-	CS_INGAME_TEST_PACKET temp;
-	temp.size = sizeof(CS_INGAME_TEST_PACKET);
+	CS_INGAME_PACKET temp;
+	temp.size = sizeof(CS_INGAME_PACKET);
 	temp.type = CS_LOGIN_TEST;
 	temp.isIn = true;
+
+	memcpy(&temp.name, res, NAME_LEN);
 
 	int retval = send(Socket, (const char*)&temp, temp.size, 0);
 	if (retval != 0) {
@@ -127,36 +144,6 @@ bool ClientSocket::SendIngamePacket()
 
 
 
-/*
-* void ClientSocket::SendTestSalePacket(int item, int num, int price)
-{
-
-	UE_LOG(LogTemp, Warning, TEXT("[SendTestSalePacket] %d %d"), num,price);
-
-	SC_CS_TESTPACKET temp;
-	temp.size = sizeof(SC_CS_TESTPACKET);
-	temp.type = TESTPACKET;
-	temp.item = item;
-	temp.testNum = num;
-	temp.testPrice = price;
-
-	int retval = send(Socket, (const char*)&temp, temp.size, 0);
-	if (retval != 0) {
-		UE_LOG(LogTemp, Warning, TEXT("Client To Server Send Success,  [%d %d, %d]"),temp.item ,temp.testNum,temp.testPrice);
-
-	}
-
-}
-
-*/
-
-void ClientSocket::RecvDataTest()
-{
-	for (int i{ 0 }; i < Items.Num(); ++i) {
-		UE_LOG(LogTemp, Warning, TEXT("[RecvDataTest] : %d %d %d"), Items[i].Item, Items[i].Num, Items[i].Price);
-
-	}
-}
 
 void ClientSocket::PacketRecv()
 {
@@ -208,22 +195,37 @@ void ClientSocket::ProcessPacket(char* packet)
 
 	case SC_CS_ITEM_REGISTER:
 	{
-		//testpacket 왓다갓다할거임
 		CS_SC_ITEM_PACKET* p = reinterpret_cast<CS_SC_ITEM_PACKET*>(packet);
 
-		SalesItem temp1{nullptr, p->item,p->total,p->price };
-	/*	switch (p->item)
-		{
-		case APPLE:
-			break;
-			
-		default:
-			break;
-		}*/
+		RegisterItems temp{p->item,p->total,p->price,p->registerId};
 
-		Items.Add(temp1);
-		UE_LOG(LogTemp, Warning, TEXT("[SC_CS_TESTPACKET] %d %d %d %d"), p->type, p->item, p->total, p->price);
+		Items.Add(temp.RegisterId, temp);
+		UE_LOG(LogTemp, Warning, TEXT("[CS_SC_ITEM_PACKET] %d %d %d %d"), p->type, p->item, p->total, p->price);
 
+		break;
+	}
+	case SC_DELETE_ITEM:
+	{
+		SC_DELETE_ITEM_PAKCET* p = reinterpret_cast<SC_DELETE_ITEM_PAKCET*>(packet);
+		
+		if (p->total <= 0) {
+			Items.FindAndRemoveChecked(p->rId);
+		}
+		else {
+			Items[p->rId].Num = p->total;
+		}
+		
+		break;
+	}
+	case SC_RECEIVE_GOLD:
+	{
+		//누가 내거 샀을때 
+		SC_RECEIVE_GOLD_PACKET* p = reinterpret_cast<SC_RECEIVE_GOLD_PACKET*>(packet);
+		AddGold = p->price;
+		UE_LOG(LogTemp, Warning, TEXT("SC_RECEIVE_GOLD Success!!!!!!! [Addglod : %d]"), AddGold);
+
+		//인벤에 넣어야함 어케 ㅅㅂ 
+		break;
 	}
 
 	}

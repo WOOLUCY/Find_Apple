@@ -7,13 +7,11 @@
 #pragma comment(lib, "ws2_32.lib")
 #include <WinSock2.h>
 #include <WS2tcpip.h>
+#include <unordered_map>
 
 #include "Windows/PostWindowsApi.h"
 #include "Windows/HideWindowsPlatformTypes.h"
 
-
-
-#include "Runtime/Core/Public/HAL/Runnable.h"
 
 #include "CoreMinimal.h"
 
@@ -29,11 +27,12 @@
 
 
 //얘도 손봐야함
-struct SalesItem {
-	char* name;
+struct RegisterItems {
 	int Item;
 	int Num;
 	int Price;
+	int RegisterId;		
+
 };
 
 
@@ -45,7 +44,10 @@ public:
 
 	SOCKET Socket;
 	bool IsInit;
-	TArray<SalesItem> Items;
+	TMap<int,RegisterItems> Items;
+	
+	int AddGold;
+
 
 	char RecvBuf[BUFSIZE];
 	int PrevRemain;
@@ -54,23 +56,21 @@ public:
 public:
 	bool InitSocket();
 
-	void SendLoginPacket();
-	void SendMovePacket();
 
 	void SendRegistOrPurchasePacket(bool Regist,void * packet); //true면 Resigter, false면 purchase??아님쪼개????
 
+	void PacketRecv();
+	void ProcessPacket(char* packet);
+	bool SendIngamePacket(char* name);
 
 
 
 	//이거 삭제해야하는 함수들 테스트 함수임
-	bool SendIngamePacket();
-	void SendTestSalePacket(int item,int num, int price);
-	void RecvDataTest();
 
-	void PacketRecv();
-	void ProcessPacket(char* packet);
-	
-	
+
+	void SendLoginPacket();
+	void SendMovePacket();
+
 
 
 };

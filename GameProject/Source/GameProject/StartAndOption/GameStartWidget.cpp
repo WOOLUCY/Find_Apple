@@ -3,9 +3,15 @@
 
 #include "GameStartWidget.h"
 #include "Components/Button.h"
+#include "Components/EditableTextBox.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Teleport/BlackScreenBegin.h"
 #include "../Teleport/BlackScreenEnd.h"
+#include "../MyGameInstance.h"
+
+#include <string>
+
+
 #include "GameOptionWidget.h"
 
 UGameStartWidget::UGameStartWidget(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
@@ -35,14 +41,41 @@ void UGameStartWidget::NativeConstruct()
 
 	StartButton->OnClicked.AddDynamic(this, &UGameStartWidget::GameStart);
 	OptionButton->OnClicked.AddDynamic(this, &UGameStartWidget::CreateOptionWidget);
+	IDTextBox->OnTextChanged.AddDynamic(this, &UGameStartWidget::ChangedIDTextBox);
 }
 
 void UGameStartWidget::GameStart()
 {
+
+	//여기가 스타트 버튼눌리는데 ID를 서버에 바로 보내지말고 
+	//인스턴스에 저장해서 스타트누르면 소켓이랑 연결하는 방식으로 하는게 좋을듯
+
+	auto MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (MyInstance != nullptr) {
+		if (!MyInstance->MySocket.IsInit) {
+			if (MyInstance->MySocket.InitSocket()) {
+				MyInstance->MySocket.IsInit = true;
+
+				char* result = TCHAR_TO_ANSI(*ID.ToString()); 
+
+				if (MyInstance->MySocket.SendIngamePacket(result)) {
+					UE_LOG(LogTemp, Warning, TEXT("SendIngamePacket() Success"));
+				}
+				else {
+					UE_LOG(LogTemp, Warning, TEXT("SendIngamePacket() Fail"));
+
+				}
+			}
+		}
+	}
+
+
 	BlackScreenPopStart();
 
 	FTimerHandle TimerHandle;
-	float BlackScreenBeginTime = 0.8;
+	float BlackScreenBeginTime = 1.0;
+
+
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 		{
@@ -85,4 +118,11 @@ void UGameStartWidget::BlackScreenPopEnd()
 
 void UGameStartWidget::ChangeLevelAndDestroy()
 {
+}
+
+void UGameStartWidget::ChangedIDTextBox(const FText& Text)
+{
+	ID = Text;
+
+	UE_LOG(LogTemp, Warning, TEXT("SomeString: %s"), *ID.ToString());
 }

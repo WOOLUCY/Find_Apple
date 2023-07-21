@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <MSWSock.h>
 #include <array>
+#include <unordered_map>
 #include <vector>
 #pragma comment (lib, "WS2_32.LIB")
 #pragma comment(lib, "MSWSock.lib")

@@ -31,6 +31,12 @@ protected:
 	UPROPERTY(EditAnywhere, category = "Setting", meta = (AllowPrivateAccess = "true"))
     FName TransferLevelName = "CopyEditMap1";
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UEditableTextBox* IDTextBox = 0;
+
+	UPROPERTY()
+	FText ID;
+
 private:
 	/* Black Screen Pop (어두워지는 효과) */
 	/* Begin */
@@ -62,4 +68,6 @@ private:
 	void BlackScreenPopEnd();
 	UFUNCTION()
 	void ChangeLevelAndDestroy();
+	UFUNCTION()
+	void ChangedIDTextBox(const FText& Text);
 };
