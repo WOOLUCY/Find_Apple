@@ -187,7 +187,13 @@ void process_packet(int c_id, char* packet)
 	}
 	case CS_LOGIN_TEST: 
 	{
-		printf("[CS_LOGIN_TEST 패킷 도착함] %d \n",ItemList.size());
+
+		CS_INGAME_PACKET* p = reinterpret_cast<CS_INGAME_PACKET*>(packet);
+		
+
+		memcpy(&clients[c_id].name, p->name, NAME_LEN);
+
+		printf("[CS_LOGIN_TEST 패킷 도착함] %s \n", clients[c_id].name);
 
 		for (auto& item : ItemList) {
 			clients[c_id].send(&item.second);

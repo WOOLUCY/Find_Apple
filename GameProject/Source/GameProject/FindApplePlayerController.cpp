@@ -30,14 +30,8 @@ void AFindApplePlayerController::BeginPlay()
 
 	MyInstance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (MyInstance != nullptr) {
-		if (!MyInstance->MySocket.IsInit) {
-			if (MyInstance->MySocket.InitSocket()) {
-				MyInstance->MySocket.IsInit = true;
-				if (MyInstance->MySocket.SendIngamePacket()) {
-					IsTick = true;
-				}
-			}
-		}
+		if (MyInstance->MySocket.IsInit) IsTick = true;
+
 	}
 
 }

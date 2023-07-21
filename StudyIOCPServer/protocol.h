@@ -74,10 +74,11 @@ struct CS_TEST_PACKET {
 	char	test;
 
 };
-struct CS_INGAME_TEST_PACKET {
+struct CS_INGAME_PACKET {
 	unsigned char size;
 	char	type;
 	bool	isIn;
+	char	name[NAME_LEN];
 
 };
 

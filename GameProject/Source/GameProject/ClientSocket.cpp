@@ -121,12 +121,14 @@ void ClientSocket::SendRegistOrPurchasePacket(bool Regist,void* packet)
 }
 
 
-bool ClientSocket::SendIngamePacket()
+bool ClientSocket::SendIngamePacket(char* res)
 {
-	CS_INGAME_TEST_PACKET temp;
-	temp.size = sizeof(CS_INGAME_TEST_PACKET);
+	CS_INGAME_PACKET temp;
+	temp.size = sizeof(CS_INGAME_PACKET);
 	temp.type = CS_LOGIN_TEST;
 	temp.isIn = true;
+
+	memcpy(&temp.name, res, NAME_LEN);
 
 	int retval = send(Socket, (const char*)&temp, temp.size, 0);
 	if (retval != 0) {

@@ -61,12 +61,12 @@ public:
 
 	void PacketRecv();
 	void ProcessPacket(char* packet);
-
+	bool SendIngamePacket(char* name);
 
 
 
 	//이거 삭제해야하는 함수들 테스트 함수임
-	bool SendIngamePacket();
+
 
 	void SendLoginPacket();
 	void SendMovePacket();
