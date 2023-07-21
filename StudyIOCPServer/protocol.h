@@ -6,25 +6,25 @@ constexpr int NAME_LEN = 20;
 
 // Packet ID, type
 constexpr char CS_LOGIN = 0;
-constexpr char CS_MOVE = 1; //이거 필요한가??
-constexpr char CS_GETITEM = 2;
-constexpr char CS_THROWITEM = 3;
-constexpr char CS_TEST = 8;
 
+constexpr char CS_MOVE = 1; //이거 필요한가??
 
 constexpr char SC_LOGIN_INFO = 4;
 constexpr char SC_ADD_PLAYER = 5;
 constexpr char SC_REMOVE_PLAYER = 6;
+
 constexpr char SC_MOVE_PLAYER = 7;
 
 //정말 필요한거를 밑에다가 적오보자
 
 constexpr char SC_CS_ITEM_REGISTER = 10;	//원래 testpacket그거임
+
+constexpr char CS_LOGIN_TEST = 11;
+
 constexpr char CS_CLICKED_BUY = 12;			//클라이언트에서 물건샀을때
 constexpr char SC_RECEIVE_GOLD = 13;
 constexpr char SC_DELETE_ITEM = 14;
 
-constexpr char CS_LOGIN_TEST = 11;
 
 //Kind Of Item
 constexpr int RADISH = 0;
