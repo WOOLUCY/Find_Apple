@@ -92,13 +92,17 @@ bool APlant::Harvest()
 
 
 	if (CanHarvest) {
-		UE_LOG(LogTemp, Warning, TEXT("Call Harvest"));
 	
-		UE_LOG(LogTemp, Warning, TEXT("Plant In AddInvetory Function"));
 		
 		auto* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 		AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
 		if (MyCharacter != nullptr) {
+
+			//사과일때 시네마틱 재생하기
+			if (ItemName == "apple") {
+				UE_LOG(LogTemp, Warning, TEXT("FindApple!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
+
+			}
 
 			//MyCharacter->InventoryComponent
 			MyCharacter->InventoryComponent->AddToInventory(ItemName, 1);
