@@ -6,6 +6,8 @@
 #include "FindApplePlayerController.h"
 #include "Engine/EngineTypes.h"
 #include "FindAppleCharacter.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
+#include "Sound/SoundCue.h"
 
 UFindAppleAnimInstance::UFindAppleAnimInstance()
 {
@@ -27,6 +29,26 @@ UFindAppleAnimInstance::UFindAppleAnimInstance()
 	}
 
 
+	static ConstructorHelpers::FObjectFinder<USoundCue> CONCRETE_CUE
+	(TEXT("/Script/Engine.SoundCue'/Game/Semin/Sound/FootStep/Concrete_Sound_Cue.Concrete_Sound_Cue'"));
+	if (CONCRETE_CUE.Succeeded()) {
+		ConcreteSoundCue = CONCRETE_CUE.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<USoundCue> GRASS_CUE
+	(TEXT("/Script/Engine.SoundCue'/Game/Semin/Sound/FootStep/Grass_Sound_Cue.Grass_Sound_Cue'"));
+	if (GRASS_CUE.Succeeded()) {
+		GrassSoundCue = GRASS_CUE.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<USoundCue> WOOD_CUE
+	(TEXT("/Script/Engine.SoundCue'/Game/Semin/Sound/FootStep/Wood_Sound_Cue.Wood_Sound_Cue'"));
+	if (WOOD_CUE.Succeeded()) {
+		WoodSoundCue = WOOD_CUE.Object;
+	}
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	AudioComponent->bAutoActivate = false;
 }
 
 void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -121,6 +143,50 @@ void UFindAppleAnimInstance::AnimNotify_HitEnd()
 {
 	HitCheckEnd.ExecuteIfBound();
 
+
+}
+
+void UFindAppleAnimInstance::AnimNotify_FootStep()
+{
+	UE_LOG(LogTemp, Warning, TEXT("AnimNotify"));
+	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+
+	FHitResult HitResult;
+	FCollisionResponseParams ResponseParams;
+	FCollisionQueryParams QueryParams = FCollisionQueryParams::DefaultQueryParam;
+	FActorSpawnParameters SpawnParams;
+	QueryParams.bReturnPhysicalMaterial = true;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	FVector StartTrace = CharacterActor->GetActorLocation();
+	FVector EndTrace = CharacterActor->GetActorLocation() - FVector(0, 0, 150);
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace, ECollisionChannel::ECC_Visibility, QueryParams, ResponseParams))
+	{
+		if (AActor* HitActor = Cast<AActor> (HitResult.GetActor()))
+		{
+			switch (HitResult.PhysMaterial->SurfaceType) 
+			{
+			case SurfaceType1:
+				UE_LOG(LogTemp, Warning, TEXT("AnimNotify222222"));
+				AudioComponent->SetSound(WoodSoundCue);
+				AudioComponent->Play();
+				break;
+			case SurfaceType2:
+				UE_LOG(LogTemp, Warning, TEXT("AnimNotify grass"));
+				AudioComponent->SetSound(GrassSoundCue);
+				AudioComponent->Play();
+				break;
+			case SurfaceType3:
+				UE_LOG(LogTemp, Warning, TEXT("AnimNotify concrete"));
+				AudioComponent->SetSound(ConcreteSoundCue);
+				AudioComponent->Play();
+				break;
+			}
+		}
+
+
+	}
 
 }
 

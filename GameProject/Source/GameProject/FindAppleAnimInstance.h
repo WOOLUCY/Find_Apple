@@ -27,6 +27,7 @@ public:
 	void PlayPlantMontage();
 
 
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Move, Meta = (AllowPrivateAccess = true))
 		float Speed;
@@ -51,14 +52,24 @@ public:
 	bool  OffInput();
 	void  OnInput();
 
+	UPROPERTY()
+	class USoundCue* WoodSoundCue;
+	UPROPERTY()
+	class USoundCue* GrassSoundCue;
+	UPROPERTY()
+	class USoundCue* ConcreteSoundCue;
+
+	UPROPERTY()
+	class UAudioComponent* AudioComponent;
+
 private:
 	UFUNCTION()
 	void AnimNotify_HitStart();
 
 	UFUNCTION()
 	void AnimNotify_HitEnd();
-
-
-
+	
+	UFUNCTION()
+	void AnimNotify_FootStep();
 
 };
