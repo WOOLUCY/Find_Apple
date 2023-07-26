@@ -99,11 +99,13 @@ void AItemRespawn::GetRandomPointInCollisionBox()
 	const FRotator SpawnRotation = UKismetMathLibrary::RandomRotator(true);
 
 	ADropedItem* DropedActor;
+	CollisionMesh->SetWorldScale3D(RespawnScale);
 
 	DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
 	DropedActor->CollisionMesh->SetBoxExtent(FVector(30.f, 30.f, 30.f));
 	DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
-	DropedActor->ItemFresh(SpawnItemName);
+	DropedActor->RespawnScale = RespawnScale;
+	DropedActor->ItemFresh(SpawnItemName);S
 
 	Actors.Add(DropedActor);
 }

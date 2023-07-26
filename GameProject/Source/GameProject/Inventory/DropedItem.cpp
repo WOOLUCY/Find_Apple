@@ -82,7 +82,14 @@ void ADropedItem::BeginPlay()
 			if (RowName == ItemName)
 			{
 				MyBox->SetStaticMesh(InventoryRow.Mesh3D);
-				MyBox->SetWorldScale3D(InventoryRow.MeshScale);
+				if (RespawnScale == FVector(1, 1, 1)) 
+				{
+					MyBox->SetWorldScale3D(InventoryRow.MeshScale);
+				}
+				else 
+				{
+					MyBox->SetWorldScale3D(RespawnScale);
+				}
 				MyBox->SetMaterial(0, InventoryRow.Mesh3D->GetMaterial(0));
 			}
 		}

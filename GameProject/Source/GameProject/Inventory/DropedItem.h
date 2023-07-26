@@ -49,6 +49,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UStaticMeshComponent* MyBox = nullptr;
+
+	UPROPERTY()
+	FVector RespawnScale = FVector(1, 1, 1);
+
 private:
 	UPROPERTY(EditAnywhere, Category = "ItemSetting")
 	class UDataTable* ItemDataTable;
