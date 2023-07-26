@@ -18,6 +18,7 @@ AItemRespawn::AItemRespawn()
 	CollisionMesh->SetBoxExtent(FVector(64.f, 64.f, 64.f));
 	CollisionMesh->SetupAttachment(GetRootComponent());
 	CollisionMesh->SetHiddenInGame(true);
+	CollisionMesh->SetWorldScale3D(RespawnScale);
 
 	SetRootComponent(CollisionMesh);
 
@@ -35,6 +36,8 @@ void AItemRespawn::BeginPlay()
 	{
 		CollisionMesh->SetBoxExtent(FVector(64.f, 64.f, 10.f));
 	}
+
+	CollisionMesh->SetWorldScale3D(RespawnScale);
 
 	/* 5 √ ∏∂¥Ÿ */
 	GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &AItemRespawn::AdvanceTimer, SecTimer, true);

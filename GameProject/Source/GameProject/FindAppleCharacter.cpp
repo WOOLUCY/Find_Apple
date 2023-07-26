@@ -525,9 +525,26 @@ void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
 			if (this->IsOverlappingActor(Actor))
 			{
 				Interface->Execute_PicUpItem(Actor);
+
+				UE_LOG(LogTemp, Warning, TEXT("Grab"));
+
+				if (IsAction) {
+					return;
+				}
+
+				else {
+						Anim->PlayGrabItemMontage();
+						IsAction = true;
+				}
 			}
 		}
 	}
+
+	
+
+	// When Player use Equipment, CurHunger decreases
+	if (GetEquipNum() != 0)
+		SetCurHunger((GetCurHunger() - 10.f));
 }
 
 
@@ -1138,6 +1155,9 @@ void AFindAppleCharacter::DayChange()
 void AFindAppleCharacter::OnActionMontageEnded(UAnimMontage* Montage, bool bInteruppted)
 {
 	IsAction = false;
+
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	PlayerController->GetCharacter()->GetCharacterMovement()->SetActive(true);
 }
 
 float AFindAppleCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,

@@ -33,6 +33,10 @@ public:
 	/* 해당 구역에 리스폰 될 액터의 개수 */
 	UPROPERTY(EditAnywhere, Category = "Setting")
 	int RespawnNum = 20;
+	
+	// 리스폰되는 액터의 크기 
+	UPROPERTY(EditAnywhere, Category = "Setting")
+	FVector RespawnScale = FVector(10, 10, 10);
 
 	/* 스폰할 아이템의 행 이름 */
 	UPROPERTY(EditAnywhere, Category = "Setting")

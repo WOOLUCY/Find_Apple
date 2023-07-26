@@ -28,6 +28,12 @@ UFindAppleAnimInstance::UFindAppleAnimInstance()
 		PlantMontage = PLANT_MON.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> GRAB_MON
+	(TEXT("/Script/Engine.AnimMontage'/Game/Characters/Hero/GrabMontage.GrabMontage'"));
+	if (GRAB_MON.Succeeded()) {
+		GrabMontage = GRAB_MON.Object;
+	}
+
 
 	static ConstructorHelpers::FObjectFinder<USoundCue> CONCRETE_CUE
 	(TEXT("/Script/Engine.SoundCue'/Game/Semin/Sound/FootStep/Concrete_Sound_Cue.Concrete_Sound_Cue'"));
@@ -78,7 +84,6 @@ void UFindAppleAnimInstance::PlayActionMontage()
 		Montage_Play(ActionMontage, PlaySpeed);
 		UWorld* World = GetWorld();
 		if (World){
-			UE_LOG(LogTemp, Warning, TEXT("OnInpnut!!!!!!!!????????!"));
 
 			FTimerManager& TimerManager = World->GetTimerManager();
 
@@ -110,10 +115,33 @@ void UFindAppleAnimInstance::PlayPlantMontage()
 
 }
 
+void UFindAppleAnimInstance::PlayGrabItemMontage()
+{
+	static float PlayLength = GrabMontage->GetPlayLength() / (PlaySpeed * 2.f);
+
+	if (OffInput()) {
+		Montage_Play(GrabMontage, PlaySpeed);
+		UWorld* World = GetWorld();
+
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		PlayerController->GetCharacter()->GetCharacterMovement()->SetActive(false);
+
+		if (World) {
+			FTimerManager& TimerManager = World->GetTimerManager();
+
+			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 0.2f, false);
+		}
+
+	}
+	// 애니메이션이 끝나면 입력 활성화
+}
+
 bool UFindAppleAnimInstance::OffInput()
 {
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	AFindApplePlayerController* Mycontol = Cast<AFindApplePlayerController>(PlayerController);
+
+
 	if (Mycontol != nullptr) {
 		Mycontol->GetPawn()->DisableInput(Mycontol);
 		return true;
@@ -124,7 +152,6 @@ bool UFindAppleAnimInstance::OffInput()
 
 void UFindAppleAnimInstance::OnInput()
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnInpnut!!!!!!!!!"));
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	AFindApplePlayerController* Mycontol = Cast<AFindApplePlayerController>(PlayerController);
 	if (Mycontol != nullptr) {
@@ -148,7 +175,6 @@ void UFindAppleAnimInstance::AnimNotify_HitEnd()
 
 void UFindAppleAnimInstance::AnimNotify_FootStep()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AnimNotify"));
 	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
 	FHitResult HitResult;
@@ -168,17 +194,14 @@ void UFindAppleAnimInstance::AnimNotify_FootStep()
 			switch (HitResult.PhysMaterial->SurfaceType) 
 			{
 			case SurfaceType1:
-				UE_LOG(LogTemp, Warning, TEXT("AnimNotify222222"));
 				AudioComponent->SetSound(WoodSoundCue);
 				AudioComponent->Play();
 				break;
 			case SurfaceType2:
-				UE_LOG(LogTemp, Warning, TEXT("AnimNotify grass"));
 				AudioComponent->SetSound(GrassSoundCue);
 				AudioComponent->Play();
 				break;
 			case SurfaceType3:
-				UE_LOG(LogTemp, Warning, TEXT("AnimNotify concrete"));
 				AudioComponent->SetSound(ConcreteSoundCue);
 				AudioComponent->Play();
 				break;
