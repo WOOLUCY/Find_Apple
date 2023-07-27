@@ -67,10 +67,19 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Audio")
 	class USoundWave* GrabAudioCue;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* WeildAudioCue;
+
 	UPROPERTY()
 	class UAudioComponent* AudioComponent;
 
+	UPROPERTY()
+	class UAudioComponent* InteractAudioComponent;
+
 private:
+	UFUNCTION()
+	void AnimNotify_HitSound();
+
 	UFUNCTION()
 	void AnimNotify_HitStart();
 

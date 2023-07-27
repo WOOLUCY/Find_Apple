@@ -79,9 +79,15 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Audio")
 	class UAudioComponent* HitAudioComponent;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* InteractAudioComponent;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Audio")
 	class USoundWave* DeadAudioCue;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* InteractAudioCue;
 	
 	UPROPERTY()
 	bool deadSound = false;

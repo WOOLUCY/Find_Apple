@@ -57,8 +57,15 @@ UFindAppleAnimInstance::UFindAppleAnimInstance()
 	static ConstructorHelpers::FObjectFinder<USoundWave> GrabSoundCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Grab.Grab'"));
 	GrabAudioCue = GrabSoundCue.Object;
 
+	//Weild Music Sound
+	static ConstructorHelpers::FObjectFinder<USoundWave> WeildSoundCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Interaction/Wield.Wield'"));
+	WeildAudioCue = WeildSoundCue.Object;
+
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
 	AudioComponent->bAutoActivate = false;
+
+	InteractAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp2"));
+	InteractAudioComponent->bAutoActivate = false;
 }
 
 void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -168,18 +175,20 @@ void UFindAppleAnimInstance::OnInput()
 	}
 }
 
+void UFindAppleAnimInstance::AnimNotify_HitSound()
+{
+	InteractAudioComponent->SetSound(WeildAudioCue);
+	InteractAudioComponent->Play();
+}
+
 void UFindAppleAnimInstance::AnimNotify_HitStart()
 {
-
 	HitCheckStart.ExecuteIfBound();
-
 }
 
 void UFindAppleAnimInstance::AnimNotify_HitEnd()
 {
 	HitCheckEnd.ExecuteIfBound();
-
-
 }
 
 void UFindAppleAnimInstance::AnimNotify_FootStep()

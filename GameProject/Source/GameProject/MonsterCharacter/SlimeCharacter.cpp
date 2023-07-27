@@ -65,6 +65,13 @@ ASlimeCharacter::ASlimeCharacter()
 	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue2(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/MonsterDeath.MonsterDeath'"));
 	DeadAudioCue = propellerCue2.Object;
 
+	static ConstructorHelpers::FObjectFinder<USoundWave> interactCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Interaction/Sword.Sword'"));
+	InteractAudioCue = interactCue.Object;
+
+	//sound
+	InteractAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp2"));
+	InteractAudioComponent->bAutoActivate = false;
+
 
 	//set health bar widget
 	HealthBarWidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
@@ -201,7 +208,12 @@ float ASlimeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	if (Health <= 0.f)
 		return	0.f;
 
+
+	HitAudioComponent->SetSound(HitAudioCue);
 	HitAudioComponent->Play();
+
+	InteractAudioComponent->SetSound(InteractAudioCue);
+	InteractAudioComponent->Play();
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
