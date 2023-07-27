@@ -105,7 +105,7 @@ void AItemRespawn::GetRandomPointInCollisionBox()
 	DropedActor->CollisionMesh->SetBoxExtent(FVector(30.f, 30.f, 30.f));
 	DropedActor->CollisionMesh->SetWorldLocation(DropedActor->MyBox->GetComponentLocation());
 	DropedActor->RespawnScale = RespawnScale;
-	DropedActor->ItemFresh(SpawnItemName);S
+	DropedActor->ItemFresh(SpawnItemName);
 
 	Actors.Add(DropedActor);
 }
