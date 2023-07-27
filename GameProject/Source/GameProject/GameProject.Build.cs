@@ -15,6 +15,5 @@ public class GameProject : ModuleRules
 				"EnhancedInput"
 			}
 		);
-
 	}
 }

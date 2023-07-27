@@ -63,6 +63,10 @@ public:
 	UPROPERTY()
 	class USoundCue* ConcreteSoundCue;
 
+	//Pick sound
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* GrabAudioCue;
+
 	UPROPERTY()
 	class UAudioComponent* AudioComponent;
 

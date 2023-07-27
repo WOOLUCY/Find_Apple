@@ -53,6 +53,10 @@ UFindAppleAnimInstance::UFindAppleAnimInstance()
 		WoodSoundCue = WOOD_CUE.Object;
 	}
 
+	//Grab Music Sound
+	static ConstructorHelpers::FObjectFinder<USoundWave> GrabSoundCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Grab.Grab'"));
+	GrabAudioCue = GrabSoundCue.Object;
+
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
 	AudioComponent->bAutoActivate = false;
 }
@@ -130,6 +134,11 @@ void UFindAppleAnimInstance::PlayGrabItemMontage()
 			FTimerManager& TimerManager = World->GetTimerManager();
 
 			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 0.2f, false);
+
+			
+
+			AudioComponent->SetSound(GrabAudioCue);
+			AudioComponent->Play();
 		}
 
 	}

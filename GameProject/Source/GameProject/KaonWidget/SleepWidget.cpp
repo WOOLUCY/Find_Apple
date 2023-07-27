@@ -36,6 +36,8 @@ void USleepWidget::YesChoice()
 {
 	UE_LOG(LogTemp, Warning, TEXT("YesChoice"));
 	YesDelegate.ExecuteIfBound();
+
+
 }
 
 void USleepWidget::NoChoice()

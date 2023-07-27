@@ -34,7 +34,7 @@ void UInventoryToolTipUW::SetText()
 
 	ItemNameText->SetText(ItemName);
 	DescriptText->SetText(Descript);
-	UE_LOG(LogTemp, Warning, TEXT("SetText()asdw"));
+	//UE_LOG(LogTemp, Warning, TEXT("SetText()asdw"));
 
 	if (Eatable == false) {
 		EatButton->SetVisibility(ESlateVisibility::Hidden);

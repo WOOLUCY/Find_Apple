@@ -269,7 +269,7 @@ public:
 	class USoundWave* battleAudioCue;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Audio")
-	class UAudioComponent* battleAudioComponent;
+	class UAudioComponent* AudioComponent;
 
 	UPROPERTY()
 	bool isPlayingBattleMusic;

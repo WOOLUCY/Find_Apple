@@ -17,6 +17,8 @@
 #include <LevelSequencePlayer.h>
 #include <MovieSceneSequencePlayer.h>
 #include "Camera/CameraActor.h"
+#include "Engine/LevelScriptActor.h"
+#include "MainLevelScriptActor.h"
 
 
 // Sets default values
@@ -73,7 +75,12 @@ ABed::ABed()
 	Box->OnComponentBeginOverlap.AddDynamic(this, &ABed::OnOverlapBegin);
 	Box->OnComponentEndOverlap.AddDynamic(this, &ABed::OnOverlapEnd);
 
+	//Grab Music Sound
+	static ConstructorHelpers::FObjectFinder<USoundWave> sleepSoundCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Sleep.Sleep'"));
+	SleepAudioCue = sleepSoundCue.Object;
 
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	AudioComponent->bAutoActivate = false;
 }
 
 // Called when the game starts or when spawned
@@ -91,6 +98,16 @@ void ABed::BeginPlay()
 }
 
 
+void ABed::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+
+	if (SleepAudioCue->IsValidLowLevelFast()) {
+		AudioComponent->SetSound(SleepAudioCue);
+	}
+
+}
 
 
 void ABed::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -185,6 +202,26 @@ void ABed::YesChoice()
 	FString Name = "SleepLevel";
 	//UGameplayStatics::OpenLevel(this, *Name);
 	SequenceCinematic->SequencePlayer->Play();
+
+	AMainLevelScriptActor* LevelScript = Cast<AMainLevelScriptActor>(GetWorld()->GetLevelScriptActor());
+	LevelScript->BackgroundMusicStopAndPlay();
+
+	float startTime = 0.f;
+	float volume = 0.8f;
+	float fadeTime = 0.8f;
+	AudioComponent->FadeIn(fadeTime, volume, startTime);
+	AudioComponent->FadeOut(fadeTime, volume);
+
+	AudioComponent->SetSound(SleepAudioCue);
+	AudioComponent->Play();
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			AudioComponent->Stop();
+
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		}), 4.f, false);
 
 	HiddenWidget();
 }

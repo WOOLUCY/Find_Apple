@@ -37,10 +37,33 @@ void AMainLevelScriptActor::BeginPlay()
 	PlayerController->SetShowMouseCursor(false);
 	PlayerController->SetInputMode(FInputModeGameOnly());
 
-	float startTime = 9.f;
-	float volume = 1.0f;
-	float fadeTime = 1.0f;
+	float startTime = 0.f;
+	float volume = 0.8f;
+	float fadeTime = 0.8f;
 	backgoundMusicAudioComponent->FadeIn(fadeTime, volume, startTime);
+	backgoundMusicAudioComponent->FadeOut(fadeTime, volume);
 
+	backgoundMusicAudioComponent->SetSound(backgoundMusicAudioCue);
 	backgoundMusicAudioComponent->Play();
+}
+
+void AMainLevelScriptActor::BackgroundMusicStopAndPlay()
+{
+	float startTime = 0.f;
+	float volume = 0.8f;
+	float fadeTime = 0.8f;
+	backgoundMusicAudioComponent->FadeIn(fadeTime, volume, startTime);
+	backgoundMusicAudioComponent->FadeOut(fadeTime, volume);
+
+	backgoundMusicAudioComponent->SetSound(backgoundMusicAudioCue);
+	backgoundMusicAudioComponent->Stop();
+
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			backgoundMusicAudioComponent->Play();
+
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		}), 4.f, false);
 }

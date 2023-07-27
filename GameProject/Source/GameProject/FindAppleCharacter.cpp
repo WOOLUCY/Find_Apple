@@ -326,8 +326,8 @@ AFindAppleCharacter::AFindAppleCharacter()
 	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Battle.Battle'"));
 	battleAudioCue = propellerCue.Object;
 
-	battleAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
-	battleAudioComponent->bAutoActivate = false;
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	AudioComponent->bAutoActivate = false;
 }
 
 
@@ -425,7 +425,7 @@ void AFindAppleCharacter::PostInitializeComponents()
 
 
 	if (battleAudioCue->IsValidLowLevelFast()) {
-		battleAudioComponent->SetSound(battleAudioCue);
+		AudioComponent->SetSound(battleAudioCue);
 	}
 
 }
@@ -526,11 +526,9 @@ void AFindAppleCharacter::PickItem(const FInputActionValue& Value)
 			{
 				Interface->Execute_PicUpItem(Actor);
 
-				UE_LOG(LogTemp, Warning, TEXT("Grab"));
-
 				if (IsAction) {
 					return;
-				}
+				}	
 
 				else {
 						Anim->PlayGrabItemMontage();
@@ -1007,9 +1005,9 @@ void AFindAppleCharacter::SetPlayBattleMusic(int MonsterNum)
 			float startTime = 0.f;
 			float volume = 0.3f;
 			float fadeTime = 1.5f;
-			battleAudioComponent->FadeIn(fadeTime, volume, startTime);
+			AudioComponent->FadeIn(fadeTime, volume, startTime);
 
-			battleAudioComponent->Play();
+			AudioComponent->Play();
 
 			isPlayingBattleMusic = true;
 		}		
@@ -1018,8 +1016,8 @@ void AFindAppleCharacter::SetPlayBattleMusic(int MonsterNum)
 	else {
 		float volume = 0.3f;
 		float fadeTime = 1.5f;
-		battleAudioComponent->FadeOut(fadeTime, volume);
-		battleAudioComponent->Stop();
+		AudioComponent->FadeOut(fadeTime, volume);
+		AudioComponent->Stop();
 		isPlayingBattleMusic = false;
 	}
 

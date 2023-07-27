@@ -28,4 +28,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Audio")
 	class UAudioComponent* backgoundMusicAudioComponent;
+
+	UFUNCTION()
+	void BackgroundMusicStopAndPlay();
 };
