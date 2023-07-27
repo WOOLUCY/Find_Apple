@@ -3,7 +3,6 @@
 
 #include "SlimeAIController.h"
 
-#include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Sound/SoundWave.h"
 #include "Components/AudioComponent.h"

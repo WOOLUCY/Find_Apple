@@ -45,7 +45,6 @@ void ALevelTransferVol::NotifyActorBeginOverlap(AActor* OtherActor)
 
 
 	if (hero != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("OverlapBegin Comple pereofjdskfjksdlfjsdklfjsdklfj"));
 		ShowWdiget();
 	}
 	else {

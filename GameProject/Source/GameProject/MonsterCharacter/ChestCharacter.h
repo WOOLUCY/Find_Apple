@@ -46,6 +46,9 @@ public:
 	FDoOnce DoOnce;
 
 	int AttackNum = 0;
+
+	UPROPERTY()
+	bool firstSeeing = false;
 	
 	UPROPERTY()
 	bool IsDead = false;

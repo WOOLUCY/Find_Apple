@@ -12,6 +12,8 @@
 #include "Components/AudioComponent.h"
 #include "HealthBarWidget.h"
 #include "Components/WidgetComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Math/Vector.h"
 
 // Sets default values
 AChestCharacter::AChestCharacter()
@@ -164,6 +166,11 @@ void AChestCharacter::Tick(float DeltaTime)
 			{
 				if (IsDead == false)
 				{
+					APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+					AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(PlayerPawn);
+
+					MyCharacter->countOfMonstersAggro -= 1;
+
 					ADropedItem* DropedActor;
 
 					DropedActor = GetWorld()->SpawnActor<ADropedItem>(ADropedItem::StaticClass(), GetActorLocation(), GetActorRotation());
@@ -180,6 +187,18 @@ void AChestCharacter::Tick(float DeltaTime)
 	}
 
 
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(PlayerPawn);
+
+
+	// AI가 플레이어를 발견할 수 있는 범위를 1000 으로 제한함!!!
+	if (GetController()->LineOfSightTo(PlayerPawn) && GetDistanceTo(PlayerPawn) > 1000 && firstSeeing == true) // 1000의 조건을 넣은 부분
+	{	
+		firstSeeing = false;
+		MyCharacter->countOfMonstersAggro -= 1;
+
+		UE_LOG(LogTemp, Warning, TEXT("first Seeing: %b"), firstSeeing);
+	}
 }
 
 // Called to bind functionality to input
@@ -202,6 +221,16 @@ float AChestCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	IsAttacked = true;
 	// 맞았을 때만 프로그레스 바 표시
 	HealthBarWidgetComp->SetHiddenInGame(false);
+
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(PlayerPawn);
+
+	if (firstSeeing == false) 
+	{
+		firstSeeing = true;
+		MyCharacter->countOfMonstersAggro += 1;
+	}
+
 
 	FTimerHandle TimerHandle;
 	if (Health <= 20.f)
