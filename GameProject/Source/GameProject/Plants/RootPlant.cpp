@@ -31,7 +31,7 @@ ARootPlant::ARootPlant()
 		Meshs.Add(SM_VEG2.Object);
 	}
 
-
+	if (DemoCount == TOTAL ||DemoCount == Radish) DemoCount = 0;
 
 
 	switch (DemoCount)
@@ -90,7 +90,6 @@ ARootPlant::ARootPlant()
 
 	//데모때 다 보여주기위해서 일단 순서대로 나오게 설정하겠슴
 	++DemoCount;
-	if (DemoCount == TOTAL) DemoCount = 0;
 	
 
 	Current->SetCollisionProfileName("NoCollision");

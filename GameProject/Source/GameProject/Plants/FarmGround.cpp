@@ -9,6 +9,7 @@
 #include "../FindAppleCharacter.h"
 #include "../Inventory/InventoryDataTable.h"
 #include "../Inventory/InventoryComponent.h"
+#include "../MyGameInstance.h"
 
 #include "Plant.h"
 #include "Tomato.h"
@@ -213,9 +214,38 @@ void AFarmGround::PutSeed()
 		UWorld* TheWorld = GetWorld();
 		if (TheWorld) {
 
-			//Planted = TheWorld->SpawnActor<APlant>(ARootPlant::StaticClass(), GetActorLocation(), FRotator());
-			//Planted = TheWorld->SpawnActor<APlant>(AVegPlant::StaticClass(), GetActorLocation(), FRotator());
-			Planted = TheWorld->SpawnActor<APlant>(AAppleTree::StaticClass(), GetActorLocation(), FRotator());
+			//static UMyGameInstance* instance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(TheWorld));
+			//if (instance->plantType >= 7) instance->plantType = 0;
+			int temp = 0;
+			switch (temp)//(instance->plantType)
+			{
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+				Planted = TheWorld->SpawnActor<APlant>(ARootPlant::StaticClass(), GetActorLocation(), FRotator());
+			//++instance->plantType;
+				break;
+
+			case 4:
+			case 5:
+			case 6:
+				Planted = TheWorld->SpawnActor<APlant>(AVegPlant::StaticClass(), GetActorLocation(), FRotator());
+				//++instance->plantType;
+
+				break;
+
+			case 7:			
+				Planted = TheWorld->SpawnActor<APlant>(AAppleTree::StaticClass(), GetActorLocation(), FRotator());
+				//++instance->plantType;
+
+				break;
+
+			default:
+				//instance->plantType = 0;
+				break;
+			}
+
 
 		}
 

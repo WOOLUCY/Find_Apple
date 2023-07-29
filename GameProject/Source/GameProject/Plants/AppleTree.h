@@ -20,7 +20,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void PutWater() override;
-	virtual bool Harvest() override;
 
 
 private:

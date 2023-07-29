@@ -60,8 +60,4 @@ void AAppleTree::PutWater()
 	Super::PutWater();
 }
 
-bool AAppleTree::Harvest()
-{
-	return false;
-}
 
