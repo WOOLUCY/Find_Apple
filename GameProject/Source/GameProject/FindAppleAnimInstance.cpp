@@ -32,6 +32,14 @@ UFindAppleAnimInstance::UFindAppleAnimInstance()
 		RodMontage = ROD_MON.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> END_MON
+	(TEXT("/Script/Engine.AnimMontage'/Game/Characters/Hero/EndMontage.EndMontage'"));
+	if (END_MON.Succeeded()) {
+		FishEndMontage = END_MON.Object;
+	}
+
+	//FishEndMontage->RateScale = -1.f;
+
 }
 
 void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -106,6 +114,25 @@ void UFindAppleAnimInstance::PlayRodMontage()
 			FTimerManager& TimerManager = World->GetTimerManager();
 
 			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 3.f, false);
+		}
+
+	}
+	// 애니메이션이 끝나면 입력 활성화
+}
+
+void UFindAppleAnimInstance::PlayFishEndMontage()
+{
+	static float PlayLength = FishEndMontage->GetPlayLength() / (PlaySpeed * 1.f);
+
+	if (OffInput()) {
+		Montage_Play(FishEndMontage, PlaySpeed);
+		UWorld* World = GetWorld();
+		if (World) {
+			UE_LOG(LogTemp, Warning, TEXT("Fishing End"));
+
+			FTimerManager& TimerManager = World->GetTimerManager();
+
+			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 0.2f, false);
 		}
 
 	}

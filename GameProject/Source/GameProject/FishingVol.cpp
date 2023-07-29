@@ -39,7 +39,7 @@ void AFishingVol::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	if (hero != nullptr) {
 		UE_LOG(LogClass, Warning, TEXT("Fishing Volume is overlapped"));
-		hero->SetIsFishing(true);
+		hero->SetIsInFishingVol(true);
 	}
 	else {
 		return;
@@ -52,7 +52,7 @@ void AFishingVol::NotifyActorEndOverlap(AActor* OtherActor)
 
 	auto hero = Cast<AFindAppleCharacter>(OtherActor);
 	if (hero != nullptr) {
-		hero->SetIsFishing(false);
+		hero->SetIsInFishingVol(false);
 	}
 	else {
 		return;

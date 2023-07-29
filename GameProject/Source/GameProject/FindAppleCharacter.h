@@ -103,6 +103,10 @@ protected:
 	// W: ≥¨ΩÀ¥Î º±≈√
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 		UInputAction* RodMapping;
+	// W: Fishing End
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* FishingEndMapping;
+
 
 
 	void MoveForward(const FInputActionValue& Value);
@@ -131,6 +135,7 @@ protected:
 	void EquipRod(const FInputActionValue& Value);
 	void EquipReset(const FInputActionValue& Value);
 	void ChangeSpeed(const FInputActionValue& Value);
+	void EndFishing(const FInputActionValue& Value);
 
 	void UpEquip(const FInputActionValue& Value);
 	void DownEquip(const FInputActionValue& Value);
@@ -245,10 +250,16 @@ public:
 	bool GetIsRunning() { return bIsRunning; }
 	void SetIsRunning(bool _in) { bIsRunning = _in; }
 
+	bool GetIsInFishingVol() const { return bIsInFishingVol; }
+	void SetIsInFishingVol(bool _in) { bIsInFishingVol = _in; }
 	bool GetIsFishing() const { return bIsFishing; }
 	void SetIsFishing(bool _in) { bIsFishing = _in; }
-	
-	
+	bool GetIsFishDetected() const { return bIsFishDetected; }
+	void SetIsFishDetected(bool _in) { bIsFishDetected = _in; }
+	float GetFishingWaitTime() const { return FishingWaitTime; }
+	void SetFishingWaitTime(float _in) { FishingWaitTime = _in; }
+	float GetMaxFishingWaitTime() const { return MaxFishingWaitTime; }
+
 public:
 	UFUNCTION()
 	void BlackScreenPopStart();
@@ -310,8 +321,19 @@ private:
 
 	// Fishing
 	UPROPERTY(EditDefaultsOnly)
+	bool bIsInFishingVol;
+
+	UPROPERTY(EditDefaultsOnly)
 	bool bIsFishing;
 
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsFishDetected;
+
+	UPROPERTY(EditDefaultsOnly)
+	float FishingWaitTime;
+
+	UPROPERTY(EditDefaultsOnly)
+	float MaxFishingWaitTime = 100.f;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsAction;
