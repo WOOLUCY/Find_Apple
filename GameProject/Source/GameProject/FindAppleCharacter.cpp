@@ -857,7 +857,6 @@ void AFindAppleCharacter::EquipPick(const FInputActionValue& Value)
 
 void AFindAppleCharacter::EquipRod(const FInputActionValue& Value)
 {
-
 	if (CurEquipNum == 4) return;
 
 	if (CurEquipNum != 0 && CurEquipNum != 4 && isEquipOwn) {
@@ -865,9 +864,9 @@ void AFindAppleCharacter::EquipRod(const FInputActionValue& Value)
 		isEquipOwn = false;
 	}
 
-
 	if (CurEquipNum != 4) {
 		CurEquipNum = 4;
+
 		if (ItemDataTable != nullptr)
 		{
 			ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
@@ -878,7 +877,7 @@ void AFindAppleCharacter::EquipRod(const FInputActionValue& Value)
 				FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
 
 				if (InventoryRow.ItemType == 13) {
-					//Rod 는 아이템 타입이 13
+					UE_LOG(LogTemp, Warning, TEXT("Cast!"));
 					if (InventoryComponent->InventoryContent.Find(RowName))
 					{
 						AFishingRod* ToolActor;
@@ -1039,7 +1038,7 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 	// Fishing
 	if (GetIsFishDetected())
 	{
-		SetFishingWaitTime(GetFishingWaitTime() + 0.5f);
+		SetFishingWaitTime(GetFishingWaitTime() + 0.8f);
 
 		if (GetFishingWaitTime() > 100.f)
 		{
@@ -1083,10 +1082,10 @@ void AFindAppleCharacter::ChangeEquipment(int in)
 	}
 
 	// Fishing Rod
-	else if (in == 4 && GetIsInFishingVol())
+	else if (in == 4)
 	{
 
-		CurEquipActor = GetWorld()->SpawnActor<APick>(FVector::ZeroVector, FRotator::ZeroRotator);
+		CurEquipActor = GetWorld()->SpawnActor<AFishingRod>(FVector::ZeroVector, FRotator::ZeroRotator);
 		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("RodSocket"));
 		//CurEquipNum = 3;
 	}

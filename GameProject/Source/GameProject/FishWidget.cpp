@@ -30,6 +30,7 @@ void UFishWidget::UpdateFishingProgress()
 	// 낚싯대를 들고 있고, 물고기가 감지된 상황
 	if(MyChar->GetIsFishDetected()&& MyChar->GetEquipNum()== 4)
 	{
+		if(MyChar->GetFishingWaitTime() > 10.f)
 		BubbleImage->SetOpacity(1.f);
 
 		float percent = (MyChar->GetFishingWaitTime()) / (MyChar->GetMaxFishingWaitTime());

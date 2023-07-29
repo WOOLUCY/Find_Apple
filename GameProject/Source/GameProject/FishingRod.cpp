@@ -14,7 +14,7 @@ AFishingRod::AFishingRod()
 	RootComponent = Rod;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MESH
-	(TEXT("/Script/Engine.StaticMesh'/Game/Woo/Rod/Rod.Rod'"));
+	(TEXT("/Script/Engine.StaticMesh'/Game/Woo/Fishing/Rod/Rod.Rod'"));
 	if (SM_MESH.Succeeded()) {
 		Rod->SetStaticMesh(SM_MESH.Object);
 	}
