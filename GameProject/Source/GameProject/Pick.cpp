@@ -2,6 +2,7 @@
 
 
 #include "Pick.h"
+#include "FindAppleCharacter.h"
 
 // Sets default values
 APick::APick()
@@ -65,7 +66,6 @@ void APick::BeginPlay()
 			Anim->HitCheckStart.BindUObject(this, &APick::SetCollisionStart);
 			Anim->HitCheckEnd.BindUObject(this, &APick::SetCollisionEnd);
 
-		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Pick - delegate connetec "));
 
 		}
 	}
@@ -82,7 +82,17 @@ void APick::Tick(float DeltaTime)
 
 void APick::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	//일단 야긴 빼고 
+	FString name = OtherActor->GetName();
+
+	UWorld* TheWorld = GetWorld();
+	if (TheWorld != nullptr) {
+		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
+		if (Cast<AFindAppleCharacter>(OtherActor) != hero) {
+			FDamageEvent DamageEvent;
+			OtherActor->TakeDamage(Damage, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), this);
+		}
+	}
+
 }
 
 void APick::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
