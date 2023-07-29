@@ -16,13 +16,12 @@ AStone::AStone()
 	MaxDamage = 30;
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	light = CreateDefaultSubobject<UPointLightComponent>(TEXT("LIGHT"));
-	RespawnTime = 10;
+	RespawnTime = 30;
 
 	RootComponent = mesh;
 	light->SetupAttachment(RootComponent);
-
-	
-
+	light->AddRelativeLocation(FVector(0, 0, 94.f));
+	light->SetIntensity(600.f);
 }
 
 void AStone::RespawnStone()
@@ -30,6 +29,7 @@ void AStone::RespawnStone()
 	TotalDamage = 0;
 	mesh->SetVisibility(true);
 	light->SetVisibility(true);
+	
 
 }
 

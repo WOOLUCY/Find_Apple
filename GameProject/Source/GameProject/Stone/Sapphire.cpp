@@ -6,13 +6,12 @@
 ASapphire::ASapphire()
 {
 	ConstructorHelpers::FObjectFinder<UStaticMesh> SM_MESH
-	(TEXT("/Script/Engine.StaticMesh'/Game/Woo/Cave/Ore/Ore01.Ore01'"));
+	(TEXT("/Script/Engine.StaticMesh'/Game/Woo/Cave/Ore/Ore08.Ore08'"));
 	if (SM_MESH.Succeeded()) {
 		mesh->SetStaticMesh(SM_MESH.Object);
 
 	}
-	light->SetLightColor(FLinearColor::Red);
-
+	light->SetLightColor(FLinearColor::Blue);
 	name = "Sapphire";
 
 }
