@@ -7,7 +7,6 @@
 
 #include "Components/WidgetComponent.h"
 
-#include "ToolWidget.h"
 #include "InGameHUD.generated.h"
 
 /**
@@ -36,6 +35,9 @@ public:
 	UFUNCTION()
 		void UpdateToolImage();
 
+	UFUNCTION()
+		void UpdateFishingProcess();
+
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> HPWidgetClass;
@@ -48,6 +50,10 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 	TSubclassOf<UUserWidget> HungerWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> FishWidgetClass;
+
 private:
 	UPROPERTY()
 	class UHPWidget* HPWidget;
@@ -57,6 +63,6 @@ private:
 	class UTimeWidget* TimeWidget;
 	UPROPERTY()
 	class UHungerWidget* HungerWidget;
-
-
+	UPROPERTY()
+	class UFishWidget* FishWidget;
 };

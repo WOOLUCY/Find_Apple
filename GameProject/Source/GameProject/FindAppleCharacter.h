@@ -8,6 +8,7 @@
 #include "Sword.h"
 #include "Pick.h"
 #include "Ax.h"
+#include "FishingRod.h"
 #include "DoOnce.h"
 
 
@@ -99,6 +100,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 		UInputAction* ResetEquipMapping;
 
+	// W: ≥¨ΩÀ¥Î º±≈√
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* RodMapping;
+	// W: Fishing End
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+		UInputAction* FishingEndMapping;
+
 
 
 	void MoveForward(const FInputActionValue& Value);
@@ -124,11 +132,14 @@ protected:
 	void EquipSword(const FInputActionValue& Value);
 	void EquipAx(const FInputActionValue& Value);
 	void EquipPick(const FInputActionValue& Value);
+	void EquipRod(const FInputActionValue& Value);
 	void EquipReset(const FInputActionValue& Value);
 	void ChangeSpeed(const FInputActionValue& Value);
+	void EndFishing(const FInputActionValue& Value);
 
 	void UpEquip(const FInputActionValue& Value);
 	void DownEquip(const FInputActionValue& Value);
+	void ApplyEquip(const FInputActionValue& Value);
 
 
 public:	
@@ -177,7 +188,6 @@ public:
 
 	TArray<struct FInventoryTableRow*> InventoryData;
 
-
 	/* Quest System */
 	//UPROPERTY()
 	//TSubclassOf<class UUserWidget> QuestListWidgetClass;
@@ -205,9 +215,6 @@ public:
 	bool bPauseWidget = false;
 
 	/* Post Process Effect */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PostProcess")
-	class UPostProcessComponent* PostProcessComp;
-
 	UPROPERTY(EditAnywhere, Category = "PostProcess")
 	class UTexture* DirtMask;
 
@@ -221,8 +228,6 @@ public:
 	float GetMaxHunger() { return MaxHunger; }
 
 	/* Combat */
-	//UPROPERTY(EditAnywhere, Category = "Combat")
-	//bool IsAttacking = false;
 	UFUNCTION()
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void DamageReaction(float DamageAmount);
@@ -245,7 +250,18 @@ public:
 	bool GetIsRunning() { return bIsRunning; }
 	void SetIsRunning(bool _in) { bIsRunning = _in; }
 
+	bool GetIsInFishingVol() const { return bIsInFishingVol; }
+	void SetIsInFishingVol(bool _in) { bIsInFishingVol = _in; }
+	bool GetIsFishing() const { return bIsFishing; }
+	void SetIsFishing(bool _in) { bIsFishing = _in; }
+	bool GetIsFishDetected() const { return bIsFishDetected; }
+	void SetIsFishDetected(bool _in) { bIsFishDetected = _in; }
+	float GetFishingWaitTime() const { return FishingWaitTime; }
+	void SetFishingWaitTime(float _in) { FishingWaitTime = _in; }
+	float GetMaxFishingWaitTime() const { return MaxFishingWaitTime; }
+
 	void SetPlayBattleMusic(int MonsterNum);
+
 	
 	
 public:
@@ -321,6 +337,21 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float CurHunger;
 
+	// Fishing
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsInFishingVol;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsFishing;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsFishDetected;
+
+	UPROPERTY(EditDefaultsOnly)
+	float FishingWaitTime;
+
+	UPROPERTY(EditDefaultsOnly)
+	float MaxFishingWaitTime = 100.f;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsAction;
@@ -332,4 +363,3 @@ private:
 	bool isEquipOwn = false;
 
 };
-

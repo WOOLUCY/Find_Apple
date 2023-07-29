@@ -7,6 +7,7 @@
 #include "ToolWidget.h"
 #include "HungerWidget.h"
 #include "HPWidget.h"
+#include "FishWidget.h"
 
 
 AInGameHUD::AInGameHUD()
@@ -25,7 +26,7 @@ AInGameHUD::AInGameHUD()
 
 	ConstructorHelpers::FClassFinder<UToolWidget> ToolWidgetObject(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/UI/ToolWidget.ToolWidget_C'"));
 	if (ToolWidgetObject.Succeeded())
-	{
+	{ 
 		ToolWidgetClass = ToolWidgetObject.Class;
 	}
 
@@ -33,6 +34,12 @@ AInGameHUD::AInGameHUD()
 	if (HungerWidgetObject.Succeeded())
 	{
 		HungerWidgetClass = HungerWidgetObject.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<UFishWidget> FishWidgetObject(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Woo/UI/Fishing/FishWidget.FishWidget_C'"));
+	if (FishWidgetObject.Succeeded())
+	{
+		FishWidgetClass = FishWidgetObject.Class;
 	}
 
 }
@@ -73,6 +80,14 @@ void AInGameHUD::BeginPlay()
 			HungerWidget->AddToViewport();
 		}
 	}
+	if (FishWidgetClass)
+	{
+		FishWidget = CreateWidget<UFishWidget>(GetWorld(), FishWidgetClass);
+		if (FishWidget)
+		{
+			FishWidget->AddToViewport();
+		}
+	}
 }
 
 void AInGameHUD::DrawHUD()
@@ -87,6 +102,7 @@ void AInGameHUD::Tick(float DeltaSeconds)
 	UpdateHeartCount();
 	UpdateToolImage();
 	UpdateHunger();
+	UpdateFishingProcess();
 }
 
 void AInGameHUD::UpdateHeartCount()
@@ -111,5 +127,13 @@ void AInGameHUD::UpdateToolImage()
 	if (ToolWidget)
 	{
 		ToolWidget->UpdateToolImage();
+	}
+}
+
+void AInGameHUD::UpdateFishingProcess()
+{
+	if (FishWidget)
+	{
+		FishWidget->UpdateFishingProgress();
 	}
 }
