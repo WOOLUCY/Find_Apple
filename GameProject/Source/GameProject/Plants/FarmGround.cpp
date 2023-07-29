@@ -214,9 +214,9 @@ void AFarmGround::PutSeed()
 		UWorld* TheWorld = GetWorld();
 		if (TheWorld) {
 
-			//static UMyGameInstance* instance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(TheWorld));
-			//if (instance->plantType >= 7) instance->plantType = 0;
-			int temp = 0;
+			UMyGameInstance* instance = Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(TheWorld));
+			if (instance->plantType > 7) instance->plantType = 0;
+			int temp = instance->plantType;
 			switch (temp)//(instance->plantType)
 			{
 			case 0:
@@ -224,21 +224,20 @@ void AFarmGround::PutSeed()
 			case 2:
 			case 3:
 				Planted = TheWorld->SpawnActor<APlant>(ARootPlant::StaticClass(), GetActorLocation(), FRotator());
-			//++instance->plantType;
+				++instance->plantType;
 				break;
 
 			case 4:
 			case 5:
 			case 6:
 				Planted = TheWorld->SpawnActor<APlant>(AVegPlant::StaticClass(), GetActorLocation(), FRotator());
-				//++instance->plantType;
+				++instance->plantType;
 
 				break;
 
 			case 7:			
 				Planted = TheWorld->SpawnActor<APlant>(AAppleTree::StaticClass(), GetActorLocation(), FRotator());
-				//++instance->plantType;
-
+				instance->plantType = 0;
 				break;
 
 			default:

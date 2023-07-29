@@ -49,7 +49,7 @@ public:
 
 	ClientSocket MySocket;
 
-	int plantType = 0;
+	int plantType = 7;
 
 	FRotator Sun{ 0,180.f,180.f };
 	void SetCharLoc(FVector Loc);

@@ -59,6 +59,8 @@ public:
 	UPROPERTY()
 	FText Name;
 
+	UPROPERTY()
+	int type;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

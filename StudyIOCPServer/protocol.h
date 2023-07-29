@@ -46,6 +46,8 @@ constexpr int ROCK = 15;
 constexpr int TRUNK = 16;
 constexpr int BRANCH = 17;
 constexpr int  SEED = 18;
+constexpr int FISH = 19;
+
 
 
 #pragma pack (push, 1)

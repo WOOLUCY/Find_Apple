@@ -102,6 +102,10 @@ void UTradeWidget::NativeConstruct()
 		case SEED:
 			SelectItemName = FName("seed");
 			break;
+		case FISH:
+			SelectItemName = FName("fish");
+			break;
+
 
 		default:
 			break;

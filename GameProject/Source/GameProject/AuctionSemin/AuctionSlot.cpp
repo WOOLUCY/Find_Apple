@@ -67,6 +67,8 @@ void UAuctionSlot::NativePreConstruct()
 					SlotImage->SetBrushColor(FColor::White);
 					Descript = InventoryRow.Descript;
 					Name = InventoryRow.DisplayName;
+					type = InventoryRow.KindOfItem;
+
 				}
 			}
 		}
@@ -85,57 +87,9 @@ FReply UAuctionSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 			AuctionEnterWidgetClass->SelectItemName->SetText(Name);
 			AuctionEnterWidgetClass->ItemName = Name;
 			AuctionEnterWidgetClass->NonDisplayName = ItemName;
+			AuctionEnterWidgetClass->ItemType = type;
 
-			FString StringName = *ItemName.ToString();
-			if (StringName.Equals(FString(TEXT("apple")))) {
-				AuctionEnterWidgetClass->ItemType = APPLE;
 
-			}
-			else if (StringName.Equals(FString(TEXT("Rubby")))) {
-				AuctionEnterWidgetClass->ItemType = RUBBY;
-
-			}
-			else if (StringName.Equals(FString(TEXT("trunk")))) {
-				AuctionEnterWidgetClass->ItemType = TRUNK;
-
-			}
-			else if (StringName.Equals(FString(TEXT("rock")))) {
-				AuctionEnterWidgetClass->ItemType = ROCK;
-
-			}
-			else if (StringName.Equals(FString(TEXT("branch")))) {
-				AuctionEnterWidgetClass->ItemType = BRANCH;
-
-			}
-			else if (StringName.Equals(FString(TEXT("Seed")))) {
-				AuctionEnterWidgetClass->ItemType = SEED;
-
-			}
-			else if (StringName.Equals(FString(TEXT("Iron")))) {
-				AuctionEnterWidgetClass->ItemType = IRON;
-
-			}
-			else if (StringName.Equals(FString(TEXT("Radish")))) {
-				AuctionEnterWidgetClass->ItemType = RADISH;
-
-			}
-			else if (StringName.Equals(FString(TEXT("Gold")))) {
-				AuctionEnterWidgetClass->ItemType = GOLD;
-
-			}
-			else if (StringName.Equals(FString(TEXT("Sapphire")))) {
-				AuctionEnterWidgetClass->ItemType = SAPPHIRE;
-
-			}
-			else if (StringName.Equals(FString(TEXT("apple")))) {
-				AuctionEnterWidgetClass->ItemType = APPLE;
-
-			}
-
-			else {
-				AuctionEnterWidgetClass->ItemType = -1;
-
-			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
 				FString::Printf(TEXT("ItmeType %d"), AuctionEnterWidgetClass->ItemType));
