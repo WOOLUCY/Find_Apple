@@ -36,7 +36,7 @@ constexpr int CUCUMBER = 6;
 constexpr int YELLOMELON = 7;
 constexpr int CACTUS = 8;
 constexpr int ORANGE = 9;
-constexpr int APPLE = 100;
+constexpr int APPLE = 10;
 
 constexpr int GOLD = 11;
 constexpr int IRON = 12;

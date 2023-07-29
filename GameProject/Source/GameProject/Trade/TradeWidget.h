@@ -41,6 +41,12 @@ public:
 	UPROPERTY()
 	FName SelectItemName;
 
+
+	UPROPERTY()
+		int kindofitem;
+
+
+
 	TArray<struct FInventoryTableRow*> InventoryData;
 	UPROPERTY()
 	TSubclassOf<class UUserWidget> TradeListWidgetClass;

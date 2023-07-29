@@ -56,54 +56,73 @@ void UTradeWidget::NativeConstruct()
 		{
 		case RADISH:
 			SelectItemName = FName("Radish");
+			kindofitem = RADISH;
 			break;
 		case CARROT:
 			SelectItemName = FName("Carrot");
+			kindofitem = CARROT;
+
 			break;
 		case KOHLRABI:
 			SelectItemName = FName("Kohlrabi");
+			kindofitem = KOHLRABI;
+
 			break;
 		case TOMATO:
 			SelectItemName = FName("tomato");
+			kindofitem = TOMATO;
 			break;
 		case CUCUMBER:
 			SelectItemName = FName("cucumber");
+			kindofitem = CUCUMBER;
 			break;
 		case YELLOMELON:
 			SelectItemName = FName("yellomelon");
+			kindofitem = YELLOMELON;
 			break;
 		case CACTUS:
 			SelectItemName = FName("cactus");
+			kindofitem = CACTUS;
 			break;
 		case APPLE:
 			SelectItemName = FName("apple");
+			kindofitem = APPLE;
 			break;
 		case GOLD:
 			SelectItemName = FName("gold");
+			kindofitem = GOLD;
 			break;
 		case IRON:
 			SelectItemName = FName("iron");
+			kindofitem = IRON;
 			break;
 		case RUBBY:
 			SelectItemName = FName("rubby");
+			kindofitem = RUBBY;
 			break;
 		case SAPPHIRE:
 			SelectItemName = FName("sapphire");
+			kindofitem = SAPPHIRE;
 			break;
 		case ROCK:
 			SelectItemName = FName("rock");
+			kindofitem = ROCK;
 			break;
 		case TRUNK:
 			SelectItemName = FName("trunk");
+			kindofitem = TRUNK;
 			break;
 		case BRANCH:
 			SelectItemName = FName("branch");
+			kindofitem = BRANCH;
 			break;
 		case SEED:
 			SelectItemName = FName("seed");
+			kindofitem = SEED;
 			break;
 		case FISH:
 			SelectItemName = FName("fish");
+			kindofitem = FISH;
 			break;
 
 
@@ -122,7 +141,7 @@ void UTradeWidget::NativeConstruct()
 			{
 				FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
 
-				if (SelectItemName == RowName)
+				if (InventoryRow.KindOfItem == kindofitem)
 				{
 					if (InventoryRow.ItemType != 2) {
 						TradeListWidgetUIObject = CreateWidget<UTradeListWidget>(GetWorld(), TradeListWidgetClass);
