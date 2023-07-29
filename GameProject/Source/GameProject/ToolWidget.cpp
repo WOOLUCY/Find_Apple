@@ -42,6 +42,7 @@ void UToolWidget::UpdateToolImage()
 		SwordImg->SetOpacity(1.f);
 		AxeImg->SetOpacity(0.f);
 		PickImg->SetOpacity(0.f);
+		RodImg->SetOpacity(0.f);
 		PlayAnimation(SwordAnimation);
 		PrevEquipNum = 1;
 	}
@@ -51,6 +52,7 @@ void UToolWidget::UpdateToolImage()
 		SwordImg->SetOpacity(0.f);
 		AxeImg->SetOpacity(1.f);
 		PickImg->SetOpacity(0.f);
+		RodImg->SetOpacity(0.f);
 		PlayAnimation(AxeAnimation);
 		PrevEquipNum = 2;
 	}
@@ -60,8 +62,19 @@ void UToolWidget::UpdateToolImage()
 		SwordImg->SetOpacity(0.f);
 		AxeImg->SetOpacity(0.f);
 		PickImg->SetOpacity(1.f);
+		RodImg->SetOpacity(0.f);
 		PlayAnimation(PickAnimation);
 		PrevEquipNum = 3;
+	}
+	else if (MyChar->GetEquipNum() == 4 && DoOnce.Execute())
+	{
+		HandImg->SetOpacity(0.f);
+		SwordImg->SetOpacity(0.f);
+		AxeImg->SetOpacity(0.f);
+		PickImg->SetOpacity(0.f);
+		RodImg->SetOpacity(1.f);
+		PlayAnimation(RodAnimation);
+		PrevEquipNum = 4;
 	}
 	else if (MyChar->GetEquipNum()== 0 && DoOnce.Execute())
 	{
@@ -69,6 +82,7 @@ void UToolWidget::UpdateToolImage()
 		SwordImg->SetOpacity(0.f);
 		AxeImg->SetOpacity(0.f);
 		PickImg->SetOpacity(0.f);
+		RodImg->SetOpacity(0.f);
 		PlayAnimation(HandAnimation);
 		PrevEquipNum = 0;
 	}

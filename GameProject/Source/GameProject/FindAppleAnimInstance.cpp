@@ -41,6 +41,7 @@ UFindAppleAnimInstance::UFindAppleAnimInstance()
 		ConcreteSoundCue = CONCRETE_CUE.Object;
 	}
 
+
 	static ConstructorHelpers::FObjectFinder<USoundCue> GRASS_CUE
 	(TEXT("/Script/Engine.SoundCue'/Game/Semin/Sound/FootStep/Grass_Sound_Cue.Grass_Sound_Cue'"));
 	if (GRASS_CUE.Succeeded()) {
@@ -66,6 +67,20 @@ UFindAppleAnimInstance::UFindAppleAnimInstance()
 
 	InteractAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp2"));
 	InteractAudioComponent->bAutoActivate = false;
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ROD_MON
+	(TEXT("/Script/Engine.AnimMontage'/Game/Characters/Hero/FishingMontage.FishingMontage'"));
+	if (ROD_MON.Succeeded()) {
+		RodMontage = ROD_MON.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> END_MON
+	(TEXT("/Script/Engine.AnimMontage'/Game/Characters/Hero/EndMontage.EndMontage'"));
+	if (END_MON.Succeeded()) {
+		FishEndMontage = END_MON.Object;
+	}
+
+	//FishEndMontage->RateScale = -1.f;
 }
 
 void UFindAppleAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -126,6 +141,44 @@ void UFindAppleAnimInstance::PlayPlantMontage()
 
 }
 
+void UFindAppleAnimInstance::PlayRodMontage()
+{
+	static float PlayLength = RodMontage->GetPlayLength() / (PlaySpeed * 1.5f);
+
+	if (OffInput()) {
+		Montage_Play(RodMontage, 1.f);
+		UWorld* World = GetWorld();
+		if (World) {
+			UE_LOG(LogTemp, Warning, TEXT("Fishing Rod Casting"));
+
+			FTimerManager& TimerManager = World->GetTimerManager();
+
+			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 3.f, false);
+		}
+
+	}
+	// 애니메이션이 끝나면 입력 활성화
+}
+
+void UFindAppleAnimInstance::PlayFishEndMontage()
+{
+	static float PlayLength = FishEndMontage->GetPlayLength() / (PlaySpeed * 1.f);
+
+	if (OffInput()) {
+		Montage_Play(FishEndMontage, PlaySpeed);
+		UWorld* World = GetWorld();
+		if (World) {
+			UE_LOG(LogTemp, Warning, TEXT("Fishing End"));
+
+			FTimerManager& TimerManager = World->GetTimerManager();
+
+			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 0.2f, false);
+		}
+
+	}
+	// 애니메이션이 끝나면 입력 활성화
+}
+
 void UFindAppleAnimInstance::PlayGrabItemMontage()
 {
 	static float PlayLength = GrabMontage->GetPlayLength() / (PlaySpeed * 2.f);
@@ -142,7 +195,7 @@ void UFindAppleAnimInstance::PlayGrabItemMontage()
 
 			TimerManager.SetTimer(TimerHandle, this, &UFindAppleAnimInstance::OnInput, 0.2f, false);
 
-			
+
 
 			AudioComponent->SetSound(GrabAudioCue);
 			AudioComponent->Play();

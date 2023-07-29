@@ -25,6 +25,8 @@ public:
 	//¸ùÅ¸ÁÖ 
 	void PlayActionMontage();
 	void PlayPlantMontage();
+	void PlayRodMontage();
+	void PlayFishEndMontage();
 	void PlayGrabItemMontage();
 
 
@@ -39,6 +41,10 @@ private:
 		UAnimMontage* ActionMontage;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* PlantMontage;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* RodMontage;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* FishEndMontage;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Action, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* GrabMontage;

@@ -242,6 +242,20 @@ AFindAppleCharacter::AFindAppleCharacter()
 		ResetEquipMapping = Input_Reset.Object;
 	}
 
+	// W: 낚싯대 선택
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_Rod(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_Rod.IA_Rod'"));
+	if (Input_Rod.Succeeded())
+	{
+		RodMapping = Input_Rod.Object;
+	}
+	// W: Fishing End
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input_FishingEnd(TEXT("/Script/EnhancedInput.InputAction'/Game/Woo/KeyInput/IA_FishingEnd.IA_FishingEnd'"));
+	if (Input_FishingEnd.Succeeded())
+	{
+		FishingEndMapping = Input_FishingEnd.Object;
+	}
+
+
 	/* CameraShake */
 	ConstructorHelpers::FClassFinder<UCameraShakeBase>  CameraShake(TEXT("/Script/Engine.Blueprint'/Game/Woo/Camera/BP_DeathCS.BP_DeathCS_C'"));
 	if (CameraShake.Succeeded())
@@ -840,6 +854,49 @@ void AFindAppleCharacter::EquipPick(const FInputActionValue& Value)
 	}
 
 }
+
+void AFindAppleCharacter::EquipRod(const FInputActionValue& Value)
+{
+	if (CurEquipNum == 4) return;
+
+	if (CurEquipNum != 0 && CurEquipNum != 4 && isEquipOwn) {
+		CurEquipActor->Destroy();
+		isEquipOwn = false;
+	}
+
+	if (CurEquipNum != 4) {
+		CurEquipNum = 4;
+
+		if (ItemDataTable != nullptr)
+		{
+			ItemDataTable->GetAllRows<FInventoryTableRow>(TEXT("GetAllRows"), InventoryData);
+			TArray<FName> RowNames = ItemDataTable->GetRowNames();
+
+			for (FName RowName : RowNames)
+			{
+				FInventoryTableRow InventoryRow = *(ItemDataTable->FindRow<FInventoryTableRow>(RowName, RowName.ToString()));
+
+				if (InventoryRow.ItemType == 13) {
+					UE_LOG(LogTemp, Warning, TEXT("Cast!"));
+					if (InventoryComponent->InventoryContent.Find(RowName))
+					{
+						AFishingRod* ToolActor;
+						ToolActor = GetWorld()->SpawnActor<AFishingRod>(AFishingRod::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+
+						ToolActor->SetMesh(InventoryRow.Mesh3D);
+						CurEquipActor = ToolActor;
+						CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("RodSocket"));
+						isEquipOwn = true;
+					}
+				}
+			}
+		}
+
+		//CurEquipActor = GetWorld()->SpawnActor<AAx>(FVector::ZeroVector, FRotator::ZeroRotator);
+	}
+
+}
+
 void AFindAppleCharacter::EquipReset(const FInputActionValue& Value)
 {
 
@@ -878,6 +935,26 @@ void AFindAppleCharacter::ChangeSpeed(const FInputActionValue& Value)
 		}), 5.f, false);
 
 
+}
+
+void AFindAppleCharacter::EndFishing(const FInputActionValue& Value)
+{
+	// 낚시 성공
+	if (GetIsFishDetected())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cast!"));
+		Anim->PlayFishEndMontage();
+		SetFishingWaitTime(0.f);
+		SetIsFishDetected(false);
+		InventoryComponent->AddToInventory("Fish", 1);
+		
+	}
+	// 낚시 실패
+	else
+	{
+		SetFishingWaitTime(0.f);
+		SetIsFishDetected(false);
+	}
 }
 
 
@@ -942,6 +1019,7 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 
 	// TODO: 실시간으로 허기가 줄어들게
 
+
 	//판매되었을때 인벤에 추가
 
 	static UWorld* TheWorld = GetWorld();
@@ -956,6 +1034,20 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 	}
 
 	SetPlayBattleMusic(countOfMonstersAggro);
+
+	// Fishing
+	if (GetIsFishDetected())
+	{
+		SetFishingWaitTime(GetFishingWaitTime() + 0.8f);
+
+		if (GetFishingWaitTime() > 100.f)
+		{
+			// WaitTime 초과
+			Anim->PlayFishEndMontage();
+			SetIsFishDetected(false);
+			SetFishingWaitTime(0.f);
+		}
+	}
 
 }
 
@@ -986,6 +1078,15 @@ void AFindAppleCharacter::ChangeEquipment(int in)
 
 		CurEquipActor = GetWorld()->SpawnActor<APick>(FVector::ZeroVector, FRotator::ZeroRotator);
 		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("PickSocket"));
+		//CurEquipNum = 3;
+	}
+
+	// Fishing Rod
+	else if (in == 4)
+	{
+
+		CurEquipActor = GetWorld()->SpawnActor<AFishingRod>(FVector::ZeroVector, FRotator::ZeroRotator);
+		CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("RodSocket"));
 		//CurEquipNum = 3;
 	}
 
@@ -1053,12 +1154,40 @@ void AFindAppleCharacter::BlackScreenPopEnd()
 	BlackScreenBeginUIObject->EndAnimation();
 }
 
+void AFindAppleCharacter::ApplyEquip(const FInputActionValue& Value)
+{
+	if(GetEquipNum() == 0)
+	{
+		EquipReset(Value);
+	}
+
+	else if (GetEquipNum() == 1)
+	{
+		EquipSword(Value);
+	}
+
+	else if (GetEquipNum() == 2)
+	{
+		EquipAx(Value);
+	}
+
+	else if (GetEquipNum() == 3)
+	{
+		EquipPick(Value);
+	}
+
+	else if (GetEquipNum() == 4 && GetIsInFishingVol())
+	{
+		EquipRod(Value);
+	}
+}
+
 void AFindAppleCharacter::UpEquip(const FInputActionValue& Value)
 {
 	// 도구 번호 변환
 	int temp = GetEquipNum();
 
-	if (temp + 1 > 3)
+	if (temp + 1 > 4)
 	{
 		SetEquipNum(0);
 	}
@@ -1066,6 +1195,8 @@ void AFindAppleCharacter::UpEquip(const FInputActionValue& Value)
 		SetEquipNum(++temp);
 
 	ChangeEquipment(GetEquipNum());
+
+	ApplyEquip(Value);
 }
 
 void AFindAppleCharacter::DownEquip(const FInputActionValue& Value)
@@ -1074,12 +1205,14 @@ void AFindAppleCharacter::DownEquip(const FInputActionValue& Value)
 
 	if (temp - 1 < 0)
 	{
-		SetEquipNum(3);
+		SetEquipNum(4);
 	}
 	else
 		SetEquipNum(--temp);
 
 	ChangeEquipment(GetEquipNum());
+
+	ApplyEquip(Value);
 }
 
 // Called to bind functionality to input
@@ -1117,6 +1250,12 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(PickMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipPick);
 		EnhancedInputComponent->BindAction(ResetEquipMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipReset);
 
+		// W: equipment rod
+		EnhancedInputComponent->BindAction(RodMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EquipRod);
+
+		// W: Fishing End
+		EnhancedInputComponent->BindAction(FishingEndMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EndFishing);
+
 		// W: Wheel Equipment
 		EnhancedInputComponent->BindAction(WheelUpAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::UpEquip);
 		EnhancedInputComponent->BindAction(WheelDownAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::DownEquip);
@@ -1126,13 +1265,32 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 }
 
+
+
 void AFindAppleCharacter::Action()
 {
 	if (IsAction) {
 		return;
 	}
 	else {
-		if (CurEquipNum != 0 && isEquipOwn) {
+		if (CurEquipNum == 4 && isEquipOwn)
+		{
+			if (GetIsInFishingVol())
+			{
+				Anim->PlayRodMontage();
+				IsAction = true;
+				SetIsFishing(true);
+
+				// Fish is Detected
+				int32 RandomInt = UKismetMathLibrary::RandomIntegerInRange(3, 10);
+				FTimerHandle TimerHandle;
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+					{
+						SetIsFishDetected(true);
+					}, RandomInt, false);
+			}
+		}
+		else if (CurEquipNum != 0 && isEquipOwn) {
 			Anim->PlayActionMontage();
 			IsAction = true;
 		}
