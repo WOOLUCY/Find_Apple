@@ -53,7 +53,7 @@ void UAuctionMenuTab::Refresh()
 
 					if (InventoryElement.Key == RowName)
 					{
-						if (InventoryRow.ItemType != 2) {
+						if (InventoryRow.ItemType != 2 && InventoryRow.ItemType != 10 && InventoryRow.ItemType != 11 && InventoryRow.ItemType != 12 && InventoryRow.ItemType != 13) {
 
 							InventorySlotUIObject = CreateWidget<UAuctionSlot>(GetWorld(), InventorySlotWidgetClass);
 							InventorySlotUIObject->Quantity = InventoryElement.Value;

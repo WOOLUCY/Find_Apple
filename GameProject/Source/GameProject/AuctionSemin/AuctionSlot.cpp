@@ -60,7 +60,7 @@ void UAuctionSlot::NativePreConstruct()
 
 			if (RowName == ItemName)
 			{
-				if (InventoryRow.ItemType != 2) {
+				if (InventoryRow.ItemType != 2 && InventoryRow.ItemType != 10 && InventoryRow.ItemType != 11 && InventoryRow.ItemType != 12 && InventoryRow.ItemType != 13) {
 					// ItemType = 0은 섭취 불가능, 1 는 가능, 2 는인벤토리상 안 보이는 템
 					Thumbnail = InventoryRow.Thumbnail;
 					SlotImage->SetBrushFromTexture(Thumbnail);

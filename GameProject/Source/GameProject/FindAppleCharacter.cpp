@@ -761,6 +761,7 @@ void AFindAppleCharacter::EquipSword(const FInputActionValue& Value)
 						CurEquipActor = ToolActor;
 						CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("SwordSocket"));
 						isEquipOwn = true;
+						return;
 					}
 				}
 			}
@@ -804,6 +805,7 @@ void AFindAppleCharacter::EquipAx(const FInputActionValue& Value)
 						CurEquipActor = ToolActor;
 						CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("AxSocket"));
 						isEquipOwn = true;
+						return;
 					}
 				}
 			}
@@ -847,6 +849,7 @@ void AFindAppleCharacter::EquipPick(const FInputActionValue& Value)
 						CurEquipActor = ToolActor;
 						CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("PickSocket"));
 						isEquipOwn = true;
+						return;
 					}
 				}
 			}
@@ -887,6 +890,7 @@ void AFindAppleCharacter::EquipRod(const FInputActionValue& Value)
 						CurEquipActor = ToolActor;
 						CurEquipActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("RodSocket"));
 						isEquipOwn = true;
+						return;
 					}
 				}
 			}
