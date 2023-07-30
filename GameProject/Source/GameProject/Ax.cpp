@@ -29,8 +29,12 @@ AAx::AAx()
 
 
 
+	//Pick Music Sound
+	static ConstructorHelpers::FObjectFinder<USoundWave> WeildSoundCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Interaction/ChoppingWood.ChoppingWood'"));
+	AxAudioCue = WeildSoundCue.Object;
 
-
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	AudioComponent->bAutoActivate = false;
 }
 
 void AAx::BeginPlay()
@@ -51,6 +55,10 @@ void AAx::BeginPlay()
 			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("AAx - delegate connetec "));
 
 		}
+	}
+
+	if (AxAudioCue->IsValidLowLevelFast()) {
+		AudioComponent->SetSound(AxAudioCue);
 	}
 	
 
@@ -75,10 +83,23 @@ void AAx::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (TheWorld != nullptr) {
 		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
 		if (Cast<AFindAppleCharacter>(OtherActor) != hero) {
-			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, name);
-			//데미지를주겠다.
-			FDamageEvent DamageEvent;
-			OtherActor->TakeDamage(Damage, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), this);
+			if (IsAttacked == false) {
+
+				//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, name);
+				//데미지를주겠다.
+				FDamageEvent DamageEvent;
+				OtherActor->TakeDamage(Damage, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), this);
+
+				IsAttacked = true;
+
+				AudioComponent->Play();
+
+				FTimerHandle TimerHandle;
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+					{
+						IsAttacked = false;
+					}, 0.5f, false);
+			}
 			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, TEXT("TakeDamage"));
 		}
 		else {

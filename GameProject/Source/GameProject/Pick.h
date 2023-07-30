@@ -34,7 +34,16 @@ public:
 
 	UPROPERTY()
 		UFindAppleAnimInstance* Anim;
+	
+	//pick sound
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* PickAudioCue;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* AudioComponent;
+
+	UPROPERTY()
+	bool IsAttacked;
 
 protected:
 	// Called when the game starts or when spawned
