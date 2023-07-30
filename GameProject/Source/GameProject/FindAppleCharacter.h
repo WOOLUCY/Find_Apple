@@ -293,7 +293,12 @@ public:
 	// 플레이어에게 집중하는 몬스터가 1 이상이라면 배틀 뮤직 재생
 	UPROPERTY()
 	int countOfMonstersAggro;
-
+	
+	// 낚시 UI Object
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> FishingUIClass;
+	UPROPERTY()
+	class UFishingWidget* FishingUIObject;
 
 private:
 	UPROPERTY()
