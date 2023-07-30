@@ -17,6 +17,15 @@ public:
 	// Sets default values for this actor's properties
 	AAx();
 
+	UPROPERTY()
+	bool IsAttacked = false;
+	//ax sound
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class USoundWave* AxAudioCue;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+	class UAudioComponent* AudioComponent;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

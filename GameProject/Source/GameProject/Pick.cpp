@@ -28,7 +28,12 @@ APick::APick()
 	Pick->SetCollisionProfileName(TEXT("NoCollision"));
 	CollisionBox->SetCollisionProfileName(TEXT("NoCollision"));
 
+	//Pick Music Sound
+	static ConstructorHelpers::FObjectFinder<USoundWave> WeildSoundCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/PickAxe.PickAxe'"));
+	PickAudioCue = WeildSoundCue.Object;
 
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
+	AudioComponent->bAutoActivate = false;
 }
 
 void APick::SetCollisionStart()
@@ -70,6 +75,9 @@ void APick::BeginPlay()
 		}
 	}
 
+	if (PickAudioCue->IsValidLowLevelFast()) {
+		AudioComponent->SetSound(PickAudioCue);
+	}
 
 }
 
@@ -86,10 +94,26 @@ void APick::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	UWorld* TheWorld = GetWorld();
 	if (TheWorld != nullptr) {
-		auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
-		if (Cast<AFindAppleCharacter>(OtherActor) != hero) {
+
+		if (IsAttacked == false) {
+			auto hero = UGameplayStatics::GetPlayerCharacter(TheWorld, 0);
+			if (Cast<AFindAppleCharacter>(OtherActor) != hero) {
+
+			//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, name);
+			//데미지를주겠다.
 			FDamageEvent DamageEvent;
 			OtherActor->TakeDamage(Damage, DamageEvent, UGameplayStatics::GetPlayerController(TheWorld, 0), this);
+
+			IsAttacked = true;
+			AudioComponent->Play();
+
+			FTimerHandle TimerHandle;
+
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+				{
+					IsAttacked = false;
+				}, 0.5f, false);
+			}
 		}
 	}
 

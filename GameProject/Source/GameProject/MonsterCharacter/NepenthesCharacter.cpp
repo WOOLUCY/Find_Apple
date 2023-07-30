@@ -180,7 +180,7 @@ float ANepenthesCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Da
 				UE_LOG(LogClass, Warning, TEXT("Slime Current HP: %f"), Health);
 
 				IsAttacked = false;
-			}, 0.5f, false);
+			}, 0.7f, false);
 	}
 
 	return Damage;
