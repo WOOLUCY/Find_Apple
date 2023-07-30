@@ -174,6 +174,7 @@ void process_packet(int c_id, char* packet)
 		clients[c_id].send_login_info_packet();
 
 		//로그인정보 모두에게 보내준다.ㄱ느데 우리는 필요없을듯??
+		//기본정보를돈
 
 		SC_ADD_PLAYER_PACKET add_packet;
 		add_packet.id = c_id;

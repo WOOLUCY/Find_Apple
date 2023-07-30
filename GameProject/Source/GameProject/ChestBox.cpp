@@ -37,6 +37,7 @@ void AChestBox::RespawnBox()
 
 	TotalDamage = 0.f;
 	ChestMesh->SetVisibility(true);
+	ChestMesh->SetCollisionProfileName("BlockAll");
 
 
 
@@ -65,6 +66,7 @@ float AChestBox::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet,
 					ADropedItem* DropedActor = GetWorld()->SpawnActor<ADropedItem>(PivotWorld + FVector(0, 0, 70.f), FRotator::ZeroRotator);
 					DropedActor->ItemFresh(ItemName);
 					once = false;
+					ChestMesh->SetCollisionProfileName("NoCollision");
 				}
 
 				FTimerHandle Timer;

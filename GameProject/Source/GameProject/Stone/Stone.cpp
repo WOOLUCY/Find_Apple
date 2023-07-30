@@ -29,7 +29,8 @@ void AStone::RespawnStone()
 	TotalDamage = 0;
 	mesh->SetVisibility(true);
 	light->SetVisibility(true);
-	
+	mesh->SetCollisionProfileName("BlockAll");
+
 
 }
 
@@ -56,6 +57,8 @@ float AStone::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvnet, AC
 					ADropedItem* DropedActor = GetWorld()->SpawnActor<ADropedItem>(PivotWorld + FVector(0, 0, 50.f), FRotator::ZeroRotator);
 					DropedActor->ItemFresh(name);
 					once = false;
+
+					mesh->SetCollisionProfileName("NoCollision");
 				}
 
 				FTimerHandle Timer;
