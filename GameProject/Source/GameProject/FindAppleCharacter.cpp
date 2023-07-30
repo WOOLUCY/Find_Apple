@@ -1301,7 +1301,7 @@ void AFindAppleCharacter::Action()
 	}
 
 	// When Player use Equipment, CurHunger decreases
-	if(GetEquipNum() != 0)
+	if(GetEquipNum() != 0 && GetCurHunger() >= 10.f)
 		SetCurHunger((GetCurHunger() - 10.f));
 }
 
