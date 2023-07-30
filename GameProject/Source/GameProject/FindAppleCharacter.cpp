@@ -31,6 +31,7 @@
 #include "PauseWidget.h"
 
 #include "Teleport/BlackScreenBegin.h"
+#include "FishingWidget.h"
 #include "Sound/SoundWave.h"
 #include "Components/AudioComponent.h"
 
@@ -336,6 +337,12 @@ AFindAppleCharacter::AFindAppleCharacter()
 		BlackScreenBeginClass = UBlackScreenBeginWidget.Class;
 	}
 
+	ConstructorHelpers::FClassFinder<UFishingWidget>  FishingAnimationnWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Inventory/UI/WBP_Fish.WBP_Fish_C'"));
+	if (FishingAnimationnWidget.Succeeded())
+	{
+		FishingUIClass = FishingAnimationnWidget.Class;
+	}
+
 	//battle Music Sound
 	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Battle.Battle'"));
 	battleAudioCue = propellerCue.Object;
@@ -354,6 +361,10 @@ void AFindAppleCharacter::BeginPlay()
 	BlackScreenBeginUIObject = CreateWidget<UBlackScreenBegin>(GetWorld(), BlackScreenBeginClass);
 	BlackScreenBeginUIObject->AddToViewport();
 	BlackScreenBeginUIObject->EndAnimation();
+
+	FishingUIObject = CreateWidget<UFishingWidget>(GetWorld(), FishingUIClass);
+	FishingUIObject->AddToViewport();
+	FishingUIObject->StartBeginAnimation();
 
 	CurHealth = MaxHealth;
 	CurHunger = MaxHunger;
@@ -951,7 +962,7 @@ void AFindAppleCharacter::EndFishing(const FInputActionValue& Value)
 		SetFishingWaitTime(0.f);
 		SetIsFishDetected(false);
 		InventoryComponent->AddToInventory("Fish", 1);
-		
+		FishingUIObject->StartFishingAnimation();
 	}
 	// 낚시 실패
 	else
@@ -1047,6 +1058,7 @@ void AFindAppleCharacter::Tick(float DeltaTime)
 		if (GetFishingWaitTime() > 100.f)
 		{
 			// WaitTime 초과
+			FishingUIObject->StartFailAnimation();
 			Anim->PlayFishEndMontage();
 			SetIsFishDetected(false);
 			SetFishingWaitTime(0.f);
@@ -1261,8 +1273,8 @@ void AFindAppleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(FishingEndMapping, ETriggerEvent::Triggered, this, &AFindAppleCharacter::EndFishing);
 
 		// W: Wheel Equipment
-		EnhancedInputComponent->BindAction(WheelUpAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::UpEquip);
-		EnhancedInputComponent->BindAction(WheelDownAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::DownEquip);
+		//EnhancedInputComponent->BindAction(WheelUpAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::UpEquip);
+		//EnhancedInputComponent->BindAction(WheelDownAction, ETriggerEvent::Triggered, this, &AFindAppleCharacter::DownEquip);
 
 	}
 	PlayerInputComponent->BindAction(TEXT("Action"), EInputEvent::IE_Pressed, this, &AFindAppleCharacter::Action);
