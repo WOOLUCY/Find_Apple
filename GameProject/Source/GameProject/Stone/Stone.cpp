@@ -11,7 +11,7 @@
 AStone::AStone()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	TotalDamage = 0;
 	MaxDamage = 30;
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));

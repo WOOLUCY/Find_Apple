@@ -102,52 +102,6 @@ ATree::ATree()
 
 
 
-	//int RandonNumber = FMath::RandRange(0, 3);
-
-	//switch (RandonNumber)
-	//{
-	//case 0:
-
-
-	//	break;
-	//case 1:
-	//	SM_LOWER = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeLower1.TreeLower1'"));
-	//	if (SM_LOWER.Succeeded()) {
-	//		Lower->SetStaticMesh(SM_LOWER.Object);
-	//	}
-	//	SM_UPPER = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeUpper1.TreeUpper1'"));
-	//	if (SM_UPPER.Succeeded()) {
-	//		Upper->SetStaticMesh(SM_UPPER.Object);
-	//	}
-
-	//	break;
-	//case 2:
-	//	SM_LOWER = ConstructorHelpers::FObjectFinder<UStaticMesh> (TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeLower2.TreeLower2'"));
-	//	if (SM_LOWER.Succeeded()) {
-	//		Lower->SetStaticMesh(SM_LOWER.Object);
-	//	}
-	//	SM_UPPER = ConstructorHelpers::FObjectFinder<UStaticMesh> (TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeUpper2.TreeUpper2'"));
-	//	if (SM_UPPER.Succeeded()) {
-	//		Upper->SetStaticMesh(SM_UPPER.Object);
-	//	}
-
-	//	break;
-	//case 3:
-	//	SM_LOWER = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeLower3.TreeLower3'"));
-	//	if (SM_LOWER.Succeeded()) {
-	//		Lower->SetStaticMesh(SM_LOWER.Object);
-	//	}
-	//	SM_UPPER = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Script/Engine.StaticMesh'/Game/kaon/asset/model/TreeUpper3.TreeUpper3'"));
-	//	if (SM_UPPER.Succeeded()) {
-	//		Upper->SetStaticMesh(SM_UPPER.Object);
-	//	}
-
-	//	break;
-
-	//default:
-	//	break;
-	//}
-
 
 
 
