@@ -19,7 +19,7 @@
 
 
 //프로토콜 추가하면 삭제해야함
-#define SERVER_ADDR  "127.0.0.1"
+#define SERVER_ADDR  "10.30.1.40"
 #define SERVER_PORT  4000
 #define BUFSIZE		 1024
 
