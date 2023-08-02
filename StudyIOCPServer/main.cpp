@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "SESSION.h"
 
-#define SERVER_ADDR "127.0.0.1"
+#define SERVER_ADDR "10.30.1"
 #define SERVER_PORT 4000
 #define BUFSIZE 256
 #define MAX_USER 100
