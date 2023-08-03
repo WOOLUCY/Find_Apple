@@ -17,6 +17,11 @@
 class UInputMappingContext;
 class UInputAction;
 
+struct Message {
+	FText Name;
+	FText Title;
+	FText Detail;
+};
 
 UCLASS()
 class GAMEPROJECT_API AFindAppleCharacter : public ACharacter
@@ -232,6 +237,15 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void DamageReaction(float DamageAmount);
 	FDoOnce DoOnce;
+
+	/* Message */
+	// 편지 보낸 사람의 ID, 편지 제목, 내용 순서
+	TArray<Message> MessageList; // 받은 메시지를 모두 보관
+
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> MessageWidgetClass;
+	UPROPERTY()
+	class UMessageHudWidget* MessageWidget;
 
 
 	/* Gettor & Settor */

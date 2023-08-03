@@ -34,6 +34,9 @@
 #include "FishingWidget.h"
 #include "Sound/SoundWave.h"
 #include "Components/AudioComponent.h"
+#include "MessageUI/MessageListUI.h"
+#include "MessageUI/MessageHudWidget.h"
+#include "Components/Button.h"
 
 // Sets default values
 AFindAppleCharacter::AFindAppleCharacter()
@@ -343,6 +346,13 @@ AFindAppleCharacter::AFindAppleCharacter()
 		FishingUIClass = FishingAnimationnWidget.Class;
 	}
 
+	ConstructorHelpers::FClassFinder<UMessageHudWidget> MessageObject(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Message/MessageHudWidget.MessageHudWidget_C'"));
+	if (MessageObject.Succeeded())
+	{
+		MessageWidgetClass = MessageObject.Class;
+	}
+
+
 	//battle Music Sound
 	static ConstructorHelpers::FObjectFinder<USoundWave> propellerCue(TEXT("/Script/Engine.SoundWave'/Game/Semin/Sound/Battle.Battle'"));
 	battleAudioCue = propellerCue.Object;
@@ -437,7 +447,17 @@ void AFindAppleCharacter::BeginPlay()
 			}
 		}
 	}
+	FString a = "aaaa";
+	Message Temp = { FText::FromString(a), FText::FromString(a), FText::FromString(a) };
+	MessageList.Add(Temp);
 
+
+
+	if (MessageWidgetClass)
+	{
+		MessageWidget = CreateWidget<UMessageHudWidget>(GetWorld(), MessageWidgetClass);
+		MessageWidget->AddToViewport();
+	}
 }
 
 void AFindAppleCharacter::PostInitializeComponents()
@@ -447,12 +467,9 @@ void AFindAppleCharacter::PostInitializeComponents()
 	Anim = Cast<UFindAppleAnimInstance>(GetMesh()->GetAnimInstance());
 	Anim->OnMontageEnded.AddDynamic(this, &AFindAppleCharacter::OnActionMontageEnded);
 
-
-
 	if (battleAudioCue->IsValidLowLevelFast()) {
 		AudioComponent->SetSound(battleAudioCue);
 	}
-
 }
 
 void AFindAppleCharacter::PossessedBy(AController* NewController)

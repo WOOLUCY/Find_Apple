@@ -8,7 +8,8 @@
 #include "HungerWidget.h"
 #include "HPWidget.h"
 #include "FishWidget.h"
-
+#include "Components/Button.h"
+#include "MessageUI/MessageHudWidget.h"
 
 AInGameHUD::AInGameHUD()
 {
@@ -137,3 +138,4 @@ void AInGameHUD::UpdateFishingProcess()
 		FishWidget->UpdateFishingProgress();
 	}
 }
+

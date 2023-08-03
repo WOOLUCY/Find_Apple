@@ -14,4 +14,16 @@ class GAMEPROJECT_API UMessageSendUI : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	UMessageSendUI(const FObjectInitializer& objectInitializer);
+	virtual void NativeConstruct() override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMessageListUI* MessageListUIWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* CloseButton;
+
+	UFUNCTION()
+	void CloseButtonClick();
 };

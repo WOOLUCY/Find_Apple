@@ -13,5 +13,15 @@ UCLASS()
 class GAMEPROJECT_API UMessageSlot : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	UMessageSlot(const FObjectInitializer& objectInitializer);
+	virtual void NativeConstruct() override;
 	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* TitleText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* SenderText;
 };
