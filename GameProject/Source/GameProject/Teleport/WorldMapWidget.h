@@ -64,6 +64,8 @@ public:
 	void HomeButtonClick();
 	UFUNCTION()
 	void BridgeButtonClick();
+	UFUNCTION()
+	void Remove();
 
 private:
 	UFUNCTION()

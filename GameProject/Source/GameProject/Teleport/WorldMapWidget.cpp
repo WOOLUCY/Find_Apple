@@ -230,6 +230,12 @@ void UWorldMapWidget::BridgeButtonClick()
 	RemoveFromParent();
 }
 
+void UWorldMapWidget::Remove()
+{
+	BlackScreenBeginUIObject->RemoveFromParent();
+	RemoveFromParent();
+}
+
 void UWorldMapWidget::TeleportPlayer(FName Place)
 {
 	if (Place == "Home")

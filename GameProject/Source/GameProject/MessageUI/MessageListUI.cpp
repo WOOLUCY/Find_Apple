@@ -60,6 +60,28 @@ void UMessageListUI::CloseButtonClick()
 	RemoveFromParent();
 }
 
+void UMessageListUI::Refresh()
+{
+	MessageList->ClearChildren();
+
+	AActor* CharacterActor = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	AFindAppleCharacter* MyCharacter = Cast<AFindAppleCharacter>(CharacterActor);
+
+	// 가장 최근에 추가된(받은) 메시지가 가장 앞에 표시되도록 함 
+	for (int i = MyCharacter->MessageList.Num() - 1; i >= 0; i--) {
+		MessageSlotWidgetUIObject = CreateWidget<UMessageSlot>(GetWorld(), MessageSlotWidgetClass);
+		MessageSlotWidgetUIObject->TitleText->SetText(MyCharacter->MessageList[i].Title);
+		MessageSlotWidgetUIObject->SenderText->SetText(MyCharacter->MessageList[i].Name);
+		MessageList->AddChild(MessageSlotWidgetUIObject);
+	}
+	/*for (Message message : MyCharacter->MessageList) {
+		MessageSlotWidgetUIObject = CreateWidget<UMessageSlot>(GetWorld(), MessageSlotWidgetClass);
+		MessageSlotWidgetUIObject->TitleText->SetText(message.Title);
+		MessageSlotWidgetUIObject->SenderText->SetText(message.Name);
+		MessageList->AddChild(MessageSlotWidgetUIObject);
+	}*/
+}
+
 void UMessageListUI::CreateSendMessageWidget()
 {
 	SendMessageWidgetUIObject = CreateWidget<UMessageSendUI>(GetWorld(), SendMessageWidgetClass);

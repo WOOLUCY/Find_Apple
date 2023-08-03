@@ -33,6 +33,9 @@ public:
 	UFUNCTION()
 	void CloseButtonClick();
 
+	UFUNCTION()
+	void Refresh();
+
 private:
 	UPROPERTY()
 	TSubclassOf<class UUserWidget> MessageSlotWidgetClass;

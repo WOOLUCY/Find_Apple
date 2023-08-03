@@ -608,8 +608,11 @@ void AFindAppleCharacter::ShowWorldMap(const FInputActionValue& Value)
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (bWorldMapWidget)
 	{
-		WorldMapUIObject->RemoveFromParent();
-		bWorldMapWidget = false;
+		if (WorldMapUIObject) 
+		{
+			WorldMapUIObject->Remove();
+			bWorldMapWidget = false;
+		}
 		PlayerController->SetInputMode(FInputModeGameOnly());
 		PlayerController->SetShowMouseCursor(false);
 	}
