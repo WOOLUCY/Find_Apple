@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MessageHudWidget.h"
 #include "MessageSendUI.h"
+#include "MessageInfoUI.h"
 
 UMessageListUI::UMessageListUI(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -26,6 +27,12 @@ UMessageListUI::UMessageListUI(const FObjectInitializer& objectInitializer) : Su
 	{
 		SendMessageWidgetClass = MessageSendWidget.Class;
 	}
+
+	ConstructorHelpers::FClassFinder<UMessageInfoUI> MessagInfoWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Semin/UI/Message/MessageInformWidget.MessageInformWidget_C'"));
+	if (MessagInfoWidget.Succeeded())
+	{
+		MessageInfoWidgetClass = MessagInfoWidget.Class;
+	}
 }
 
 void UMessageListUI::NativeConstruct()
@@ -39,6 +46,8 @@ void UMessageListUI::NativeConstruct()
 		MessageSlotWidgetUIObject = CreateWidget<UMessageSlot>(GetWorld(), MessageSlotWidgetClass);
 		MessageSlotWidgetUIObject->TitleText->SetText(message.Title);
 		MessageSlotWidgetUIObject->SenderText->SetText(message.Name);
+		MessageSlotWidgetUIObject->DetailText->SetText(message.Detail);
+		MessageSlotWidgetUIObject->MessageListUIWidget = this;
 		MessageList->AddChild(MessageSlotWidgetUIObject);
 	}
 
@@ -72,6 +81,8 @@ void UMessageListUI::Refresh()
 		MessageSlotWidgetUIObject = CreateWidget<UMessageSlot>(GetWorld(), MessageSlotWidgetClass);
 		MessageSlotWidgetUIObject->TitleText->SetText(MyCharacter->MessageList[i].Title);
 		MessageSlotWidgetUIObject->SenderText->SetText(MyCharacter->MessageList[i].Name);
+		MessageSlotWidgetUIObject->DetailText->SetText(MyCharacter->MessageList[i].Detail);
+		MessageSlotWidgetUIObject->MessageListUIWidget = this;
 		MessageList->AddChild(MessageSlotWidgetUIObject);
 	}
 	/*for (Message message : MyCharacter->MessageList) {
@@ -80,6 +91,28 @@ void UMessageListUI::Refresh()
 		MessageSlotWidgetUIObject->SenderText->SetText(message.Name);
 		MessageList->AddChild(MessageSlotWidgetUIObject);
 	}*/
+}
+
+void UMessageListUI::SetInfoUIWidget(FText Name, FText Title, FText Detail)
+{
+	if ( !MessageInfoOpened ) // 메시지 상세정보 보기가 켜져 있지 않다면 새로 생성
+	{
+		MessageInfoWidgetUIObject = CreateWidget<UMessageInfoUI>(GetWorld(), MessageInfoWidgetClass);
+		MessageInfoOpened = true;
+		MessageInfoWidgetUIObject->MessageListUIWidget = this;
+		MessageInfoWidgetUIObject->NameTextBox->SetText(Name);
+		MessageInfoWidgetUIObject->TitleTextBox->SetText(Title);
+		MessageInfoWidgetUIObject->DetailTextBox->SetText(Detail);
+		MessageInfoWidgetUIObject->AddToViewport();
+		UE_LOG(LogTemp, Warning, TEXT("!MessageInfoWidgetClass"));
+	}
+	else
+	{
+		MessageInfoWidgetUIObject->NameTextBox->SetText(Name);
+		MessageInfoWidgetUIObject->TitleTextBox->SetText(Title);
+		MessageInfoWidgetUIObject->DetailTextBox->SetText(Detail);
+		UE_LOG(LogTemp, Warning, TEXT("MessageInfoWidgetClass"));
+	}
 }
 
 void UMessageListUI::CreateSendMessageWidget()

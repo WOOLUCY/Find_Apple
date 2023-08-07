@@ -17,11 +17,26 @@ class GAMEPROJECT_API UMessageSlot : public UUserWidget
 public:
 	UMessageSlot(const FObjectInitializer& objectInitializer);
 	virtual void NativeConstruct() override;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* SlotButton;	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* TitleText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* SenderText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* DetailText;
+
+	UPROPERTY()
+	FText ScriptText;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMessageListUI* MessageListUIWidget;
+
+private:
+	UFUNCTION()
+	void SlotButtonClick();
 };

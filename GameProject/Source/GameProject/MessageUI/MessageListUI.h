@@ -36,6 +36,15 @@ public:
 	UFUNCTION()
 	void Refresh();
 
+	UFUNCTION()
+	void SetInfoUIWidget(FText Name, FText Title, FText Dtail);
+
+	UPROPERTY()
+	class UMessageInfoUI* MessageInfoWidgetUIObject;
+
+	UPROPERTY()
+	bool MessageInfoOpened = false;
+
 private:
 	UPROPERTY()
 	TSubclassOf<class UUserWidget> MessageSlotWidgetClass;
@@ -49,4 +58,7 @@ private:
 	
 	UFUNCTION()
 	void CreateSendMessageWidget();
+
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> MessageInfoWidgetClass;
 };
